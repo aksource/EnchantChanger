@@ -1,0 +1,9 @@
+﻿
+item.multitoolholders:Holder3.name=3-Wayツールホルダー
+item.multitoolholders:Holder5.name=5-Wayツールホルダー
+item.multitoolholders:Holder7.name=7-Wayツールホルダー
+item.multitoolholders:Holder9.name=9-Wayツールホルダー
+container.toolholder=ツールホルダー
+Key.openToolHolder=ツールホルダーを開く
+Key.nextToolHolder=次のスロット
+Key.prevToolHolder=前のスロット

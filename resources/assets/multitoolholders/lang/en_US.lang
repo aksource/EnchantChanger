@@ -1,0 +1,9 @@
+﻿
+item.multitoolholders:Holder3.name=3-Way Tool Holder
+item.multitoolholders:Holder5.name=5-Way Tool Holder
+item.multitoolholders:Holder7.name=7-Way Tool Holder
+item.multitoolholders:Holder9.name=9-Way Tool Holder
+container.toolholder=ToolHolder
+Key.openToolHolder=Open ToolHolder
+Key.nextToolHolder=ToolHolder Next Slot
+Key.prevToolHolder=ToolHolder Previous Slot

@@ -1,0 +1,21 @@
+[
+{
+  "modid": "AdvancedTools",
+  "name": "AdvancedTools",
+  "description": "New Tools and Mobs",
+  "version": "2.0r",
+  "mcversion": "1.6.*",
+  "url": "http://forum.minecraftuser.jp/viewtopic.php?f=13&t=6672",
+  "updateUrl": "",
+  "authors": [
+    "Nanashi"
+  ],
+  "credits": "By Nanashi",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
