@@ -28,8 +28,10 @@ local.properties
 /resources/assets/buildcraft
 /resources/assets/minecraft
 /resources/assets/forge
+/resources/assets/cavestory
 /java/ak/ee3aa
 /resources/assets/ee3aa
+/resources/*.info
 /ExVein
 
 fmlversion.properties

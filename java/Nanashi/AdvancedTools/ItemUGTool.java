@@ -51,7 +51,12 @@ public class ItemUGTool extends ItemTool
 	{
 		return false;
 	}
-
+	@Override
+	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	{
+		getRange(par1ItemStack);
+	}
+	@Override
 	public Item setUnlocalizedName(String var1)
 	{
 		super.setUnlocalizedName(var1);
@@ -155,27 +160,27 @@ public class ItemUGTool extends ItemTool
 		ChunkPosition[] var8 = new ChunkPosition[6];
 
 		if (var1.field_151327_b > minChunkPos.field_151327_b){
-			var8[0] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b - 1, var1.field_151327_b);
+			var8[0] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b - 1, var1.field_151328_c);
 		}
 
 		if (var1.field_151327_b < maxChunkPos.field_151327_b){
-			var8[1] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b + 1, var1.field_151327_b);
+			var8[1] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b + 1, var1.field_151328_c);
 		}
 
-		if (var1.field_151327_b > minChunkPos.field_151327_b){
-			var8[2] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151327_b - 1);
+		if (var1.field_151328_c > minChunkPos.field_151328_c){
+			var8[2] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c - 1);
 		}
 
-		if (var1.field_151327_b < maxChunkPos.field_151327_b){
-			var8[3] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151327_b + 1);
+		if (var1.field_151328_c < maxChunkPos.field_151328_c){
+			var8[3] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c + 1);
 		}
 
 		if (var1.field_151329_a > minChunkPos.field_151329_a){
-			var8[4] = new ChunkPosition(var1.field_151329_a - 1, var1.field_151327_b, var1.field_151327_b);
+			var8[4] = new ChunkPosition(var1.field_151329_a - 1, var1.field_151327_b, var1.field_151328_c);
 		}
 
 		if (var1.field_151329_a < maxChunkPos.field_151329_a){
-			var8[5] = new ChunkPosition(var1.field_151329_a + 1, var1.field_151327_b, var1.field_151327_b);
+			var8[5] = new ChunkPosition(var1.field_151329_a + 1, var1.field_151327_b, var1.field_151328_c);
 		}
 
 		for (int var9 = 0; var9 < 6; ++var9){
@@ -194,7 +199,7 @@ public class ItemUGTool extends ItemTool
 
 	protected boolean destroyBlock(World world, ChunkPosition var1, Block blockid, ItemStack var3, EntityPlayer var4)
 	{
-		Block var5 = world.func_147439_a(var1.field_151329_a, var1.field_151327_b, var1.field_151327_b);
+		Block var5 = world.func_147439_a(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
 
 		if (var5 == Blocks.air){
 			return false;
@@ -221,15 +226,15 @@ public class ItemUGTool extends ItemTool
 
 	private boolean checkandDestroy(World world,ChunkPosition var1, Block var2, ItemStack var3, EntityPlayer var4)
 	{
-		int var5 = world.getBlockMetadata(var1.field_151329_a, var1.field_151327_b, var1.field_151327_b);
-		boolean var6 = world.func_147468_f(var1.field_151329_a, var1.field_151327_b, var1.field_151327_b);
+		int var5 = world.getBlockMetadata(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
+		boolean var6 = world.func_147468_f(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
 
 		if (var6){
-			var2.func_149664_b(world, var1.field_151329_a, var1.field_151327_b, var1.field_151327_b, var5);
+			var2.func_149664_b(world, var1.field_151329_a, var1.field_151327_b, var1.field_151328_c, var5);
 			if(AdvancedTools.dropGather){
 				var2.func_149636_a(world, var4, MathHelper.ceiling_double_int( var4.posX), MathHelper.ceiling_double_int( var4.posY), MathHelper.ceiling_double_int( var4.posZ), var5);
 			}else{
-				var2.func_149636_a(world, var4, var1.field_151329_a, var1.field_151327_b, var1.field_151327_b, var5);
+				var2.func_149636_a(world, var4, var1.field_151329_a, var1.field_151327_b, var1.field_151328_c, var5);
 			}
 
 			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, var3) <= 0){

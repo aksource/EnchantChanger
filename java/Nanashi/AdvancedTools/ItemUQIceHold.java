@@ -97,9 +97,9 @@ public class ItemUQIceHold extends ItemUniqueArms
 								{
 									var2.func_147449_b(var8 + var12, var9 + var11, var10 + var13, Blocks.ice);
 								}
-								else if (var2.func_147439_a(var8 + var12, var9 + 1 + var11, var10 + var13) == Blocks.air && Blocks.snow.func_149742_c(var2, var8 + var12, var9 + 1 + var11, var10 + var13))
+								else if (var2.func_147439_a(var8 + var12, var9 + 1 + var11, var10 + var13) == Blocks.air && Blocks.snow_layer.func_149742_c(var2, var8 + var12, var9 + 1 + var11, var10 + var13))
 								{
-									var2.func_147449_b(var8 + var12, var9 + 1 + var11, var10 + var13, Blocks.snow);
+									var2.func_147449_b(var8 + var12, var9 + 1 + var11, var10 + var13, Blocks.snow_layer);
 								}
 							}
 						}
