@@ -9,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import ak.akapi.ConfigSavable;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
@@ -19,7 +20,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid="ChainDestruction", name="ChainDestruction", version="1.0d")
 //@NetworkMod(clientSideRequired=true, serverSideRequired=false, channels = {"CD|RegKey"}, packetHandler=PacketHandler.class)
@@ -39,8 +39,9 @@ public class ChainDestruction
 	public static int maxDestroyedBlock;
 	public static boolean dropOnPlayer = true;
 	public ConfigSavable config;
-	public InteractBlockHook interactblockhook;
+	public InteractBlockHook interactblockhook = new InteractBlockHook();
 	public static boolean loadMTH = false;
+//	public SimpleNetworkWrapper simpleChannel;
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -56,14 +57,12 @@ public class ChainDestruction
 	public void load(FMLInitializationEvent event)
 	{
 		proxy.registerClientInfo();
-		interactblockhook = new InteractBlockHook();
 		MinecraftForge.EVENT_BUS.register(interactblockhook);
+		FMLCommonHandler.instance().bus().register(interactblockhook);
 		MinecraftForge.EVENT_BUS.register(new SaveConfig());
-
-		LanguageRegistry.instance().addStringLocalization("Key.CDRegistItem", "RegChainDestructItem");
-		LanguageRegistry.instance().addStringLocalization("Key.CDRegistItem", "ja_JP","一括破壊アイテム登録キー");
-		LanguageRegistry.instance().addStringLocalization("Key.CDDIgUnder", "Dig Under Key");
-		LanguageRegistry.instance().addStringLocalization("Key.CDDIgUnder", "ja_JP","下方採掘キー");
+//		SimpleNetworkWrapper simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ChainDestructionPacket");
+//		simpleChannel.registerMessage(PacketFromServerHandler.class, CDServerMsg.class, 1, Side.SERVER);
+//		simpleChannel.registerMessage(PacketFromClientHandler.class, CDClientMsg.class, 2, Side.CLIENT);
 	}
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent evet)
