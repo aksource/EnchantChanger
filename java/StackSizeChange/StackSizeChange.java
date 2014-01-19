@@ -1,20 +1,15 @@
 package StackSizeChange;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid="StackSizeChange", name="StackSizeChange", version="1.7srg-1",dependencies="required-after:FML")
@@ -82,29 +77,29 @@ public class StackSizeChange
 		RecordMax = (RecordMax<1)?1:(RecordMax>64)?64:RecordMax;
 		SaddleMax = config.get(Configuration.CATEGORY_GENERAL, "SaddleMax", 64, "Saddle Max Stack Size, min = 1, max = 64").getInt();
 		SaddleMax = (SaddleMax<1)?1:(SaddleMax>64)?64:SaddleMax;
-		BucketMax = config.get(Configuration.CATEGORY_GENERAL, "BucketMax", 64, "Bucket Max Stack Size, min = 1, max = 64").getInt();
-		BucketMax = (BucketMax<1)?1:(BucketMax>64)?64:BucketMax;
-		PotionMax = config.get(Configuration.CATEGORY_GENERAL, "PotionMax", 64, "Potion Max Stack Size, min = 1, max = 64").getInt();
-		PotionMax = (PotionMax<0)?1:(PotionMax>64)?64:PotionMax;
-		SoupMax = config.get(Configuration.CATEGORY_GENERAL, "SoupMax", 64, "Soup Max Stack Size, min = 1, max = 64").getInt();
-		SoupMax = (SoupMax<1)?1:(SoupMax>64)?64:SoupMax;
-		MilkMax = config.get(Configuration.CATEGORY_GENERAL, "MilkMax", 64, "BucketMilk Max Stack Size, min = 1, max = 64").getInt();
-		MilkMax = (MilkMax<1)?1:(MilkMax>64)?64:MilkMax;
-		BucketWaterMax = config.get(Configuration.CATEGORY_GENERAL, "BucketWaterMax", 64, "BucketWater Max Stack Size, min = 1, max = 64").getInt();
-		BucketWaterMax = (BucketWaterMax<1)?1:(BucketWaterMax>64)?64:BucketWaterMax;
-		BucketLavaMax = config.get(Configuration.CATEGORY_GENERAL, "BucketLavaMax", 64, "BucketLava Max Stack Size, min = 1, max = 64").getInt();
-		BucketLavaMax = (BucketLavaMax<1)?1:(BucketLavaMax>64)?64:BucketLavaMax;
+//		BucketMax = config.get(Configuration.CATEGORY_GENERAL, "BucketMax", 64, "Bucket Max Stack Size, min = 1, max = 64").getInt();
+//		BucketMax = (BucketMax<1)?1:(BucketMax>64)?64:BucketMax;
+//		PotionMax = config.get(Configuration.CATEGORY_GENERAL, "PotionMax", 64, "Potion Max Stack Size, min = 1, max = 64").getInt();
+//		PotionMax = (PotionMax<0)?1:(PotionMax>64)?64:PotionMax;
+//		SoupMax = config.get(Configuration.CATEGORY_GENERAL, "SoupMax", 64, "Soup Max Stack Size, min = 1, max = 64").getInt();
+//		SoupMax = (SoupMax<1)?1:(SoupMax>64)?64:SoupMax;
+//		MilkMax = config.get(Configuration.CATEGORY_GENERAL, "MilkMax", 64, "BucketMilk Max Stack Size, min = 1, max = 64").getInt();
+//		MilkMax = (MilkMax<1)?1:(MilkMax>64)?64:MilkMax;
+//		BucketWaterMax = config.get(Configuration.CATEGORY_GENERAL, "BucketWaterMax", 64, "BucketWater Max Stack Size, min = 1, max = 64").getInt();
+//		BucketWaterMax = (BucketWaterMax<1)?1:(BucketWaterMax>64)?64:BucketWaterMax;
+//		BucketLavaMax = config.get(Configuration.CATEGORY_GENERAL, "BucketLavaMax", 64, "BucketLava Max Stack Size, min = 1, max = 64").getInt();
+//		BucketLavaMax = (BucketLavaMax<1)?1:(BucketLavaMax>64)?64:BucketLavaMax;
 		EnchantBookMax = config.get(Configuration.CATEGORY_GENERAL, "EnchantBookMax", 64, "EnchantableBook Max Stack Size, min = 1, max = 64").getInt();
 		EnchantBookMax = (EnchantBookMax<1)?1:(EnchantBookMax>64)?64:EnchantBookMax;
-		BucketReplace = config.get(Configuration.CATEGORY_GENERAL, "BucketReplace", true).getBoolean(true);
-		addStackableBucket = config.get(Configuration.CATEGORY_GENERAL, "addStackableBucket", false).getBoolean(false);
-		StackableBucketID = config.get(Configuration.CATEGORY_GENERAL, "StackableBucketID", 17250, "only use addStackableBacket=true. on use +0..+3 IDs, min = 4096, max = 31996").getInt();
-		StackableBucketID = (StackableBucketID<4096)?4096:(StackableBucketID>31996)?31996:StackableBucketID;
-		SoupAmount = config.get(Configuration.CATEGORY_GENERAL, "SoupAmount", 6, "1.2.5 = 8, 1.3.x = 6, min=1, max=20").getInt();
-		SoupAmount = (SoupAmount<1)?1:(SoupAmount>20)?20:SoupAmount;
-		isNetherSetWater = config.get(Configuration.CATEGORY_GENERAL, "isNetherSetWater", false,"true: I would like to put the water into a StackableBucket with Nether.").getBoolean(false);
-		isStackCustom = config.get(Configuration.CATEGORY_GENERAL, "isStackCustom", true, "true: Improve the operation of the stack").getBoolean(true);
-		
+//		BucketReplace = config.get(Configuration.CATEGORY_GENERAL, "BucketReplace", true).getBoolean(true);
+//		addStackableBucket = config.get(Configuration.CATEGORY_GENERAL, "addStackableBucket", false).getBoolean(false);
+//		StackableBucketID = config.get(Configuration.CATEGORY_GENERAL, "StackableBucketID", 17250, "only use addStackableBacket=true. on use +0..+3 IDs, min = 4096, max = 31996").getInt();
+//		StackableBucketID = (StackableBucketID<4096)?4096:(StackableBucketID>31996)?31996:StackableBucketID;
+//		SoupAmount = config.get(Configuration.CATEGORY_GENERAL, "SoupAmount", 6, "1.2.5 = 8, 1.3.x = 6, min=1, max=20").getInt();
+//		SoupAmount = (SoupAmount<1)?1:(SoupAmount>20)?20:SoupAmount;
+//		isNetherSetWater = config.get(Configuration.CATEGORY_GENERAL, "isNetherSetWater", false,"true: I would like to put the water into a StackableBucket with Nether.").getBoolean(false);
+//		isStackCustom = config.get(Configuration.CATEGORY_GENERAL, "isStackCustom", true, "true: Improve the operation of the stack").getBoolean(true);
+//		
 		config.save();
 		Items.wooden_door.setMaxStackSize(DoorMax);
 		Items.minecart.setMaxStackSize(CartMax);
@@ -139,51 +134,51 @@ public class StackSizeChange
 //		Item.bowlSoup = (new ItemSoupStack(26, SoupAmount)).setUnlocalizedName("mushroomStew").setMaxStackSize(SoupMax);
 //		MinecraftForge.EVENT_BUS.register((ItemSoupStack)Item.bowlSoup);
 
-		if(BucketReplace)
-		{
-			bucketEmpty = (new ItemBucketStack(Blocks.air)).setUnlocalizedName("bucket").setMaxStackSize(BucketMax).setTextureName("bucket_empty");
-			bucketWater = (new ItemBucketStack(Blocks.water)).setUnlocalizedName("bucketWater").setContainerItem(bucketEmpty).setMaxStackSize(BucketWaterMax).setTextureName("bucket_water");
-			bucketLava = (new ItemBucketStack(Blocks.lava)).setUnlocalizedName("bucketLava").setContainerItem(bucketEmpty).setMaxStackSize(BucketLavaMax).setTextureName("bucket_lava");
-			bucketMilk = (new ItemBucketMilkStack()).setUnlocalizedName("milk").setContainerItem(bucketEmpty).setMaxStackSize(MilkMax).setTextureName("bucket_milk");
-			
-			Item.bucketEmpty = bucketEmpty;
-			Item.bucketWater = bucketWater;
-			Item.bucketLava = bucketLava;
-			Item.bucketMilk = bucketMilk;
-		}
-		if(!BucketReplace && addStackableBucket)
-		{
-			bucketEmpty = (new ItemBucketStack(Blocks.air)).setUnlocalizedName("stackbucket").setMaxStackSize(BucketMax).setTextureName("bucket_empty");
-			bucketWater = (new ItemBucketStack(Blocks.water)).setUnlocalizedName("stackbucketWater").setContainerItem(bucketEmpty).setMaxStackSize(BucketWaterMax).setTextureName("bucket_water");
-			bucketLava = (new ItemBucketStack(Blocks.lava)).setUnlocalizedName("stackbucketLava").setContainerItem(bucketEmpty).setMaxStackSize(BucketLavaMax).setTextureName("bucket_lava");
-			bucketMilk = (new ItemBucketMilkStack()).setUnlocalizedName("stackmilk").setContainerItem(bucketEmpty).setMaxStackSize(MilkMax).setTextureName("bucket_milk");
-			GameRegistry.registerItem(bucketEmpty, "bucket_stackable");
-			GameRegistry.registerItem(bucketWater, "water_bucket_stackable");
-			GameRegistry.registerItem(bucketLava, "lava_bucket_stackable");
-			GameRegistry.registerItem(bucketMilk, "milk_stackable");
-			addName(bucketEmpty, "Stackable Bucket",       "スタックバケツ");
-			addName(bucketWater, "Stackable Bucket Water", "スタック水入りバケツ");
-			addName(bucketLava,  "Stackable Bucket Lava",  "スタック溶岩入りバケツ");
-			addName(bucketMilk,  "Stackable Bucket Milk",  "スタック牛乳");
-			GameRegistry.addRecipe(new ItemStack(bucketEmpty, 2), new Object[]{ "I I","III"," I ", 'I',Items.iron_ingot });
-			GameRegistry.addShapelessRecipe(new ItemStack(bucketEmpty, 1), new Object[]{ Items.bucket });
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.bucket, 1), new Object[]{ bucketEmpty });
-			GameRegistry.addRecipe(new ItemStack(Items.cake, 1), new Object[]
-				{ "MMM","SES","WWW", 'M',bucketMilk, 'S',Items.sugar, 'E',Items.egg, 'W',Items.wheat });
-		}
-		if(BucketReplace || addStackableBucket)
-		{
-			BehaviorSBucketFullDispense var2 = new BehaviorSBucketFullDispense();
-			BlockDispenser.field_149943_a.putObject(bucketLava, var2);
-			BlockDispenser.field_149943_a.putObject(bucketWater, var2);
-			BlockDispenser.field_149943_a.putObject(bucketEmpty, new BehaviorSBucketEmptyDispense());
-			MinecraftForge.EVENT_BUS.register((ItemBucketMilkStack)bucketMilk);
-		}
-		if(isStackCustom)
-		{
-			Item.potion = (ItemPotion)(new ItemPotionStack(117)).setUnlocalizedName("potion").setMaxStackSize(PotionMax).setTextureName("potion_bottle_empty");
-			Item.glassBottle = (new ItemGlassBottleStack(118)).setUnlocalizedName("glassBottle");
-		}
+//		if(BucketReplace)
+//		{
+//			bucketEmpty = (new ItemBucketStack(Blocks.air)).setUnlocalizedName("bucket").setMaxStackSize(BucketMax).setTextureName("bucket_empty");
+//			bucketWater = (new ItemBucketStack(Blocks.water)).setUnlocalizedName("bucketWater").setContainerItem(bucketEmpty).setMaxStackSize(BucketWaterMax).setTextureName("bucket_water");
+//			bucketLava = (new ItemBucketStack(Blocks.lava)).setUnlocalizedName("bucketLava").setContainerItem(bucketEmpty).setMaxStackSize(BucketLavaMax).setTextureName("bucket_lava");
+//			bucketMilk = (new ItemBucketMilkStack()).setUnlocalizedName("milk").setContainerItem(bucketEmpty).setMaxStackSize(MilkMax).setTextureName("bucket_milk");
+//			
+//			Item.bucketEmpty = bucketEmpty;
+//			Item.bucketWater = bucketWater;
+//			Item.bucketLava = bucketLava;
+//			Item.bucketMilk = bucketMilk;
+//		}
+//		if(!BucketReplace && addStackableBucket)
+//		{
+//			bucketEmpty = (new ItemBucketStack(Blocks.air)).setUnlocalizedName("stackbucket").setMaxStackSize(BucketMax).setTextureName("bucket_empty");
+//			bucketWater = (new ItemBucketStack(Blocks.water)).setUnlocalizedName("stackbucketWater").setContainerItem(bucketEmpty).setMaxStackSize(BucketWaterMax).setTextureName("bucket_water");
+//			bucketLava = (new ItemBucketStack(Blocks.lava)).setUnlocalizedName("stackbucketLava").setContainerItem(bucketEmpty).setMaxStackSize(BucketLavaMax).setTextureName("bucket_lava");
+//			bucketMilk = (new ItemBucketMilkStack()).setUnlocalizedName("stackmilk").setContainerItem(bucketEmpty).setMaxStackSize(MilkMax).setTextureName("bucket_milk");
+//			GameRegistry.registerItem(bucketEmpty, "bucket_stackable");
+//			GameRegistry.registerItem(bucketWater, "water_bucket_stackable");
+//			GameRegistry.registerItem(bucketLava, "lava_bucket_stackable");
+//			GameRegistry.registerItem(bucketMilk, "milk_stackable");
+//			addName(bucketEmpty, "Stackable Bucket",       "スタックバケツ");
+//			addName(bucketWater, "Stackable Bucket Water", "スタック水入りバケツ");
+//			addName(bucketLava,  "Stackable Bucket Lava",  "スタック溶岩入りバケツ");
+//			addName(bucketMilk,  "Stackable Bucket Milk",  "スタック牛乳");
+//			GameRegistry.addRecipe(new ItemStack(bucketEmpty, 2), new Object[]{ "I I","III"," I ", 'I',Items.iron_ingot });
+//			GameRegistry.addShapelessRecipe(new ItemStack(bucketEmpty, 1), new Object[]{ Items.bucket });
+//			GameRegistry.addShapelessRecipe(new ItemStack(Items.bucket, 1), new Object[]{ bucketEmpty });
+//			GameRegistry.addRecipe(new ItemStack(Items.cake, 1), new Object[]
+//				{ "MMM","SES","WWW", 'M',bucketMilk, 'S',Items.sugar, 'E',Items.egg, 'W',Items.wheat });
+//		}
+//		if(BucketReplace || addStackableBucket)
+//		{
+//			BehaviorSBucketFullDispense var2 = new BehaviorSBucketFullDispense();
+//			BlockDispenser.field_149943_a.putObject(bucketLava, var2);
+//			BlockDispenser.field_149943_a.putObject(bucketWater, var2);
+//			BlockDispenser.field_149943_a.putObject(bucketEmpty, new BehaviorSBucketEmptyDispense());
+//			MinecraftForge.EVENT_BUS.register((ItemBucketMilkStack)bucketMilk);
+//		}
+//		if(isStackCustom)
+//		{
+//			Item.potion = (ItemPotion)(new ItemPotionStack(117)).setUnlocalizedName("potion").setMaxStackSize(PotionMax).setTextureName("potion_bottle_empty");
+//			Item.glassBottle = (new ItemGlassBottleStack(118)).setUnlocalizedName("glassBottle");
+//		}
 	}
 	@EventHandler
 	public void load(FMLInitializationEvent event)
