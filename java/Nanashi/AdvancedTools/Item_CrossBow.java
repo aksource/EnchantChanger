@@ -45,7 +45,7 @@ public class Item_CrossBow extends ItemBow
 	{
 		boolean var4 = var3.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, var1) > 0;
 
-		if (var4 || var3.inventory.func_146028_b(Items.arrow))
+		if (var4 || var3.inventory.hasItem(Items.arrow))
 		{
 			EntityArrow var5 = new EntityArrow(var2, var3, 0.75F);
 			var1.damageItem(1, var3);
@@ -53,7 +53,7 @@ public class Item_CrossBow extends ItemBow
 
 			if (!var4)
 			{
-				var3.inventory.func_146026_a(Items.arrow);
+				var3.inventory.consumeInventoryItem(Items.arrow);
 			}
 
 			int var6 = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, var1);

@@ -24,8 +24,8 @@ public class Entity_HighSkeleton extends EntitySkeleton
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(25.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(25.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(2.0D);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Entity_HighSkeleton extends EntitySkeleton
 
 			if (var2 || this.rand.nextFloat() < 0.05F)
 			{
-				this.func_145779_a(AdvancedTools.CrossBow, 1);
+				this.dropItem(AdvancedTools.CrossBow, 1);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class Entity_HighSkeleton extends EntitySkeleton
 
 		if (this.rand.nextFloat() <= 0.1F + 0.1F * (float)var2)
 		{
-			this.func_145779_a(AdvancedTools.BlueEnhancer, 1);
+			this.dropItem(AdvancedTools.BlueEnhancer, 1);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Entity_HighSkeleton extends EntitySkeleton
 	 * Returns the item ID for the item the mob drops on death.
 	 */
 	@Override
-	protected Item func_146068_u()
+	protected Item getDropItem()
 	{
 		return Items.arrow;
 	}

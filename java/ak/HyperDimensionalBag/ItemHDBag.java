@@ -34,7 +34,7 @@ public class ItemHDBag extends Item{
     }
     @SideOnly(Side.CLIENT)
     @Override
-    public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List)
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
     	for(int i=0;i<16;i++)
     		par3List.add(new ItemStack(par1, 1, i));
@@ -52,7 +52,7 @@ public class ItemHDBag extends Item{
 			{
 				this.data = getData(item,world);
 				this.data.onUpdate(world, player);
-				this.data.onInventoryChanged();
+				this.data.markDirty();
 			}
 		}
 	}

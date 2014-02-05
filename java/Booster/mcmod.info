@@ -1,0 +1,21 @@
+[
+{
+  "modid": "Booster",
+  "name": "Booster MOD",
+  "description": "Add Boosters like The Cave Story Booster",
+  "version": "1.7.2v1",
+  "mcversion": "1.7.2",
+  "url": "http://forum.minecraftuser.jp/viewtopic.php?f=13&t=6672",
+  "updateUrl": "",
+  "authors": [
+    "edke"
+  ],
+  "credits": "Updated By A.K.",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]

@@ -35,7 +35,7 @@ public class Item_ThrowingKnife extends Item
 	@Override
 	public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
 	{
-		if (var3.capabilities.isCreativeMode || var3.inventory.func_146028_b(this))
+		if (var3.capabilities.isCreativeMode || var3.inventory.hasItem(this))
 		{
 			Entity_ThrowingKnife var4 = new Entity_ThrowingKnife(var2, var3, 1.0F, this.addPoison);
 			var2.playSoundAtEntity(var3, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
@@ -60,7 +60,7 @@ public class Item_ThrowingKnife extends Item
 
 			if (!((EntityPlayer)var3).inventory.addItemStackToInventory(new ItemStack(AdvancedTools.ThrowingKnife)))
 			{
-				var3.func_145779_a(AdvancedTools.ThrowingKnife, 1);
+				var3.dropItem(AdvancedTools.ThrowingKnife, 1);
 			}
 		}
 

@@ -32,7 +32,7 @@ public class VoidJumpEventHook
 		boolean voidJumpEnchanted = false;
 		int lv;
 		for(int i = 1;i < 5; i++){
-			armor = entity.getCurrentItemOrArmor(i);
+			armor = entity.getEquipmentInSlot(i);
 			lv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVoidJump, armor);
 			if(lv > 0){
 				voidJumpEnchanted = true;
@@ -83,12 +83,12 @@ public class VoidJumpEventHook
 		WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
 		par1EntityPlayerMP.dimension = par2;
 		WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-		par1EntityPlayerMP.playerNetServerHandler.func_147359_a(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
+		par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 		par1EntityPlayerMP.isDead = false;
 		serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
 		serverConf.func_72375_a(par1EntityPlayerMP, worldserver);
-		par1EntityPlayerMP.playerNetServerHandler.func_147364_a(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
+		par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
 		par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 		serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 		serverConf.syncPlayerInventory(par1EntityPlayerMP);
@@ -97,7 +97,7 @@ public class VoidJumpEventHook
 		while (iterator.hasNext())
 		{
 			PotionEffect potioneffect = (PotionEffect)iterator.next();
-			par1EntityPlayerMP.playerNetServerHandler.func_147359_a(new S1DPacketEntityEffect(par1EntityPlayerMP.func_145782_y(), potioneffect));
+			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
 		}
 
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);

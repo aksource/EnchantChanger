@@ -1,12 +1,8 @@
 package ak.ChainDestruction;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,8 +22,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class InteractBlockHook
@@ -51,10 +45,10 @@ public class InteractBlockHook
 	@SubscribeEvent
 	public void KeyPressEvent(KeyInputEvent event)
 	{
-		if(ClientProxy.registItemKey.func_151468_f()){
+		if(ClientProxy.registItemKey.isPressed()){
 			this.pressRegisterKey = true;
 		}
-		if(ClientProxy.digUnderKey.func_151468_f()){
+		if(ClientProxy.digUnderKey.isPressed()){
 			this.pressDigUnderKey = true;
 		}
 	}
@@ -67,7 +61,7 @@ public class InteractBlockHook
 		ItemStack item = event.entityPlayer.getCurrentEquippedItem();
 		if(item != null && ChainDestruction.enableItems.contains(ChainDestruction.getUniqueStrings(item.getItem())))
 		{
-			Block block = world.func_147439_a(event.x, event.y, event.z);
+			Block block = world.getBlock(event.x, event.y, event.z);
 			if(event.action == Action.RIGHT_CLICK_BLOCK)
 			{
 				String chat;
@@ -75,13 +69,13 @@ public class InteractBlockHook
 				{
 					ChainDestruction.enableBlocks.add(ChainDestruction.getUniqueStrings(block));
 					chat = String.format("Add Block : %s", ChainDestruction.getUniqueStrings(block));
-					player.func_146105_b(new ChatComponentTranslation(chat, new Object[0]));
+					player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 				}
 				else if(!player.isSneaking() && ChainDestruction.enableBlocks.contains(ChainDestruction.getUniqueStrings(block)))
 				{
 					ChainDestruction.enableBlocks.remove(ChainDestruction.getUniqueStrings(block));
 					chat = String.format("Remove Block : %s", ChainDestruction.getUniqueStrings(block));
-					player.func_146105_b(new ChatComponentTranslation(chat, new Object[0]));
+					player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 				}
 			}
 			else if(event.action == Action.LEFT_CLICK_BLOCK
@@ -107,7 +101,7 @@ public class InteractBlockHook
 			EntityItem ei;
 			for(ItemStack stack:event.drops){
 				ei = new EntityItem(event.world, event.harvester.posX,event.harvester.posY, event.harvester.posZ, stack);
-				ei.field_145804_b = 0;
+				ei.delayBeforeCanPickup = 0;
 				event.world.spawnEntityInWorld(ei);
 			}
 			event.drops.clear();
@@ -138,14 +132,7 @@ public class InteractBlockHook
 				this.toggle = this.pressRegisterKey;
 //				this.digUnderToggle = CDKeyHandler.digUnderKeyDown && CDKeyHandler.digUnderKeyUp;
 				this.digUnderToggle = this.pressDigUnderKey;
-				if(this.digUnderToggle)
-				{
-					pressDigUnderKey = false;
-					this.digUnder = !this.digUnder;
-					chat = String.format("Dig Under %b", this.digUnder);
-					player.func_146105_b(new ChatComponentTranslation(chat, new Object[0]));
-				}
-				this.writePacketData((EntityClientPlayerMP) player);
+				ChainDestruction.packetPipeline.sendToServer(new KeyHandlingPacket(toggle, digUnderToggle));
 //				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketRegKeyToggle(this));
 			}
 			if(this.toggle && item != null)
@@ -155,15 +142,21 @@ public class InteractBlockHook
 				{
 					ChainDestruction.enableItems.remove(ChainDestruction.getUniqueStrings(item));
 					chat = String.format("Remove Tool : %s", ChainDestruction.getUniqueStrings(item));
-					player.func_146105_b(new ChatComponentTranslation(chat, new Object[0]));
+					player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 				}
 				if(!player.isSneaking() && !ChainDestruction.enableItems.contains(ChainDestruction.getUniqueStrings(item)))
 				{
 					ChainDestruction.enableItems.add(ChainDestruction.getUniqueStrings(item));
 					chat = String.format("Add Tool :  %s", ChainDestruction.getUniqueStrings(item));
-					player.func_146105_b(new ChatComponentTranslation(chat, new Object[0]));
+					player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 				}
-				this.writePacketData((EntityClientPlayerMP) player);
+			}
+			if(this.digUnderToggle)
+			{
+				pressDigUnderKey = false;
+				this.digUnder = !this.digUnder;
+				chat = String.format("Dig Under %b", this.digUnder);
+				player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 			}
 			ChainDestruction.digUnder = this.digUnder;
 		}
@@ -194,8 +187,8 @@ public class InteractBlockHook
 		int i1 = EnchantmentHelper.getFortuneModifier(player);
 		for(EntityItem eItem: list){
 			if(eItem.getEntityItem().getItem() instanceof ItemBlock && GameRegistry.findUniqueIdentifierFor(block).equals(GameRegistry.findUniqueIdentifierFor(eItem.getEntityItem().getItem()))
-					|| GameRegistry.findUniqueIdentifierFor(block.func_149650_a(blockPos[4], world.rand, i1)).equals(GameRegistry.findUniqueIdentifierFor(eItem.getEntityItem().getItem()))){
-				eItem.field_145804_b = 0;
+					|| GameRegistry.findUniqueIdentifierFor(block.getItemDropped(blockPos[4], world.rand, i1)).equals(GameRegistry.findUniqueIdentifierFor(eItem.getEntityItem().getItem()))){
+				eItem.delayBeforeCanPickup = 0;
 				d0 = player.posX - MathHelper.sin(f1) * 0.5D;
 				d1 = player.posY + 0.5D;
 				d2 = player.posZ + MathHelper.cos(f1) * 0.5D;
@@ -216,7 +209,7 @@ public class InteractBlockHook
 				continue;
 			}
 			chunk = this.getNextChunkPosition(new ChunkPosition(blockPos[0], blockPos[1], blockPos[2]), side);
-			id = world.func_147439_a(chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c);
+			id = world.getBlock(chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ);
 			if(checkChunkInBounds(chunk) && block == id/* && !blocklist.contains(chunk)*/)
 			{
 				this.SearchBlock(world, player, block, chunk, ForgeDirection.OPPOSITES[side], item);
@@ -243,14 +236,14 @@ public class InteractBlockHook
 //			item = ((IInventory)tooldata).getStackInSlot(slotNum);
 //			isMultiToolHolder = true;
 //		}
-		int meta = world.getBlockMetadata(chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c);
+		int meta = world.getBlockMetadata(chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ);
 		if(item == null){
 			return true;
 		}
-		if(item.getItem().func_150894_a(item, world, block, chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c, player)){
-			if(world.func_147468_f(chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c)){
-				block.func_149664_b(world,chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c, meta);
-				block.func_149636_a(world, player, MathHelper.ceiling_double_int( player.posX), MathHelper.ceiling_double_int( player.posY), MathHelper.ceiling_double_int( player.posZ), meta);
+		if(item.getItem().onBlockDestroyed(item, world, block, chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ, player)){
+			if(world.setBlockToAir(chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ)){
+				block.onBlockDestroyedByPlayer(world,chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ, meta);
+				block.harvestBlock(world, player, MathHelper.ceiling_double_int( player.posX), MathHelper.ceiling_double_int( player.posY), MathHelper.ceiling_double_int( player.posZ), meta);
 				if(item.stackSize == 0){
 					destroyItem(player, item, isMultiToolHolder, tooldata, slotNum);
 					return true;
@@ -282,7 +275,7 @@ public class InteractBlockHook
 				continue;
 			}
 			chunk = getNextChunkPosition(chunkpos, side);
-			id = world.func_147439_a(chunk.field_151329_a, chunk.field_151327_b, chunk.field_151328_c);
+			id = world.getBlock(chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ);
 			if(checkChunkInBounds(chunk) && GameRegistry.findUniqueIdentifierFor(block).equals(GameRegistry.findUniqueIdentifierFor(id))/* && !blocklist.contains(chunk)*/){
 				this.SearchBlock(world, player, block, chunk, ForgeDirection.OPPOSITES[side], heldItem);
 			}
@@ -293,14 +286,14 @@ public class InteractBlockHook
 		int dx = ForgeDirection.getOrientation(side).offsetX;
 		int dy = ForgeDirection.getOrientation(side).offsetY;
 		int dz = ForgeDirection.getOrientation(side).offsetZ;
-		return new ChunkPosition(chunk.field_151329_a + dx,chunk.field_151327_b + dy,chunk.field_151328_c + dz);
+		return new ChunkPosition(chunk.chunkPosX + dx,chunk.chunkPosY + dy,chunk.chunkPosZ + dz);
 	}
 	public boolean checkChunkInBounds(ChunkPosition chunk)
 	{
 		boolean bx,by,bz;
-		bx = chunk.field_151329_a >= minX && chunk.field_151329_a <= maxX;
-		by = chunk.field_151327_b >= minY && chunk.field_151327_b <= maxY;
-		bz = chunk.field_151328_c >= minZ && chunk.field_151328_c <= maxZ;
+		bx = chunk.chunkPosX >= minX && chunk.chunkPosX <= maxX;
+		by = chunk.chunkPosY >= minY && chunk.chunkPosY <= maxY;
+		bz = chunk.chunkPosZ >= minZ && chunk.chunkPosZ <= maxZ;
 		return bx && by && bz;
 	}
 	public void setBlockBounds(EntityPlayer player)
@@ -317,67 +310,4 @@ public class InteractBlockHook
 		minZ = blockPos[2] - ChainDestruction.maxDestroyedBlock;
 		maxZ = blockPos[2] + ChainDestruction.maxDestroyedBlock;
 	}
- 	public void writePacketData(EntityClientPlayerMP player)
- 	{
- 		ByteBuf data = Unpooled.buffer(2);
- 		try{
- 			data.writeBoolean(this.toggle);
- 			data.writeBoolean(this.digUnder);
- 			FMLProxyPacket packet = new FMLProxyPacket(data, "ChainDestructionPacket");
- 	        player.sendQueue.func_147297_a(packet);
- 		}catch (Exception e){
- 			e.printStackTrace();
- 		}
- 	}
- 	
- 	public class CDServerMsg implements IMessage
- 	{
- 		public boolean toggle1;
- 		public boolean toggle2;
- 		@Override
- 		public void fromBytes(ByteBuf buf) {
- 			try{
- 				toggle1 = buf.readBoolean();
- 				toggle2 = buf.readBoolean();
- 			}catch(Exception e){
- 				e.printStackTrace();
- 			}
- 		}
-
- 		@Override
- 		public void toBytes(ByteBuf buf) {
- 			try{
- 				buf.writeBoolean(toggle1);
- 				buf.writeBoolean(toggle2);
- 			}catch(Exception e){
- 				e.printStackTrace();
- 			}
- 		}
- 		
- 	}
- 	
- 	public class CDClientMsg implements IMessage
- 	{
- 		public boolean toggle1;
- 		public boolean toggle2;
- 		@Override
- 		public void fromBytes(ByteBuf buf) {
- 			try{
- 				toggle1 = buf.getBoolean(0);
- 				toggle2 = buf.getBoolean(1);
- 			}catch(Exception e){
- 				e.printStackTrace();
- 			}
- 		}
-
- 		@Override
- 		public void toBytes(ByteBuf buf) {
- 			try{
- 				buf.setBoolean(0, toggle1);
- 				buf.setBoolean(1, toggle2);
- 			}catch(Exception e){
- 				e.printStackTrace();
- 			}
- 		}
- 	}
 }

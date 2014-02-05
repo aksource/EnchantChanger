@@ -23,7 +23,7 @@ public class FenceGateKeeper
 	@Mod.EventHandler
 	public void preInti(FMLPreInitializationEvent event)
 	{
-		fenceGate = new kpBlockFenceGate().func_149711_c(2.0F).func_149752_b(5.0F).func_149672_a(Block.field_149780_i).func_149663_c("fenceGateCustom");
+		fenceGate = new kpBlockFenceGate().setHardness(2.0F).setResistance(5.0F).setStepSound(Block.soundTypeWood).setBlockName("fenceGateCustom");
 	}
 	public void load(FMLInitializationEvent event)
 	{

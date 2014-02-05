@@ -64,9 +64,9 @@ public class Entity_BBFireBall extends Entity
 			int var8 = MathHelper.floor_double(this.posY);
 			int var5 = MathHelper.floor_double(this.posZ);
 
-			if (this.worldObj.func_147439_a(var3, var8, var5) == Blocks.air && Blocks.fire.func_149742_c(this.worldObj, var3, var8, var5))
+			if (this.worldObj.getBlock(var3, var8, var5) == Blocks.air && Blocks.fire.canPlaceBlockAt(this.worldObj, var3, var8, var5))
 			{
-				this.worldObj.func_147449_b(var3, var8, var5, Blocks.fire);
+				this.worldObj.setBlock(var3, var8, var5, Blocks.fire);
 			}
 
 			for (int var6 = 0; var6 < 4; ++var6)
@@ -75,9 +75,9 @@ public class Entity_BBFireBall extends Entity
 				var8 = MathHelper.floor_double(this.posY) + this.rand.nextInt(3) - 1;
 				var5 = MathHelper.floor_double(this.posZ) + this.rand.nextInt(3) - 1;
 
-				if (this.worldObj.func_147439_a(var3, var8, var5) == Blocks.air && Blocks.fire.func_149742_c(this.worldObj, var3, var8, var5))
+				if (this.worldObj.getBlock(var3, var8, var5) == Blocks.air && Blocks.fire.canPlaceBlockAt(this.worldObj, var3, var8, var5))
 				{
-					this.worldObj.func_147449_b(var3, var8, var5, Blocks.fire);
+					this.worldObj.setBlock(var3, var8, var5, Blocks.fire);
 				}
 			}
 
@@ -171,12 +171,12 @@ public class Entity_BBFireBall extends Entity
 			this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var1) * 180.0D / Math.PI);
 		}
 
-		Block var17 = this.worldObj.func_147439_a(this.xTile, this.yTile, this.zTile);
+		Block var17 = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 
 		if (var17 != Blocks.air)
 		{
-			var17.func_149719_a(this.worldObj, this.xTile, this.yTile, this.zTile);
-			AxisAlignedBB var2 = var17.func_149668_a(this.worldObj, this.xTile, this.yTile, this.zTile);
+			var17.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+			AxisAlignedBB var2 = var17.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
 			if (var2 != null && var2.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ)))
 			{
@@ -260,7 +260,7 @@ public class Entity_BBFireBall extends Entity
 					this.xTile = var4.blockX;
 					this.yTile = var4.blockY;
 					this.zTile = var4.blockZ;
-					this.inTile = this.worldObj.func_147439_a(this.xTile, this.yTile, this.zTile);
+					this.inTile = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 					this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 					this.motionX = (double)((float)(var4.hitVec.xCoord - this.posX));
 					this.motionY = (double)((float)(var4.hitVec.yCoord - this.posY));

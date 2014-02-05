@@ -22,9 +22,9 @@ public class Entity_ZombieWarrior extends EntityZombie
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(40.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.32D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(10.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.32D);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(10.0D);
     }
 
 	/**
@@ -47,7 +47,7 @@ public class Entity_ZombieWarrior extends EntityZombie
 
 			if (var2 || this.rand.nextFloat() < 0.05F)
 			{
-				this.func_145779_a(AdvancedTools.DevilSword, 1);
+				this.dropItem(AdvancedTools.DevilSword, 1);
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public class Entity_ZombieWarrior extends EntityZombie
 
 		if (this.rand.nextFloat() <= 0.1F + 0.1F * (float)var2)
 		{
-			this.func_145779_a(AdvancedTools.BlueEnhancer, 1);
+			this.dropItem(AdvancedTools.BlueEnhancer, 1);
 		}
 	}
 

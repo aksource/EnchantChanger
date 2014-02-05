@@ -15,6 +15,6 @@ public class DigBedrock
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		Blocks.bedrock.func_149711_c(250.0F).setHarvestLevel("pickaxe", 3);;
+		Blocks.bedrock.setHardness(250.0F).setHarvestLevel("pickaxe", 3);;
 	}
 }

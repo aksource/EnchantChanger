@@ -54,12 +54,14 @@ public class Entity_GoldCreeper extends EntityMob
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 	}
+	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.38D);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.38D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
 	}
+	@Override
 	public boolean isAIEnabled()
 	{
 		return true;
@@ -68,10 +70,12 @@ public class Entity_GoldCreeper extends EntityMob
 	/**
 	 * The number of iterations PathFinder.getSafePoint will execute before giving up.
 	 */
+	@Override
 	public int getMaxSafePointTries()
 	{
 		return this.getAttackTarget() == null ? 3 : 3 + MathHelper.ceiling_float_int(this.getHealth() - 1);
 	}
+	@Override
 	protected void fall(float par1)
 	{
 		super.fall(par1);
@@ -82,13 +86,14 @@ public class Entity_GoldCreeper extends EntityMob
 			this.timeSinceIgnited = this.fuseTime - 5;
 		}
 	}
+	@Override
 	protected void entityInit()
 	{
 		super.entityInit();
 		this.dataWatcher.addObject(16, Byte.valueOf((byte) - 1));
 		this.dataWatcher.addObject(17, Byte.valueOf((byte)0));
 	}
-
+	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeEntityToNBT(par1NBTTagCompound);
@@ -102,7 +107,7 @@ public class Entity_GoldCreeper extends EntityMob
 		par1NBTTagCompound.setByte("ExplosionRadius", (byte)this.explosionRadius);
 	}
 
-
+	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readEntityFromNBT(par1NBTTagCompound);
@@ -198,7 +203,7 @@ public class Entity_GoldCreeper extends EntityMob
 
 				if (var3 || this.rand.nextFloat() < 0.3F && this.getHealth() > 0)
 				{
-					this.func_145779_a(Items.gold_nugget, 1);
+					this.dropItem(Items.gold_nugget, 1);
 				}
 			}
 		}
@@ -243,7 +248,7 @@ public class Entity_GoldCreeper extends EntityMob
 
 			if (var2 || this.rand.nextFloat() < 0.3F)
 			{
-				this.func_145779_a(AdvancedTools.list.get(this.rand.nextInt(29)), 1);
+				this.dropItem(AdvancedTools.list.get(this.rand.nextInt(29)), 1);
 			}
 		}
 	}

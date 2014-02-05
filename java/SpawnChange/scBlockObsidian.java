@@ -16,7 +16,7 @@ public class scBlockObsidian extends BlockObsidian
 	
 	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) 
 	{
-		if (portalSpawn && world.func_147439_a(x, y + 1, z) == Blocks.portal)
+		if (portalSpawn && world.getBlock(x, y + 1, z) == Blocks.portal)
 			return false;
 		return true;
 	}

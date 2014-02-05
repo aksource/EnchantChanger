@@ -254,7 +254,7 @@ public class ModifierItemName
 					}
 				}
 				str = str + event.item.getEntityItem().getDisplayName();
-				event.item.getEntityItem().func_151001_c(str);
+				event.item.getEntityItem().setStackDisplayName(str);
 			}
 		}
 	}

@@ -30,7 +30,7 @@ public class LilypadBreed
 		LilypadRate = config.get(Configuration.CATEGORY_GENERAL, "LilypadRate", 25, "LilyPad Spown Rate(0%-100%), min = 0, max = 100").getInt();
 		LilypadRate = (LilypadRate <0)?0:(LilypadRate>100)?100:LilypadRate;
 		config.save();
-		waterlily = (new BlockLilypadBreed()).func_149711_c(0.0F).func_149672_a(Block.field_149779_h).func_149663_c("waterlily").func_149658_d("waterlily");
+		waterlily = (new BlockLilypadBreed()).setHardness(0.0F).setStepSound(Block.soundTypeGrass).setBlockName("waterlily").setBlockTextureName("waterlily");
 		GameRegistry.registerBlock(waterlily, ItemLilypadBreed.class, "waterlily");
 	}
 	@Mod.EventHandler

@@ -110,9 +110,9 @@ public class NameWakander
 	{
 		String blockUnique = getUniqueStrings(block);
 		String str;
-		Item item = Item.func_150898_a(block);
+		Item item = Item.getItemFromBlock(block);
 		ItemStack stack = new ItemStack(item);
-		str = String.format("%s, %s, %s" + crlf, blockUnique, block.func_149739_a() + ".name", block.func_149732_F());
+		str = String.format("%s, %s, %s" + crlf, blockUnique, block.getUnlocalizedName() + ".name", block.getLocalizedName());
 		this.blockNames.add(str);
 	}
 	private void addItemName(Item item)

@@ -68,14 +68,14 @@ public class ItemSpecialSet extends Item
         }
         else
         {
-            Block var8 = par3World.func_147439_a(par4, par5, par6);
-            Block var9 = par3World.func_147439_a(par4 + 1, par5, par6);
+            Block var8 = par3World.getBlock(par4, par5, par6);
+            Block var9 = par3World.getBlock(par4 + 1, par5, par6);
 
             if (var8 == Blocks.air && var9 == Blocks.air)
             {
             	par3World.playSoundEffect((double)par4 + 0.5D, (double)par5 + 0.5D, (double)par6 + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-            	par3World.func_147449_b(par4, par5, par6, Blocks.chest);
-                TileEntityChest var10 = (TileEntityChest)par3World.func_147438_o(par4, par5, par6);
+            	par3World.setBlock(par4, par5, par6, Blocks.chest);
+                TileEntityChest var10 = (TileEntityChest)par3World.getTileEntity(par4, par5, par6);
 
                 if (var10 != null)
                 {
@@ -108,8 +108,8 @@ public class ItemSpecialSet extends Item
                     var10.setInventorySlotContents(26, new ItemStack(AdvancedTools.PoisonKnife, 16));
                 }
 
-                par3World.func_147449_b(par4 + 1, par5, par6, Blocks.chest);
-                var10 = (TileEntityChest)par3World.func_147438_o(par4 + 1, par5, par6);
+                par3World.setBlock(par4 + 1, par5, par6, Blocks.chest);
+                var10 = (TileEntityChest)par3World.getTileEntity(par4 + 1, par5, par6);
 
                 if (var10 != null)
                 {

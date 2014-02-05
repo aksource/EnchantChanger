@@ -126,12 +126,12 @@ public class Entity_SBWindEdge extends Entity
 				this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var1) * 180.0D / Math.PI);
 			}
 
-			Block var31 = this.worldObj.func_147439_a(this.xTile, this.yTile, this.zTile);
+			Block var31 = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 
 			//			 if (var31 > 0)
 			//			 {
-			var31.func_149719_a(this.worldObj, this.xTile, this.yTile, this.zTile);
-			AxisAlignedBB var2 = var31.func_149668_a(this.worldObj, this.xTile, this.yTile, this.zTile);
+			var31.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+			AxisAlignedBB var2 = var31.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
 			if (var2 != null && var2.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ)))
 			{
@@ -216,7 +216,7 @@ public class Entity_SBWindEdge extends Entity
 						this.xTile = var4.blockX;
 						this.yTile = var4.blockY;
 						this.zTile = var4.blockZ;
-						this.inTile = this.worldObj.func_147439_a(this.xTile, this.yTile, this.zTile);
+						this.inTile = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 						this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 						this.motionX = (double)((float)(var4.hitVec.xCoord - this.posX));
 						this.motionY = (double)((float)(var4.hitVec.yCoord - this.posY));

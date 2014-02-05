@@ -51,13 +51,13 @@ public class ItemUGPickaxe extends ItemUGTool
 				if (var1 != Blocks.iron_block && var1 != Blocks.iron_ore){
 					if (var1 != Blocks.lapis_block && var1 != Blocks.lapis_ore){
 						if (var1 != Blocks.redstone_ore && var1 != Blocks.lit_redstone_ore){
-							if (var1.func_149688_o() == Material.field_151576_e){
+							if (var1.getMaterial() == Material.rock){
 								return true;
 							}else{
 								if(blocksEffectiveAgainst.contains(var1)){
 									return true;
 								}else
-									return var1.func_149688_o() == Material.field_151573_f;
+									return var1.getMaterial() == Material.iron;
 							}
 						}else{
 							return this.toolMaterial.getHarvestLevel() >= 2;
@@ -78,7 +78,7 @@ public class ItemUGPickaxe extends ItemUGTool
 	@Override
 	public float getDigSpeed(ItemStack var1, Block var2, int meta)
 	{
-		return var2 != null && (var2.func_149688_o() == Material.field_151573_f || var2.func_149688_o() == Material.field_151576_e) ? this.efficiencyOnProperMaterial : super.getDigSpeed(var1, var2, meta);
+		return var2 != null && (var2.getMaterial() == Material.iron || var2.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getDigSpeed(var1, var2, meta);
 	}
 
 	public boolean doChainDestraction(Block var1)

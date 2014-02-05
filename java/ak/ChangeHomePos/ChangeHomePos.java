@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent.Serializer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.village.Village;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.config.Configuration;
@@ -54,14 +54,14 @@ public class ChangeHomePos
 		{
 			ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
 			String chat;
-			if(event.target instanceof EntityVillager && heldItem != null && getUniqueStrings(heldItem.getItem()).equals(posChangeItem) && pos.field_151328_c != -1)
+			if(event.target instanceof EntityVillager && heldItem != null && getUniqueStrings(heldItem.getItem()).equals(posChangeItem) && pos.chunkPosY != -1)
 			{
 				Village vil = ObfuscationReflectionHelper.getPrivateValue(EntityVillager.class, (EntityVillager)event.target, 3);
 				if(vil == null)
 					return;
-				((EntityVillager)event.target).setHomeArea(pos.field_151327_b, pos.field_151328_c, pos.field_151329_a, (int)((float)(vil.getVillageRadius() * 0.6F)));
-				chat = String.format("Set Home Pos x: %d y: %d z: %d", pos.field_151327_b,pos.field_151328_c,pos.field_151329_a);
-				event.entityPlayer.func_146105_b(Serializer.func_150699_a(chat));
+				((EntityVillager)event.target).setHomeArea(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, (int)((float)(vil.getVillageRadius() * 0.6F)));
+				chat = String.format("Set Home Pos x: %d y: %d z: %d", pos.chunkPosX,pos.chunkPosY,pos.chunkPosZ);
+				event.entityPlayer.addChatMessage(new ChatComponentTranslation(chat, new Object[]{}));
 				event.setCanceled(true);
 			}
 		}
@@ -75,7 +75,7 @@ public class ChangeHomePos
 			{
 				pos = new ChunkPosition(event.x, event.y, event.z);
 				chat = String.format("Regist Home Pos x: %d y: %d z: %d", event.x,event.y,event.z);
-				event.entityPlayer.func_146105_b(Serializer.func_150699_a(chat));
+				event.entityPlayer.addChatMessage(new ChatComponentTranslation(chat, new Object[]{}));
 			}
 		}
 	}

@@ -72,10 +72,10 @@ public class HarvestLevelSetter
 			if(block != null && lv >=0){
 				if(blockNameAndLv.length < 3){
 					block.setHarvestLevel(toolKind, lv);
-					FMLLog.fine(String.format("#Block %s %s %d", block.func_149732_F(), toolKind, lv));
+					FMLLog.fine(String.format("#Block %s %s %d", block.getLocalizedName(), toolKind, lv));
 				}else{
 					block.setHarvestLevel(toolKind, lv, meta);
-					FMLLog.fine(String.format("#Block %s %s %d %d", block.func_149732_F(), toolKind, lv, meta));
+					FMLLog.fine(String.format("#Block %s %s %d %d", block.getLocalizedName(), toolKind, lv, meta));
 				}
 			}
 		}

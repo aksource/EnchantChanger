@@ -18,8 +18,8 @@ public class Entity_HighSpeedCreeper extends EntityCreeper
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.365D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.365D);
     }
 
 	/**
@@ -73,12 +73,12 @@ public class Entity_HighSpeedCreeper extends EntityCreeper
 
 		if (this.rand.nextFloat() <= 0.25F + 0.1F * (float)var2)
 		{
-			this.func_145779_a(AdvancedTools.RedEnhancer, 1);
+			this.dropItem(AdvancedTools.RedEnhancer, 1);
 		}
 
 		if (this.rand.nextFloat() <= 0.1F + 0.1F * (float)var2)
 		{
-			this.func_145779_a(AdvancedTools.BlueEnhancer, 1);
+			this.dropItem(AdvancedTools.BlueEnhancer, 1);
 		}
 	}
 

@@ -27,7 +27,7 @@ public class Render_UQFreezer extends Render
 		GL11.glScalef(var10.width * 1.5F, var10.height * 1.5F, var10.width * 1.5F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.2F);
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-		(new RenderBlocks()).func_147800_a(Blocks.glass, 0, var1.getBrightness(var9));
+		(new RenderBlocks()).renderBlockAsItem(Blocks.glass, 0, var1.getBrightness(var9));
 		GL11.glPopMatrix();
 	}
 

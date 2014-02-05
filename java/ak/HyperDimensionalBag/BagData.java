@@ -23,7 +23,7 @@ public class BagData extends WorldSavedData implements IInventory
 		if(!this.init)
 		{
 			this.init = true;
-			this.onInventoryChanged();
+//			this.onInventoryChanged();
 		}
 		if(var1.getWorldTime() % 80l == 0l)
 			this.upDate = true;
@@ -55,7 +55,7 @@ public class BagData extends WorldSavedData implements IInventory
 			{
 				var3 = items[var1];
 				items[var1] = null;
-				this.onInventoryChanged();
+				this.markDirty();
 				return var3;
 			}
 			else
@@ -67,7 +67,7 @@ public class BagData extends WorldSavedData implements IInventory
 					this.items[var1] = null;
 				}
 
-				this.onInventoryChanged();
+				this.markDirty();
 				return var3;
 			}
 		}
@@ -87,7 +87,7 @@ public class BagData extends WorldSavedData implements IInventory
 	}
 
 	@Override
-	public String func_145825_b() {
+	public String getInventoryName() {
 		return "HDBag";
 	}
 
@@ -95,11 +95,11 @@ public class BagData extends WorldSavedData implements IInventory
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-
-	@Override
-	public void onInventoryChanged() {
-		this.upDate = true;
-	}
+//
+//	@Override
+//	public void onInventoryChanged() {
+//		this.upDate = true;
+//	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
@@ -107,21 +107,21 @@ public class BagData extends WorldSavedData implements IInventory
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 		this.markDirty();
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound var1) {
-		NBTTagList var2 = var1.func_150295_c("Items", 10);
+		NBTTagList var2 = var1.getTagList("Items", 10);
 		this.items = new ItemStack[54];
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
-			NBTTagCompound var4 = (NBTTagCompound)var2.func_150305_b(var3);
+			NBTTagCompound var4 = (NBTTagCompound)var2.getCompoundTagAt(var3);
 			int var5 = var4.getByte("Slot") & 255;
 
 			if (var5 >= 0 && var5 < this.items.length)
@@ -148,7 +148,7 @@ public class BagData extends WorldSavedData implements IInventory
 		var1.setTag("Items", var2);
 	}
 	@Override
-	public boolean func_145818_k_() {
+	public boolean hasCustomInventoryName() {
 		return false;
 	}
 	@Override

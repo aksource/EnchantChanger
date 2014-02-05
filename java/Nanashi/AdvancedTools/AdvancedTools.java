@@ -130,19 +130,19 @@ public class AdvancedTools
 		EntityRegistry.registerModEntity(Entity_PGPowerBomb.class, "PGPowerBomb", 9, this, 250, 1, true);
 		EntityRegistry.registerModEntity(Entity_SBWindEdge.class, "SBWindEdge", 10, this, 250, 1, true);
 		if (spawnHiGradeMob){
-			for(int i = 0; i <BiomeGenBase.func_150565_n().length;i++){
-				if(BiomeGenBase.func_150565_n()[i] != null
-						&& BiomeGenBase.func_150565_n()[i] != BiomeGenBase.hell
-						&& BiomeGenBase.func_150565_n()[i] != BiomeGenBase.mushroomIsland
-						&& BiomeGenBase.func_150565_n()[i] != BiomeGenBase.mushroomIslandShore
-						&& BiomeGenBase.func_150565_n()[i] != BiomeGenBase.sky
-						&& BiomeGenBase.func_150565_n()[i].getSpawnableList(EnumCreatureType.monster).size() >= 5){
-					EntityRegistry.addSpawn(Entity_HighSkeleton.class, 2, 1, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
-					EntityRegistry.addSpawn(Entity_SkeletonSniper.class, 3, 1, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
-					EntityRegistry.addSpawn(Entity_ZombieWarrior.class, 2, 1, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
-					EntityRegistry.addSpawn(Entity_FireZombie.class, 3, 1, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
-					EntityRegistry.addSpawn(Entity_HighSpeedCreeper.class, 3, 4, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
-					EntityRegistry.addSpawn(Entity_GoldCreeper.class, 1, 1, 4, EnumCreatureType.monster, BiomeGenBase.func_150565_n()[i]);
+			for(int i = 0; i <BiomeGenBase.getBiomeGenArray().length;i++){
+				if(BiomeGenBase.getBiomeGenArray()[i] != null
+						&& BiomeGenBase.getBiomeGenArray()[i] != BiomeGenBase.hell
+						&& BiomeGenBase.getBiomeGenArray()[i] != BiomeGenBase.mushroomIsland
+						&& BiomeGenBase.getBiomeGenArray()[i] != BiomeGenBase.mushroomIslandShore
+						&& BiomeGenBase.getBiomeGenArray()[i] != BiomeGenBase.sky
+						&& BiomeGenBase.getBiomeGenArray()[i].getSpawnableList(EnumCreatureType.monster).size() >= 5){
+					EntityRegistry.addSpawn(Entity_HighSkeleton.class, 2, 1, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
+					EntityRegistry.addSpawn(Entity_SkeletonSniper.class, 3, 1, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
+					EntityRegistry.addSpawn(Entity_ZombieWarrior.class, 2, 1, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
+					EntityRegistry.addSpawn(Entity_FireZombie.class, 3, 1, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
+					EntityRegistry.addSpawn(Entity_HighSpeedCreeper.class, 3, 4, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
+					EntityRegistry.addSpawn(Entity_GoldCreeper.class, 1, 1, 4, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray()[i]);
 				}
 			}
 		}
@@ -317,7 +317,7 @@ public class AdvancedTools
         double PlayerposZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double)var1;
         Vec3 PlayerPosition = Vec3.createVectorHelper(PlayerposX, PlayerposY, PlayerposZ);
         Vec3 PlayerLookVec = PlayerPosition.addVector(viewX*Dislimit, viewY*Dislimit, viewZ*Dislimit);
-        MovingObjectPosition MOP = world.clip(PlayerPosition, PlayerLookVec, true);
+        MovingObjectPosition MOP = world.rayTraceBlocks(PlayerPosition, PlayerLookVec, true);
         return MOP;
     }
 }

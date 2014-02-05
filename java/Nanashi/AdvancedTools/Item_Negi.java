@@ -62,7 +62,7 @@ public class Item_Negi extends ItemFood
 		return true;
 	}
 	@Override
-	public boolean func_150894_a(ItemStack par1, World par2, Block par3, int par4, int par5, int par6, EntityLivingBase par7)
+	public boolean onBlockDestroyed(ItemStack par1, World par2, Block par3, int par4, int par5, int par6, EntityLivingBase par7)
 	{
 		par1.damageItem(2, par7);
 		return true;

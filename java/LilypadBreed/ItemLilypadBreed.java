@@ -50,9 +50,9 @@ public class ItemLilypadBreed extends ItemLilyPad
 					return par1ItemStack;
 				}
 
-				if (par2World.func_147439_a(i, j, k).func_149688_o() == Material.field_151586_h && par2World.getBlockMetadata(i, j, k) == 0 && par2World.func_147437_c(i, j + 1, k))
+				if (par2World.getBlock(i, j, k).getMaterial() == Material.water && par2World.getBlockMetadata(i, j, k) == 0 && par2World.isAirBlock(i, j + 1, k))
 				{
-					par2World.func_147449_b(i, j + 1, k, LilypadBreed.waterlily);
+					par2World.setBlock(i, j + 1, k, LilypadBreed.waterlily);
 
 					if (!par3EntityPlayer.capabilities.isCreativeMode)
 					{
@@ -73,6 +73,6 @@ public class ItemLilypadBreed extends ItemLilyPad
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
 	{
-		return LilypadBreed.waterlily.func_149741_i(par1ItemStack.getItemDamage());
+		return LilypadBreed.waterlily.getRenderColor(par1ItemStack.getItemDamage());
 	}
 }

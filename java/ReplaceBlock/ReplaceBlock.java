@@ -54,11 +54,11 @@ public class ReplaceBlock
 						{
 							for(int y = targetYposMax; y >= targetYposMin; y--)
 							{
-								if(this.isTargetBlock(event.entityLiving.worldObj.func_147439_a(x, y, z)))
+								if(this.isTargetBlock(event.entityLiving.worldObj.getBlock(x, y, z)))
 								{
 									//minecraft.getIntegratedServer().worldServerForDimension(minecraft.thePlayer.dimension).setBlock(x, y, z, replaceBlockID, 0, 3);
 									Block block = GameData.blockRegistry.getObject(replaceBlockID);
-									event.entityLiving.worldObj.func_147449_b(x, y, z, block);
+									event.entityLiving.worldObj.setBlock(x, y, z, block);
 								}
 							}
 						}

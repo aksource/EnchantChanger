@@ -47,12 +47,12 @@ public class ItemUGAxe extends ItemUGTool
 	@Override
 	public boolean func_150897_b(Block var1)
 	{
-		return var1.func_149688_o() == Material.field_151575_d;
+		return var1.getMaterial() == Material.wood;
 	}
 	@Override
     public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta)
     {
-        return par2Block != null && (par2Block.func_149688_o() == Material.field_151575_d || par2Block.func_149688_o() == Material.field_151581_o || par2Block.func_149688_o() == Material.field_151595_p) ? this.efficiencyOnProperMaterial : super.getDigSpeed(par1ItemStack, par2Block, meta);
+        return par2Block != null && (par2Block.getMaterial() == Material.wood || par2Block.getMaterial() == Material.plants || par2Block.getMaterial() == Material.vine) ? this.efficiencyOnProperMaterial : super.getDigSpeed(par1ItemStack, par2Block, meta);
     }
 	public boolean doChainDestraction(Block var1)
 	{
@@ -64,78 +64,78 @@ public class ItemUGAxe extends ItemUGTool
 		ArrayList var7 = new ArrayList();
 		ChunkPosition[] var8 = new ChunkPosition[17];
 
-		if (var1.field_151328_c < var3.field_151328_c){
-			var8[0] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c + 1, var1.field_151329_a);
+		if (var1.chunkPosY < var3.chunkPosY){
+			var8[0] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY + 1, var1.chunkPosZ);
 		}
 
-		if (var1.field_151329_a > var2.field_151329_a){
-			var8[1] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c, var1.field_151329_a - 1);
+		if (var1.chunkPosZ > var2.chunkPosZ){
+			var8[1] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ - 1);
 		}
 
-		if (var1.field_151329_a < var3.field_151329_a){
-			var8[2] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c, var1.field_151329_a + 1);
+		if (var1.chunkPosZ < var3.chunkPosZ){
+			var8[2] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ + 1);
 		}
 
-		if (var1.field_151327_b > var2.field_151327_b){
-			var8[3] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c, var1.field_151329_a);
+		if (var1.chunkPosX > var2.chunkPosX){
+			var8[3] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY, var1.chunkPosZ);
 		}
 
-		if (var1.field_151327_b < var3.field_151327_b){
-			var8[4] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c, var1.field_151329_a);
+		if (var1.chunkPosX < var3.chunkPosX){
+			var8[4] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY, var1.chunkPosZ);
 		}
 
 		if (checkArrays(var4, AdvancedTools.addBlockForAxe)){
-			if (var1.field_151329_a > var2.field_151329_a && var1.field_151327_b > var2.field_151327_b){
-				var8[5] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c, var1.field_151329_a - 1);
+			if (var1.chunkPosZ > var2.chunkPosZ && var1.chunkPosX > var2.chunkPosX){
+				var8[5] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY, var1.chunkPosZ - 1);
 			}
 
-			if (var1.field_151329_a < var3.field_151329_a && var1.field_151327_b > var2.field_151327_b){
-				var8[6] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c, var1.field_151329_a + 1);
+			if (var1.chunkPosZ < var3.chunkPosZ && var1.chunkPosX > var2.chunkPosX){
+				var8[6] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY, var1.chunkPosZ + 1);
 			}
 
-			if (var1.field_151329_a > var2.field_151329_a && var1.field_151327_b < var3.field_151327_b){
-				var8[7] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c, var1.field_151329_a - 1);
+			if (var1.chunkPosZ > var2.chunkPosZ && var1.chunkPosX < var3.chunkPosX){
+				var8[7] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY, var1.chunkPosZ - 1);
 			}
 
-			if (var1.field_151329_a < var3.field_151329_a && var1.field_151327_b < var3.field_151327_b){
-				var8[8] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c, var1.field_151329_a + 1);
+			if (var1.chunkPosZ < var3.chunkPosZ && var1.chunkPosX < var3.chunkPosX){
+				var8[8] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY, var1.chunkPosZ + 1);
 			}
 
-			if (var1.field_151328_c < var3.field_151328_c){
-				if (var1.field_151329_a > var2.field_151329_a){
-					var8[13] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c + 1, var1.field_151329_a - 1);
+			if (var1.chunkPosY < var3.chunkPosY){
+				if (var1.chunkPosZ > var2.chunkPosZ){
+					var8[13] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY + 1, var1.chunkPosZ - 1);
 				}
 
-				if (var1.field_151329_a < var3.field_151329_a){
-					var8[14] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c + 1, var1.field_151329_a + 1);
+				if (var1.chunkPosZ < var3.chunkPosZ){
+					var8[14] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY + 1, var1.chunkPosZ + 1);
 				}
 
-				if (var1.field_151327_b > var2.field_151327_b){
-					var8[15] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c + 1, var1.field_151329_a);
+				if (var1.chunkPosX > var2.chunkPosX){
+					var8[15] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY + 1, var1.chunkPosZ);
 				}
 
-				if (var1.field_151327_b < var3.field_151327_b){
-					var8[16] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c + 1, var1.field_151329_a);
+				if (var1.chunkPosX < var3.chunkPosX){
+					var8[16] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY + 1, var1.chunkPosZ);
 				}
 
-				if (var1.field_151329_a > var2.field_151329_a && var1.field_151327_b > var2.field_151327_b){
-					var8[9] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c + 1, var1.field_151329_a - 1);
+				if (var1.chunkPosZ > var2.chunkPosZ && var1.chunkPosX > var2.chunkPosX){
+					var8[9] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY + 1, var1.chunkPosZ - 1);
 				}
 
-				if (var1.field_151329_a < var3.field_151329_a && var1.field_151327_b > var2.field_151327_b){
-					var8[10] = new ChunkPosition(var1.field_151327_b - 1, var1.field_151328_c + 1, var1.field_151329_a + 1);
+				if (var1.chunkPosZ < var3.chunkPosZ && var1.chunkPosX > var2.chunkPosX){
+					var8[10] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY + 1, var1.chunkPosZ + 1);
 				}
 
-				if (var1.field_151329_a > var2.field_151329_a && var1.field_151327_b < var3.field_151327_b){
-					var8[11] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c + 1, var1.field_151329_a - 1);
+				if (var1.chunkPosZ > var2.chunkPosZ && var1.chunkPosX < var3.chunkPosX){
+					var8[11] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY + 1, var1.chunkPosZ - 1);
 				}
 
-				if (var1.field_151329_a < var3.field_151329_a && var1.field_151327_b < var3.field_151327_b){
-					var8[12] = new ChunkPosition(var1.field_151327_b + 1, var1.field_151328_c + 1, var1.field_151329_a + 1);
+				if (var1.chunkPosZ < var3.chunkPosZ && var1.chunkPosX < var3.chunkPosX){
+					var8[12] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY + 1, var1.chunkPosZ + 1);
 				}
 			}
-		}else if (var1.field_151328_c > var2.field_151328_c){
-			var8[5] = new ChunkPosition(var1.field_151327_b, var1.field_151328_c - 1, var1.field_151329_a);
+		}else if (var1.chunkPosY > var2.chunkPosY){
+			var8[5] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY - 1, var1.chunkPosZ);
 		}
 
 		for (int var9 = 0; var9 < 17; ++var9){

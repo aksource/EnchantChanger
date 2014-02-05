@@ -56,9 +56,9 @@ public class ItemSwordStack extends ItemSword
 		return true;
 	}
 	@Override
-	public boolean func_150894_a(ItemStack par1ItemStack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
+	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
 	{
-		if ((double)par3.func_149712_f(par2World, par4, par5, par6) > 0.0D)
+		if ((double)par3.getBlockHardness(par2World, par4, par5, par6) > 0.0D)
 		{	
 			if(par3 == Blocks.web)
 			{

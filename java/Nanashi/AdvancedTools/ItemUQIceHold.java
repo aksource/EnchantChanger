@@ -88,18 +88,18 @@ public class ItemUQIceHold extends ItemUniqueArms
 					{
 						for (var13 = -6; var13 <= 6; ++var13)
 						{
-							if (Math.sqrt((double)(var12 * var12 + var13 * var13)) <= 5.8D && var2.func_147437_c(var8 + var12, var9 + 1 + var11, var10 + var13))
+							if (Math.sqrt((double)(var12 * var12 + var13 * var13)) <= 5.8D && var2.isAirBlock(var8 + var12, var9 + 1 + var11, var10 + var13))
 							{
 								var2.spawnParticle("explode", (double)(var8 + var12), (double)(var9 + 1 + var11), (double)(var10 + var13), 0.0D, 0.0D, 0.0D);
-								Material var14 = var2.func_147439_a(var8 + var12, var9 + var11, var10 + var13).func_149688_o();
+								Material var14 = var2.getBlock(var8 + var12, var9 + var11, var10 + var13).getMaterial();
 
-								if (var14 == Material.field_151586_h && var2.getBlockMetadata(var8, var9 + var11, var10) == 0)
+								if (var14 == Material.water && var2.getBlockMetadata(var8, var9 + var11, var10) == 0)
 								{
-									var2.func_147449_b(var8 + var12, var9 + var11, var10 + var13, Blocks.ice);
+									var2.setBlock(var8 + var12, var9 + var11, var10 + var13, Blocks.ice);
 								}
-								else if (var2.func_147439_a(var8 + var12, var9 + 1 + var11, var10 + var13) == Blocks.air && Blocks.snow_layer.func_149742_c(var2, var8 + var12, var9 + 1 + var11, var10 + var13))
+								else if (var2.getBlock(var8 + var12, var9 + 1 + var11, var10 + var13) == Blocks.air && Blocks.snow_layer.canPlaceBlockAt(var2, var8 + var12, var9 + 1 + var11, var10 + var13))
 								{
-									var2.func_147449_b(var8 + var12, var9 + 1 + var11, var10 + var13, Blocks.snow_layer);
+									var2.setBlock(var8 + var12, var9 + 1 + var11, var10 + var13, Blocks.snow_layer);
 								}
 							}
 						}
@@ -180,18 +180,18 @@ public class ItemUQIceHold extends ItemUniqueArms
 						{
 							for (int var25 = -3; var25 <= 3; ++var25)
 							{
-								if (Math.sqrt((double)(var13 * var13 + var25 * var25)) <= 2.8D && var2.func_147437_c(var10 + var13, var11 + 1, var12 + var25))
+								if (Math.sqrt((double)(var13 * var13 + var25 * var25)) <= 2.8D && var2.isAirBlock(var10 + var13, var11 + 1, var12 + var25))
 								{
 									var2.spawnParticle("explode", (double)(var10 + var13), (double)(var11 + 1), (double)(var12 + var25), 0.0D, 0.0D, 0.0D);
-									Material var23 = var2.func_147439_a(var10 + var13, var11, var12 + var25).func_149688_o();
+									Material var23 = var2.getBlock(var10 + var13, var11, var12 + var25).getMaterial();
 
-									if (var23 == Material.field_151586_h && var2.getBlockMetadata(var10, var11, var12) == 0)
+									if (var23 == Material.water && var2.getBlockMetadata(var10, var11, var12) == 0)
 									{
-										var2.func_147449_b(var10 + var13, var11, var12 + var25, Blocks.ice);
+										var2.setBlock(var10 + var13, var11, var12 + var25, Blocks.ice);
 									}
-									else if (var2.func_147439_a(var10 + var13, var11 + 1, var12 + var25) == Blocks.air && Blocks.snow.func_149742_c(var2, var10 + var13, var11 + 1, var12 + var25))
+									else if (var2.getBlock(var10 + var13, var11 + 1, var12 + var25) == Blocks.air && Blocks.snow.canPlaceBlockAt(var2, var10 + var13, var11 + 1, var12 + var25))
 									{
-										var2.func_147449_b(var10 + var13, var11 + 1, var12 + var25, Blocks.snow);
+										var2.setBlock(var10 + var13, var11 + 1, var12 + var25, Blocks.snow);
 									}
 								}
 							}

@@ -106,7 +106,7 @@ public class plItemMobegg extends ItemMonsterPlacer
 	}
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List)
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(par1, 1, 0));
 //		super.func_150895_a(par1, par2CreativeTabs, par3List);

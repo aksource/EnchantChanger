@@ -68,7 +68,7 @@ public class ItemUGTool extends ItemTool
 		return this;
 	}
 	@Override
-	public boolean func_150894_a(ItemStack item, World world, Block blockid, int x, int y, int z, EntityLivingBase breaker)
+	public boolean onBlockDestroyed(ItemStack item, World world, Block blockid, int x, int y, int z, EntityLivingBase breaker)
 	{
 		if (!world.isRemote){
 			item.damageItem(1, breaker);
@@ -159,28 +159,28 @@ public class ItemUGTool extends ItemTool
 		ArrayList var7 = new ArrayList();
 		ChunkPosition[] var8 = new ChunkPosition[6];
 
-		if (var1.field_151327_b > minChunkPos.field_151327_b){
-			var8[0] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b - 1, var1.field_151328_c);
+		if (var1.chunkPosY > minChunkPos.chunkPosY){
+			var8[0] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY - 1, var1.chunkPosZ);
 		}
 
-		if (var1.field_151327_b < maxChunkPos.field_151327_b){
-			var8[1] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b + 1, var1.field_151328_c);
+		if (var1.chunkPosY < maxChunkPos.chunkPosY){
+			var8[1] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY + 1, var1.chunkPosZ);
 		}
 
-		if (var1.field_151328_c > minChunkPos.field_151328_c){
-			var8[2] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c - 1);
+		if (var1.chunkPosZ > minChunkPos.chunkPosZ){
+			var8[2] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ - 1);
 		}
 
-		if (var1.field_151328_c < maxChunkPos.field_151328_c){
-			var8[3] = new ChunkPosition(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c + 1);
+		if (var1.chunkPosZ < maxChunkPos.chunkPosZ){
+			var8[3] = new ChunkPosition(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ + 1);
 		}
 
-		if (var1.field_151329_a > minChunkPos.field_151329_a){
-			var8[4] = new ChunkPosition(var1.field_151329_a - 1, var1.field_151327_b, var1.field_151328_c);
+		if (var1.chunkPosX > minChunkPos.chunkPosX){
+			var8[4] = new ChunkPosition(var1.chunkPosX - 1, var1.chunkPosY, var1.chunkPosZ);
 		}
 
-		if (var1.field_151329_a < maxChunkPos.field_151329_a){
-			var8[5] = new ChunkPosition(var1.field_151329_a + 1, var1.field_151327_b, var1.field_151328_c);
+		if (var1.chunkPosX < maxChunkPos.chunkPosX){
+			var8[5] = new ChunkPosition(var1.chunkPosX + 1, var1.chunkPosY, var1.chunkPosZ);
 		}
 
 		for (int var9 = 0; var9 < 6; ++var9){
@@ -199,7 +199,7 @@ public class ItemUGTool extends ItemTool
 
 	protected boolean destroyBlock(World world, ChunkPosition var1, Block blockid, ItemStack var3, EntityPlayer var4)
 	{
-		Block var5 = world.func_147439_a(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
+		Block var5 = world.getBlock(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ);
 
 		if (var5 == Blocks.air){
 			return false;
@@ -226,15 +226,15 @@ public class ItemUGTool extends ItemTool
 
 	private boolean checkandDestroy(World world,ChunkPosition var1, Block var2, ItemStack var3, EntityPlayer var4)
 	{
-		int var5 = world.getBlockMetadata(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
-		boolean var6 = world.func_147468_f(var1.field_151329_a, var1.field_151327_b, var1.field_151328_c);
+		int var5 = world.getBlockMetadata(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ);
+		boolean var6 = world.setBlockToAir(var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ);
 
 		if (var6){
-			var2.func_149664_b(world, var1.field_151329_a, var1.field_151327_b, var1.field_151328_c, var5);
+			var2.onBlockDestroyedByPlayer(world, var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ, var5);
 			if(AdvancedTools.dropGather){
-				var2.func_149636_a(world, var4, MathHelper.ceiling_double_int( var4.posX), MathHelper.ceiling_double_int( var4.posY), MathHelper.ceiling_double_int( var4.posZ), var5);
+				var2.harvestBlock(world, var4, MathHelper.ceiling_double_int( var4.posX), MathHelper.ceiling_double_int( var4.posY), MathHelper.ceiling_double_int( var4.posZ), var5);
 			}else{
-				var2.func_149636_a(world, var4, var1.field_151329_a, var1.field_151327_b, var1.field_151328_c, var5);
+				var2.harvestBlock(world, var4, var1.chunkPosX, var1.chunkPosY, var1.chunkPosZ, var5);
 			}
 
 			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, var3) <= 0){
@@ -255,10 +255,10 @@ public class ItemUGTool extends ItemTool
 			String chat;
 			if (range == 0){
 				chat = this.BaseName + " will harvest only one.";
-				player.func_145747_a(new ChatComponentTranslation(chat, new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 			}else{
 				chat = this.BaseName + "\'s range was changed to " + (range * 2 + 1) + "x" + (range * 2 + 1);
-				player.func_145747_a(new ChatComponentTranslation(chat, new Object[0]));
+				player.addChatMessage(new ChatComponentTranslation(chat, new Object[0]));
 			}
 		}
 		return var1;

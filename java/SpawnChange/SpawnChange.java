@@ -1,7 +1,5 @@
 package SpawnChange;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
@@ -43,7 +41,7 @@ public class SpawnChange
 		SlimeSpawnHeight = (SlimeSpawnHeight <0)?0:(SlimeSpawnHeight>255)?255:SlimeSpawnHeight;
 		config.save();
 		if(!portalSpawn){
-			obsidian = (new scBlockObsidian()).func_149711_c(50.0F).func_149752_b(2000.0F).func_149672_a(Block.field_149769_e).func_149663_c("obsidian").func_149658_d("obsidian");
+			obsidian = (new scBlockObsidian()).setHardness(50.0F).setResistance(2000.0F).setStepSound(Block.soundTypeStone).setBlockName("obsidian").setBlockTextureName("obsidian");
 			GameRegistry.registerBlock(obsidian, "obsidian_nospawn");
 		}
 	}

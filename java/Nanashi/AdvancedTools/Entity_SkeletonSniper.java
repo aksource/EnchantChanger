@@ -26,8 +26,8 @@ public class Entity_SkeletonSniper extends EntitySkeleton
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(25.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(25.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(2.0D);
     }
 	/**
 	 * Returns true if the newer Entity AI code should be run
@@ -70,7 +70,7 @@ public class Entity_SkeletonSniper extends EntitySkeleton
 
 		if (this.rand.nextFloat() <= 0.2F + 0.1F * (float)var2)
 		{
-			this.func_145779_a(AdvancedTools.RedEnhancer, 1);
+			this.dropItem(AdvancedTools.RedEnhancer, 1);
 		}
 	}
 

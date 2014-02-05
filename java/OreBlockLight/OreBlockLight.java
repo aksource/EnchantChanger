@@ -41,7 +41,7 @@ public class OreBlockLight
 		for(int i = 0;i < IDs.length;i++){
 			if(!IDs[i].isEmpty() && GameData.blockRegistry.getObject(IDs[i]) != null){
 				block = GameData.blockRegistry.getObject(IDs[i]);
-				block.func_149715_a(Lv);
+				block.setLightLevel(Lv);
 			}
 		}
 	}

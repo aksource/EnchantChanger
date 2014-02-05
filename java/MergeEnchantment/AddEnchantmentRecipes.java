@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class AddEnchantmentRecipes implements IRecipe
 {
 
-	private ItemStack output =null;
+	private ItemStack output = null;
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world)
@@ -23,78 +23,61 @@ public class AddEnchantmentRecipes implements IRecipe
 		ItemStack tool = null;
 		int bookflag = 0;
 		ItemStack book = null;
-		boolean flag =false;
+		boolean flag = false;
 		int EnchInt1;
 		Enchantment ench1;
 		int EnchInt2;
 		Enchantment ench2;
 		ItemStack craftitem;
-		for(int i=0; i< inv.getSizeInventory();i++)
-		{
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			craftitem = inv.getStackInSlot(i);
-			if(craftitem !=null)
-			{
-				if(craftitem.getItem().isRepairable())
-				{
+			if (craftitem != null) {
+				if (craftitem.getItem().isRepairable()) {
 					toolflag++;
 					tool = craftitem.copy();
-				}
-				else if(craftitem.getItem() instanceof ItemEnchantedBook)
-				{
+				} else if (craftitem.getItem() instanceof ItemEnchantedBook) {
 					bookflag++;
 					book = craftitem.copy();
-				}
-				else
-				{
+				} else {
 					return false;
 				}
-			}
-			else continue;
+			} else
+				continue;
 		}
-		if(toolflag > 0 && toolflag < 2 && bookflag > 0 && bookflag < 2)
-		{
-//			System.out.println(tool);
+		if (toolflag > 0 && toolflag < 2 && bookflag > 0 && bookflag < 2) {
 			Map toolenchlist = EnchantmentHelper.getEnchantments(tool);
 			Map bookenchlist = EnchantmentHelper.getEnchantments(book);
 			Iterator var1 = bookenchlist.keySet().iterator();
 			Iterator var2 = toolenchlist.keySet().iterator();
-			while (var1.hasNext())
-			{
-				EnchInt1 = ((Integer)var1.next()).intValue();
-//				System.out.println(EnchInt1);
+			while (var1.hasNext()) {
+				EnchInt1 = ((Integer) var1.next()).intValue();
 				ench1 = Enchantment.enchantmentsList[EnchInt1];
-				int var3 = toolenchlist.containsKey(Integer.valueOf(EnchInt1)) ? ((Integer)toolenchlist.get(Integer.valueOf(EnchInt1))).intValue() : 0;
-				int var4 = ((Integer)bookenchlist.get(Integer.valueOf(EnchInt1))).intValue();
-//				System.out.println(var4);
+				int var3 = toolenchlist.containsKey(Integer.valueOf(EnchInt1)) ? ((Integer) toolenchlist.get(Integer
+						.valueOf(EnchInt1))).intValue() : 0;
+				int var4 = ((Integer) bookenchlist.get(Integer.valueOf(EnchInt1))).intValue();
 				int Max;
-				if (var3 == var4)
-				{
+				if (var3 == var4) {
 					Max = var4;
-				}
-				else
-				{
+				} else {
 					Max = Math.max(var4, var3);
 				}
 
 				var4 = Max;
-				flag =  ench1.canApplyAtEnchantingTable(tool);
-//				System.out.println(flag);
-				while (var2.hasNext())
-				{
-					EnchInt2 = ((Integer)var2.next()).intValue();
+				flag = ench1.canApplyAtEnchantingTable(tool);
+				while (var2.hasNext()) {
+					EnchInt2 = ((Integer) var2.next()).intValue();
 					ench2 = Enchantment.enchantmentsList[EnchInt2];
 					flag = ench1.canApplyTogether(ench2);
-//					System.out.println(flag);
 				}
 				toolenchlist.put(Integer.valueOf(EnchInt1), Integer.valueOf(var4));
 			}
 			this.output = tool;
-			int var5 = (this.output.getItemDamage() - this.output.getMaxDamage()/20 <1)? 1 : this.output.getItemDamage() - this.output.getMaxDamage()/20;
+			int var5 = (this.output.getItemDamage() - this.output.getMaxDamage() / 20 < 1) ? 1 : this.output
+					.getItemDamage() - this.output.getMaxDamage() / 20;
 			this.output.setItemDamage(var5);
 			EnchantmentHelper.setEnchantments(toolenchlist, this.output);
 			return flag;
-		}
-		else
+		} else
 			return false;
 	}
 

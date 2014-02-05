@@ -5,6 +5,7 @@ import java.util.HashSet;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.WorldEvent.Save;
@@ -39,9 +40,9 @@ public class ChainDestruction
 	public static int maxDestroyedBlock;
 	public static boolean dropOnPlayer = true;
 	public ConfigSavable config;
-	public InteractBlockHook interactblockhook = new InteractBlockHook();
+	public static InteractBlockHook interactblockhook = new InteractBlockHook();
 	public static boolean loadMTH = false;
-//	public SimpleNetworkWrapper simpleChannel;
+	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -52,6 +53,7 @@ public class ChainDestruction
 		blocksConfig = config.get(Configuration.CATEGORY_GENERAL, "chainDestroyedBlockIdConfig", vanillaBlocks).getStringList();
 		digUnder = config.get(Configuration.CATEGORY_GENERAL, "digUnder", true).getBoolean(true);
 		config.save();
+
 	}
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent event)
@@ -60,17 +62,18 @@ public class ChainDestruction
 		MinecraftForge.EVENT_BUS.register(interactblockhook);
 		FMLCommonHandler.instance().bus().register(interactblockhook);
 		MinecraftForge.EVENT_BUS.register(new SaveConfig());
-//		SimpleNetworkWrapper simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ChainDestructionPacket");
-//		simpleChannel.registerMessage(PacketFromServerHandler.class, CDServerMsg.class, 1, Side.SERVER);
-//		simpleChannel.registerMessage(PacketFromClientHandler.class, CDClientMsg.class, 2, Side.CLIENT);
+		
+		packetPipeline.initialise();
+
 	}
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent evet)
 	{
 		addItemsAndBlocks();
 		this.loadMTH = Loader.isModLoaded("MultiToolHolders");
+		packetPipeline.postInitialise();
 	}
-	public void addItemsAndBlocks()
+	private void addItemsAndBlocks()
 	{
 		for(int i = 0;i< itemsConfig.length;i++)
 		{
@@ -97,6 +100,9 @@ public class ChainDestruction
 	public static String getUniqueStrings(Object obj)
 	{
 		UniqueIdentifier uId;
+		if(obj instanceof ItemStack) {
+			obj = ((ItemStack)obj).getItem();
+		}
 		if(obj instanceof Block) {
 			uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
 		}else {
