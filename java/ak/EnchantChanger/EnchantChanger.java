@@ -25,6 +25,8 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 import ak.EnchantChanger.Client.ClientProxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -302,7 +304,7 @@ public class EnchantChanger {
 				tabsEChanger).setBlockName("EnchantChanger").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
 		GameRegistry.registerBlock(BlockMat, "EnchantChanger");
 		HugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0)
-				.setBlockName("HugeMateria");
+				.setBlockName("HugeMateria").setBlockTextureName("");
 		GameRegistry.registerBlock(HugeMateria, "blockhugemateria");
 		ItemHugeMateria = new EcItemHugeMateria()
 				.setUnlocalizedName(this.EcTextureDomain + "HugeMateria")
@@ -351,7 +353,8 @@ public class EnchantChanger {
 //			MinecraftForge.removeBlockEffectiveness(block, "FF7");
 //			MinecraftForge.setBlockHarvestLevel(block, "FF7", 0);
 //		}
-
+		RecipeSorter.register("EnchantChanger:MateriaRecipe", EcMateriaRecipe.class, Category.SHAPELESS, "after:FML");
+		RecipeSorter.register("EnchantChanger:MasterMateriaRecipe", EcMasterMateriaRecipe.class, Category.SHAPELESS, "after:FML");
 		if (this.Difficulty < 2)
 			GameRegistry.addRecipe(new EcMateriaRecipe());
 		GameRegistry.addRecipe(new EcMasterMateriaRecipe());
@@ -527,11 +530,11 @@ public class EnchantChanger {
 			item.setTagCompound(new NBTTagCompound());
 		}
 
-		if (!item.stackTagCompound.hasKey("ench")) {
+		if (!item.stackTagCompound.hasKey("ench", 9)) {
 			item.stackTagCompound.setTag("ench", new NBTTagList());
 		}
 
-		NBTTagList var3 = (NBTTagList) item.stackTagCompound.getTag("ench");
+		NBTTagList var3 = (NBTTagList) item.stackTagCompound.getTagList("ench", 10);
 		NBTTagCompound var4 = new NBTTagCompound();
 		var4.setShort("id", (short) enchantment.effectId);
 		var4.setShort("lvl", (short) (Lv));

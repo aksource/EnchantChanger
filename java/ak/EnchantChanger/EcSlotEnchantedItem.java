@@ -17,11 +17,12 @@ public class EcSlotEnchantedItem extends Slot
 		this.materializeSource = par2IInventory;
 		this.materializeResult = par3IInventory;
 	}
-
+	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
 	{
 		return false;
 	}
+	@Override
 	public int getSlotStackLimit()
 	{
 		return 1;

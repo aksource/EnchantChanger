@@ -37,7 +37,7 @@ public class MergeEnchantmentRecipes implements IRecipe
 			craftitem = inv.getStackInSlot(i);
 			if(craftitem !=null)
 			{
-				if(craftitem.getItem().isRepairable() && !GameRegistry.findUniqueIdentifierFor(craftitem.getItem()).equals(GameRegistry.findUniqueIdentifierFor(Items.book)))
+				if(craftitem.getItem().getItemEnchantability() > 0/*craftitem.getItem().isRepairable()*/ && !GameRegistry.findUniqueIdentifierFor(craftitem.getItem()).equals(GameRegistry.findUniqueIdentifierFor(Items.book)))
 				{
 					if(items[0] == null)
 					{

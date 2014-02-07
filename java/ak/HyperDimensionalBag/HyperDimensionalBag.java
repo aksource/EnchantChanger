@@ -1,24 +1,29 @@
 package ak.HyperDimensionalBag;
 
+import java.util.Map;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 @Mod(modid="HyperDimensionalBag", name="HyperDimensionalBag", version="1.0a",dependencies="required-after:FML")
 //@NetworkMod(clientSideRequired=true, serverSideRequired=false)
@@ -30,7 +35,7 @@ public class HyperDimensionalBag
 	@SidedProxy(clientSide = "ak.HyperDimensionalBag.ClientProxy", serverSide = "ak.HyperDimensionalBag.CommonProxy")
 	public static CommonProxy proxy;
 	
-	public static int bagID;
+	public static int bagID = 30000;
 	public static int guiID = 0;
 	public static String GuiBagTex ="textures/gui/GuiBag.png";
 	public static String TextureDomain = "hyperdimensionalbag:";
@@ -47,7 +52,8 @@ public class HyperDimensionalBag
 		hardRecipe = config.get(Configuration.CATEGORY_GENERAL, "HardRecipe", false).getBoolean(false);
 		config.save();
 		HDBag = new ItemHDBag().setUnlocalizedName(this.TextureDomain + "Bag").setTextureName(this.TextureDomain + "Bag").setCreativeTab(CreativeTabs.tabTools);
-		GameRegistry.registerItem(HDBag, "hyperdimentionalbag");
+//		GameRegistry.registerItem(HDBag, "hyperdimentionalbag");
+		registerItemToId(HDBag, "hyperdimentionalbag", "HyperDimensionalBag", bagID);
 	}
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent event)
@@ -66,16 +72,31 @@ public class HyperDimensionalBag
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		loadSB = Loader.isModLoaded("mod_StorageBox");
-//		addLocalName();
 	}
-	public void addLocalName()
+	private void registerItemToId(Item item, String name, String modId, int Id)
 	{
-		LanguageRegistry.addName(HDBag, "HyperDimensional Bag");
-		LanguageRegistry.instance().addNameForObject(HDBag, "ja_JP", "超次元バッグ");
-		for(int i=0;i<16;i++)
-		{
-			LanguageRegistry.instance().addStringLocalization(String.format("item.HDBag.%d.name", i),  StatCollector.translateToLocal(String.format("item.fireworksCharge.%s", ItemDye.field_150921_b[i])) + " HyperDimensional Bag");
-			LanguageRegistry.instance().addStringLocalization(String.format("item.HDBag.%d.name", i), "ja_JP", StatCollector.translateToLocal(String.format("item.fireworksCharge.%s", ItemDye.field_150921_b[i])) +"の超次元バッグ");
-		}
+		Map<UniqueIdentifier, ModContainer> customOwners = ObfuscationReflectionHelper.getPrivateValue(GameData.class, null, 3);
+        ModContainer mc = Loader.instance().activeModContainer();
+        if (modId != null)
+        {
+            customOwners.put(new UniqueIdentifier(modId + ":" + name), mc);
+        }
+        if (item instanceof ItemBlock)
+        {
+            throw new RuntimeException("Cannot register an itemblock separately from it's block");
+        }
+        int itemId = GameData.itemRegistry.add(Id, name, item);
+        GameData.blockRegistry.useSlot(itemId);
+	}
+	private void registerBlockToId(Block block, String name, String modId, int Id)
+	{
+		Map<UniqueIdentifier, ModContainer> customOwners = ObfuscationReflectionHelper.getPrivateValue(GameData.class, null, 3);
+        ModContainer mc = Loader.instance().activeModContainer();
+        if (modId != null)
+        {
+            customOwners.put(new UniqueIdentifier(modId + ":" + name), mc);
+        }
+        int blockId = GameData.blockRegistry.add(Id, name, block);
+        GameData.itemRegistry.useSlot(blockId);
 	}
 }

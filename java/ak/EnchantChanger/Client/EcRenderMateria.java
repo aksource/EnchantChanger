@@ -1,5 +1,7 @@
 package ak.EnchantChanger.Client;
 
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -18,27 +20,41 @@ public class EcRenderMateria implements IItemRenderer
 {
 	private static double vert[];
 	private static int face[];
-	private ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia0.png");
-	private ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia1.png");
-	private ResourceLocation materia3 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia3.png");
-	private ResourceLocation materia4 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia4.png");
-	private ResourceLocation materia5 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia5.png");
-	private ResourceLocation materia6 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia6.png");
-	private ResourceLocation materia7 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia7.png");
-	private ResourceLocation materia8 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia8.png");
-	private ResourceLocation materia9 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/gui/materia9.png");
-	private ResourceLocation materia10 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<Integer, ResourceLocation>();
+	public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<Integer, ResourceLocation>();
+	private static ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia0.png");
+	private static ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia1.png");
+	private static ResourceLocation materia3 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia3.png");
+	private static ResourceLocation materia4 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia4.png");
+	private static ResourceLocation materia5 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia5.png");
+	private static ResourceLocation materia6 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia6.png");
+	private static ResourceLocation materia7 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia7.png");
+	private static ResourceLocation materia8 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia8.png");
+	private static ResourceLocation materia9 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+			"textures/gui/materia9.png");
+	private static ResourceLocation materia10 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia10.png");
-	private ResourceLocation materia11 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static ResourceLocation materia11 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia11.png");
-	private ResourceLocation materia12 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static ResourceLocation materia12 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia12.png");
-	private ResourceLocation materia13 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static ResourceLocation materia13 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia13.png");
-	private ResourceLocation materia14 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static ResourceLocation materia14 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia14.png");
-	private ResourceLocation materia15 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static ResourceLocation materia15 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia15.png");
+	private static ResourceLocation[] materiaRes = new ResourceLocation[] { materia0, materia1, null, materia3,
+			materia4, materia5, materia6, materia7, materia8, materia9, materia10, materia11, materia12, materia13,
+			materia14, materia15 };
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -114,84 +130,58 @@ public class EcRenderMateria implements IItemRenderer
 	public ResourceLocation getTextuerfromEnch(ItemStack item)
 	{
 		if (item.getItemDamage() > 0) {
-			int num;
-			switch (item.getItemDamage() - 1) {
-			case 0:
-				return materia0;
-			case 1:
-				return materia15;
-			case 2:
-				return materia5;
-			case 3:
-				return materia9;
-			case 4:
-				return materia11;
-			case 5:
-				return materia7;
-			case 6:
-				return materia6;
-			case 7:
+			if (masterMateriaMap.containsKey(item.getItemDamage() - 1)) {
+				return masterMateriaMap.get(item.getItemDamage() - 1);
+			} else {
 				return materia10;
-			default:
-				return materia0;
 			}
 		} else if (!item.isItemEnchanted())
 			return materia0;
-		else {
-			int num;
-			switch (EnchantChanger.getMateriaEnchKind(item)) {
-			case 0:
-				return materia8;
-			case 1:
-				return materia8;
-			case 2:
-				return materia8;
-			case 3:
-				return materia8;
-			case 4:
-				return materia8;
-			case 5:
-				return materia4;
-			case 6:
-				return materia4;
-			case 7:
-				return materia8;
-			case 16:
-				return materia13;
-			case 17:
-				return materia13;
-			case 18:
-				return materia13;
-			case 19:
-				return materia14;
-			case 20:
-				return materia1;
-			case 21:
-				return materia9;
-			case 32:
-				return materia5;
-			case 33:
-				return materia7;
-			case 34:
-				return materia3;
-			case 35:
-				return materia9;
-			case 48:
-				return materia13;
-			case 49:
-				return materia14;
-			case 50:
-				return materia1;
-			case 51:
-				return materia12;
-			default:
-				return materia10;
-			}
-		}
+		else if (materiaMap.containsKey(EnchantChanger.getMateriaEnchKind(item))) {
+			return materiaMap.get(EnchantChanger.getMateriaEnchKind(item));
+		} else
+			return materia10;
+	}
+
+	public static void registerExtraMateria(int enchantmentId, int texId) {
+		if(texId > 0 && texId < 16 && texId != 2)
+			materiaMap.put(enchantmentId, materiaRes[texId]);
 	}
 
 	static
 	{
+		masterMateriaMap.put(0, materia0);
+		masterMateriaMap.put(1, materia15);
+		masterMateriaMap.put(2, materia5);
+		masterMateriaMap.put(3, materia9);
+		masterMateriaMap.put(4, materia11);
+		masterMateriaMap.put(5, materia7);
+		masterMateriaMap.put(6, materia6);
+		masterMateriaMap.put(7, materia10);
+		materiaMap.put(0, materia8);
+		materiaMap.put(1, materia8);
+		materiaMap.put(2, materia8);
+		materiaMap.put(3, materia8);
+		materiaMap.put(4, materia8);
+		materiaMap.put(5, materia4);
+		materiaMap.put(6, materia4);
+		materiaMap.put(7, materia8);
+		materiaMap.put(16, materia13);
+		materiaMap.put(17, materia13);
+		materiaMap.put(18, materia13);
+		materiaMap.put(19, materia14);
+		materiaMap.put(20, materia1);
+		materiaMap.put(21, materia9);
+		materiaMap.put(32, materia5);
+		materiaMap.put(33, materia7);
+		materiaMap.put(34, materia3);
+		materiaMap.put(35, materia9);
+		materiaMap.put(48, materia13);
+		materiaMap.put(49, materia14);
+		materiaMap.put(50, materia1);
+		materiaMap.put(51, materia12);
+		materiaMap.put(61, materia4);
+		materiaMap.put(62, materia4);
 		vert = new double[] {
 				0.000000, 1.000000, 0.000000,
 				0.000000, -1.000000, 0.000000,

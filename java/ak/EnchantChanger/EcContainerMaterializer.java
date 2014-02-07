@@ -149,7 +149,6 @@ public class EcContainerMaterializer extends Container {
 			 NBTTagList enchOnItem = enchitem.getEnchantmentTagList();
 			 int itemdmg = enchitem.getItemDamage();
 			 float dmgratio = (enchitem.getMaxDamage() == 0)? 1: (enchitem.getMaxDamage() - itemdmg) / enchitem.getMaxDamage();
-//			 int itemID = enchitem.itemID;
 			 ItemStack Result = enchitem.copy();
 			 if(Result.hasTagCompound()){
 				 Result.getTagCompound().removeTag("ench");

@@ -182,7 +182,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	}
 	public boolean isMaterializing()
 	{
-		return this.MaterializingTime >0;
+		return this.MaterializingTime > 0;
 	}
 	public boolean canMake()
 	{

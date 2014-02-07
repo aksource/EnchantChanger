@@ -32,7 +32,7 @@ public class AddEnchantmentRecipes implements IRecipe
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			craftitem = inv.getStackInSlot(i);
 			if (craftitem != null) {
-				if (craftitem.getItem().isRepairable()) {
+				if (craftitem.getItem().getItemEnchantability() > 0/*craftitem.getItem().isRepairable()*/) {
 					toolflag++;
 					tool = craftitem.copy();
 				} else if (craftitem.getItem() instanceof ItemEnchantedBook) {

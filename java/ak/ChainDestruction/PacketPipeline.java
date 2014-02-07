@@ -26,36 +26,42 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
+ * Packet pipeline クラス。パケットの登録と、パケットのSendToを行う。
  * @author sirgingalot
  * some code from: cpw
  */
 @ChannelHandler.Sharable
 public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, AbstractPacket> {
 
+	//こちらで使わないので、知る必要はないが、登録するChannelの変数。基本的に１MOD（1 packetPipelineインスタンス）に１Channel
     private EnumMap<Side, FMLEmbeddedChannel>           channels;
+    //こちらも使わない。Packetクラスの保存先。１Channelに付き256種類のPacketが登録できる。
     private LinkedList<Class<? extends AbstractPacket>> packets           = new LinkedList<Class<? extends AbstractPacket>>();
+    //使わない。PostInitされたかどうか。
     private boolean                                     isPostInitialised = false;
 
     /**
-     * Register your packet with the pipeline. Discriminators are automatically set.
+     * pipelineにpacketを登録するメソッド。識別子は自動でセットされる。256個までしか登録できない。
      *
      * @param clazz the class to register
      *
-     * @return whether registration was successful. Failure may occur if 256 packets have been registered or if the registry already contains this packet
+     * @return 登録が成功したかどうか。256個以上の登録、同クラス登録、postInitialise内で登録するとfalseになる。
      */
     public boolean registerPacket(Class<? extends AbstractPacket> clazz) {
         if (this.packets.size() > 256) {
-            // You should log here!!
+        	//256個以上登録しようとした。
+            // You should log here!!（logを出力すべき。）
             return false;
         }
 
         if (this.packets.contains(clazz)) {
+        	//同じクラスを登録しようとした。
             // You should log here!!
             return false;
         }
 
         if (this.isPostInitialised) {
+        	//postinit処理で登録しようとした。
             // You should log here!!
             return false;
         }
@@ -64,7 +70,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         return true;
     }
 
-    // In line encoding of the packet, including discriminator setting
+    // packetのエンコード処理。ここで、識別子が設定されている。
     @Override
     protected void encode(ChannelHandlerContext ctx, AbstractPacket msg, List<Object> out) throws Exception {
         ByteBuf buffer = Unpooled.buffer();
@@ -80,7 +86,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         out.add(proxyPacket);
     }
 
-    // In line decoding and handling of the packet
+    // packetのデコード処理。
     @Override
     protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception {
         ByteBuf payload = msg.payload();
@@ -112,14 +118,15 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         out.add(pkt);
     }
 
-    // Method to call from FMLInitializationEvent
+    // 初期化メソッド。FMLInitializationEventで呼び出す。
     public void initialise() {
         this.channels = NetworkRegistry.INSTANCE.newChannel("ChainDestructionPacket", this);
+        //ここでパケットクラスの登録をする。
         this.registerPacket(KeyHandlingPacket.class);
     }
 
-    // Method to call from FMLPostInitializationEvent
-    // Ensures that packet discriminators are common between server and client by using logical sorting
+    // post初期化メソッド。FMLPostInitializationEventで呼び出す。
+    // packetの識別子がクライントとサーバーで同一なものか確認している。
     public void postInitialise() {
         if (this.isPostInitialised) {
             return;
@@ -146,7 +153,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     /**
-     * Send this message to everyone.
+     * プレイヤー全員にpacketを送る。
      * <p/>
      * Adapted from CPW's code in cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
      *
@@ -158,7 +165,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     /**
-     * Send this message to the specified player.
+     * あるプレイヤーにpacketを送る。
      * <p/>
      * Adapted from CPW's code in cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
      *
@@ -172,7 +179,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     /**
-     * Send this message to everyone within a certain range of a point.
+     * ある一定範囲内にいるプレイヤーにpacketを送る。
      * <p/>
      * Adapted from CPW's code in cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
      *
@@ -186,7 +193,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     /**
-     * Send this message to everyone within the supplied dimension.
+     * 指定ディメンションにいるプレイヤー全員にpacketを送る。
      * <p/>
      * Adapted from CPW's code in cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
      *
@@ -200,7 +207,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     /**
-     * Send this message to the server.
+     * サーバーにpacketを送る。
      * <p/>
      * Adapted from CPW's code in cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
      *

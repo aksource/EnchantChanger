@@ -3,7 +3,6 @@ package PokeLoli;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -27,7 +26,7 @@ public class PokeLoli
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent event)
 	{
-		MinecraftForge.EVENT_BUS.register(new PokeLoliEventHandler());
+//		MinecraftForge.EVENT_BUS.register(new PokeLoliEventHandler());
 		LanguageRegistry.addName(pokeEgg, "Mob Egg");
 		LanguageRegistry.instance().addNameForObject(pokeEgg, "ja_JP", "モブエッグ");
 		GameRegistry.addShapelessRecipe(new ItemStack(pokeEgg, 1, 0), new Object[]{Items.egg, Items.redstone});

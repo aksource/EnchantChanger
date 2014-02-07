@@ -65,6 +65,7 @@ public class ChainDestruction
 		
 		packetPipeline.initialise();
 
+
 	}
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent evet)

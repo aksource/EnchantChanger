@@ -10,13 +10,13 @@ class EcSlotMaterializer extends InventoryBasic
 		super(par2Str, true, par3);
 		this.container = par1ContainerMaterializer;
 	}
-
+	@Override
 	public int getInventoryStackLimit()
 	{
 		return 1;
 	}
-
-	public void onInventoryChanged()
+	@Override
+	public void markDirty()
 	{
 		super.markDirty();
 		this.container.onCraftMatrixChanged(this);

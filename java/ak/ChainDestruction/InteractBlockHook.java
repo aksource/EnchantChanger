@@ -27,7 +27,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class InteractBlockHook
 {
 	private int[] blockPos = new int[]{0,0,0,0,0};
-//	private ArrayList<ChunkPosition> blocklist = new ArrayList<ChunkPosition>();
 	private int minX;
 	private int maxX;
 	private int minY;
@@ -107,9 +106,7 @@ public class InteractBlockHook
 			event.drops.clear();
 			ChainDestroyBlock(event.world,event.harvester,event.block, event.harvester.getCurrentEquippedItem());
 			getFirstDestroyedBlock(event.world,event.harvester,event.block,  event.harvester.getCurrentEquippedItem());
-//			synchronized(blocklist){
-//				blocklist.clear();
-//			}
+
 			for(int i = 0;i<5;i++)
 			{
 				blockPos[i] = 0;
@@ -128,12 +125,10 @@ public class InteractBlockHook
 			String chat;
 			if(world.isRemote)
 			{
-//				this.toggle = CDKeyHandler.regItemKeyDown && CDKeyHandler.regItemKeyUp;
 				this.toggle = this.pressRegisterKey;
-//				this.digUnderToggle = CDKeyHandler.digUnderKeyDown && CDKeyHandler.digUnderKeyUp;
 				this.digUnderToggle = this.pressDigUnderKey;
+				//キー判定のboolean変数をpacketに載せて、サーバーに送信。
 				ChainDestruction.packetPipeline.sendToServer(new KeyHandlingPacket(toggle, digUnderToggle));
-//				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketRegKeyToggle(this));
 			}
 			if(this.toggle && item != null)
 			{
@@ -161,20 +156,7 @@ public class InteractBlockHook
 			ChainDestruction.digUnder = this.digUnder;
 		}
 	}
-//	public void ChainMethod(World world, EntityPlayer player, ItemStack item, Block block)
-//	{
-//		if(ChainDestruction.enableBlocks.contains(ChainDestruction.getUniqueStrings(block)) &&  item != null && ChainDestruction.enableItems.contains(ChainDestruction.getUniqueStrings(item.getItem())))
-//		{
-//			getFirstDestroyedBlock(world,player,block, item);
-//			setBlockBounds(player);
-//			ChainDestroyBlock(world,player,block, item);
-//			blocklist.clear();
-//			for(int i = 0;i<5;i++)
-//			{
-//				blockPos[i] = 0;
-//			}
-//		}
-//	}
+
 	public void getFirstDestroyedBlock(World world, EntityPlayer player, Block block, ItemStack item)
 	{
 		List<EntityItem> list = world.getEntitiesWithinAABB(EntityItem.class, player.boundingBox.expand(5d, 5d, 5d));
@@ -215,27 +197,13 @@ public class InteractBlockHook
 				this.SearchBlock(world, player, block, chunk, ForgeDirection.OPPOSITES[side], item);
 			}
 		}
-//		synchronized(blocklist){
-//			Iterator it = blocklist.iterator();			
-//			List<EntityItem> list;
-//			while(it.hasNext() && !flag){
-//				chunk = (ChunkPosition) it.next();
-//				flag = destroyBlockAtPosition(world, block, player, chunk, item);
-//			}
-//		}
 	}
 	private boolean destroyBlockAtPosition(World world, Block block, EntityPlayer player, ChunkPosition chunk, ItemStack item)
 	{
 		boolean isMultiToolHolder = false;
 		int slotNum = 0;
 		IInventory tooldata = null;
-//		if(ChainDestruction.loadMTH && item.getItem() instanceof ItemMultiToolHolder)
-//		{
-//			tooldata = ((ItemMultiToolHolder)item.getItem()).tools;
-//			slotNum = ((ItemMultiToolHolder)item.getItem()).SlotNum;
-//			item = ((IInventory)tooldata).getStackInSlot(slotNum);
-//			isMultiToolHolder = true;
-//		}
+
 		int meta = world.getBlockMetadata(chunk.chunkPosX, chunk.chunkPosY, chunk.chunkPosZ);
 		if(item == null){
 			return true;
@@ -267,9 +235,7 @@ public class InteractBlockHook
 		if(this.destroyBlockAtPosition(world, block, player, chunkpos, heldItem)){
 			return;
 		}
-//		synchronized(blocklist){
-//			blocklist.add(chunkpos);
-//		}
+
 		for(int side = 0;side < 6;side++){
 			if(side == face){
 				continue;

@@ -15,9 +15,12 @@ public class EcSlotItemMateria extends Slot
 		this.materializeResult = par2IInventory;
 		this.materializeSource = par3IInventory;
 	}
+	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
 	{
-		return true;}
+		return true;
+	}
+	@Override
 	public int getSlotStackLimit()
 	{
 		return 1;

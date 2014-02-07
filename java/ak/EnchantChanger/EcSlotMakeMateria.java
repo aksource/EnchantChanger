@@ -11,10 +11,12 @@ public class EcSlotMakeMateria extends Slot
 		super(par1IInventory, par2, par3, par4);
 		this.tileentity = par1IInventory;
 	}
+	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
 	{
 		return false;
 	}
+	@Override
 	public int getSlotStackLimit()
 	{
 		return 1;

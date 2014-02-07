@@ -27,7 +27,7 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
-@Mod(modid="NameWakander", name="moNameWakanderdNAME", version="1.0",dependencies="required-after:FML")
+@Mod(modid="NameWakander", name="NameWakander", version="1.0",dependencies="required-after:FML", canBeDeactivated = true)
 //@NetworkMod(clientSideRequired=true, serverSideRequired=false)
 
 public class NameWakander

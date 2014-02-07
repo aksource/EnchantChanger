@@ -15,10 +15,12 @@ public class EcSlotItemToEnchant extends Slot
 		this.materializeResult = par2IInventory;
 		this.materializeSource = par3IInventory;
 	}
+	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
 	{
 		return !(par1ItemStack.getItem() instanceof EcItemMateria);
 	}
+	@Override
 	public int getSlotStackLimit()
 	{
 		return 1;
