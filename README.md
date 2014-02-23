@@ -1,4 +1,4 @@
-EnchantChanger17
+EnchantChanger
 ================
 
-My MODs for Minecraft Ver 1.7
+EnchantChanger for Minecraft
