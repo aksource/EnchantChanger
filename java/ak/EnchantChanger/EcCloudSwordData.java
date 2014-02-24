@@ -8,11 +8,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
-public class EcCloudSwordData extends WorldSavedData implements IInventory
+public class EcCloudSwordData extends WorldSavedData
 {
 	public ItemStack[] swords = new ItemStack[5];
 	private boolean init = false;
-	private boolean upDate;
+	public boolean upDate;
 
 	public EcCloudSwordData(String par1Str)
 	{
@@ -33,79 +33,6 @@ public class EcCloudSwordData extends WorldSavedData implements IInventory
 			this.upDate = false;
 		}
 	}
-	@Override
-	public int getSizeInventory()
-	{
-		return 5;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int var1)
-	{
-		return swords[var1];
-	}
-
-	@Override
-	public ItemStack decrStackSize(int var1, int var2)
-	{
-		if(swords[var1] != null)
-		{
-			ItemStack var3;
-			if(swords[var1].stackSize <= var2)
-			{
-				var3 = swords[var1];
-				swords[var1] = null;
-				this.markDirty();
-				return var3;
-			}
-			else
-			{
-				var3 = this.swords[var1].splitStack(var2);
-
-				if (this.swords[var1].stackSize == 0)
-				{
-					this.swords[var1] = null;
-				}
-
-				this.markDirty();
-				return var3;
-			}
-		}
-		else
-			return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int var1)
-	{
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2) {
-		swords[var1] = var2;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-//	@Override
-//	public void markDirty() {
-//		this.upDate = true;
-//	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return true;
-	}
-
-	@Override
-	public void openInventory() {}
-
-	@Override
-	public void closeInventory() {}
 
 	@Override
 	public void readFromNBT(NBTTagCompound var1) {
@@ -140,16 +67,5 @@ public class EcCloudSwordData extends WorldSavedData implements IInventory
 		}
 		var1.setTag("Items", var2);
 	}
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return false;
-	}
-	@Override
-	public String getInventoryName() {
-		return "CloudSwordData";
-	}
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
+
 }

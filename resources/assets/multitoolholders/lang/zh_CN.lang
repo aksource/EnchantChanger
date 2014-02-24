@@ -1,9 +1,0 @@
-
-item.multitoolholders:Holder3.name=3-匣工具包
-item.multitoolholders:Holder5.name=5-匣工具包
-item.multitoolholders:Holder7.name=7-匣工具包
-item.multitoolholders:Holder9.name=9-匣工具包
-container.toolholder=工具包
-Key.openToolHolder=打开工具包
-Key.nextToolHolder=工具包下一格
-Key.prevToolHolder=工具包上一格

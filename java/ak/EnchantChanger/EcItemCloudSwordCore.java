@@ -183,11 +183,9 @@ public class EcItemCloudSwordCore extends EcItemSword
 	}
 	public void makeSwordData(EcCloudSwordData data, ItemStack[] items)
 	{
-		for(int i=0;i<5;i++){
-			data.setInventorySlotContents(i, items[i]);
-		}
+		data.swords = items;
 	}
-	private EcCloudSwordData getSwordData(ItemStack var1, World var2)
+	public EcCloudSwordData getSwordData(ItemStack var1, World var2)
 	{
 		int uId = (var1.hasTagCompound())?var1.getTagCompound().getInteger("CloudSwordStrage"):0;
 		String var3 = String.format("swords_%s", uId);

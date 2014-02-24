@@ -1,5 +1,6 @@
 package ak.EnchantChanger;
 
+import ak.MultiToolHolders.InventoryToolHolder;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -226,14 +227,14 @@ public class EcEntityApOrb extends Entity
 			{
 				if (EnchantChanger.loadMTH && items[i].getItem() instanceof ItemMultiToolHolder)
 				{
-					ToolHolderData tools = ((ItemMultiToolHolder) items[i].getItem()).tools;
+					InventoryToolHolder tools = ((ItemMultiToolHolder) items[i].getItem()).tools;
 					if (tools != null)
 					{
-						for (int j = 0; j < tools.tools.length; j++)
+						for (int j = 0; j < tools.data.tools.length; j++)
 						{
-							if (tools.tools[j] != null && tools.tools[j].isItemEnchanted())
+							if (tools.data.tools[j] != null && tools.data.tools[j].isItemEnchanted())
 							{
-								addApToItem(tools.tools[j]);
+								addApToItem(tools.data.tools[j]);
 							}
 						}
 					}

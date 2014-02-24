@@ -42,7 +42,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
-@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.7a-universal", dependencies = "required-after:FML")
+@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.7b-universal", dependencies = "required-after:FML")
 //@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = { "EC|Sw", "EC|CS", "EC|Levi" }, packetHandler = Packet_EnchantChanger.class)
 public class EnchantChanger {
 	public static int ExExpBottleID;

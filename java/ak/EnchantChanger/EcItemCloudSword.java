@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EcItemCloudSword extends EcItemSword
 {
 	private int SlotNum = 5;
-	private EcCloudSwordData SwordData;
+	private EcInventoryCloudSword SwordData = null;
 
 	public EcItemCloudSword()
 	{
@@ -48,15 +48,9 @@ public class EcItemCloudSword extends EcItemSword
 		} else {
 			par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
 			if (!par2World.isRemote) {
-				//				if (this.SlotNum == 5)
-				//					this.SlotNum = 0;
-				//				else
-				//					this.SlotNum++;
-				//				PacketDispatcher.sendPacketToPlayer(Packet_EnchantChanger.getPacketCS(this), (Player) par3EntityPlayer);
-				increaseSlotNum(par1ItemStack);
+    			increaseSlotNum(par1ItemStack);
 				EnchantChanger.packetPipeline.sendTo(new CloudSwordPacket(this.getSlotNum(par1ItemStack)), (EntityPlayerMP) par3EntityPlayer);
-//				PacketDispatcher.sendPacketToPlayer(Packet_EnchantChanger.getPacketCS(this, par1ItemStack),
-//						(Player) par3EntityPlayer);
+
 				if (this.SwordData != null && getSlotNum(par1ItemStack) != 5 && this.SwordData
 						.getStackInSlot(getSlotNum(par1ItemStack)) != null) {
 					par3EntityPlayer.addChatMessage(new ChatComponentTranslation(this.SwordData
@@ -72,12 +66,13 @@ public class EcItemCloudSword extends EcItemSword
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
 		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
 		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
-			this.SwordData = this.getSwordData(par1ItemStack, par2World);
-			this.SwordData.onUpdate(par2World, (EntityPlayer) par3Entity);
+            if(this.SwordData == null)
+                this.SwordData = new EcInventoryCloudSword(par1ItemStack, par2World);
+			this.SwordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
 		}
 	}
 
-	private EcCloudSwordData getSwordData(ItemStack var1, World var2)
+	public EcCloudSwordData getSwordData(ItemStack var1, World var2)
 	{
 		int uId = (var1.hasTagCompound()) ? var1.getTagCompound().getInteger("CloudSwordStrage") : 0;
 		String var3 = String.format("swords_%s", uId);
@@ -130,12 +125,12 @@ public class EcItemCloudSword extends EcItemSword
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		List slotItem;
+        if(this.SwordData == null)
+            this.SwordData = new EcInventoryCloudSword(par1ItemStack, par2EntityPlayer.worldObj);
 		if (getSlotNum(par1ItemStack) != 5
-				&& this.getSwordData(par1ItemStack, par2EntityPlayer.worldObj)
-						.getStackInSlot(getSlotNum(par1ItemStack)) != null)
+				&& this.SwordData.getStackInSlot(getSlotNum(par1ItemStack)) != null)
 		{
-			slotItem = this.getSwordData(par1ItemStack, par2EntityPlayer.worldObj)
-					.getStackInSlot(getSlotNum(par1ItemStack)).getTooltip(par2EntityPlayer, par4);
+			slotItem = this.SwordData.getStackInSlot(getSlotNum(par1ItemStack)).getTooltip(par2EntityPlayer, par4);
 			par3List.addAll(slotItem);
 		}
 	}
