@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -29,6 +30,7 @@ public class LivingEventHooks
 	private int AbsorpMptime = 20 * 3;
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	private int mptimer = this.FlightMptime;
+    public boolean isMateriaKeyPressed = false;
 
 	@SubscribeEvent
 	public void LivingUpdate(LivingUpdateEvent event)
@@ -38,6 +40,7 @@ public class LivingEventHooks
 			this.Flight(player);
 			this.GreatGospel(player);
 			this.Absorption(player.worldObj, player);
+            this.openMateriaWindow(player.worldObj, player);
 		}
 	}
 
@@ -179,7 +182,16 @@ public class LivingEventHooks
 			}
 		}
 	}
+    private void openMateriaWindow(World world, EntityPlayer player) {
+        EnchantChanger.packetPipeline.sendToServer(new KeyMateriaWindowPacket(this.isMateriaKeyPressed));
 
+        if (isMateriaKeyPressed && !world.isRemote && canOpenMateriaWindow(player)) {
+            isMateriaKeyPressed = false;
+            player.openGui(EnchantChanger.instance, EnchantChanger.guiIdMateriaWindow, world, MathHelper.ceiling_double_int(player.posX), MathHelper.ceiling_double_int(player.posY), MathHelper.ceiling_double_int(player.posZ));
+        } else {
+            isMateriaKeyPressed = false;
+        }
+    }
 	public boolean MpCount(int par1, int par2)
 	{
 		Count[par1]++;
@@ -236,7 +248,10 @@ public class LivingEventHooks
 		NBTTagCompound nbt = player.getEntityData();
 		return nbt.getBoolean("levitation");
 	}
-
+    private boolean canOpenMateriaWindow(EntityPlayer player) {
+        NBTTagCompound nbt = player.getEntityData();
+        return nbt.getBoolean("EC|soldier");
+    }
 	public void readPacketData(boolean var1, EntityPlayer player)
 	{
 		try {

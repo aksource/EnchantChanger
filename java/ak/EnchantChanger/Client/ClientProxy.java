@@ -20,6 +20,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 public class ClientProxy extends CommonProxy {
 	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
 			Keyboard.KEY_V, "EnchantChanger:KeyMagic");
+    public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger:KeyMateria");
 
 	@Override
 	public void registerRenderInformation() {
@@ -33,6 +34,7 @@ public class ClientProxy extends CommonProxy {
 		// TickRegistry.registerTickHandler(new ClientTickHandler(),
 		// Side.CLIENT);
 		ClientRegistry.registerKeyBinding(MagicKey);
+        ClientRegistry.registerKeyBinding(MateriaKey);
 		IItemRenderer swordRenderer = new EcSwordRenderer();
 		MinecraftForgeClient.registerItemRenderer(
 				EnchantChanger.ItemSephirothSword,

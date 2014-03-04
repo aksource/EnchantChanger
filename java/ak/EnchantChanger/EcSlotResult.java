@@ -3,7 +3,6 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 class EcSlotResult extends InventoryBasic
 {
-	/** The brewing stand this slot belongs to. */
 	final EcContainerMaterializer container;
 	private ItemStack[] ResultContents;
 
