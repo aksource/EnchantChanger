@@ -34,12 +34,8 @@ public class EcGuiMaterializer extends GuiContainer
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,int par3) {
-		//draw your Gui here, only thing you need to change is the path
-//		int texture;
-//		texture = mc.renderEngine.getTexture(EnchantChanger.EcGuiMaterializer);
+
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//		this.mc.renderEngine.bindTexture(texture);
-//		this.mc.renderEngine.bindTexture(EnchantChanger.EcGuiMaterializer);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(gui);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;

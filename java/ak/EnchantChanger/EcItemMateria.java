@@ -1,8 +1,8 @@
 package ak.EnchantChanger;
 
-import java.util.Iterator;
-import java.util.List;
-
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -21,20 +21,15 @@ import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.*;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class EcItemMateria extends Item
 {
@@ -145,7 +140,7 @@ public class EcItemMateria extends Item
 				return;
 			case 7:
 				Haste(player, entity);
-				player.addChatMessage(new ChatComponentTranslation("Haste!", new Object[0]));
+				player.addChatMessage(new ChatComponentText("Haste!"));
 				;
 				return;
 			default:
@@ -182,7 +177,7 @@ public class EcItemMateria extends Item
 					entity.addPotionEffect(new PotionEffect(potionNum, 20 * 60 * EnchantChanger.MateriaPotionMinutes,
 							Lv));
 					player.addExperienceLevel(-LevelUPEXP(item, false));
-					player.addChatMessage(new ChatComponentTranslation(EntityName + " gets " + Message, new Object[] {}));
+					player.addChatMessage(new ChatComponentText(EntityName + " gets " + Message));
 					player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - 6);
 					return;
 				}
@@ -224,16 +219,31 @@ public class EcItemMateria extends Item
 		}
 		for (int i = 0; i < MagicMateriaNum; i++) {
 			ItemStack magic = new ItemStack(this, 1, 1 + i);
-			if (i < this.magicEnch.length)
+			if (i < magicEnch.length)
 				magic.addEnchantment(Enchantment.enchantmentsList[this.magicEnch[i]], 1);
 			itemList.add(magic);
 		}
 	}
 
-	public boolean isMagicEnch(int enchID)
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+        if (par1ItemStack.isItemEnchanted()) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                Enchantment enchantment = EnchantChanger.enchKind(par1ItemStack);
+                String enchType = "Type : " + StatCollector.translateToLocal("enchantmenttype." + enchantment.type.name());
+                String enchInfo = "Info : " + StatCollector.translateToLocal("info." + enchantment.getName());
+                par3List.add(enchType);
+                par3List.add(enchInfo);
+            } else {
+                par3List.add("Press " + EnumChatFormatting.BLUE + EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " Key to get more Info.");
+            }
+        }
+    }
+
+    public boolean isMagicEnch(int enchID)
 	{
-		for (int i = 0; i < this.magicEnch.length; i++)
-			if (enchID == this.magicEnch[i])
+		for (int i = 0; i < magicEnch.length; i++)
+			if (enchID == magicEnch[i])
 				return true;
 		return false;
 	}

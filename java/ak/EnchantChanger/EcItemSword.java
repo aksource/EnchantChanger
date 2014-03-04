@@ -2,7 +2,9 @@ package ak.EnchantChanger;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -61,7 +63,17 @@ public class EcItemSword extends ItemSword {
 //		par3List.add(String.valueOf(item.getItemDamage()));
 //	}
 
-	public static void doMagic(ItemStack par1ItemStack, World par2World,
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
+        return ImmutableSet.of("pickaxe");
+    }
+
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass) {
+        return toolClass.equals("pickaxe") ? 2 : 0;
+    }
+
+    public static void doMagic(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.EnchantmentMeteoId, par1ItemStack) > 0) {

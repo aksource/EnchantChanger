@@ -21,10 +21,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	private ItemStack[] Hugeitemstacks = new ItemStack[5];
 	public int MaterializingTime = 0;
 	public float angle = 0;
-	public int BoolToInt(boolean par1)
-	{
-		return (par1) ? 1:0;
-	}
+
 	@Override
 	public int getSizeInventory()
 	{
