@@ -118,6 +118,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         this.registerPacket(KeyHandlingPacket.class);
         this.registerPacket(LevitationPacket.class);
         this.registerPacket(CloudSwordPacket.class);
+        this.registerPacket(KeyMateriaWindowPacket.class);
     }
 
     // Method to call from FMLPostInitializationEvent
