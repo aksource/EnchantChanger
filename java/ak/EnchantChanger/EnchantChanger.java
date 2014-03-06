@@ -15,16 +15,14 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
@@ -35,6 +33,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
@@ -59,6 +60,10 @@ public class EnchantChanger {
     public static Block BlockMat;
     public static Block HugeMateria;
     public static Item ItemHugeMateria;
+    public static Block blockLifeStream;
+    public static Fluid fluidLifeStream;
+    public static Item bucketLifeStream;
+
     public static boolean LevelCap;
     public static boolean Debug;
     public static float MeteoPower;
@@ -270,6 +275,13 @@ public class EnchantChanger {
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(ItemHugeMateria, "itemhugemateria",
                 "EnchantChanger");
+        fluidLifeStream = new Fluid("lifestream").setLuminosity(15);
+        FluidRegistry.registerFluid(fluidLifeStream);
+        blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, Material.water).setBlockName("lifestream");
+        GameRegistry.registerBlock(blockLifeStream, "life_stream");
+        bucketLifeStream = new ItemBucket(blockLifeStream).setUnlocalizedName(EnchantChanger.EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
+        GameRegistry.registerItem(bucketLifeStream, "bucket_lifestream");
+        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLifeStream), new ItemStack(Items.bucket));
 
         Meteo = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteoId, 0);
         Holy = new EcEnchantmentHoly(EnchantChanger.EndhantmentHolyId, 0);
@@ -283,6 +295,8 @@ public class EnchantChanger {
         this.initMaps();
         livingeventhooks = new LivingEventHooks();
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
+        FillBucketHook.INSTANCE.buckets.put(blockLifeStream, bucketLifeStream);
+        MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
         FMLCommonHandler.instance().bus().register(this);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
         packetPipeline.initialise();

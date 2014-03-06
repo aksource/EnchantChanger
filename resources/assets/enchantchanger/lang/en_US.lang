@@ -1,5 +1,7 @@
 ﻿
 tile.EnchantChanger.name=Enchant Changer
+tile.HugeMateria.name=HugeMateria
+tile.lifestream.name=Fluid Life Stream
 item.enchantchanger:HugeMateria.name=HugeMateria
 item.enchantchanger:ExExpBottle.name=Ex Exp Bottle
 item.enchantchanger:ZackSword.name=Buster Sword
@@ -10,6 +12,7 @@ item.enchantchanger:UltimateWeapon.name=Ultimate Weapon
 item.enchantchanger:PortableEnchantChanger.name=Soldier License
 item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
+item.enchantchanger:bucketLifestream=Bucket of Life Stream
 enchantment.Meteo=Meteo
 enchantment.Holy=Holy
 enchantment.Teleport=Teleport

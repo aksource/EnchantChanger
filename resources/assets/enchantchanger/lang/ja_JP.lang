@@ -1,5 +1,7 @@
 ﻿
 tile.EnchantChanger.name=エンチャントチェンジャー
+tile.HugeMateria.name=ヒュージマテリア
+tile.lifestream.name=液体ライフストリーム
 item.enchantchanger:HugeMateria.name=ヒュージマテリア
 item.enchantchanger:ExExpBottle.name=エンチャントの瓶EX
 item.enchantchanger:ZackSword.name=バスターソード
@@ -10,6 +12,7 @@ item.enchantchanger:UltimateWeapon.name=究極剣
 item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
+item.enchantchanger:bucketLifestream=ライフストリームバケツ
 
 enchantment.Meteo=Meteo
 enchantment.Holy=Holy
