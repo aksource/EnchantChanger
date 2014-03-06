@@ -22,7 +22,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
@@ -279,7 +282,7 @@ public class EnchantChanger {
         FluidRegistry.registerFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, Material.water).setBlockName("lifestream");
         GameRegistry.registerBlock(blockLifeStream, "life_stream");
-        bucketLifeStream = new ItemBucket(blockLifeStream).setUnlocalizedName(EnchantChanger.EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
+        bucketLifeStream = new EcItemBucketLifeStream(blockLifeStream).setUnlocalizedName(EnchantChanger.EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(bucketLifeStream, "bucket_lifestream");
         FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLifeStream), new ItemStack(Items.bucket));
 

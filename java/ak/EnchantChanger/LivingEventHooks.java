@@ -32,6 +32,8 @@ public class LivingEventHooks
 	private int mptimer = this.FlightMptime;
     public boolean isMateriaKeyPressed = false;
 
+    private static long lastTime = 0;
+
 	@SubscribeEvent
 	public void LivingUpdate(LivingUpdateEvent event)
 	{
@@ -60,8 +62,10 @@ public class LivingEventHooks
 				&& ((EntityPlayer) killer.getEntity()).getCurrentEquippedItem().isItemEnchanted()
 				&& !entity.worldObj.isRemote) {
 			int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, entity, 1);
+            if (lastTime - entity.worldObj.getTotalWorldTime() < 20) exp = 2;
 			entity.worldObj.spawnEntityInWorld(new EcEntityApOrb(entity.worldObj, entity.posX, entity.posY,
 					entity.posZ, exp / 2));
+            lastTime = entity.worldObj.getTotalWorldTime();
 		}
 	}
 
