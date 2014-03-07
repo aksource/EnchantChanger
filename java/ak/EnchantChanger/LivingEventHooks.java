@@ -95,15 +95,15 @@ public class LivingEventHooks
 					this.flyToggleTimer = 0;
 				}
 			}
-			boolean var4 = (float) ((EntityPlayerSP) player).getFoodStats().getFoodLevel() > 6.0F;
+			boolean var4 = (float) player.getFoodStats().getFoodLevel() > 6.0F;
 			if (((EntityPlayerSP) player).onGround && !var3
 					&& ((EntityPlayerSP) player).movementInput.moveForward >= var2
-					&& !((EntityPlayerSP) player).isSprinting() && var4 && !((EntityPlayerSP) player).isUsingItem()
-					&& !((EntityPlayerSP) player).isPotionActive(Potion.blindness)) {
+					&& ! player.isSprinting() && var4 && !player.isUsingItem()
+					&& !player.isPotionActive(Potion.blindness)) {
 				if (this.sprintToggleTimer == 0) {
 					this.sprintToggleTimer = 7;
 				} else {
-					((EntityPlayerSP) player).setSprinting(true);
+					 player.setSprinting(true);
 					this.sprintToggleTimer = 0;
 				}
 			}
@@ -179,7 +179,7 @@ public class LivingEventHooks
 				for (int i = 0; i < EntityList.size(); i++) {
 					Entity entity = (Entity) EntityList.get(i);
 					if (entity instanceof EntityLiving) {
-						((EntityLiving) entity).attackEntityFrom(DamageSource.generic, 1);
+						entity.attackEntityFrom(DamageSource.generic, 1);
 						player.getFoodStats().addStats(1, 1.0f);
 					}
 				}
