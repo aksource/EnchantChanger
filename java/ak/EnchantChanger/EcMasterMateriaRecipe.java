@@ -45,12 +45,12 @@ public class EcMasterMateriaRecipe implements IRecipe
 		{
 			if(this.chekEnchmateria(materia, 6, 16, 21))
 			{
-				this.output = new ItemStack(EnchantChanger.MasterMateria,1,3);
+				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,3);
 				flag = true;
 			}
 			else if(this.chekEnchmateria(materia, 5, 0, 4) || this.chekEnchmateria(materia, 5, 7, 7))
 			{
-				this.output = new ItemStack(EnchantChanger.MasterMateria,1,1);
+				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,1);
 				flag = true;
 			}
 		}
@@ -58,12 +58,12 @@ public class EcMasterMateriaRecipe implements IRecipe
 		{
 			if(this.chekEnchmateria(materia, 4, 32, 35))
 			{
-				this.output = new ItemStack(EnchantChanger.MasterMateria,1,4);
+				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,4);
 				flag = true;
 			}
 			else if(this.chekEnchmateria(materia, 4, 48, 51))
 			{
-				this.output = new ItemStack(EnchantChanger.MasterMateria,1,5);
+				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,5);
 				flag = true;
 			}
 		}
@@ -71,7 +71,7 @@ public class EcMasterMateriaRecipe implements IRecipe
 		{
 			if(this.chekEnchmateria(materia, 2, 5, 6))
 			{
-				this.output = new ItemStack(EnchantChanger.MasterMateria,1,2);
+				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,2);
 				flag = true;
 			}
 		}

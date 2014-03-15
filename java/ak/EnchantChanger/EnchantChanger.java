@@ -1,15 +1,14 @@
 package ak.EnchantChanger;
 
 import ak.EnchantChanger.Client.ClientProxy;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -20,6 +19,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -28,10 +28,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,34 +41,38 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 @Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.7c-universal", dependencies = "required-after:FML", useMetadata = true)
 public class EnchantChanger {
-    public static Item ItemExExpBottle;
-    public static Item ItemMat;
-    public static Item ItemZackSword;
-    public static Item ItemCloudSword;
+    public static Item itemExExpBottle;
+    public static Item itemMateria;
+    public static Item itemZackSword;
+    public static Item itemCloudSword;
     public static Item ItemCloudSwordCore;
-    public static Item ItemSephirothSword;
-    public static Item ItemUltimateWeapon;
-    public static Item ItemPortableEnchantChanger;
-    public static Item ItemPortableEnchantmentTable;
-    public static Item MasterMateria;
-    public static Item ItemImitateSephirothSword;
-    public static Block BlockMat;
-    public static Block HugeMateria;
-    public static Item ItemHugeMateria;
+    public static Item itemSephirothSword;
+    public static Item itemUltimateWeapon;
+    public static Item iemPortableEnchantChanger;
+    public static Item itemPortableEnchantmentTable;
+    public static Item itemMasterMateria;
+    public static Item itemImitateSephirothSword;
+    public static Block blockEnchantChanger;
+    public static Block blockHugeMateria;
+    public static Item itemHugeMateria;
     public static Block blockLifeStream;
     public static Fluid fluidLifeStream;
     public static Item bucketLifeStream;
+    public static Block blockMakoReactor;
+    public static Potion potionMako;
+    public static DamageSource damageSourceMako;
 
-    public static boolean LevelCap;
-    public static boolean Debug;
-    public static float MeteoPower;
-    public static float MeteoSize;
+    public static boolean enableLevelCap;
+    public static boolean debug;
+    public static float powerMeteo;
+    public static float sizeMeteo;
     public static int[] extraSwordIDs;
     public static int[] extraToolIDs;
     public static int[] extraBowIDs;
@@ -90,7 +92,7 @@ public class EnchantChanger {
     };
     public static HashMap<Integer, Integer> levelLimitMap = new HashMap<Integer, Integer>();
 
-    public static boolean DecMateriaLv;
+    public static boolean enableDecMateriaLv;
     public static boolean YouAreTera;
     public static int MateriaPotionMinutes;
     public static int Difficulty;
@@ -99,6 +101,7 @@ public class EnchantChanger {
     public static boolean enableAPSystem;
     public static boolean enableDungeonLoot;
     public static int aPBasePoint;
+    public static int idMakoPoison;
 
     public static int EnchantmentMeteoId;
     public static Enchantment Meteo;
@@ -121,11 +124,16 @@ public class EnchantChanger {
     public static String EcGuiMaterializer = "textures/gui/materializer.png";
     public static String EcGuiHuge = "textures/gui/HugeMateriaContainer.png";
     public static String EcGuiMateriaWindow = "textures/gui/MaterializingContainer.png";
+    public static String EcPotionEffect = "textures/gui/potioneffect.png";
     public static String EcHugetex = "textures/item/hugemateriatex.png";
     public static String EcTextureDomain = "enchantchanger:";
     public static String EcAssetsDomain = "enchantchanger";
 
     public static boolean loadMTH = false;
+    public static boolean loadBC = false;
+    public static boolean loadIC = false;
+    public static boolean loadTE = false;
+    public static boolean loadUE = false;
     @Mod.Instance("EnchantChanger")
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
@@ -146,13 +154,13 @@ public class EnchantChanger {
         Configuration config = new Configuration(
                 event.getSuggestedConfigurationFile());
         config.load();
-        LevelCap = config
+        enableLevelCap = config
                 .get(Configuration.CATEGORY_GENERAL,
-                        "LevelCap",
+                        "enableLevelCap",
                         false,
                         "TRUE:You cannot change a Materia to a enchantment over max level of the enchantment.")
                 .getBoolean(false);
-        Debug = config.get(Configuration.CATEGORY_GENERAL, "Debug mode", false,
+        debug = config.get(Configuration.CATEGORY_GENERAL, "debug mode", false,
                 "デバッグ用").getBoolean(false);
         enableAPSystem = config.get(Configuration.CATEGORY_GENERAL,
                 "enableAPSystem", true).getBoolean(true);
@@ -160,6 +168,7 @@ public class EnchantChanger {
                 "enableDungeonLoot", true).getBoolean(true);
         aPBasePoint = config.get(Configuration.CATEGORY_GENERAL, "APBAsePoint",
                 200).getInt();
+        idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", 100, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra SwordIds", new int[]{267},
                 "Put Ids which you want to operate as  swords.").getIntList();
@@ -173,8 +182,8 @@ public class EnchantChanger {
                 "Extra ArmorIds", new int[]{298},
                 "Put Ids which you want to operate as  armors.").getIntList();
 
-        DecMateriaLv = config
-                .get(Configuration.CATEGORY_GENERAL, "DecMateriaLv", false,
+        enableDecMateriaLv = config
+                .get(Configuration.CATEGORY_GENERAL, "enableDecMateriaLv", false,
                         "TRUE:The level of extracted Materia is decreased by the item damage")
                 .getBoolean(false);
         YouAreTera = config
@@ -183,9 +192,9 @@ public class EnchantChanger {
                         false,
                         "TRUE:You become Tera in FF4. It means that you can use Magic Materia when your MP is exhausted")
                 .getBoolean(false);
-        MeteoPower = (float) config.get(Configuration.CATEGORY_GENERAL,
+        powerMeteo = (float) config.get(Configuration.CATEGORY_GENERAL,
                 "METEO POWER", 10, "This is a power of Meteo").getInt();
-        MeteoSize = (float) config.get(Configuration.CATEGORY_GENERAL,
+        sizeMeteo = (float) config.get(Configuration.CATEGORY_GENERAL,
                 "Meteo Size", 10, "This is a Size of Meteo").getInt();
         MateriaPotionMinutes = config.get(Configuration.CATEGORY_GENERAL,
                 "Materia Potion Minutes", 10,
@@ -210,73 +219,73 @@ public class EnchantChanger {
                 .getStringList();
         config.save();
 
-        ItemMat = (new EcItemMateria()).setUnlocalizedName(
+        itemMateria = (new EcItemMateria()).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "Materia").setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemMat, "materia", "EnchantChanger");
-        ItemExExpBottle = new EcItemExExpBottle()
+        GameRegistry.registerItem(itemMateria, "materia", "EnchantChanger");
+        itemExExpBottle = new EcItemExExpBottle()
                 .setUnlocalizedName(EnchantChanger.EcTextureDomain + "ExExpBottle")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemExExpBottle, "exexpbottle",
+        GameRegistry.registerItem(itemExExpBottle, "exexpbottle",
                 "EnchantChanger");
-        ItemZackSword = (new EcItemZackSword())
+        itemZackSword = (new EcItemZackSword())
                 .setUnlocalizedName(EnchantChanger.EcTextureDomain + "ZackSword")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemZackSword, "zacksword", "EnchantChanger");
+        GameRegistry.registerItem(itemZackSword, "zacksword", "EnchantChanger");
         ItemCloudSwordCore = (new EcItemCloudSwordCore())
                 .setUnlocalizedName(EnchantChanger.EcTextureDomain + "CloudSwordCore")
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(ItemCloudSwordCore, "cloudswordcore",
                 "EnchantChanger");
-        ItemCloudSword = (new EcItemCloudSword())
+        itemCloudSword = (new EcItemCloudSword())
                 .setUnlocalizedName(EnchantChanger.EcTextureDomain + "CloudSword")
                 .setCreativeTab(null);
-        GameRegistry.registerItem(ItemCloudSword, "cloudsword",
+        GameRegistry.registerItem(itemCloudSword, "cloudsword",
                 "EnchantChanger");
-        ItemSephirothSword = (new EcItemSephirothSword(
+        itemSephirothSword = (new EcItemSephirothSword(
         )).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "MasamuneBlade").setCreativeTab(
                 tabsEChanger);
-        GameRegistry.registerItem(ItemSephirothSword, "masamuneblade",
+        GameRegistry.registerItem(itemSephirothSword, "masamuneblade",
                 "EnchantChanger");
-        ItemUltimateWeapon = (new EcItemUltimateWeapon(
+        itemUltimateWeapon = (new EcItemUltimateWeapon(
         )).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "UltimateWeapon").setCreativeTab(
                 tabsEChanger);
-        GameRegistry.registerItem(ItemUltimateWeapon, "ultimateweapon",
+        GameRegistry.registerItem(itemUltimateWeapon, "ultimateweapon",
                 "EnchantChanger");
-        ItemPortableEnchantChanger = (new EcItemMaterializer(
+        iemPortableEnchantChanger = (new EcItemMaterializer(
         )).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "PortableEnchantChanger")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemPortableEnchantChanger,
+        GameRegistry.registerItem(iemPortableEnchantChanger,
                 "portableenchantchanger", "EnchantChanger");
-        ItemPortableEnchantmentTable = (new EcItemEnchantmentTable(
+        itemPortableEnchantmentTable = (new EcItemEnchantmentTable(
         )).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "PortableEnchantmentTable")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemPortableEnchantmentTable,
+        GameRegistry.registerItem(itemPortableEnchantmentTable,
                 "portableenchantmenttable", "EnchantChanger");
-        MasterMateria = new EcItemMasterMateria()
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "MasterMateria")
+        itemMasterMateria = new EcItemMasterMateria()
+                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "itemMasterMateria")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(MasterMateria, "mastermateria",
+        GameRegistry.registerItem(itemMasterMateria, "mastermateria",
                 "EnchantChanger");
-        ItemImitateSephirothSword = (new EcItemSephirothSwordImit(
+        itemImitateSephirothSword = (new EcItemSephirothSwordImit(
         )).setUnlocalizedName(
                 EnchantChanger.EcTextureDomain + "ImitateMasamuneBlade").setCreativeTab(
                 tabsEChanger);
-        GameRegistry.registerItem(ItemImitateSephirothSword,
+        GameRegistry.registerItem(itemImitateSephirothSword,
                 "imitationmasamuneblade", "EnchantChanger");
-        BlockMat = (new EcBlockMaterialize()).setCreativeTab(
+        blockEnchantChanger = (new EcBlockMaterialize()).setCreativeTab(
                 tabsEChanger).setBlockName("EnchantChanger").setBlockTextureName(EnchantChanger.EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
-        GameRegistry.registerBlock(BlockMat, "EnchantChanger");
-        HugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0)
-                .setBlockName("HugeMateria").setBlockTextureName("glass");
-        GameRegistry.registerBlock(HugeMateria, "blockhugemateria");
-        ItemHugeMateria = new EcItemHugeMateria()
+        GameRegistry.registerBlock(blockEnchantChanger, "EnchantChanger");
+        blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0)
+                .setBlockName("blockHugeMateria").setBlockTextureName("glass");
+        GameRegistry.registerBlock(blockHugeMateria, "blockhugemateria");
+        itemHugeMateria = new EcItemHugeMateria()
                 .setUnlocalizedName(EnchantChanger.EcTextureDomain + "HugeMateria")
                 .setCreativeTab(tabsEChanger);
-        GameRegistry.registerItem(ItemHugeMateria, "itemhugemateria",
+        GameRegistry.registerItem(itemHugeMateria, "itemhugemateria",
                 "EnchantChanger");
         fluidLifeStream = new Fluid("lifestream").setLuminosity(15);
         FluidRegistry.registerFluid(fluidLifeStream);
@@ -285,12 +294,18 @@ public class EnchantChanger {
         bucketLifeStream = new EcItemBucketLifeStream(blockLifeStream).setUnlocalizedName(EnchantChanger.EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(bucketLifeStream, "bucket_lifestream");
         FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLifeStream), new ItemStack(Items.bucket));
+        blockMakoReactor = new EcBlockMakoReactor().setBlockName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(tabsEChanger).setBlockTextureName(EcTextureDomain + "makoreactor-side");
 
         Meteo = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteoId, 0);
         Holy = new EcEnchantmentHoly(EnchantChanger.EndhantmentHolyId, 0);
         Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0);
         Float = new EcEnchantmentFloat(EnchantChanger.EnchantmentFloatId, 0);
         Thunder = new EcEnchantmentThunder(EnchantChanger.EnchantmentThunderId, 0);
+
+        addStatusEffect();
+        potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
+
+        damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
     }
 
     @Mod.EventHandler
@@ -309,7 +324,7 @@ public class EnchantChanger {
                 "container.hugeMateria");
 
         EntityRegistry.registerModEntity(EcEntityExExpBottle.class,
-                "ItemExExpBottle", 0, this, 250, 5, true);
+                "itemExExpBottle", 0, this, 250, 5, true);
         EntityRegistry.registerModEntity(EcEntityMeteo.class, "Meteo", 1, this,
                 250, 5, true);
         EntityRegistry.registerModEntity(EcEntityApOrb.class, "apOrb", 2, this,
@@ -324,10 +339,10 @@ public class EnchantChanger {
         if (EnchantChanger.Difficulty < 2)
             GameRegistry.addRecipe(new EcMateriaRecipe());
         GameRegistry.addRecipe(new EcMasterMateriaRecipe());
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemMat, 1, 0),
+        GameRegistry.addShapelessRecipe(new ItemStack(itemMateria, 1, 0),
                 new ItemStack(Items.diamond, 1),
                 new ItemStack(Items.ender_pearl, 1));
-        GameRegistry.addRecipe(new ItemStack(ItemZackSword, 1),
+        GameRegistry.addRecipe(new ItemStack(itemZackSword, 1),
                 " X", "XX", " Y", 'X', Blocks.iron_block,
                 'Y', Items.iron_ingot);
         if (EnchantChanger.Difficulty < 2)
@@ -335,63 +350,63 @@ public class EnchantChanger {
                     new ItemStack(ItemCloudSwordCore, 1),
                     " X ", "XYX", " Z ", 'X',
                     Blocks.iron_block, 'Y',
-                    new ItemStack(ItemMat, 1, 0),
+                    new ItemStack(itemMateria, 1, 0),
                     'Z', Items.iron_ingot);
         else
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
                     " X ", "DYD", " Z ", 'X',
                     Blocks.iron_block, 'Y',
-                    new ItemStack(ItemMat, 1, 0),
+                    new ItemStack(itemMateria, 1, 0),
                     'Z', Items.iron_ingot, 'D',
                     Items.diamond);
         GameRegistry.addRecipe(
-                new ItemStack(ItemSephirothSword, 1),
+                new ItemStack(itemSephirothSword, 1),
                 "  A", " B ", "C  ", 'A',
                 Items.iron_ingot, 'B',
                 new ItemStack(Items.diamond_sword, 1, 0),
-                'C', new ItemStack(ItemMat, 1, 1));
+                'C', new ItemStack(itemMateria, 1, 1));
         GameRegistry.addRecipe(
-                new ItemStack(ItemUltimateWeapon, 1),
+                new ItemStack(itemUltimateWeapon, 1),
                 " A ",
                 "ABA",
                 " C ",
                 'A',
                 Blocks.diamond_block,
                 'B',
-                new ItemStack(MasterMateria, 1,
+                new ItemStack(itemMasterMateria, 1,
                         OreDictionary.WILDCARD_VALUE),
                 'C', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(ItemImitateSephirothSword), "  A",
+        GameRegistry.addRecipe(new ItemStack(itemImitateSephirothSword), "  A",
                 " A ", "B  ", 'A', Items.iron_ingot, 'B', Items.iron_sword);
-        GameRegistry.addRecipe(new ItemStack(BlockMat, 1),
+        GameRegistry.addRecipe(new ItemStack(blockEnchantChanger, 1),
                 "XYX", "ZZZ", 'X',
                 Items.diamond, 'Y', Blocks.gold_block,
                 'Z', Blocks.obsidian);
-        GameRegistry.addRecipe(new ItemStack(ItemHugeMateria),
+        GameRegistry.addRecipe(new ItemStack(itemHugeMateria),
                 " A ", "ABA", " A ", 'A', Blocks.diamond_block, 'B',
                 Items.nether_star);
         GameRegistry
-                .addRecipe(new ItemStack(ItemHugeMateria),
+                .addRecipe(new ItemStack(itemHugeMateria),
                         " A ",
                         "ABA",
                         " A ",
                         'A',
                         Blocks.diamond_block,
                         'B',
-                        new ItemStack(MasterMateria, 1,
+                        new ItemStack(itemMasterMateria, 1,
                                 OreDictionary.WILDCARD_VALUE));
         GameRegistry.addShapelessRecipe(new ItemStack(
-                ItemPortableEnchantChanger, 1), BlockMat);
+                iemPortableEnchantChanger, 1), blockEnchantChanger);
         GameRegistry.addShapelessRecipe(new ItemStack(
-                ItemPortableEnchantmentTable, 1),
+                itemPortableEnchantmentTable, 1),
                 Blocks.enchanting_table);
-        GameRegistry.addShapelessRecipe(new ItemStack(MasterMateria, 1, 0),
-                new ItemStack(MasterMateria, 1, 1),
-                new ItemStack(MasterMateria, 1, 2),
-                new ItemStack(MasterMateria, 1, 3),
-                new ItemStack(MasterMateria, 1, 4),
-                new ItemStack(MasterMateria, 1, 5));
+        GameRegistry.addShapelessRecipe(new ItemStack(itemMasterMateria, 1, 0),
+                new ItemStack(itemMasterMateria, 1, 1),
+                new ItemStack(itemMasterMateria, 1, 2),
+                new ItemStack(itemMasterMateria, 1, 3),
+                new ItemStack(itemMasterMateria, 1, 4),
+                new ItemStack(itemMasterMateria, 1, 5));
         if (Difficulty == 0)
             GameRegistry.addRecipe(
                     new ItemStack(Items.experience_bottle, 8),
@@ -399,7 +414,7 @@ public class EnchantChanger {
                     new ItemStack(Items.potionitem, 1, 0),
                     'Y',
                     new ItemStack(Items.diamond, 1));
-        GameRegistry.addRecipe(new ItemStack(ItemExExpBottle, 8),
+        GameRegistry.addRecipe(new ItemStack(itemExExpBottle, 8),
                 "XXX", "XYX", "XXX", 'X',
                 new ItemStack(Items.experience_bottle, 1, 0), 'Y',
                 new ItemStack(Blocks.diamond_block, 1));
@@ -411,7 +426,7 @@ public class EnchantChanger {
                         'X',
                         Items.ender_eye,
                         'Y',
-                        new ItemStack(MasterMateria, 1,
+                        new ItemStack(itemMasterMateria, 1,
                                 OreDictionary.WILDCARD_VALUE));
         if (enableDungeonLoot)
             this.DungeonLootItemResist();
@@ -472,15 +487,12 @@ public class EnchantChanger {
     }
 
     public static boolean isApLimit(int Id, int Lv, int ap) {
-        if (EnchantChanger.getApLimit(Id, Lv) < ap)
-            return true;
-        else
-            return false;
+        return EnchantChanger.getApLimit(Id, Lv) < ap;
     }
 
     public static int getApLimit(int Id, int Lv) {
         if (EnchantChanger.apLimit.containsKey(Id)) {
-            return ((int) EnchantChanger.apLimit.get(Id)) * (Lv / 5 + 1);
+            return EnchantChanger.apLimit.get(Id) * (Lv / 5 + 1);
         } else
             return 150 * (Lv / 5 + 1);
     }
@@ -498,7 +510,7 @@ public class EnchantChanger {
             item.stackTagCompound.setTag("ench", new NBTTagList());
         }
 
-        NBTTagList var3 = (NBTTagList) item.stackTagCompound.getTagList("ench", 10);
+        NBTTagList var3 =item.stackTagCompound.getTagList("ench", 10);
         NBTTagCompound var4 = new NBTTagCompound();
         var4.setShort("id", (short) enchantment.effectId);
         var4.setShort("lvl", (short) (Lv));
@@ -611,12 +623,10 @@ public class EnchantChanger {
     }
 
     public static boolean checkLvCap(ItemStack materia) {
-        if (EnchantChanger.LevelCap) {
+        if (enableLevelCap) {
             int ench = EnchantChanger.getMateriaEnchKind(materia);
             int lv = EnchantChanger.getMateriaEnchLv(materia);
-            if (Enchantment.enchantmentsList[ench].getMaxLevel() < lv)
-                return false;
-            else return true;
+            return !(Enchantment.enchantmentsList[ench].getMaxLevel() < lv);
         } else return true;
     }
 
@@ -639,11 +649,21 @@ public class EnchantChanger {
             return ench.type.canEnchantItem(par1ItemStack.getItem());
         }
     }
-
+    private void addStatusEffect() {
+        if (idMakoPoison >= 32 && idMakoPoison < 127) {
+            if (Potion.potionTypes[idMakoPoison] == null) {
+                //NOOP yet
+            } else {
+                throw new IllegalIcuArgumentException("idMakoPoison:id has been used another MOD");
+            }
+        } else {
+            throw new IllegalArgumentException("idMakoPoison:Only set from 32 to 127");
+        }
+    }
     public void DungeonLootItemResist() {
         WeightedRandomChestContent materiaInChest;
         for (int i = 0; i < 8; i++) {
-            materiaInChest = ((EcItemMateria) ItemMat).addMateriaInChest(i, 1,
+            materiaInChest = ((EcItemMateria) itemMateria).addMateriaInChest(i, 1,
                     1, 1);
             ChestGenHooks.addItem(ChestGenHooks.MINESHAFT_CORRIDOR,
                     materiaInChest);
@@ -673,6 +693,30 @@ public class EnchantChanger {
         }
         while (ClientProxy.MateriaKey.isPressed()) {
             livingeventhooks.isMateriaKeyPressed = true;
+        }
+    }
+
+    @SubscribeEvent
+    public void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+
+    }
+
+    @SubscribeEvent
+    public void loggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+
+    }
+
+    @SubscribeEvent
+    public void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
+        if (!event.player.worldObj.isRemote) {
+            packetPipeline.sendTo(new PlayerInfoPacket(event.player.getEntityData()), (EntityPlayerMP)event.player);
+        }
+    }
+
+    @SubscribeEvent
+    public void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (!event.player.worldObj.isRemote) {
+            packetPipeline.sendTo(new PlayerInfoPacket(event.player.getEntityData()), (EntityPlayerMP)event.player);
         }
     }
 }

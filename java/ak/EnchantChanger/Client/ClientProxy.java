@@ -1,64 +1,61 @@
 package ak.EnchantChanger.Client;
 
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.input.Keyboard;
-
-import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.EcEntityApOrb;
-import ak.EnchantChanger.EcEntityExExpBottle;
-import ak.EnchantChanger.EcEntityMeteo;
-import ak.EnchantChanger.EcTileEntityHugeMateria;
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.*;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
+import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
+import org.lwjgl.input.Keyboard;
 
 public class ClientProxy extends CommonProxy {
 	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
 			Keyboard.KEY_V, "EnchantChanger:KeyMagic");
     public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger:KeyMateria");
-
+    public static int customRenderPass;
+    public static int multiPassRenderType;
+    public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
 	@Override
 	public void registerRenderInformation() {
 		RenderingRegistry.registerEntityRenderingHandler(
 				EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteo.class,
-				new EcRenderItemThrowable(EnchantChanger.MeteoSize));
+				new EcRenderItemThrowable(EnchantChanger.sizeMeteo));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
 				new EcRenderApOrb());
-//		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
-		// TickRegistry.registerTickHandler(new ClientTickHandler(),
-		// Side.CLIENT);
+        multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(ecRenderMultiPassBlock);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(EnchantChanger.blockMakoReactor), ecRenderMultiPassBlock);
+
 		ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
 		IItemRenderer swordRenderer = new EcSwordRenderer();
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemSephirothSword,
+				EnchantChanger.itemSephirothSword,
 				swordRenderer);
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemZackSword,
+				EnchantChanger.itemZackSword,
 				swordRenderer);
 		MinecraftForgeClient.registerItemRenderer(
 				EnchantChanger.ItemCloudSwordCore,
 				swordRenderer);
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemCloudSword,
+				EnchantChanger.itemCloudSword,
 				swordRenderer);
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemUltimateWeapon,
+				EnchantChanger.itemUltimateWeapon,
 				swordRenderer);
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemImitateSephirothSword,
+				EnchantChanger.itemImitateSephirothSword,
 				swordRenderer);
 		IItemRenderer materiaRenderer = new EcRenderMateria();
-		MinecraftForgeClient.registerItemRenderer(EnchantChanger.ItemMat,
+		MinecraftForgeClient.registerItemRenderer(EnchantChanger.itemMateria,
 				materiaRenderer);
 		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.MasterMateria, materiaRenderer);
+				EnchantChanger.itemMasterMateria, materiaRenderer);
 	}
 
 	@Override

@@ -1,7 +1,25 @@
-﻿
+﻿#Block
 tile.EnchantChanger.name=エンチャントチェンジャー
 tile.HugeMateria.name=ヒュージマテリア
 tile.lifestream.name=液体ライフストリーム
+#Item
+ItemMateria.Base.name=不活性マテリア
+ItemMateria.name=マテリア
+ItemMateria.Black.name=黒マテリア
+ItemMateria.White.name=白マテリア
+ItemMateria.Teleport.name=瞬間移動マテリア
+ItemMateria.Floating.name=浮遊マテリア
+ItemMateria.Thunder.name=雷マテリア
+ItemMateria.Despell.name=解呪マテリア
+ItemMateria.Haste.name=加速マテリア
+ItemMateria.Absorption.name=吸収マテリア
+ItemMasterMateria.0.name=究極のマスターマテリア
+ItemMasterMateria.1.name=防御のマスターマテリア
+ItemMasterMateria.2.name=水のマスターマテリア
+ItemMasterMateria.3.name=攻撃のマスターマテリア
+ItemMasterMateria.4.name=採掘のマスターマテリア
+ItemMasterMateria.5.name=弓のマスターマテリア
+ItemMasterMateria.6.name=追加のマスターマテリア
 item.enchantchanger:HugeMateria.name=ヒュージマテリア
 item.enchantchanger:ExExpBottle.name=エンチャントの瓶EX
 item.enchantchanger:ZackSword.name=バスターソード
@@ -12,40 +30,24 @@ item.enchantchanger:UltimateWeapon.name=究極剣
 item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
-item.enchantchanger:bucketLifestream=ライフストリームバケツ
-
+item.enchantchanger:bucketLifestream.name=ライフストリームバケツ
+#Enchantment
 enchantment.Meteo=Meteo
 enchantment.Holy=Holy
 enchantment.Teleport=Teleport
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
-
-ItemMateria.Base.name=不活性マテリア
-ItemMateria.name=マテリア
-
+#Potion
+EC|MakoPoison=魔晄中毒
+#death
+death.mako=%1$sは星に還った
+#Container
 container.materializer=エンチャントチェンジャー
 container.hugeMateria=ヒュージマテリア
-
+#Key
 Key.EcMagic=魔法キー
 Key.EcMateria=マテリア画面キー
-
-ItemMateria.Black.name=黒マテリア
-ItemMateria.White.name=白マテリア
-ItemMateria.Teleport.name=瞬間移動マテリア
-ItemMateria.Floating.name=浮遊マテリア
-ItemMateria.Thunder.name=雷マテリア
-ItemMateria.Despell.name=解呪マテリア
-ItemMateria.Haste.name=加速マテリア
-ItemMateria.Absorption.name=吸収マテリア
-
-ItemMasterMateria.0.name=究極のマスターマテリア
-ItemMasterMateria.1.name=防御のマスターマテリア
-ItemMasterMateria.2.name=水のマスターマテリア
-ItemMasterMateria.3.name=攻撃のマスターマテリア
-ItemMasterMateria.4.name=採掘のマスターマテリア
-ItemMasterMateria.5.name=弓のマスターマテリア
-ItemMasterMateria.6.name=追加のマスターマテリア
-
+#EnchantmentType
 enchantmenttype.all=全アイテム対象
 enchantmenttype.armor=全アーマー対象
 enchantmenttype.armor_feet=足装備対象
@@ -57,7 +59,7 @@ enchantmenttype.digger=ツール対象
 enchantmenttype.fishing_rod=釣り竿対象
 enchantmenttype.breakable=耐久値を持つアイテム対象
 enchantmenttype.bow=弓対象
-
+#EnchantmentInfo
 info.enchantment.damage.all=全モブへの攻撃時のダメージ増加
 info.enchantment.damage.undead=不死者への攻撃時のダメージ増加
 info.enchantment.damage.arthropods=虫への攻撃時のダメージ増加
@@ -87,7 +89,7 @@ info.enchantment.Holy=不死者へ魔法の範囲攻撃 (エンチャント交�
 info.enchantment.Teleport=視線の先にワープする (エンチャント交換MODアイテム専用)
 info.enchantment.Floating=飛行できる (エンチャント交換MODアイテム専用)
 info.enchantment.Thunder=視線の先に”サンダー”を撃つ (エンチャント交換MODアイテム専用)
-
+#AdditionalEnchantment
 info.enchantment.vorpal=モブの頭のドロップ率が増加し、一撃死もたまに起こる
 info.enchantment.disjunction=エンダーマンへのダメージ増加
 info.enchantment.wateraspect=炎に耐性のあるモブへのダメージ増加

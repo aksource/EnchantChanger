@@ -55,7 +55,7 @@ public class EcItemSword extends ItemSword {
 			}
 		}
 	}
-//For Debug
+//For debug
 //	@Override
 //	@SideOnly(Side.CLIENT)
 //	public void addInformation(ItemStack item, EntityPlayer player, List par3List, boolean par4)

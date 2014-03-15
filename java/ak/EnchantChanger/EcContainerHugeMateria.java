@@ -24,7 +24,7 @@ public class EcContainerHugeMateria extends Container {
 	private ArrayList<Integer> ItemEnchLvList = new ArrayList<Integer>();
 	private ArrayList<Integer> MateriaEnchList = new ArrayList<Integer>();
 	private int maxlv = EnchantChanger.MaxLv;
-	private boolean Debug = EnchantChanger.Debug;
+	private boolean Debug = EnchantChanger.debug;
 	private int lastMaterializingTime = 0;
 
 	public EcContainerHugeMateria (InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te){

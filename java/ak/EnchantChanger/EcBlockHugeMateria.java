@@ -13,7 +13,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 public class EcBlockHugeMateria extends BlockContainer
 {
-	private boolean isBottom;
 	public EcBlockHugeMateria()
 	{
 		super(Material.rock);
@@ -122,7 +121,7 @@ public class EcBlockHugeMateria extends BlockContainer
 	@Override
 	public Item getItemDropped(int par1, Random par2Random, int par3)
 	{
-		return par1  != 0 ? null : EnchantChanger.ItemHugeMateria;
+		return par1  != 0 ? null : EnchantChanger.itemHugeMateria;
 	}
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {

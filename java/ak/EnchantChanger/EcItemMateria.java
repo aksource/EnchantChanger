@@ -40,8 +40,8 @@ public class EcItemMateria extends Item
 	public static int[] magicEnch = new int[] { EnchantChanger.EnchantmentMeteoId, EnchantChanger.EndhantmentHolyId,
 			EnchantChanger.EnchantmentTelepoId, EnchantChanger.EnchantmentFloatId, EnchantChanger.EnchantmentThunderId };
 	public static boolean GGEnable = false;
-	private boolean LvCap = EnchantChanger.LevelCap;
-	private boolean Debug = EnchantChanger.Debug;
+	private boolean LvCap = EnchantChanger.enableLevelCap;
+	private boolean Debug = EnchantChanger.debug;
 	private boolean tera = EnchantChanger.YouAreTera;
 	private double BoxSize = 5D;
 
@@ -78,7 +78,7 @@ public class EcItemMateria extends Item
 				//				entityplayer.addExperienceLevel(LevelUPEXP(itemstack, false));
 				ItemStack expBottle;
 				if (Lv > 5)
-					expBottle = new ItemStack(EnchantChanger.ItemExExpBottle);
+					expBottle = new ItemStack(EnchantChanger.itemExExpBottle);
 				else
 					expBottle = new ItemStack(Items.experience_bottle);
 				if (!world.isRemote)
@@ -210,7 +210,7 @@ public class EcItemMateria extends Item
 				ItemStack stack2 = new ItemStack(this, 1, 0);
 				stack2.addEnchantment(Enchantment.enchantmentsList[i], 10);
 				itemList.add(stack2);
-				if (EnchantChanger.Debug) {
+				if (EnchantChanger.debug) {
 					ItemStack stack3 = new ItemStack(this, 1, 0);
 					stack3.addEnchantment(Enchantment.enchantmentsList[i], 127);
 					itemList.add(stack3);

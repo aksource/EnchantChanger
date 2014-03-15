@@ -12,7 +12,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ak.MultiToolHolders.ItemMultiToolHolder;
-import ak.MultiToolHolders.ToolHolderData;
 
 public class EcEntityApOrb extends Entity
 {
@@ -287,7 +286,7 @@ public class EcEntityApOrb extends Entity
 			}
 		} else if (ench.getMaxLevel() == 1) {
 			return true;
-		} else if (EnchantChanger.LevelCap && ench.getMaxLevel() <= nowLevel) {
+		} else if (EnchantChanger.enableLevelCap && ench.getMaxLevel() <= nowLevel) {
 			return true;
 		} else {
 			return false;

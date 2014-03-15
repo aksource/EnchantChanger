@@ -25,7 +25,7 @@ public class EcItemHugeMateria extends Item
 		case 4:par4--;break;
 		case 5:par4++;break;
 		}
-		Block hugemateria = EnchantChanger.HugeMateria;
+		Block hugemateria = EnchantChanger.blockHugeMateria;
 		if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 2, par6, par7, par1ItemStack))
 		{
 			if (!hugemateria.canPlaceBlockAt(par3World, par4, par5, par6) || !hugemateria.canPlaceBlockAt(par3World, par4, par5 + 1, par6) || !hugemateria.canPlaceBlockAt(par3World, par4, par5 + 2, par6))

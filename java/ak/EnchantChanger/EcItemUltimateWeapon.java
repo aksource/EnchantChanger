@@ -10,7 +10,7 @@ import net.minecraft.util.MathHelper;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 public class EcItemUltimateWeapon extends EcItemSword
 {
-	private float ultimateWeaponDamage = 0;
+	private float ultimateWeaponDamage = 0f;
 	public EcItemUltimateWeapon()
 	{
 		super(ToolMaterial.EMERALD);

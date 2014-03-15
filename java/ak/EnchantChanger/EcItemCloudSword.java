@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,9 +54,9 @@ public class EcItemCloudSword extends EcItemSword
 
 				if (this.SwordData != null && getSlotNum(par1ItemStack) != 5 && this.SwordData
 						.getStackInSlot(getSlotNum(par1ItemStack)) != null) {
-					par3EntityPlayer.addChatMessage(new ChatComponentTranslation(this.SwordData
+					par3EntityPlayer.addChatMessage(new ChatComponentText(this.SwordData
 							.getStackInSlot(getSlotNum(par1ItemStack))
-							.getDisplayName(), new Object[0]));
+							.getDisplayName()));
 				}
 			}
 			return par1ItemStack;

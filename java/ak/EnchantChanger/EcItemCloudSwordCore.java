@@ -81,7 +81,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 //	}
 	public ItemStack makeCloudSword(ItemStack stack)
 	{
-		ItemStack ChangeSword = new ItemStack(EnchantChanger.ItemCloudSword, 1);
+		ItemStack ChangeSword = new ItemStack(EnchantChanger.itemCloudSword, 1);
 		ChangeSword.setTagCompound(stack.getTagCompound());
 		return ChangeSword;
 	}

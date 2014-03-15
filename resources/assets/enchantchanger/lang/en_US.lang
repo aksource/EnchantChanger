@@ -1,29 +1,10 @@
-﻿
+﻿#Block
 tile.EnchantChanger.name=Enchant Changer
 tile.HugeMateria.name=HugeMateria
 tile.lifestream.name=Fluid Life Stream
-item.enchantchanger:HugeMateria.name=HugeMateria
-item.enchantchanger:ExExpBottle.name=Ex Exp Bottle
-item.enchantchanger:ZackSword.name=Buster Sword
-item.enchantchanger:CloudSword.name=Union Sword
-item.enchantchanger:CloudSwordCore.name=First Sword
-item.enchantchanger:MasamuneBlade.name=Masamune Blade
-item.enchantchanger:UltimateWeapon.name=Ultimate Weapon
-item.enchantchanger:PortableEnchantChanger.name=Soldier License
-item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
-item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
-item.enchantchanger:bucketLifestream=Bucket of Life Stream
-enchantment.Meteo=Meteo
-enchantment.Holy=Holy
-enchantment.Teleport=Teleport
-enchantment.Floating=Floating
-enchantment.Thunder=Thunder
+#Item
 ItemMateria.Base.name=Inactive Materia
 ItemMateria.name=Materia
-container.materializer=Enchant Changer
-container.hugeMateria=HugeMateria
-Key.EcMagic=Magic Key
-Key.EcMateria=Materia Window Key
 ItemMateria.Black.name=Black Materia
 ItemMateria.White.name=White Materia
 ItemMateria.Teleport.name=Teleport Materia
@@ -39,8 +20,34 @@ ItemMasterMateria.3.name=Master Materia of Attack
 ItemMasterMateria.4.name=Master Materia of Digging
 ItemMasterMateria.5.name=Master Materia of Bow
 ItemMasterMateria.6.name=Master Materia of Addition
-enchantchanger:ExExpBottle
-
+item.enchantchanger:HugeMateria.name=HugeMateria
+item.enchantchanger:ExExpBottle.name=Ex Exp Bottle
+item.enchantchanger:ZackSword.name=Buster Sword
+item.enchantchanger:CloudSword.name=Union Sword
+item.enchantchanger:CloudSwordCore.name=First Sword
+item.enchantchanger:MasamuneBlade.name=Masamune Blade
+item.enchantchanger:UltimateWeapon.name=Ultimate Weapon
+item.enchantchanger:PortableEnchantChanger.name=Soldier License
+item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
+item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
+item.enchantchanger:bucketLifestream.name=Bucket of Life Stream
+#Enchantment
+enchantment.Meteo=Meteo
+enchantment.Holy=Holy
+enchantment.Teleport=Teleport
+enchantment.Floating=Floating
+enchantment.Thunder=Thunder
+#Potion
+EC|MakoPoison=Mako Poison
+#death
+death.mako=%1$s was gone to lifestream
+#Container
+container.materializer=Enchant Changer
+container.hugeMateria=HugeMateria
+#Key
+Key.EcMagic=Magic Key
+Key.EcMateria=Materia Window Key
+#EnchantmentType
 enchantmenttype.all=All Items
 enchantmenttype.armor=All Armors
 enchantmenttype.armor_feet=Feet
@@ -52,7 +59,7 @@ enchantmenttype.digger=Digging Tools
 enchantmenttype.fishing_rod=Fishing Rod
 enchantmenttype.breakable=Breakable Tools
 enchantmenttype.bow=Bows
-
+#EnchantmentInfo
 info.enchantment.damage.all=More Sword Damage for All Mob
 info.enchantment.damage.undead=More Sword Damage for Undead
 info.enchantment.damage.arthropods=More Sword Damage for Arthropods
@@ -127,7 +134,7 @@ info.enchantment.charging=Charging
 info.enchantment.wandfortune=Get more drop items (Thaumcraft Only)
 info.enchantment.haste=Increasing moving speed
 info.enchantment.repair=Repairing duration of items using vis in Aura (Thaumcraft Only)
-
+#EnchantmentLevelAdditional
 enchantment.level.11=11
 enchantment.level.12=12
 enchantment.level.13=13

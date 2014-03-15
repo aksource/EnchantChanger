@@ -28,8 +28,8 @@ public class EcEntityMeteo extends Entity
     public double accelerationX;
     public double accelerationY;
     public double accelerationZ;
-    private float Explimit = EnchantChanger.MeteoPower;
-    private float Size = EnchantChanger.MeteoSize;
+    private float Explimit = EnchantChanger.powerMeteo;
+    private float Size = EnchantChanger.sizeMeteo;
     public EcEntityMeteo(World par1World)
     {
         super(par1World);

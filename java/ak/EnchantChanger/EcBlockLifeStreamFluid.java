@@ -56,10 +56,12 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
+        if (world.getTotalWorldTime() % 20L == 0L) return;
         List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getSelectedBoundingBoxFromPool(world, x, y, z));
         for (EntityLivingBase entity : list) {
             if (entity instanceof EntityPlayer) {
-                entity.addPotionEffect(new PotionEffect(Potion.poison.getId(), 20 * 5, 0));
+                entity.addPotionEffect(new PotionEffect(EnchantChanger.potionMako.getId(), 20 * 5, 0));
+                entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 20 * 5, 0));
             } else if (entity instanceof EntityMob) {
                 entity.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 20 * 10, 1));
             }

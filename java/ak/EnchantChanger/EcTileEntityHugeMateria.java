@@ -9,6 +9,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.relauncher.Side;
@@ -135,7 +138,20 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 
 		par1NBTTagCompound.setTag("Items", var2);
 	}
-	@Override
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        this.writeToNBT(nbtTagCompound);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTagCompound);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        this.readFromNBT(pkt.func_148857_g());
+    }
+
+    @Override
 	public void updateEntity()
 	{
 		//回転させようとしたけど、面倒だった。
@@ -213,9 +229,9 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 			if(EnchArray[dmg][i] != -1 && isValidItem(MaterialArray[EnchArray[dmg][i]], material))
 			{
 				if(magicArray.contains(EnchArray[dmg][i]))
-					result = new ItemStack(EnchantChanger.ItemMat,1,magicArray.indexOf(EnchArray[dmg][i]) + 1);
+					result = new ItemStack(EnchantChanger.itemMateria,1,magicArray.indexOf(EnchArray[dmg][i]) + 1);
 				else
-					result = new ItemStack(EnchantChanger.ItemMat,1,0);
+					result = new ItemStack(EnchantChanger.itemMateria,1,0);
 				if(EnchArray[dmg][i] >= 0 && EnchArray[dmg][i] < Enchantment.enchantmentsList.length){
 					int lv;
 					if(Enchantment.enchantmentsList[EnchArray[dmg][i]].getMaxLevel() == 1)

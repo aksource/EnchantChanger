@@ -63,7 +63,7 @@ public class EcContainerMateriaWindow extends Container {
                 if (lv > 0 && slotnum < 16) {
                     id = enchantments.getCompoundTagAt(i).getShort("id");
                     dmg = this.setMateriaDmgfromEnch(id);
-                    materia = new ItemStack(EnchantChanger.ItemMat, 1, dmg);
+                    materia = new ItemStack(EnchantChanger.itemMateria, 1, dmg);
                     EnchantChanger.addEnchantmentToItem(materia, Enchantment.enchantmentsList[id], lv);
                     this.materiaInventory.setInventorySlotContents(slotnum, materia);
                     slotnum++;

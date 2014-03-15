@@ -35,7 +35,7 @@ public class EcMateriaRecipe implements IRecipe
 			}
 			else if(craftitem.getItem() == Items.experience_bottle && expBottle == null && exExpBottle == null && materia2 == null)
 				expBottle = craftitem;
-			else if(craftitem.getItem() == EnchantChanger.ItemExExpBottle && expBottle == null && exExpBottle == null && materia2 == null)
+			else if(craftitem.getItem() == EnchantChanger.itemExExpBottle && expBottle == null && exExpBottle == null && materia2 == null)
 				exExpBottle = craftitem;
 			else
 				return false;
@@ -73,7 +73,7 @@ public class EcMateriaRecipe implements IRecipe
 				}
 				else if( expBottle == null && exExpBottle == null)
 				{
-					this.output = new ItemStack(EnchantChanger.ItemMat , 1, 0);
+					this.output = new ItemStack(EnchantChanger.itemMateria, 1, 0);
 					flag = true;
 				}
 			}

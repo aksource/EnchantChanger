@@ -16,7 +16,7 @@ public class EcItemMasterMateria extends Item
 		setHasSubtypes(true);
 		maxStackSize = 1;
 		setMaxDamage(0);
-        this.setTextureName(EnchantChanger.EcTextureDomain + "MasterMateria");
+        this.setTextureName(EnchantChanger.EcTextureDomain + "itemMasterMateria");
 	}
 	@Override
 	public String getUnlocalizedName(ItemStack par1ItemStack)

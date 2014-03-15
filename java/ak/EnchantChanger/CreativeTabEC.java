@@ -17,6 +17,6 @@ public class CreativeTabEC extends CreativeTabs
 
 	@Override
 	public Item getTabIconItem() {
-		return EnchantChanger.ItemZackSword;
+		return EnchantChanger.itemZackSword;
 	}
 }

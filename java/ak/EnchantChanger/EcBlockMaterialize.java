@@ -13,8 +13,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 public class EcBlockMaterialize extends BlockContainer
 {
+    @SideOnly(Side.CLIENT)
 	private IIcon top;
+    @SideOnly(Side.CLIENT)
 	private IIcon side;
+    @SideOnly(Side.CLIENT)
 	private IIcon bottom;
 	public EcBlockMaterialize()
 	{

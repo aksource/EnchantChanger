@@ -32,7 +32,7 @@ public class EcContainerMaterializer extends Container {
     private ArrayList<Integer> MateriaEnchList = new ArrayList<Integer>();
     private ArrayList<Integer> MateriaEnchLvList = new ArrayList<Integer>();
     private World worldPointer;
-    private boolean materiadecLv = EnchantChanger.DecMateriaLv;
+    private boolean materiadecLv = EnchantChanger.enableDecMateriaLv;
     private static ArrayList<Integer> magicDmg = new ArrayList<Integer>();
 
     public EcContainerMaterializer(World par1world, InventoryPlayer inventoryPlayer) {
@@ -238,7 +238,7 @@ public class EcContainerMaterializer extends Container {
                     int declv = (!materiadecLv) ? 0 : (dmgratio > 0.5F) ? 0 : (dmgratio > 0.25F) ? 1 : 2;
                     int decreasedLv = (data.lv - declv < 0) ? 0 : data.lv - declv;
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
-                    ItemStack materia = new ItemStack(EnchantChanger.ItemMat, 1, damage);
+                    ItemStack materia = new ItemStack(EnchantChanger.itemMateria, 1, damage);
                     EnchantChanger.addEnchantmentToItem(materia, data.enchantment, decreasedLv);
                     this.materializeResult.setInventorySlotContents(slotIndex + 1, materia);
                     slotIndex++;
@@ -248,7 +248,7 @@ public class EcContainerMaterializer extends Container {
 //                        int declv = (!materiadecLv) ? 0 : (dmgratio > 0.5F) ? 0 : (dmgratio > 0.25F) ? 1 : 2;
 //                        int decreasedLv = (this.ItemEnchLvList.get(i) - declv < 0) ? 0 : this.ItemEnchLvList.get(i) - declv;
 //                        int damage = this.setMateriaDmgfromEnch(this.ItemEnchList.get(i));
-//                        ItemStack materia = new ItemStack(EnchantChanger.ItemMat, 1, damage);
+//                        ItemStack materia = new ItemStack(EnchantChanger.itemMateria, 1, damage);
 //                        EnchantChanger.addEnchantmentToItem(materia, Enchantment.enchantmentsList[this.ItemEnchList.get(i)], decreasedLv);
 //                        this.materializeResult.setInventorySlotContents(i + 1, materia);
 //                    } else

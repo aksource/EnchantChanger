@@ -72,7 +72,7 @@ public class LivingEventHooks
 	public void Flight(EntityPlayer player)
 	{
 		this.allowLevitatiton = this.checkFlightIteminInv(player)
-				&& !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || (player.getFoodStats()
+				&& !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
 						.getFoodLevel() < 0 && !EnchantChanger.YouAreTera));
 		if (!this.allowLevitatiton) {
 			//			this.isLevitation = false;
