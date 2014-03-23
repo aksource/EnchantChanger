@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by A.K. on 14/03/08.
  */
-public class EcBlockMakoReactor extends EcMultiPassBlock{
+public class EcBlockMakoReactor extends EcBlockMultiPass{
     private static int[] sides = new int[]{2,5,3,4};
     private static String[] baseBlocks = new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).toString(),GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).toString()};
     @SideOnly(Side.CLIENT)
