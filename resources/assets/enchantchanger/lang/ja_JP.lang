@@ -30,7 +30,7 @@ item.enchantchanger:UltimateWeapon.name=究極剣
 item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
-item.enchantchanger:bucketLifestream.name=ライフストリームバケツ
+item.enchantchanger:bucketLifestream.name=ライフストリーム入りバケツ
 #Enchantment
 enchantment.Meteo=Meteo
 enchantment.Holy=Holy

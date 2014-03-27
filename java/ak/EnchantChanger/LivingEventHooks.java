@@ -14,14 +14,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class LivingEventHooks
 {
-	private boolean allowLevitatiton = false;
+	private boolean allowLevitation = false;
 	//	private boolean isLevitation = false;
 	private int flyToggleTimer = 0;
 	private int sprintToggleTimer = 0;
@@ -45,6 +44,13 @@ public class LivingEventHooks
             this.openMateriaWindow(player.worldObj, player);
 		}
 	}
+
+    @SubscribeEvent
+    public void fixLevitationDigSpeed(PlayerEvent.BreakSpeed event) {
+        if (event.entityPlayer.getEntityData().hasKey("levitation") && event.entityPlayer.getEntityData().getBoolean("levitation")) {
+            event.newSpeed = event.originalSpeed * 5.0f;
+        }
+    }
 
 	@SubscribeEvent
 	public void LivingDeath(LivingDeathEvent event)
@@ -71,22 +77,21 @@ public class LivingEventHooks
 
 	public void Flight(EntityPlayer player)
 	{
-		this.allowLevitatiton = this.checkFlightIteminInv(player)
+		this.allowLevitation = this.checkFlightIteminInv(player)
 				&& !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
 						.getFoodLevel() < 0 && !EnchantChanger.YouAreTera));
-		if (!this.allowLevitatiton) {
+		if (!this.allowLevitation) {
 			//			this.isLevitation = false;
 			this.setModeToNBT(player, false);
 			return;
 		}
 		player.fallDistance = 0.0f;
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		if (side == Side.CLIENT) {
+		if (player.worldObj.isRemote/* FMLCommonHandler.instance().getEffectiveSide().isClient()*/) {
 			boolean jump = ((EntityPlayerSP) player).movementInput.jump;
 			float var2 = 0.8F;
 			boolean var3 = ((EntityPlayerSP) player).movementInput.moveForward >= var2;
 			((EntityPlayerSP) player).movementInput.updatePlayerMoveState();
-			if (this.allowLevitatiton && !jump && ((EntityPlayerSP) player).movementInput.jump) {
+			if (this.allowLevitation && !jump && ((EntityPlayerSP) player).movementInput.jump) {
 				if (this.flyToggleTimer == 0) {
 					this.flyToggleTimer = 7;
 				} else {
@@ -138,7 +143,7 @@ public class LivingEventHooks
 
 			EnchantChanger.packetPipeline.sendToServer(new LevitationPacket(this.getModeToNBT(player)));
 		}
-		if (/*this.isLevitation*/side == side.SERVER && this.getModeToNBT(player)) {
+		if (/*FMLCommonHandler.instance().getEffectiveSide().isServer()*/!player.worldObj.isRemote && this.getModeToNBT(player)) {
 			if (this.mptimer == 0) {
 				this.mptimer = this.FlightMptime;
 				player.getFoodStats().addStats(-1, 1.0F);

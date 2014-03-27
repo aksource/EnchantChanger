@@ -27,6 +27,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     protected IIcon stillIcon;
     @SideOnly(Side.CLIENT)
     protected IIcon flowingIcon;
+    private int waitTime = 0;
     public EcBlockLifeStreamFluid(Fluid fluid, Material material) {
         super(fluid, material);
     }
@@ -56,11 +57,11 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
-        if (world.getTotalWorldTime() % 20L == 0L) return;
+        world.scheduleBlockUpdate(x, y, z, this, tickRate);
         List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getSelectedBoundingBoxFromPool(world, x, y, z));
         for (EntityLivingBase entity : list) {
             if (entity instanceof EntityPlayer) {
-                entity.addPotionEffect(new PotionEffect(EnchantChanger.potionMako.getId(), 20 * 5, 0));
+                entity.addPotionEffect(new PotionEffect(EnchantChanger.potionMako.getId(), 20 * 60, 0));
                 entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 20 * 5, 0));
             } else if (entity instanceof EntityMob) {
                 entity.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 20 * 10, 1));
