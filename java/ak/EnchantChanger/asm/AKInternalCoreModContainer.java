@@ -10,8 +10,8 @@ import java.util.Arrays;
 /**
  * Created by A.K. on 14/03/13.
  */
-public class ExtendArrayModContainer extends DummyModContainer {
-    public ExtendArrayModContainer() {
+public class AKInternalCoreModContainer extends DummyModContainer {
+    public AKInternalCoreModContainer() {
         super(new ModMetadata());
 
         ModMetadata meta = getMetadata();
