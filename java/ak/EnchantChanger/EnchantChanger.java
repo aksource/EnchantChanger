@@ -318,6 +318,11 @@ public class EnchantChanger {
         FMLCommonHandler.instance().bus().register(this);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
         packetPipeline.initialise();
+        packetPipeline.registerPacket(KeyHandlingPacket.class);
+        packetPipeline.registerPacket(LevitationPacket.class);
+        packetPipeline.registerPacket(CloudSwordPacket.class);
+        packetPipeline.registerPacket(KeyMateriaWindowPacket.class);
+        packetPipeline.registerPacket(PlayerInfoPacket.class);
         GameRegistry.registerTileEntity(EcTileEntityMaterializer.class,
                 "container.materializer");
         GameRegistry.registerTileEntity(EcTileEntityHugeMateria.class,

@@ -115,11 +115,6 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     // Method to call from FMLInitializationEvent
     public void initialise() {
         this.channels = NetworkRegistry.INSTANCE.newChannel("EnchantChangerPacket", this);
-        this.registerPacket(KeyHandlingPacket.class);
-        this.registerPacket(LevitationPacket.class);
-        this.registerPacket(CloudSwordPacket.class);
-        this.registerPacket(KeyMateriaWindowPacket.class);
-        this.registerPacket(PlayerInfoPacket.class);
     }
 
     // Method to call from FMLPostInitializationEvent
