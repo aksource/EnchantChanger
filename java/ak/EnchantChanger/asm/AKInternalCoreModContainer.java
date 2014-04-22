@@ -15,11 +15,11 @@ public class AKInternalCoreModContainer extends DummyModContainer {
         super(new ModMetadata());
 
         ModMetadata meta = getMetadata();
-        meta.modId = "ExtendPotionArray";
-        meta.name = "ExtendPotionArray";
+        meta.modId = "AKInternalCore";
+        meta.name = "AKInternalCore";
         meta.version = "1.0.0";
         meta.authorList = Arrays.asList("A.K.");
-        meta.description = "ExtendPotionArray from 32 to 127";
+        meta.description = "Change some constant number in vanilla";
         meta.url = "";
         meta.credits = "";
         this.setEnabledState(true);
