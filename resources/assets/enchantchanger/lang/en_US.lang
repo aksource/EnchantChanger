@@ -28,6 +28,7 @@ item.enchantchanger:CloudSwordCore.name=First Sword
 item.enchantchanger:MasamuneBlade.name=Masamune Blade
 item.enchantchanger:UltimateWeapon.name=Ultimate Weapon
 item.enchantchanger:PortableEnchantChanger.name=Soldier License
+#item.enchantchanger:PortableEnchantChanger.name=Portable Enchant Changer
 item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
 item.enchantchanger:bucketLifestream.name=Bucket of Life Stream

@@ -23,8 +23,8 @@ public class EcItemMaterializer extends Item
 //		par3EntityPlayer.openGui(EnchantChanger.instance, EnchantChanger.guiIdMaterializer,par2World,0,0,0);
         if (par2World.isRemote) return par1ItemStack;
         NBTTagCompound nbt = par3EntityPlayer.getEntityData();
-        boolean flag = !nbt.getBoolean("EC|soldier");
-        nbt.setBoolean("EC|soldier", flag);
+        boolean flag = !ExtendedPlayerData.get(par3EntityPlayer).getSoldierMode();
+        ExtendedPlayerData.get(par3EntityPlayer).setSoldierMode(flag);
         par3EntityPlayer.addChatComponentMessage(new ChatComponentText("Materia Setting Mode : " + flag));
         par1ItemStack.stackSize--;
 		return par1ItemStack;

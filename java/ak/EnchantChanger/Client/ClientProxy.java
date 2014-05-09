@@ -1,12 +1,10 @@
 package ak.EnchantChanger.Client;
 
 import ak.EnchantChanger.*;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.input.Keyboard;
@@ -62,10 +60,5 @@ public class ClientProxy extends CommonProxy {
 	public void registerTileEntitySpecialRenderer() {
 		ClientRegistry.bindTileEntitySpecialRenderer(
 				EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
-	}
-
-	@Override
-	public World getClientWorld() {
-		return FMLClientHandler.instance().getClient().theWorld;
 	}
 }

@@ -7,12 +7,15 @@ import ak.EnchantChanger.Client.EcGuiPortableEnchantment;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CommonProxy implements IGuiHandler {
-    public CommonProxy() {
-    }
+    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
 
     public void registerRenderInformation() {
     }
@@ -63,7 +66,14 @@ public class CommonProxy implements IGuiHandler {
         } else return null;
     }
 
-    public World getClientWorld() {
-        return null;
+    public static void storeEntityData(String name, NBTTagCompound compound)
+    {
+        extendedEntityData.put(name, compound);
     }
+
+    public static NBTTagCompound getEntityData(String name)
+    {
+        return extendedEntityData.remove(name);
+    }
+
 }

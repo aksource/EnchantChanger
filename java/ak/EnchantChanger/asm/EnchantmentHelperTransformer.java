@@ -21,7 +21,7 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
             AKInternalCorePlugin.logger.info("Finish transforming EnchantmentHelper Class");
             return basicClass;
         } catch (Exception e) {
-            throw new RuntimeException("failed : PotionArrayTransformer loading", e);
+            throw new RuntimeException("failed : EnchantmentHelperTransformer loading", e);
         }
     }
 

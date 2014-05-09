@@ -28,6 +28,7 @@ item.enchantchanger:CloudSwordCore.name=ファースト剣
 item.enchantchanger:MasamuneBlade.name=正宗
 item.enchantchanger:UltimateWeapon.name=究極剣
 item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
+#item.enchantchanger:PortableEnchantChanger.name=携帯エンチャントチェンジャー
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
 item.enchantchanger:bucketLifestream.name=ライフストリーム入りバケツ

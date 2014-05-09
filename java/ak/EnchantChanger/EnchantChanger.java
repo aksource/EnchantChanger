@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.7c-universal", dependencies = "required-after:FML", useMetadata = true)
+@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.8-universal", dependencies = "required-after:Forge@[10.12.0.1056,)", useMetadata = true)
 public class EnchantChanger {
     public static Item itemExExpBottle;
     public static Item itemMateria;
@@ -714,14 +714,14 @@ public class EnchantChanger {
     @SubscribeEvent
     public void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.player.worldObj.isRemote) {
-            packetPipeline.sendTo(new PlayerInfoPacket(event.player.getEntityData()), (EntityPlayerMP)event.player);
+            packetPipeline.sendTo(new PlayerInfoPacket(event.player), (EntityPlayerMP)event.player);
         }
     }
 
     @SubscribeEvent
     public void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.player.worldObj.isRemote) {
-            packetPipeline.sendTo(new PlayerInfoPacket(event.player.getEntityData()), (EntityPlayerMP)event.player);
+            packetPipeline.sendTo(new PlayerInfoPacket(event.player), (EntityPlayerMP)event.player);
         }
     }
 }

@@ -10,25 +10,25 @@ import net.minecraft.nbt.NBTTagCompound;
  * Created by A.K. on 14/03/10.
  */
 public class PlayerInfoPacket extends AbstractPacket {
-    private boolean canOpenMateriaWindow;
+    private NBTTagCompound data;
     public PlayerInfoPacket(){}
-    public PlayerInfoPacket(NBTTagCompound nbtTagCompound) {
-        this.canOpenMateriaWindow = nbtTagCompound.getBoolean("EC|soldier");
+    public PlayerInfoPacket(EntityPlayer player) {
+        this.data = new NBTTagCompound();
+        ExtendedPlayerData.get(player).saveNBTData(data);
     }
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-        buffer.writeBoolean(this.canOpenMateriaWindow);
+        ByteBufUtils.writeTag(buffer, data);
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-        this.canOpenMateriaWindow = buffer.readBoolean();
+        data = ByteBufUtils.readTag(buffer);
     }
 
     @Override
     public void handleClientSide(EntityPlayer player) {
-        NBTTagCompound nbt = player.getEntityData();
-        nbt.setBoolean("EC|soldier", this.canOpenMateriaWindow);
+        ExtendedPlayerData.get(player).loadNBTData(data);
     }
 
     @Override

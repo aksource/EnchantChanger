@@ -12,6 +12,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
@@ -30,8 +32,6 @@ public class LivingEventHooks
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	private int mptimer = this.FlightMptime;
     public boolean isMateriaKeyPressed = false;
-
-    private static long lastTime = 0;
 
 	@SubscribeEvent
 	public void LivingUpdate(LivingUpdateEvent event)
@@ -53,27 +53,50 @@ public class LivingEventHooks
     }
 
 	@SubscribeEvent
-	public void LivingDeath(LivingDeathEvent event)
+	public void onLivingDeathEvent(LivingDeathEvent event)
 	{
-		if (!EnchantChanger.enableAPSystem)
-			return;
 		DamageSource killer = event.source;
 		EntityLiving entity;
-		if (event.entityLiving instanceof EntityLiving)
-			entity = (EntityLiving) event.entityLiving;
-		else
-			return;
-		if (killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer
-				&& ((EntityPlayer) killer.getEntity()).getCurrentEquippedItem() != null
-				&& ((EntityPlayer) killer.getEntity()).getCurrentEquippedItem().isItemEnchanted()
-				&& !entity.worldObj.isRemote) {
-			int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, entity, 1);
-            if (lastTime - entity.worldObj.getTotalWorldTime() < 20) exp = 2;
-			entity.worldObj.spawnEntityInWorld(new EcEntityApOrb(entity.worldObj, entity.posX, entity.posY,
-					entity.posZ, exp / 2));
-            lastTime = entity.worldObj.getTotalWorldTime();
-		}
+		if (event.entityLiving instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
+			spawnAPOrb((EntityLiving)event.entityLiving, (EntityPlayer)killer.getEntity());
+		else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+            NBTTagCompound playerData = new NBTTagCompound();
+            (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).saveNBTData(playerData);
+            EnchantChanger.proxy.storeEntityData(((EntityPlayer) event.entity).getCommandSenderName(), playerData);
+            ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData((EntityPlayer) event.entity);
+        }
 	}
+
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinWorldEvent event)
+    {
+        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
+        {
+            NBTTagCompound playerData = EnchantChanger.proxy.getEntityData(((EntityPlayer) event.entity).getCommandSenderName());
+            if (playerData != null) {
+                (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).loadNBTData(playerData);
+            }
+            ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).loadProxyData((EntityPlayer)event.entity);
+        }
+    }
+
+    private void spawnAPOrb(EntityLiving dead, EntityPlayer killer) {
+        if (EnchantChanger.enableAPSystem && killer.getCurrentEquippedItem() != null && killer.getCurrentEquippedItem().isItemEnchanted() && !dead.worldObj.isRemote) {
+            int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
+            long lastTime = ExtendedPlayerData.get(killer).getApCoolintTime();
+            if (lastTime != 0 && lastTime - dead.worldObj.getTotalWorldTime() < 20) exp = 2;
+            dead.worldObj.spawnEntityInWorld(new EcEntityApOrb(dead.worldObj, dead.posX, dead.posY,
+                    dead.posZ, exp / 2));
+            ExtendedPlayerData.get(killer).setApCoolingTime(dead.worldObj.getTotalWorldTime());
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityConstructing(EntityEvent.EntityConstructing event) {
+        if (event.entity instanceof EntityPlayer) {
+            ExtendedPlayerData.register((EntityPlayer)event.entity);
+        }
+    }
 
 	public void Flight(EntityPlayer player)
 	{
@@ -181,13 +204,13 @@ public class LivingEventHooks
 			if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
 				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
 						EnchantChanger.AbsorpBoxSize, EnchantChanger.AbsorpBoxSize, EnchantChanger.AbsorpBoxSize));
-				for (int i = 0; i < EntityList.size(); i++) {
-					Entity entity = (Entity) EntityList.get(i);
-					if (entity instanceof EntityLiving) {
-						entity.attackEntityFrom(DamageSource.generic, 1);
-						player.getFoodStats().addStats(1, 1.0f);
-					}
-				}
+                for (Object aEntityList : EntityList) {
+                    Entity entity = (Entity) aEntityList;
+                    if (entity instanceof EntityLiving) {
+                        entity.attackEntityFrom(DamageSource.generic, 1);
+                        player.getFoodStats().addStats(1, 1.0f);
+                    }
+                }
 			}
 		}
 	}
@@ -248,18 +271,15 @@ public class LivingEventHooks
 
 	private void setModeToNBT(EntityPlayer player, boolean levi)
 	{
-		NBTTagCompound nbt = player.getEntityData();
-		nbt.setBoolean("levitation", levi);
+		ExtendedPlayerData.get(player).setLevitating(levi);
 	}
 
 	private boolean getModeToNBT(EntityPlayer player)
 	{
-		NBTTagCompound nbt = player.getEntityData();
-		return nbt.getBoolean("levitation");
+        return ExtendedPlayerData.get(player).isLevitating();
 	}
     private boolean canOpenMateriaWindow(EntityPlayer player) {
-        NBTTagCompound nbt = player.getEntityData();
-        return nbt.getBoolean("EC|soldier");
+        return ExtendedPlayerData.get(player).getSoldierMode();
     }
 	public void readPacketData(boolean var1, EntityPlayer player)
 	{
