@@ -43,7 +43,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -92,7 +91,7 @@ public class EnchantChanger {
             "307:0",
             "310:0"
     };
-    public static HashMap<Integer, Integer> levelLimitMap = new HashMap<Integer, Integer>();
+    public static HashMap<Integer, Integer> levelLimitMap = new HashMap<>();
 
     public static boolean enableDecMateriaLv;
     public static boolean YouAreTera;
@@ -144,8 +143,8 @@ public class EnchantChanger {
     public static int guiIdPortableEnchantmentTable = 1;
     public static int guiIdHugeMateria = 2;
     public static int guiIdMateriaWindow = 3;
-    public static HashMap<Integer, Integer> apLimit = new HashMap<Integer, Integer>();
-    public static HashSet<Integer> magicEnchantment = new HashSet<Integer>();
+    public static HashMap<Integer, Integer> apLimit = new HashMap<>();
+    public static HashSet<Integer> magicEnchantment = new HashSet<>();
     public static final CreativeTabs tabsEChanger = new CreativeTabEC(
             "EnchantChanger");
     public static LivingEventHooks livingeventhooks;
