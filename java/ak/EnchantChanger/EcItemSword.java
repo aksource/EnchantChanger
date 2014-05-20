@@ -50,7 +50,7 @@ public class EcItemSword extends ItemSword {
 				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage() - 1);
 			}
 			if (toggle) {
-				this.pressMagicKey = false;
+				pressMagicKey = false;
 				doMagic(par1ItemStack, par2World, (EntityPlayer) par3Entity);
 			}
 		}
@@ -197,7 +197,6 @@ public class EcItemSword extends ItemSword {
 						player.setLastAttacker(par1Entity);
 
 						EnchantmentHelper.func_151385_b(player, par1Entity);
-						ItemStack var9 = stack;
 						Object object = par1Entity;
 
 						if (par1Entity instanceof EntityDragonPart)
@@ -206,15 +205,15 @@ public class EcItemSword extends ItemSword {
 
 							if (ientitymultipart != null && ientitymultipart instanceof EntityLivingBase)
 							{
-								object = (EntityLivingBase)ientitymultipart;
+								object = ientitymultipart;
 							}
 						}
 
-						if (var9 != null && object instanceof EntityLivingBase) {
-							var9.hitEntity((EntityLivingBase) object, player);
+						if (stack != null && object instanceof EntityLivingBase) {
+                            stack.hitEntity((EntityLivingBase) object, player);
 							if (cancelHurt)
 								par1Entity.hurtResistantTime = 0;
-							if (var9.stackSize <= 0) {
+							if (stack.stackSize <= 0) {
 								this.destroyTheItem(player, stack);
 							}
 						}
@@ -239,24 +238,20 @@ public class EcItemSword extends ItemSword {
 
 	public double getItemStrength(ItemStack item) {
 		Multimap multimap = item.getAttributeModifiers();
-		double d0;
 		double d1 = 0;
 		if (!multimap.isEmpty()) {
-			Iterator iterator = multimap.entries().iterator();
 
-			while (iterator.hasNext()) {
-				Entry entry = (Entry) iterator.next();
-				AttributeModifier attributemodifier = (AttributeModifier) entry
-						.getValue();
-				d0 = attributemodifier.getAmount();
-
-				if (attributemodifier.getOperation() != 1
-						&& attributemodifier.getOperation() != 2) {
-					d1 = attributemodifier.getAmount();
-				} else {
-					d1 = attributemodifier.getAmount() * 100.0D;
-				}
-			}
+            for (Object object : multimap.entries()) {
+                Entry entry = (Entry) object;
+                AttributeModifier attributemodifier = (AttributeModifier) entry
+                        .getValue();
+                if (attributemodifier.getOperation() != 1
+                        && attributemodifier.getOperation() != 2) {
+                    d1 = attributemodifier.getAmount();
+                } else {
+                    d1 = attributemodifier.getAmount() * 100.0D;
+                }
+            }
 		}
 		return d1;
 	}
@@ -269,9 +264,9 @@ public class EcItemSword extends ItemSword {
 
 			if (nbttaglist != null) {
 				for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-					short short1 = ((NBTTagCompound) nbttaglist.getCompoundTagAt(i))
+					short short1 =  nbttaglist.getCompoundTagAt(i)
 							.getShort("id");
-					short short2 = ((NBTTagCompound) nbttaglist.getCompoundTagAt(i))
+					short short2 = nbttaglist.getCompoundTagAt(i)
 							.getShort("lvl");
 
 					if (Enchantment.enchantmentsList[short1] != null) {

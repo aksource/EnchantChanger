@@ -33,12 +33,14 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
         return 0.07F;
     }
 
-    protected float func_40077_c()
+    @Override
+    protected float func_70182_d()
     {
         return 0.7F;
     }
 
-    protected float func_40074_d()
+    @Override
+    protected float func_70183_g()
     {
         return -20.0F;
     }

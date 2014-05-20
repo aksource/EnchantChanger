@@ -15,13 +15,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EcGuiHugeMateria extends GuiContainer {
 
-	private EcTileEntityHugeMateria tileentity;
-	private ResourceLocation gui = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiHuge);
+	private EcTileEntityHugeMateria tileEntity;
+	private static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiHuge);
 	public EcGuiHugeMateria (InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te)
 	{
 		//the container is instanciated and passed to the superclass for handling
 		super(new EcContainerHugeMateria(inventoryPlayer, te));
-		this.tileentity = te;
+		this.tileEntity = te;
 	}
 
 	@Override
@@ -42,13 +42,13 @@ public class EcGuiHugeMateria extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //		this.mc.renderEngine.bindTexture(texture);
 //		this.mc.renderEngine.bindTexture(EnchantChanger.EcGuiHuge);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(gui);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(GUI);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 		int var1;
 
-		var1 = this.tileentity.getMaterializingProgressScaled(18);
+		var1 = this.tileEntity.getMaterializingProgressScaled(18);
 		this.drawTexturedModalRect(x + 97, y + 34, 176, 0, var1 + 1, 16);
 //		this.drawTexturedModalRect(x + 115, y + 15, 176, 16, 18, var1 + 1);
 //		this.drawTexturedModalRect(x + 113 + 18 - var1, y + 34, 176 + 18 - var1, 34, var1 + 1, 16);

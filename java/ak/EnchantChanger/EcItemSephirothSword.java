@@ -18,8 +18,6 @@ public class EcItemSephirothSword extends EcItemSword
 	public EcItemSephirothSword()
 	{
 		super(ToolMaterial.EMERALD);
-		this.setTextureName(EnchantChanger.EcTextureDomain + "MasamuneBlade");
-		this.setMaxDamage(ToolMaterial.EMERALD.getMaxUses() * 2);
 	}
 
 	@Override

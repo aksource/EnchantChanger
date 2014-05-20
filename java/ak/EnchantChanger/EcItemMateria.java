@@ -28,7 +28,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import org.lwjgl.input.Keyboard;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class EcItemMateria extends Item
@@ -40,19 +39,9 @@ public class EcItemMateria extends Item
 	public static int[] magicEnch = new int[] { EnchantChanger.EnchantmentMeteoId, EnchantChanger.EndhantmentHolyId,
 			EnchantChanger.EnchantmentTelepoId, EnchantChanger.EnchantmentFloatId, EnchantChanger.EnchantmentThunderId };
 	public static boolean GGEnable = false;
-	private boolean LvCap = EnchantChanger.enableLevelCap;
-	private boolean Debug = EnchantChanger.debug;
-	private boolean tera = EnchantChanger.YouAreTera;
-	private double BoxSize = 5D;
-
-	public EcItemMateria()
-	{
-		super();
-		setHasSubtypes(true);
-		maxStackSize = 64;
-		setMaxDamage(0);
-		this.setTextureName(EnchantChanger.EcTextureDomain + "Materia");
-	}
+//	private boolean LvCap = EnchantChanger.enableLevelCap;
+//	private boolean Debug = EnchantChanger.debug;
+//	private boolean tera = EnchantChanger.YouAreTera;
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)
@@ -97,8 +86,7 @@ public class EcItemMateria extends Item
 			case 2:
 				if (entityplayer.isSneaking()) {
 					GGEnable = !GGEnable;
-					entityplayer.addChatMessage(new ChatComponentTranslation("Great Gospel Mode " + GGEnable,
-							new Object[0]));
+					entityplayer.addChatMessage(new ChatComponentText("Great Gospel Mode " + GGEnable));
 				} else {
 					Holy(world, entityplayer);
 				}
@@ -141,10 +129,8 @@ public class EcItemMateria extends Item
 			case 7:
 				Haste(player, entity);
 				player.addChatMessage(new ChatComponentText("Haste!"));
-				;
 				return;
 			default:
-				return;
 			}
 		} else {
 			int EnchantmentKind = EnchantChanger.getMateriaEnchKind(item);
@@ -179,7 +165,6 @@ public class EcItemMateria extends Item
 					player.addExperienceLevel(-LevelUPEXP(item, false));
 					player.addChatMessage(new ChatComponentText(EntityName + " gets " + Message));
 					player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - 6);
-					return;
 				}
 			}
 		}
@@ -242,9 +227,8 @@ public class EcItemMateria extends Item
 
     public boolean isMagicEnch(int enchID)
 	{
-		for (int i = 0; i < magicEnch.length; i++)
-			if (enchID == magicEnch[i])
-				return true;
+		for (int i : magicEnch)
+			if (enchID == i) return true;
 		return false;
 	}
 
@@ -334,9 +318,7 @@ public class EcItemMateria extends Item
 
 	private static void travelDimension(EntityPlayer player, int nowDim)
 	{
-		if (nowDim == 0)
-			return;
-		else if (player instanceof EntityPlayerMP) {
+		if (nowDim != 0 && player instanceof EntityPlayerMP) {
 			EntityPlayerMP playerMP = (EntityPlayerMP) player;
 			transferPlayerToDimension(playerMP.mcServer.getConfigurationManager(), playerMP, 0, new MateriaTeleporter(
 					playerMP.mcServer.worldServerForDimension(0)));
@@ -362,11 +344,10 @@ public class EcItemMateria extends Item
 		par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 		serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 		serverConf.syncPlayerInventory(par1EntityPlayerMP);
-		Iterator iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
 
-		while (iterator.hasNext())
+		for (Object object : par1EntityPlayerMP.getActivePotionEffects())
 		{
-			PotionEffect potioneffect = (PotionEffect) iterator.next();
+			PotionEffect potioneffect = (PotionEffect) object;
 			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP
 					.getEntityId(), potioneffect));
 		}
@@ -376,7 +357,6 @@ public class EcItemMateria extends Item
 
 	public static Vec3 setTeleportPoint(World world, EntityPlayer entityplayer)
 	{
-		float var1 = 1F;
 		double distLimit = 150.0D;
 		double viewX = entityplayer.getLookVec().xCoord;
 		double viewY = entityplayer.getLookVec().yCoord;
@@ -427,8 +407,8 @@ public class EcItemMateria extends Item
 		decreasePlayerFood(entityplayer, 6);
 		List EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
 				entityplayer.boundingBox.expand(5D, 5D, 5D));
-		for (int i = 0; i < EntityList.size(); i++) {
-			Entity entity = (Entity) EntityList.get(i);
+		for (Object object : EntityList) {
+			Entity entity = (Entity) object;
 			if (((EntityLivingBase) entity).isEntityUndead()) {
 				int var1 = MathHelper.floor_float(((EntityLivingBase) entity).getMaxHealth() / 2);
 				entity.attackEntityFrom(DamageSource.magic, var1);

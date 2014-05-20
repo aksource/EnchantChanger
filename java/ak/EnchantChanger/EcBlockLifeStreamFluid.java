@@ -39,8 +39,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
 
     @Override
     public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-        if (world.getBlock(x,  y,  z).getMaterial().isLiquid()) return false;
-        return super.canDisplace(world, x, y, z);
+        return !world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z);
     }
 
     @Override

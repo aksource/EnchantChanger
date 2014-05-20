@@ -135,9 +135,9 @@ public class EcEntitySword extends Entity
 			List var5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
 			double var6 = 0.0D;
 
-			for (int var8 = 0; var8 < var5.size(); ++var8)
+			for (Object object :  var5)
 			{
-				Entity var9 = (Entity)var5.get(var8);
+				Entity var9 = (Entity)object;
 
 				if (var9.canBeCollidedWith() && (!var9.isEntityEqual(this.enemyEntity) || this.ticksInAir >= 25))
 				{
@@ -174,10 +174,10 @@ public class EcEntitySword extends Entity
 			float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-			for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
-			{
-				;
-			}
+//			for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+//			{
+//				;
+//			}
 
 			while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
 			{
@@ -233,7 +233,7 @@ public class EcEntitySword extends Entity
                 ;
             }
 			  */
-			 this.worldObj.newExplosion((Entity)null, this.posX, this.posY, this.posZ, Explimit, true, false);
+			 this.worldObj.newExplosion(null, this.posX, this.posY, this.posZ, Explimit, true, false);
 			 this.setDead();
 		 }
 	 }
@@ -278,7 +278,7 @@ public class EcEntitySword extends Entity
 	 /**
 	  * Called when the entity is attacked.
 	  */
-	 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+	 public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	 {
 		 this.setBeenAttacked();
 

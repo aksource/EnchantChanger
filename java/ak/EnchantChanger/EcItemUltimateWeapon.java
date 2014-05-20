@@ -14,8 +14,6 @@ public class EcItemUltimateWeapon extends EcItemSword
 	public EcItemUltimateWeapon()
 	{
 		super(ToolMaterial.EMERALD);
-        this.setTextureName(EnchantChanger.EcTextureDomain + "UltimateWeapon");
-		this.setMaxDamage(ToolMaterial.EMERALD.getMaxUses() * 14);
 	}
 	@Override
 	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)

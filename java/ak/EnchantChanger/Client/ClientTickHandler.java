@@ -19,7 +19,7 @@ public class ClientTickHandler
     {
     	EntityPlayer player = event.player;
     	World world = player.worldObj;
-    	if(player == null || !world.isRemote) return;
+    	if(!world.isRemote) return;
     	Minecraft mc = Minecraft.getMinecraft();
     	ItemStack ep = player.getCurrentEquippedItem();
     	int reach = 10;

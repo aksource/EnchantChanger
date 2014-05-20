@@ -11,8 +11,6 @@ public class EcItemZackSword extends EcItemSword
 	public EcItemZackSword()
 	{
 		super(ToolMaterial.IRON);
-        this.setTextureName(EnchantChanger.EcTextureDomain + "ZackSword");
-		this.setMaxDamage(ToolMaterial.IRON.getMaxUses() * 14);
 	}
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{

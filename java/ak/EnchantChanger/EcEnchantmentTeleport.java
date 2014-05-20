@@ -8,7 +8,6 @@ public class EcEnchantmentTeleport extends Enchantment
     public EcEnchantmentTeleport(int var1, int var2)
     {
         super(var1, var2, EnumEnchantmentType.weapon);
-        this.setName("Teleport");
     }
     @Override
     public boolean canApplyTogether(Enchantment par1Enchantment)

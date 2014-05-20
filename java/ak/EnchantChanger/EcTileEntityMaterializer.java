@@ -263,12 +263,10 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 	}
 	@Override
 	public boolean hasCustomInventoryName() {
-		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}
 }

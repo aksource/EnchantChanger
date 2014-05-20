@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 public class EcMasterMateriaRecipe implements IRecipe
 {
 	private ItemStack output = null;
+    private static final int[][] enchantmentRecipeList = {{}, {0, 1, 2, 3, 4, 7}, {5, 6, 61, 62}, {16, 17, 18, 19, 20, 21}, {32, 33, 34, 35}, {48, 49, 50, 51}};
 	@Override
 	public boolean matches(InventoryCrafting var1, World var2)
 	{
@@ -41,41 +42,7 @@ public class EcMasterMateriaRecipe implements IRecipe
 			else
 				return false;
 		}
-		if(materia[5] != null)
-		{
-			if(this.chekEnchmateria(materia, 6, 16, 21))
-			{
-				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,3);
-				flag = true;
-			}
-			else if(this.chekEnchmateria(materia, 5, 0, 4) || this.chekEnchmateria(materia, 5, 7, 7))
-			{
-				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,1);
-				flag = true;
-			}
-		}
-		else if(materia[3] != null)
-		{
-			if(this.chekEnchmateria(materia, 4, 32, 35))
-			{
-				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,4);
-				flag = true;
-			}
-			else if(this.chekEnchmateria(materia, 4, 48, 51))
-			{
-				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,5);
-				flag = true;
-			}
-		}
-		else if(materia[2] == null)
-		{
-			if(this.chekEnchmateria(materia, 2, 5, 6))
-			{
-				this.output = new ItemStack(EnchantChanger.itemMasterMateria,1,2);
-				flag = true;
-			}
-		}
-		return flag;
+        return searchMateria(materia);
 	}
 
 	@Override
@@ -95,22 +62,30 @@ public class EcMasterMateriaRecipe implements IRecipe
 	{
 		return this.output;
 	}
-	public boolean chekEnchmateria(ItemStack[] items, int num, int init, int end)
+
+    private boolean searchMateria(ItemStack[] items) {
+        for (int i = 1; i < 6; i++) {
+            if (checkEnchmateria(items, i)) {
+                this.output = new ItemStack(EnchantChanger.itemMasterMateria, 1, i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+	public boolean checkEnchmateria(ItemStack[] items, int num)
 	{
 		boolean ret = true;
-		for(int i = 0;i<num;i++)
-		{
-			ret = ret && checkEnch(items[i], init, end);
+		for(ItemStack itemStack : items) {
+			ret = ret && checkEnch(itemStack, num);
 		}
 		return ret;
 	}
-	public boolean checkEnch(ItemStack materia, int init, int end)
+	public boolean checkEnch(ItemStack materia, int num)
 	{
 		boolean ret=false;
-		for(int i=init;i<=end;i++)
-		{
-			if(EnchantmentHelper.getEnchantmentLevel(i, materia) == Enchantment.enchantmentsList[i].getMaxLevel())
-			{
+		for(int i : enchantmentRecipeList[num]) {
+			if(EnchantmentHelper.getEnchantmentLevel(i, materia) == Enchantment.enchantmentsList[i].getMaxLevel()) {
 				ret = true;
 				break;
 			}

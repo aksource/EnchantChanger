@@ -9,11 +9,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EcItemExExpBottle extends Item
 {
-
-	public EcItemExExpBottle() {
-		super();
-        this.setTextureName(EnchantChanger.EcTextureDomain + "ExExpBottle");
-	}
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack par1ItemStack, int pass)
 	{

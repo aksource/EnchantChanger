@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
  * Created by A.K. on 14/02/27.
  */
 public class EcGuiMateriaWindow extends GuiContainer {
-    private static ResourceLocation gui = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMateriaWindow);
+    private static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMateriaWindow);
     private ItemStack itemStack;
     public EcGuiMateriaWindow(World world, InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
         super(new EcContainerMateriaWindow(world, inventoryPlayer, item, slotnum));
@@ -24,7 +24,7 @@ public class EcGuiMateriaWindow extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(gui);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(GUI);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);

@@ -18,14 +18,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EcItemCloudSword extends EcItemSword
 {
-	private int SlotNum = 5;
 	private EcInventoryCloudSword SwordData = null;
 
 	public EcItemCloudSword()
 	{
 		super(ToolMaterial.EMERALD);
-		this.setTextureName(EnchantChanger.EcTextureDomain + "CloudSword");
-		this.setMaxDamage(ToolMaterial.IRON.getMaxUses() * 14);
 	}
 
 	@Override
@@ -115,7 +112,7 @@ public class EcItemCloudSword extends EcItemSword
 
 	public void destroyTheItem(EntityPlayer player, ItemStack orig)
 	{
-		this.SwordData.setInventorySlotContents(getSlotNum(orig), (ItemStack) null);
+		this.SwordData.setInventorySlotContents(getSlotNum(orig),  null);
 		MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, orig));
 		this.doCastOffSwords(player.worldObj, player);
 		player.inventory.setInventorySlotContents(player.inventory.currentItem,

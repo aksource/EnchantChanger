@@ -23,9 +23,6 @@ public class EcContainerPortableEnchantment extends Container
 
     /** current world (for bookshelf counting) */
     private World worldPointer;
-    private int posX;
-    private int posY;
-    private int posZ;
     private Random rand = new Random();
     private InventoryPlayer InvP;
 
@@ -39,9 +36,6 @@ public class EcContainerPortableEnchantment extends Container
     {
         this.InvP = par1InventoryPlayer;
     	this.worldPointer = par2World;
-        this.posX = par3;
-        this.posY = par4;
-        this.posZ = par5;
         this.addSlotToContainer(new EcSlotPortableEnchantment(this, this.tableInventory, 0, 25, 47));
         int var6;
 
@@ -64,9 +58,9 @@ public class EcContainerPortableEnchantment extends Container
     {
         super.detectAndSendChanges();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1)
+        for (Object object : this.crafters)
         {
-            ICrafting var2 = (ICrafting)this.crafters.get(var1);
+            ICrafting var2 = (ICrafting)object;
             var2.sendProgressBarUpdate(this, 0, this.enchantLevels[0]);
             var2.sendProgressBarUpdate(this, 1, this.enchantLevels[1]);
             var2.sendProgressBarUpdate(this, 2, this.enchantLevels[2]);
@@ -144,11 +138,8 @@ public class EcContainerPortableEnchantment extends Container
                 if (var4 != null)
                 {
                     par1EntityPlayer.addExperienceLevel(-this.enchantLevels[par2]);
-                    Iterator var5 = var4.iterator();
-
-                    while (var5.hasNext())
-                    {
-                        EnchantmentData var6 = (EnchantmentData)var5.next();
+                    for (Object object : var4) {
+                        EnchantmentData var6 = (EnchantmentData)object;
                         var3.addEnchantment(var6.enchantmentobj, var6.enchantmentLevel);
                     }
 
@@ -225,7 +216,7 @@ public class EcContainerPortableEnchantment extends Container
 
             if (var5.stackSize == 0)
             {
-                var4.putStack((ItemStack)null);
+                var4.putStack(null);
             }
             else
             {

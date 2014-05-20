@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EcGuiMaterializer extends GuiContainer
 {
-	private ResourceLocation gui = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMaterializer);
+	private static final ResourceLocation gui = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMaterializer);
 	public EcGuiMaterializer (World world, InventoryPlayer inventoryPlayer)
 	{
 		//the container is instanciated and passed to the superclass for handling

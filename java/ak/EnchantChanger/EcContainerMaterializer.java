@@ -8,9 +8,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
@@ -25,14 +23,14 @@ public class EcContainerMaterializer extends Container {
     public IInventory materializeSource = new EcSlotMaterializer(this, "MaterializerSource", SourceSlotNum);
     protected EcTileEntityMaterializer tileEntity;
     protected InventoryPlayer InvPlayer;
-    private ArrayList<EnchantmentData> itemEnchantmentData = new ArrayList<EnchantmentData>();
-    private ArrayList<EnchantmentData> enchantmentRemoveData = new ArrayList<EnchantmentData>();
+    private ArrayList<EnchantmentData> itemEnchantmentData = new ArrayList<>();
+    private ArrayList<EnchantmentData> enchantmentRemoveData = new ArrayList<>();
 
-    private ArrayList<Integer> MateriaEnchList = new ArrayList<Integer>();
-    private ArrayList<Integer> MateriaEnchLvList = new ArrayList<Integer>();
+    private ArrayList<Integer> MateriaEnchList = new ArrayList<>();
+    private ArrayList<Integer> MateriaEnchLvList = new ArrayList<>();
     private World worldPointer;
     private boolean materiadecLv = EnchantChanger.enableDecMateriaLv;
-    private static ArrayList<Integer> magicDmg = new ArrayList<Integer>();
+    private static ArrayList<Integer> magicDmg = new ArrayList<>();
 
     public EcContainerMaterializer(World par1world, InventoryPlayer inventoryPlayer) {
         InvPlayer = inventoryPlayer;
@@ -93,14 +91,14 @@ public class EcContainerMaterializer extends Container {
                 }
             } else {
                 if (itemstack.getItem() instanceof EcItemMateria) {
-                    for (int i = 1; i < this.SourceSlotNum; i++) {
+                    for (int i = 1; i < SourceSlotNum; i++) {
                         if (!((Slot) this.inventorySlots.get(i)).getHasStack()) {
                             ((Slot) this.inventorySlots.get(i)).putStack(itemstack.copy());
                             itemstack.stackSize--;
-                            i = this.SourceSlotNum;
+                            i = SourceSlotNum;
                         }
                     }
-                } else if (((Slot) this.inventorySlots.get(0)).getHasStack() || !(itemstack.getItem() instanceof Item)) {
+                } else if (((Slot) this.inventorySlots.get(0)).getHasStack()) {
                     return null;
                 } else if (itemstack.hasTagCompound() && itemstack.stackSize == 1) {
                     ((Slot) this.inventorySlots.get(0)).putStack(itemstack.copy());
@@ -112,7 +110,7 @@ public class EcContainerMaterializer extends Container {
             }
 
             if (itemstack.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
@@ -131,7 +129,7 @@ public class EcContainerMaterializer extends Container {
     public void onCraftMatrixChanged(IInventory par1IInventory) {
         ItemStack enchitem = this.materializeSource.getStackInSlot(0);
         if (enchitem != null) {
-            if (!(enchitem.getItem() instanceof Item) || (EnchantChanger.loadMTH && enchitem.getItem() instanceof ItemMultiToolHolder)) {
+            if (EnchantChanger.loadMTH && enchitem.getItem() instanceof ItemMultiToolHolder) {
                 return;
             }
             NBTTagList enchOnItem = enchitem.getEnchantmentTagList();
@@ -165,7 +163,7 @@ public class EcContainerMaterializer extends Container {
                     Enchantment enchKind = EnchantChanger.enchKind(materiaitem);
 
                     if (!EnchantChanger.isEnchantmentValid(enchKind, enchitem) || !EnchantChanger.checkLvCap(materiaitem)) {
-                        for (int i1 = 0; i1 < this.ResultSlotNum; i1++) {
+                        for (int i1 = 0; i1 < ResultSlotNum; i1++) {
                             this.materializeResult.setInventorySlotContents(i1, null);
                         }
                         this.MateriaEnchList.clear();

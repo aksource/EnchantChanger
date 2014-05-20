@@ -48,13 +48,6 @@ public class EcEntityApOrb extends Entity
 		return false;
 	}
 
-	public EcEntityApOrb(World par1World)
-	{
-		super(par1World);
-		this.setSize(0.25F, 0.25F);
-		this.yOffset = this.height / 2.0F;
-	}
-
 	protected void entityInit() {
 	}
 
@@ -220,13 +213,13 @@ public class EcEntityApOrb extends Entity
 			items[i + 9] = player.inventory.armorInventory[i];
 		}
 
-		for (int i = 0; i < items.length; i++)
+		for (ItemStack itemStack : items)
 		{
-			if (items[i] != null && items[i].isItemEnchanted())
+			if (itemStack != null && itemStack.isItemEnchanted())
 			{
-				if (EnchantChanger.loadMTH && items[i].getItem() instanceof ItemMultiToolHolder)
+				if (EnchantChanger.loadMTH && itemStack.getItem() instanceof ItemMultiToolHolder)
 				{
-					InventoryToolHolder tools = ((ItemMultiToolHolder) items[i].getItem()).tools;
+					InventoryToolHolder tools = ((ItemMultiToolHolder) itemStack.getItem()).tools;
 					if (tools != null)
 					{
 						for (int j = 0; j < tools.data.tools.length; j++)
@@ -240,7 +233,7 @@ public class EcEntityApOrb extends Entity
 				}
 				else
 				{
-					addApToItem(items[i]);
+					addApToItem(itemStack);
 				}
 
 			}
@@ -249,18 +242,16 @@ public class EcEntityApOrb extends Entity
 
 	private void addApToItem(ItemStack item)
 	{
-		NBTTagCompound nbt;
 		NBTTagList enchantList;
 		int prevAp;
 		short enchantmentId;
 		short enchantmentLv;
 		int nowAp;
-		nbt = item.getTagCompound();
 		enchantList = item.getEnchantmentTagList();
 		for (int j = 0; j < enchantList.tagCount(); j++) {
-			prevAp = ((NBTTagCompound) enchantList.getCompoundTagAt(j)).getInteger("ap");
-			enchantmentId = ((NBTTagCompound) enchantList.getCompoundTagAt(j)).getShort("id");
-			enchantmentLv = ((NBTTagCompound) enchantList.getCompoundTagAt(j)).getShort("lvl");
+			prevAp = enchantList.getCompoundTagAt(j).getInteger("ap");
+			enchantmentId =  enchantList.getCompoundTagAt(j).getShort("id");
+			enchantmentLv = enchantList.getCompoundTagAt(j).getShort("lvl");
 			if (checkLevelLimit(Enchantment.enchantmentsList[enchantmentId], enchantmentLv) || EnchantChanger.magicEnchantment.contains(Integer.valueOf((int) enchantmentId))) {
 				continue;
 			}
@@ -268,9 +259,9 @@ public class EcEntityApOrb extends Entity
 			if (EnchantChanger.isApLimit(enchantmentId, enchantmentLv, nowAp)) {
 				nowAp -= EnchantChanger.getApLimit(enchantmentId, enchantmentLv);
 				if (enchantmentLv < Short.MAX_VALUE)
-					((NBTTagCompound) enchantList.getCompoundTagAt(j)).setShort("lvl", (short) (enchantmentLv + 1));
+					enchantList.getCompoundTagAt(j).setShort("lvl", (short) (enchantmentLv + 1));
 			}
-			((NBTTagCompound) enchantList.getCompoundTagAt(j)).setInteger("ap", nowAp);
+			enchantList.getCompoundTagAt(j).setInteger("ap", nowAp);
 		}
 	}
 
@@ -284,18 +275,8 @@ public class EcEntityApOrb extends Entity
 			} else {
 				return EnchantChanger.levelLimitMap.get(Integer.valueOf(ench.effectId)) <= nowLevel;
 			}
-		} else if (ench.getMaxLevel() == 1) {
-			return true;
-		} else if (EnchantChanger.enableLevelCap && ench.getMaxLevel() <= nowLevel) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public int getApValue()
-	{
-		return this.apValue;
+		} else
+            return ench.getMaxLevel() == 1 ||  EnchantChanger.enableLevelCap && ench.getMaxLevel() <= nowLevel;
 	}
 
 	public int getTextureByXP()

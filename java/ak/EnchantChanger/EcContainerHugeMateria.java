@@ -1,5 +1,4 @@
 package ak.EnchantChanger;
-import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -7,7 +6,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,16 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EcContainerHugeMateria extends Container {
 
-	public int[] vanillaEnch = new int[]{0,1,2,3,4,5,6,16,17,18,19,20,21,32,33,34,35,48,49,50,51};
-	public static int ResultSlotNum = 9;
-	public static int SourceSlotNum = 9;
 	protected EcTileEntityHugeMateria tileEntity;
 	protected InventoryPlayer InvPlayer;
-	private ArrayList<Integer> ItemEnchList = new ArrayList<Integer>();
-	private ArrayList<Integer> ItemEnchLvList = new ArrayList<Integer>();
-	private ArrayList<Integer> MateriaEnchList = new ArrayList<Integer>();
-	private int maxlv = EnchantChanger.MaxLv;
-	private boolean Debug = EnchantChanger.debug;
 	private int lastMaterializingTime = 0;
 
 	public EcContainerHugeMateria (InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te){
@@ -53,9 +43,9 @@ public class EcContainerHugeMateria extends Container {
     {
         super.detectAndSendChanges();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1)
+        for (Object object :  this.crafters)
         {
-            ICrafting var2 = (ICrafting)this.crafters.get(var1);
+            ICrafting var2 = (ICrafting)object;
 
             if (this.lastMaterializingTime != this.tileEntity.MaterializingTime)
             {
@@ -125,7 +115,7 @@ public class EcContainerHugeMateria extends Container {
 						return null;
 					}
 				}
-				else if(itemstack.getItem() instanceof Item && itemstack.getItem() == Items.diamond)
+				else if(itemstack.getItem() == Items.diamond)
 				{
 					if (!this.mergeItemStack(itemstack, 2, 3, false))
 					{
@@ -143,7 +133,7 @@ public class EcContainerHugeMateria extends Container {
 
 			if (itemstack.stackSize == 0)
 			{
-				slot.putStack((ItemStack)null);
+				slot.putStack(null);
 			}
 			else
 			{

@@ -22,15 +22,14 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class LivingEventHooks
 {
-	private boolean allowLevitation = false;
 	//	private boolean isLevitation = false;
 	private int flyToggleTimer = 0;
 	private int sprintToggleTimer = 0;
-	private int FlightMptime = 20 * 3;
-	private int GGMptime = 20 * 1;
-	private int AbsorpMptime = 20 * 3;
+	private static final int FlightMptime = 20 * 3;
+	private static final int GGMptime = 20;
+	private static final int AbsorpMptime = 20 * 3;
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	private int mptimer = this.FlightMptime;
+	private int mptimer = FlightMptime;
     public boolean isMateriaKeyPressed = false;
 
 	@SubscribeEvent
@@ -42,6 +41,8 @@ public class LivingEventHooks
 			this.GreatGospel(player);
 			this.Absorption(player.worldObj, player);
             this.openMateriaWindow(player.worldObj, player);
+            //EXPOrb cooldown time set 0.
+            ((EntityPlayer)event.entityLiving).xpCooldown = 0;
 		}
 	}
 
@@ -62,7 +63,7 @@ public class LivingEventHooks
 		else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
             NBTTagCompound playerData = new NBTTagCompound();
             (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).saveNBTData(playerData);
-            EnchantChanger.proxy.storeEntityData(((EntityPlayer) event.entity).getCommandSenderName(), playerData);
+            CommonProxy.storeEntityData(event.entity.getCommandSenderName(), playerData);
             ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData((EntityPlayer) event.entity);
         }
 	}
@@ -72,7 +73,7 @@ public class LivingEventHooks
     {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
         {
-            NBTTagCompound playerData = EnchantChanger.proxy.getEntityData(((EntityPlayer) event.entity).getCommandSenderName());
+            NBTTagCompound playerData = CommonProxy.getEntityData(event.entity.getCommandSenderName());
             if (playerData != null) {
                 (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).loadNBTData(playerData);
             }
@@ -85,9 +86,11 @@ public class LivingEventHooks
             int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
             long lastTime = ExtendedPlayerData.get(killer).getApCoolintTime();
             if (lastTime != 0 && lastTime - dead.worldObj.getTotalWorldTime() < 20) exp = 2;
-            dead.worldObj.spawnEntityInWorld(new EcEntityApOrb(dead.worldObj, dead.posX, dead.posY,
-                    dead.posZ, exp / 2));
-            ExtendedPlayerData.get(killer).setApCoolingTime(dead.worldObj.getTotalWorldTime());
+            if (exp > 0 ) {
+                dead.worldObj.spawnEntityInWorld(new EcEntityApOrb(dead.worldObj, dead.posX, dead.posY,
+                        dead.posZ, exp / 2));
+                ExtendedPlayerData.get(killer).setApCoolingTime(dead.worldObj.getTotalWorldTime());
+            }
         }
     }
 
@@ -100,10 +103,10 @@ public class LivingEventHooks
 
 	public void Flight(EntityPlayer player)
 	{
-		this.allowLevitation = this.checkFlightIteminInv(player)
+        boolean allowLevitation = checkFlightIteminInv(player)
 				&& !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
 						.getFoodLevel() < 0 && !EnchantChanger.YouAreTera));
-		if (!this.allowLevitation) {
+		if (!allowLevitation) {
 			//			this.isLevitation = false;
 			this.setModeToNBT(player, false);
 			return;
@@ -114,7 +117,7 @@ public class LivingEventHooks
 			float var2 = 0.8F;
 			boolean var3 = ((EntityPlayerSP) player).movementInput.moveForward >= var2;
 			((EntityPlayerSP) player).movementInput.updatePlayerMoveState();
-			if (this.allowLevitation && !jump && ((EntityPlayerSP) player).movementInput.jump) {
+			if (allowLevitation && !jump && ((EntityPlayerSP) player).movementInput.jump) {
 				if (this.flyToggleTimer == 0) {
 					this.flyToggleTimer = 7;
 				} else {
@@ -168,7 +171,7 @@ public class LivingEventHooks
 		}
 		if (/*FMLCommonHandler.instance().getEffectiveSide().isServer()*/!player.worldObj.isRemote && this.getModeToNBT(player)) {
 			if (this.mptimer == 0) {
-				this.mptimer = this.FlightMptime;
+				this.mptimer = FlightMptime;
 				player.getFoodStats().addStats(-1, 1.0F);
 			} else
 				--this.mptimer;

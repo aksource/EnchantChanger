@@ -8,6 +8,5 @@ public class EcEnchantmentFloat extends Enchantment
 	public EcEnchantmentFloat(int var1, int var2)
     {
         super(var1, var2, EnumEnchantmentType.weapon);
-        this.setName("Floating");
     }
 }

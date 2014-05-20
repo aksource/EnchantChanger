@@ -31,9 +31,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -219,71 +221,71 @@ public class EnchantChanger {
                 .getStringList();
         config.save();
 
-        itemMateria = (new EcItemMateria()).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "Materia").setCreativeTab(tabsEChanger);
+        itemMateria = (new EcItemMateria()).setHasSubtypes(true).setMaxDamage(0).setUnlocalizedName(
+                EcTextureDomain + "Materia").setTextureName(EcTextureDomain + "Materia").setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemMateria, "materia", "EnchantChanger");
         itemExExpBottle = new EcItemExExpBottle()
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "ExExpBottle")
+                .setUnlocalizedName(EcTextureDomain + "ExExpBottle").setTextureName(EcTextureDomain + "ExExpBottle")
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemExExpBottle, "exexpbottle",
                 "EnchantChanger");
         itemZackSword = (new EcItemZackSword())
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "ZackSword")
+                .setUnlocalizedName(EcTextureDomain + "ZackSword").setTextureName(EcTextureDomain + "ZackSword").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14)
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemZackSword, "zacksword", "EnchantChanger");
         ItemCloudSwordCore = (new EcItemCloudSwordCore())
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "CloudSwordCore")
+                .setUnlocalizedName(EcTextureDomain + "CloudSwordCore").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14)
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(ItemCloudSwordCore, "cloudswordcore",
                 "EnchantChanger");
         itemCloudSword = (new EcItemCloudSword())
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "CloudSword")
+                .setUnlocalizedName(EcTextureDomain + "CloudSword").setTextureName(EcTextureDomain + "CloudSword").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14)
                 .setCreativeTab(null);
         GameRegistry.registerItem(itemCloudSword, "cloudsword",
                 "EnchantChanger");
         itemSephirothSword = (new EcItemSephirothSword(
         )).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "MasamuneBlade").setCreativeTab(
-                tabsEChanger);
+                EcTextureDomain + "MasamuneBlade").setCreativeTab(
+                tabsEChanger).setTextureName(EcTextureDomain + "MasamuneBlade").setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 2);
         GameRegistry.registerItem(itemSephirothSword, "masamuneblade",
                 "EnchantChanger");
         itemUltimateWeapon = (new EcItemUltimateWeapon(
         )).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "UltimateWeapon").setCreativeTab(
-                tabsEChanger);
+                EcTextureDomain + "UltimateWeapon").setCreativeTab(
+                tabsEChanger).setTextureName(EcTextureDomain + "UltimateWeapon").setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 14);
         GameRegistry.registerItem(itemUltimateWeapon, "ultimateweapon",
                 "EnchantChanger");
         iemPortableEnchantChanger = (new EcItemMaterializer(
         )).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "PortableEnchantChanger")
+                EcTextureDomain + "PortableEnchantChanger")
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(iemPortableEnchantChanger,
                 "portableenchantchanger", "EnchantChanger");
         itemPortableEnchantmentTable = (new EcItemEnchantmentTable(
         )).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "PortableEnchantmentTable")
+                EcTextureDomain + "PortableEnchantmentTable")
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemPortableEnchantmentTable,
                 "portableenchantmenttable", "EnchantChanger");
         itemMasterMateria = new EcItemMasterMateria()
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "itemMasterMateria")
+                .setUnlocalizedName(EcTextureDomain + "itemMasterMateria").setTextureName(EcTextureDomain + "itemMasterMateria").setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1)
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemMasterMateria, "mastermateria",
                 "EnchantChanger");
         itemImitateSephirothSword = (new EcItemSephirothSwordImit(
         )).setUnlocalizedName(
-                EnchantChanger.EcTextureDomain + "ImitateMasamuneBlade").setCreativeTab(
-                tabsEChanger);
+                EcTextureDomain + "ImitateMasamuneBlade").setCreativeTab(
+                tabsEChanger).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses()).setTextureName(EcTextureDomain + "ImitateMasamuneBlade");
         GameRegistry.registerItem(itemImitateSephirothSword,
                 "imitationmasamuneblade", "EnchantChanger");
         blockEnchantChanger = (new EcBlockMaterialize()).setCreativeTab(
-                tabsEChanger).setBlockName("EnchantChanger").setBlockTextureName(EnchantChanger.EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
+                tabsEChanger).setBlockName("EnchantChanger").setBlockTextureName(EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
         GameRegistry.registerBlock(blockEnchantChanger, "EnchantChanger");
         blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0)
                 .setBlockName("blockHugeMateria").setBlockTextureName("glass");
         GameRegistry.registerBlock(blockHugeMateria, "blockhugemateria");
         itemHugeMateria = new EcItemHugeMateria()
-                .setUnlocalizedName(EnchantChanger.EcTextureDomain + "HugeMateria")
+                .setUnlocalizedName(EcTextureDomain + "HugeMateria").setTextureName(EcTextureDomain + "HugeMateria")
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemHugeMateria, "itemhugemateria",
                 "EnchantChanger");
@@ -291,19 +293,18 @@ public class EnchantChanger {
         FluidRegistry.registerFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, Material.water).setBlockName("lifestream");
         GameRegistry.registerBlock(blockLifeStream, "life_stream");
-        bucketLifeStream = new EcItemBucketLifeStream(blockLifeStream).setUnlocalizedName(EnchantChanger.EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
+        bucketLifeStream = new EcItemBucketLifeStream(blockLifeStream).setUnlocalizedName(EcTextureDomain + "bucketLifestream").setTextureName(EnchantChanger.EcTextureDomain + "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(bucketLifeStream, "bucket_lifestream");
         FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLifeStream), new ItemStack(Items.bucket));
         blockMakoReactor = new EcBlockMakoReactor().setBlockName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(tabsEChanger).setBlockTextureName(EcTextureDomain + "makoreactor-side");
 
-        Meteo = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteoId, 0);
-        Holy = new EcEnchantmentHoly(EnchantChanger.EndhantmentHolyId, 0);
-        Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0);
-        Float = new EcEnchantmentFloat(EnchantChanger.EnchantmentFloatId, 0);
-        Thunder = new EcEnchantmentThunder(EnchantChanger.EnchantmentThunderId, 0);
+        Meteo = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteoId, 0).setName("Meteo");
+        Holy = new EcEnchantmentHoly(EnchantChanger.EndhantmentHolyId, 0).setName("Holy");
+        Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0).setName("Teleport");
+        Float = new EcEnchantmentFloat(EnchantChanger.EnchantmentFloatId, 0).setName("Floating");
+        Thunder = new EcEnchantmentThunder(EnchantChanger.EnchantmentThunderId, 0).setName("Thunder");
 
         addStatusEffect();
-        potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
 
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
     }
@@ -317,6 +318,7 @@ public class EnchantChanger {
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
         FMLCommonHandler.instance().bus().register(this);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
+        MinecraftForge.TERRAIN_GEN_BUS.register(this);
         packetPipeline.initialise();
         packetPipeline.registerPacket(KeyHandlingPacket.class);
         packetPipeline.registerPacket(LevitationPacket.class);
@@ -548,8 +550,7 @@ public class EnchantChanger {
                                                           World world, double reach) {
         Entity pointedEntity = null;
         float var1 = 1F;
-        double distLimit = reach;
-        double distBlock = distLimit;
+        double distBlock = reach;
         double viewX = player.getLookVec().xCoord;
         double viewY = player.getLookVec().yCoord;
         double viewZ = player.getLookVec().zCoord;
@@ -561,19 +562,19 @@ public class EnchantChanger {
         // player.prevPosZ + (player.posZ - player.prevPosZ) * (double)var1;
         Vec3 PlayerPosition = world.getWorldVec3Pool().getVecFromPool(
                 PlayerposX, PlayerposY, PlayerposZ);
-        Vec3 PlayerLookVec = PlayerPosition.addVector(viewX * distLimit, viewY
-                * distLimit, viewZ * distLimit);
+        Vec3 PlayerLookVec = PlayerPosition.addVector(viewX * reach, viewY
+                * reach, viewZ * reach);
         MovingObjectPosition MOP = world.rayTraceBlocks(PlayerPosition, PlayerLookVec);
         if (MOP != null)
             distBlock = MOP.hitVec.distanceTo(PlayerPosition);
         List list = world.getEntitiesWithinAABBExcludingEntity(
                 player,
-                player.boundingBox.addCoord(viewX * distLimit,
-                        viewY * distLimit, viewZ * distLimit).expand(
+                player.boundingBox.addCoord(viewX * reach,
+                        viewY * reach, viewZ * reach).expand(
                         (double) var1, (double) var1, (double) var1));
         double dist1 = distBlock;
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity) list.get(i);
+        for (Object object : list) {
+            Entity entity = (Entity) object;
 
             if (entity.canBeCollidedWith()) {
                 float f2 = entity.getCollisionBorderSize();
@@ -657,7 +658,7 @@ public class EnchantChanger {
     private void addStatusEffect() {
         if (idMakoPoison >= 32 && idMakoPoison < 127) {
             if (Potion.potionTypes[idMakoPoison] == null) {
-                //NOOP yet
+                potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
             } else {
                 throw new IllegalIcuArgumentException("idMakoPoison:id has been used another MOD");
             }
@@ -722,6 +723,19 @@ public class EnchantChanger {
     public void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.player.worldObj.isRemote) {
             packetPipeline.sendTo(new PlayerInfoPacket(event.player), (EntityPlayerMP)event.player);
+        }
+    }
+    //ライフストリームの地底湖を生成するつもりのコード
+    @SubscribeEvent
+    public void populateLifeStreamLake(PopulateChunkEvent.Post event) {
+        if (event.rand.nextInt(30) == 0) {
+            int k = event.chunkX * 16;
+            int l = event.chunkZ * 16;
+            int x,y,z;
+            x = k + event.rand.nextInt(16) + 8;
+            y = event.rand.nextInt(256);
+            z = l + event.rand.nextInt(16) + 8;
+            (new WorldGenLakes(blockLifeStream)).generate(event.world, event.rand, x, y, z);
         }
     }
 }

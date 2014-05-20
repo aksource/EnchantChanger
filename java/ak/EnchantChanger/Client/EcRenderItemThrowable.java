@@ -19,8 +19,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EcRenderItemThrowable extends Render
 {
 	private float RenderSize;
-	private ResourceLocation texMeteo = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcMeteoPNG);
-	private ResourceLocation texExp = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcExpBottlePNG);
+	private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcMeteoPNG);
+	private static final ResourceLocation TEXTUREEXEXPBOTTLE = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcExpBottlePNG);
 
 	public EcRenderItemThrowable(float par2)
 	{
@@ -67,6 +67,6 @@ public class EcRenderItemThrowable extends Render
 	 * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
 	 */
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return entity instanceof EcEntityMeteo ? this.texMeteo: entity instanceof EcEntityExExpBottle ? this.texExp: TextureMap.locationItemsTexture;
+		return entity instanceof EcEntityMeteo ? TEXTUREMETEO : entity instanceof EcEntityExExpBottle ? TEXTUREEXEXPBOTTLE : TextureMap.locationItemsTexture;
 	}
 }

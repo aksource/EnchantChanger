@@ -8,7 +8,6 @@ public class EcEnchantmentHoly extends Enchantment
 	public EcEnchantmentHoly(int var1, int var2)
     {
         super(var1, var2, EnumEnchantmentType.weapon);
-        this.setName("Holy");
     }
 	@Override
     public boolean canApplyTogether(Enchantment par1Enchantment)

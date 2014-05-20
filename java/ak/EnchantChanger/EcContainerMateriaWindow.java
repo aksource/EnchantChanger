@@ -90,12 +90,7 @@ public class EcContainerMateriaWindow extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         ItemStack item = player.getCurrentEquippedItem();
-        if (item == null) return false;
-        else if (item.getItem() instanceof  EcItemMateria || item.getItem() instanceof  EcItemMasterMateria) return false;
-        else if (EnchantChanger.loadMTH && item.getItem() instanceof ItemMultiToolHolder) return false;
-        else {
-            return true;
-        }
+        return item != null && !(item.getItem() instanceof  EcItemMateria || item.getItem() instanceof  EcItemMasterMateria) && !(EnchantChanger.loadMTH && item.getItem() instanceof ItemMultiToolHolder);
     }
 
     @Override
@@ -141,7 +136,7 @@ public class EcContainerMateriaWindow extends Container {
             }
 
             if (itemstack.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
@@ -173,7 +168,7 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private ArrayList<EnchantmentData> getEnchantmentListFromInventory() {
-        ArrayList<EnchantmentData> list = new ArrayList<EnchantmentData>();
+        ArrayList<EnchantmentData> list = new ArrayList<>();
         ItemStack slotItem;
         EnchantmentData enchData;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {

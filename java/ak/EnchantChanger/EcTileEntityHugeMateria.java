@@ -92,9 +92,6 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	@Override
 	public void closeInventory() {}
 	@SideOnly(Side.CLIENT)
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	 public int getMaterializingProgressScaled(int par1)
 	{
 		return this.MaterializingTime * par1/200;
@@ -108,7 +105,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
-			NBTTagCompound var4 = (NBTTagCompound)var2.getCompoundTagAt(var3);
+			NBTTagCompound var4 = var2.getCompoundTagAt(var3);
 			int var5 = var4.getByte("Slot") & 255;
 
 			if (var5 >= 0 && var5 < this.Hugeitemstacks.length)
@@ -193,10 +190,10 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	public String getInventoryName() {
 		return "container.hugeMateria";
 	}
-	public boolean isMaterializing()
-	{
-		return this.MaterializingTime > 0;
-	}
+//	public boolean isMaterializing()
+//	{
+//		return this.MaterializingTime > 0;
+//	}
 	public boolean canMake()
 	{
 		ItemStack hMateria = this.getStackInSlot(0);
@@ -214,10 +211,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 			if(hMateria != null && hMateria.getItem() instanceof EcItemMasterMateria)
 			{
 				int dmg = hMateria.getItemDamage();
-				if(dmg >=0 && dmg < 6)
-					return makeResult(material, dmg, lvPlus);
-				else
-					return false;
+                return dmg >= 0 && dmg < 6 && makeResult(material, dmg, lvPlus);
 			}
 			return materiaLvUp(material,lvPlus);
 		}
@@ -286,7 +280,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	static{
 		EnchArray = new int[EcItemMasterMateria.MasterMateriaNum - 1][10];
 		MaterialArray = new ItemStack[Enchantment.enchantmentsList.length + 3];
-		magicArray = new ArrayList<Integer>(EcItemMateria.MagicMateriaNum);
+		magicArray = new ArrayList<>(EcItemMateria.MagicMateriaNum);
 		int i,j;
 		for(i = 0;i<EnchArray.length;i++){
 			for(j = 0;j<EnchArray[i].length;j++){

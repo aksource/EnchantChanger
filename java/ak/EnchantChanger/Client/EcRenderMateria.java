@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import ak.EnchantChanger.EcItemMateria;
@@ -22,40 +24,45 @@ public class EcRenderMateria implements IItemRenderer
 	private static int face[];
 	public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<Integer, ResourceLocation>();
 	public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<Integer, ResourceLocation>();
-	private static ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia0.png");
-	private static ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia1.png");
-	private static ResourceLocation materia3 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia3 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia3.png");
-	private static ResourceLocation materia4 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia4 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia4.png");
-	private static ResourceLocation materia5 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia5 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia5.png");
-	private static ResourceLocation materia6 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia6 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia6.png");
-	private static ResourceLocation materia7 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia7 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia7.png");
-	private static ResourceLocation materia8 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia8 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia8.png");
-	private static ResourceLocation materia9 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia9 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia9.png");
-	private static ResourceLocation materia10 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia10 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia10.png");
-	private static ResourceLocation materia11 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia11 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia11.png");
-	private static ResourceLocation materia12 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia12 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia12.png");
-	private static ResourceLocation materia13 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia13 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia13.png");
-	private static ResourceLocation materia14 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia14 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia14.png");
-	private static ResourceLocation materia15 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia15 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia15.png");
-	private static ResourceLocation[] materiaRes = new ResourceLocation[] { materia0, materia1, null, materia3,
+	private static final ResourceLocation[] materiaRes = new ResourceLocation[] { materia0, materia1, null, materia3,
 			materia4, materia5, materia6, materia7, materia8, materia9, materia10, materia11, materia12, materia13,
 			materia14, materia15 };
+    private static final ResourceLocation materiaObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/spherelight.obj");
+    private final IModelCustom sphireModel;
 
+    public EcRenderMateria() {
+        sphireModel = AdvancedModelLoader.loadModel(materiaObj);
+    }
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON
@@ -71,15 +78,27 @@ public class EcRenderMateria implements IItemRenderer
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		float f0 = 0.2F;
-		float f1 = 16F;
-		if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON)
-			this.renderMateria(item, 0.2f, 0, 0, f0, type);
-		else if (type == ItemRenderType.INVENTORY)
-			this.renderMateria(item, 0f, 0f, 0f, f1, type);
-		else if (type == ItemRenderType.ENTITY)
-			this.renderMateria(item, 0, 0, 0, f0, type);
+		float f1 = 8F;
+		if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+            this.renderMateriaModel(item, 0.5f, 0, 0, f0, type);
+        } else if (type == ItemRenderType.INVENTORY) {
+            this.renderMateriaModel(item, 8f, 8f, 0f, f1, type);
+        } else if (type == ItemRenderType.ENTITY) {
+            this.renderMateriaModel(item, 0, 0, 0, f0, type);
+        }
 	}
-
+    //Obj仕様renderメソッド
+    private void renderMateriaModel(ItemStack item, float x, float y, float z, float size, ItemRenderType type) {
+        Minecraft mc = Minecraft.getMinecraft();
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, z);
+        if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslatef(0.3f, 0.2f, 0);
+        mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
+        GL11.glScalef(size, size, size);
+        sphireModel.renderAll();
+        GL11.glTranslatef(x, y, z);
+        GL11.glPopMatrix();
+    }
 	public void renderMateria(ItemStack item, float x, float y, float z, float size, ItemRenderType type)
 	{
 		Minecraft mc = Minecraft.getMinecraft();

@@ -19,10 +19,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EcItemCloudSwordCore extends EcItemSword
 {
-	public static boolean ActiveMode=false;
 	public static Entity Attackentity = null;
 	private ItemStack[] swords = new ItemStack[5];
-	private EcCloudSwordData SwordData;
 	private int nowAttackingSwordSlot;
 	@SideOnly(Side.CLIENT)
 	private IIcon open;
@@ -32,13 +30,12 @@ public class EcItemCloudSwordCore extends EcItemSword
 	public EcItemCloudSwordCore()
 	{
 		super(ToolMaterial.IRON);
-		this.setMaxDamage(ToolMaterial.IRON.getMaxUses() * 14);
 	}
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister)
 	{
-		this.itemIcon = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-close");;
+		this.itemIcon = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-close");
 		this.open = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-open");
 		this.close = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-close");
 	}
