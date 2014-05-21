@@ -32,6 +32,8 @@ public class EcRenderHugeMateria extends TileEntitySpecialRenderer
     public void doRenderModel(EcTileEntityHugeMateria tileEntityHugeMateria, double par2, double par4, double par6, float par8) {
         bindTexture(texture16);
         GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glTranslated(par2 + 0.5d, par4 + 1.7d, par6 + 0.5d);
         GL11.glScaled(0.7d, 0.7d, 0.7d);
         this.modelHugeMateria.renderAll();
