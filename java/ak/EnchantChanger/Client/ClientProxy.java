@@ -11,8 +11,8 @@ import org.lwjgl.input.Keyboard;
 
 public class ClientProxy extends CommonProxy {
 	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
-			Keyboard.KEY_V, "EnchantChanger:KeyMagic");
-    public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger:KeyMateria");
+			Keyboard.KEY_V, "EnchantChanger");
+    public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger");
     public static int customRenderPass;
     public static int multiPassRenderType;
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
