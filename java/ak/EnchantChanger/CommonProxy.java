@@ -1,9 +1,14 @@
 package ak.EnchantChanger;
 
-import ak.EnchantChanger.Client.EcGuiHugeMateria;
-import ak.EnchantChanger.Client.EcGuiMateriaWindow;
-import ak.EnchantChanger.Client.EcGuiMaterializer;
-import ak.EnchantChanger.Client.EcGuiPortableEnchantment;
+import ak.EnchantChanger.Client.gui.EcGuiHugeMateria;
+import ak.EnchantChanger.Client.gui.EcGuiMateriaWindow;
+import ak.EnchantChanger.Client.gui.EcGuiMaterializer;
+import ak.EnchantChanger.Client.gui.EcGuiPortableEnchantment;
+import ak.EnchantChanger.inventory.EcContainerHugeMateria;
+import ak.EnchantChanger.inventory.EcContainerMateriaWindow;
+import ak.EnchantChanger.inventory.EcContainerMaterializer;
+import ak.EnchantChanger.inventory.EcContainerPortableEnchantment;
+import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommonProxy implements IGuiHandler {
-    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
+    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<>();
 
     public void registerRenderInformation() {
     }

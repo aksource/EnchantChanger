@@ -1,5 +1,7 @@
 package ak.EnchantChanger;
 
+import ak.EnchantChanger.network.MessagePlayerProperties;
+import ak.EnchantChanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,27 +15,27 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public final static String EXT_PROP_NAME = "EC:ExtPlayerData";
-    private final EntityPlayer player;
+//    private final EntityPlayer player;
     private boolean isLevitating;
     private boolean soldierMode;
     private long apCoolingTime;
 
-    public ExtendedPlayerData(EntityPlayer player) {
-        this.player = player;
-        this.isLevitating = false;
-        this.soldierMode = false;
-        this.apCoolingTime = 0;
-    }
+//    public ExtendedPlayerData(EntityPlayer player) {
+//        this.player = player;
+//        this.isLevitating = false;
+//        this.soldierMode = false;
+//        this.apCoolingTime = 0;
+//    }
 
-    private static final String getSaveKey(EntityPlayer player) {
+    private static String getSaveKey(EntityPlayer player) {
         return player.getCommandSenderName() + ":" + EXT_PROP_NAME;
     }
 
-    public static final void register(EntityPlayer player) {
-        player.registerExtendedProperties(EXT_PROP_NAME, new ExtendedPlayerData(player));
+    public static void register(EntityPlayer player) {
+        player.registerExtendedProperties(EXT_PROP_NAME, new ExtendedPlayerData());
     }
 
-    public static final ExtendedPlayerData get(EntityPlayer player) {
+    public static ExtendedPlayerData get(EntityPlayer player) {
         return (ExtendedPlayerData)player.getExtendedProperties(EXT_PROP_NAME);
     }
 
@@ -59,7 +61,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     }
 
-    public long getApCoolintTime() {
+    public long getApCoolingTime() {
         return this.apCoolingTime;
     }
 
@@ -84,13 +86,13 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     }
 
     public void saveProxyData(EntityPlayer player) {
-
+        //NO-OP yet
     }
 
     public void loadProxyData(EntityPlayer player) {
         ExtendedPlayerData playerData = ExtendedPlayerData.get(player);
         NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
         if (savedData != null) { playerData.loadNBTData(savedData); }
-        EnchantChanger.packetPipeline.sendTo(new PlayerInfoPacket(player), (EntityPlayerMP)player);
+        PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
     }
 }

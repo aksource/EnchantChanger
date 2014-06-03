@@ -1,7 +1,28 @@
 package ak.EnchantChanger;
 
 import ak.EnchantChanger.Client.ClientProxy;
+import ak.EnchantChanger.block.EcBlockHugeMateria;
+import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
+import ak.EnchantChanger.block.EcBlockMakoReactor;
+import ak.EnchantChanger.block.EcBlockMaterialize;
+import ak.EnchantChanger.enchantment.*;
+import ak.EnchantChanger.entity.EcEntityApOrb;
+import ak.EnchantChanger.entity.EcEntityExExpBottle;
+import ak.EnchantChanger.entity.EcEntityMeteo;
+import ak.EnchantChanger.eventhandler.CommonTickHandler;
+import ak.EnchantChanger.eventhandler.FillBucketHook;
+import ak.EnchantChanger.eventhandler.LivingEventHooks;
+import ak.EnchantChanger.item.*;
+import ak.EnchantChanger.network.MessageKeyPressed;
+import ak.EnchantChanger.network.MessagePlayerProperties;
+import ak.EnchantChanger.network.PacketHandler;
+import ak.EnchantChanger.potion.EcPotionMako;
+import ak.EnchantChanger.recipe.EcMasterMateriaRecipe;
+import ak.EnchantChanger.recipe.EcMateriaRecipe;
+import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -46,9 +67,12 @@ import net.minecraftforge.oredict.RecipeSorter.Category;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Logger;
 
-@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.8-universal", dependencies = "required-after:Forge@[10.12.0.1056,)", useMetadata = true)
+@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.8-universal", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
 public class EnchantChanger {
+
+    public static final String MOD_ID = "EnchantChanger";
     public static Item itemExExpBottle;
     public static Item itemMateria;
     public static Item itemZackSword;
@@ -98,7 +122,7 @@ public class EnchantChanger {
     public static int MateriaPotionMinutes;
     public static int Difficulty;
     public static double AbsorpBoxSize = 5D;
-    public static int MaxLv = 127;
+//    public static int MaxLv = 127;
     public static boolean enableAPSystem;
     public static boolean enableDungeonLoot;
     public static int aPBasePoint;
@@ -115,20 +139,20 @@ public class EnchantChanger {
     public static int EnchantmentThunderId;
     public static Enchantment Thunder;
 
-    public static String EcMeteoPNG = "textures/items/Meteo.png";
-    public static String EcExpBottlePNG = "textures/items/ExExpBottle.png";
-    public static String EcZackSwordPNG = "textures/item/ZackSword.png";
-    public static String EcSephirothSwordPNG = "textures/item/SephirothSword.png";
-    public static String EcCloudSword2PNG = "textures/item/CloudSword-3Dtrue.png";
-    public static String EcCloudSwordCore2PNG = "textures/item/CloudSwordCore-3Dtrue.png";
-    public static String EcUltimateWeaponPNG = "textures/item/UltimaWeapon.png";
-    public static String EcGuiMaterializer = "textures/gui/materializer.png";
-    public static String EcGuiHuge = "textures/gui/HugeMateriaContainer.png";
-    public static String EcGuiMateriaWindow = "textures/gui/MaterializingContainer.png";
-    public static String EcPotionEffect = "textures/gui/potioneffect.png";
-    public static String EcHugetex = "textures/item/hugemateriatex.png";
-    public static String EcTextureDomain = "enchantchanger:";
-    public static String EcAssetsDomain = "enchantchanger";
+    public static final String EcMeteoPNG = "textures/items/Meteo.png";
+    public static final String EcExpBottlePNG = "textures/items/ExExpBottle.png";
+    public static final String EcZackSwordPNG = "textures/item/ZackSword.png";
+    public static final String EcSephirothSwordPNG = "textures/item/SephirothSword.png";
+    public static final String EcCloudSword2PNG = "textures/item/CloudSword-3Dtrue.png";
+    public static final String EcCloudSwordCore2PNG = "textures/item/CloudSwordCore-3Dtrue.png";
+    public static final String EcUltimateWeaponPNG = "textures/item/UltimaWeapon.png";
+    public static final String EcGuiMaterializer = "textures/gui/materializer.png";
+    public static final String EcGuiHuge = "textures/gui/HugeMateriaContainer.png";
+    public static final String EcGuiMateriaWindow = "textures/gui/MaterializingContainer.png";
+    public static final String EcPotionEffect = "textures/gui/potioneffect.png";
+    public static final String EcHugetex = "textures/item/hugemateriatex.png";
+    public static final String EcTextureDomain = "enchantchanger:";
+    public static final String EcAssetsDomain = "enchantchanger";
 
     public static boolean loadMTH = false;
     public static boolean loadBC = false;
@@ -143,12 +167,18 @@ public class EnchantChanger {
     public static int guiIdPortableEnchantmentTable = 1;
     public static int guiIdHugeMateria = 2;
     public static int guiIdMateriaWindow = 3;
-    public static HashMap<Integer, Integer> apLimit = new HashMap<>();
-    public static HashSet<Integer> magicEnchantment = new HashSet<>();
+    public static final HashMap<Integer, Integer> apLimit = new HashMap<>();
+    public static final HashSet<Integer> magicEnchantment = new HashSet<>();
     public static final CreativeTabs tabsEChanger = new CreativeTabEC(
             "EnchantChanger");
-    public static LivingEventHooks livingeventhooks;
-    public static final PacketPipeline packetPipeline = new PacketPipeline();
+    public static final LivingEventHooks livingeventhooks = new LivingEventHooks();
+
+    public static final byte MagicKEY = 0;
+    public static final byte MateriaKEY = 1;
+
+//    public static final PacketPipeline packetPipeline = new PacketPipeline();
+    //Logger
+    public static final Logger logger = Logger.getLogger("EnchantChanger");
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -299,10 +329,10 @@ public class EnchantChanger {
 
         Meteo = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteoId, 0).setName("Meteo");
         Holy = new EcEnchantmentHoly(EnchantChanger.EndhantmentHolyId, 0).setName("Holy");
-        Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0).setName("Teleport");
+        Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0).setName("teleportTo");
         Float = new EcEnchantmentFloat(EnchantChanger.EnchantmentFloatId, 0).setName("Floating");
         Thunder = new EcEnchantmentThunder(EnchantChanger.EnchantmentThunderId, 0).setName("Thunder");
-
+        PacketHandler.init();
         addStatusEffect();
 
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
@@ -311,19 +341,18 @@ public class EnchantChanger {
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
         this.initMaps();
-        livingeventhooks = new LivingEventHooks();
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
-        FillBucketHook.INSTANCE.buckets.put(blockLifeStream, bucketLifeStream);
+        FillBucketHook.buckets.put(blockLifeStream, bucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
         FMLCommonHandler.instance().bus().register(this);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
-        packetPipeline.initialise();
-        packetPipeline.registerPacket(KeyHandlingPacket.class);
-        packetPipeline.registerPacket(LevitationPacket.class);
-        packetPipeline.registerPacket(CloudSwordPacket.class);
-        packetPipeline.registerPacket(KeyMateriaWindowPacket.class);
-        packetPipeline.registerPacket(PlayerInfoPacket.class);
+//        packetPipeline.initialise();
+//        packetPipeline.registerPacket(KeyHandlingPacket.class);
+//        packetPipeline.registerPacket(LevitationPacket.class);
+//        packetPipeline.registerPacket(CloudSwordPacket.class);
+//        packetPipeline.registerPacket(KeyMateriaWindowPacket.class);
+//        packetPipeline.registerPacket(PlayerInfoPacket.class);
         GameRegistry.registerTileEntity(EcTileEntityMaterializer.class,
                 "container.materializer");
         GameRegistry.registerTileEntity(EcTileEntityHugeMateria.class,
@@ -349,59 +378,69 @@ public class EnchantChanger {
                 new ItemStack(Items.diamond, 1),
                 new ItemStack(Items.ender_pearl, 1));
         GameRegistry.addRecipe(new ItemStack(itemZackSword, 1),
-                " X", "XX", " Y", 'X', Blocks.iron_block,
+                " X",
+                "XX",
+                " Y",
+                'X', Blocks.iron_block,
                 'Y', Items.iron_ingot);
         if (EnchantChanger.Difficulty < 2)
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
-                    " X ", "XYX", " Z ", 'X',
-                    Blocks.iron_block, 'Y',
-                    new ItemStack(itemMateria, 1, 0),
+                    " X ",
+                    "XYX",
+                    " Z ",
+                    'X', Blocks.iron_block,
+                    'Y', new ItemStack(itemMateria, 1, 0),
                     'Z', Items.iron_ingot);
         else
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
-                    " X ", "DYD", " Z ", 'X',
-                    Blocks.iron_block, 'Y',
-                    new ItemStack(itemMateria, 1, 0),
-                    'Z', Items.iron_ingot, 'D',
-                    Items.diamond);
+                    " X ",
+                    "DYD",
+                    " Z ",
+                    'X', Blocks.iron_block,
+                    'Y', new ItemStack(itemMateria, 1, 0),
+                    'Z', Items.iron_ingot,
+                    'D', Items.diamond);
         GameRegistry.addRecipe(
                 new ItemStack(itemSephirothSword, 1),
-                "  A", " B ", "C  ", 'A',
-                Items.iron_ingot, 'B',
-                new ItemStack(Items.diamond_sword, 1, 0),
+                "  A", " B ", "C  ",
+                'A', Items.iron_ingot,
+                'B', new ItemStack(Items.diamond_sword, 1, 0),
                 'C', new ItemStack(itemMateria, 1, 1));
         GameRegistry.addRecipe(
                 new ItemStack(itemUltimateWeapon, 1),
                 " A ",
                 "ABA",
                 " C ",
-                'A',
-                Blocks.diamond_block,
-                'B',
-                new ItemStack(itemMasterMateria, 1,
-                        OreDictionary.WILDCARD_VALUE),
+                'A', Blocks.diamond_block,
+                'B', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE),
                 'C', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(itemImitateSephirothSword), "  A",
-                " A ", "B  ", 'A', Items.iron_ingot, 'B', Items.iron_sword);
+        GameRegistry.addRecipe(new ItemStack(itemImitateSephirothSword),
+                "  A",
+                " A ",
+                "B  ",
+                'A', Items.iron_ingot,
+                'B', Items.iron_sword);
         GameRegistry.addRecipe(new ItemStack(blockEnchantChanger, 1),
-                "XYX", "ZZZ", 'X',
-                Items.diamond, 'Y', Blocks.gold_block,
+                "XYX",
+                "ZZZ",
+                'X', Items.diamond,
+                'Y', Blocks.gold_block,
                 'Z', Blocks.obsidian);
         GameRegistry.addRecipe(new ItemStack(itemHugeMateria),
-                " A ", "ABA", " A ", 'A', Blocks.diamond_block, 'B',
-                Items.nether_star);
+                " A ",
+                "ABA",
+                " A ",
+                'A', Blocks.diamond_block,
+                'B', Items.nether_star);
         GameRegistry
                 .addRecipe(new ItemStack(itemHugeMateria),
                         " A ",
                         "ABA",
                         " A ",
-                        'A',
-                        Blocks.diamond_block,
-                        'B',
-                        new ItemStack(itemMasterMateria, 1,
-                                OreDictionary.WILDCARD_VALUE));
+                        'A', Blocks.diamond_block,
+                        'B', new ItemStack(itemMasterMateria, 1,  OreDictionary.WILDCARD_VALUE));
         GameRegistry.addShapelessRecipe(new ItemStack(
                 iemPortableEnchantChanger, 1), blockEnchantChanger);
         GameRegistry.addShapelessRecipe(new ItemStack(
@@ -416,24 +455,20 @@ public class EnchantChanger {
         if (Difficulty == 0)
             GameRegistry.addRecipe(
                     new ItemStack(Items.experience_bottle, 8),
-                    "XXX", "XYX", "XXX", 'X',
-                    new ItemStack(Items.potionitem, 1, 0),
-                    'Y',
-                    new ItemStack(Items.diamond, 1));
+                    "XXX", "XYX", "XXX",
+                    'X', new ItemStack(Items.potionitem, 1, 0),
+                    'Y', new ItemStack(Items.diamond, 1));
         GameRegistry.addRecipe(new ItemStack(itemExExpBottle, 8),
-                "XXX", "XYX", "XXX", 'X',
-                new ItemStack(Items.experience_bottle, 1, 0), 'Y',
-                new ItemStack(Blocks.diamond_block, 1));
+                "XXX", "XYX", "XXX",
+                'X', new ItemStack(Items.experience_bottle, 1, 0),
+                'Y', new ItemStack(Blocks.diamond_block, 1));
         GameRegistry
                 .addRecipe(new ItemStack(Blocks.dragon_egg, 1),
                         "XXX",
                         "XYX",
                         "XXX",
-                        'X',
-                        Items.ender_eye,
-                        'Y',
-                        new ItemStack(itemMasterMateria, 1,
-                                OreDictionary.WILDCARD_VALUE));
+                        'X', Items.ender_eye,
+                        'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
         if (enableDungeonLoot)
             this.DungeonLootItemResist();
     }
@@ -441,7 +476,7 @@ public class EnchantChanger {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         loadMTH = Loader.isModLoaded("MultiToolHolders");
-        packetPipeline.postInitialise();
+//        packetPipeline.postInitialise();
     }
 
     private void initMaps() {
@@ -655,14 +690,14 @@ public class EnchantChanger {
         }
     }
     private void addStatusEffect() {
-        if (idMakoPoison >= 32 && idMakoPoison < 127) {
+        if (idMakoPoison < 127) {
             if (Potion.potionTypes[idMakoPoison] == null) {
                 potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
             } else {
                 throw new IllegalIcuArgumentException("idMakoPoison:id has been used another MOD");
             }
         } else {
-            throw new IllegalArgumentException("idMakoPoison:Only set from 32 to 127");
+            throw new IllegalArgumentException("idMakoPoison:Only set from 24 to 127");
         }
     }
     public void DungeonLootItemResist() {
@@ -691,13 +726,25 @@ public class EnchantChanger {
         }
     }
 
+    private byte getKeyIndex() {
+        byte key = -1;
+        if (ClientProxy.MagicKey.isPressed()) {
+            key = MagicKEY;
+        } else if (ClientProxy.MateriaKey.isPressed()) {
+            key = MateriaKEY;
+        }
+
+        return key;
+    }
+
     @SubscribeEvent
     public void KeyHandlingEvent(KeyInputEvent event) {
-        while (ClientProxy.MagicKey.isPressed()) {
-            EcItemSword.pressMagicKey = true;
-        }
-        while (ClientProxy.MateriaKey.isPressed()) {
-            livingeventhooks.isMateriaKeyPressed = true;
+        if (FMLClientHandler.instance().getClient().inGameHasFocus && FMLClientHandler.instance().getClientPlayerEntity() != null) {
+            EntityPlayer entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+            byte keyIndex = getKeyIndex();
+            if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
+                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
+            }
         }
     }
 
@@ -714,14 +761,14 @@ public class EnchantChanger {
     @SubscribeEvent
     public void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.player.worldObj.isRemote) {
-            packetPipeline.sendTo(new PlayerInfoPacket(event.player), (EntityPlayerMP)event.player);
+            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP)event.player);
         }
     }
 
     @SubscribeEvent
     public void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.player.worldObj.isRemote) {
-            packetPipeline.sendTo(new PlayerInfoPacket(event.player), (EntityPlayerMP)event.player);
+            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP)event.player);
         }
     }
     //ライフストリームの地底湖を生成するつもりのコード
@@ -735,6 +782,7 @@ public class EnchantChanger {
             y = event.rand.nextInt(256);
             z = l + event.rand.nextInt(16) + 8;
             (new WorldGenLakes(blockLifeStream)).generate(event.world, event.rand, x, y, z);
+            logger.fine(String.format("LifeStreamLake is generated at (%d, %d, %d)", x, y, z));
         }
     }
 }

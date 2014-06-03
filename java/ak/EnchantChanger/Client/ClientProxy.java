@@ -1,6 +1,11 @@
 package ak.EnchantChanger.Client;
 
 import ak.EnchantChanger.*;
+import ak.EnchantChanger.Client.renderer.*;
+import ak.EnchantChanger.entity.EcEntityApOrb;
+import ak.EnchantChanger.entity.EcEntityExExpBottle;
+import ak.EnchantChanger.entity.EcEntityMeteo;
+import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.client.settings.KeyBinding;
