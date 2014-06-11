@@ -21,6 +21,7 @@ import ak.EnchantChanger.recipe.EcMasterMateriaRecipe;
 import ak.EnchantChanger.recipe.EcMateriaRecipe;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
+import ak.MultiToolHolders.ItemMultiToolHolder;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.*;
@@ -744,10 +745,26 @@ public class EnchantChanger {
             byte keyIndex = getKeyIndex();
             if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
                 PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
+                switch(keyIndex) {
+                    case EnchantChanger.MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
+                }
             }
         }
     }
 
+    private void doMagic(ItemStack itemStack, EntityPlayer player) {
+        if (itemStack.getItem() instanceof EcItemSword) {
+            EcItemSword.doMagic(itemStack, player.worldObj, player);
+        } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
+            //ツールホルダーとの連携処理。
+            ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
+            if (mth.tools.getStackInSlot(mth.SlotNum) != null
+                    && mth.tools.getStackInSlot(mth.SlotNum).getItem() instanceof EcItemSword)
+            {
+                EcItemSword.doMagic(mth.tools.getStackInSlot(mth.SlotNum), player.worldObj, player);
+            }
+        }
+    }
     @SubscribeEvent
     public void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 

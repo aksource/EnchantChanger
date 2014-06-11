@@ -61,7 +61,7 @@ public class EcItemMateria extends Item
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-        if (world.isRemote) return itemstack;
+//        if (world.isRemote) return itemstack;
 		if (itemstack.stackSize > 1) {
 			return itemstack;
 		}
@@ -283,7 +283,7 @@ public class EcItemMateria extends Item
 
 	public static void teleportTo(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-		if (!canMagic(entityplayer) || world.isRemote) {
+		if (!canMagic(entityplayer)/* || world.isRemote*/) {
 			return;
 		}
         Vec3 point;
@@ -309,15 +309,18 @@ public class EcItemMateria extends Item
 	private static void teleportToChunkCoord(World world, EntityPlayer entityplayer, Vec3 vector,
 			boolean isSneaking, boolean telepoDim, int dimID)
 	{
-		entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
-		entityplayer.fallDistance = 0.0F;
-		if (telepoDim)
-			travelDimension(entityplayer, dimID);
-		decreasePlayerFood(entityplayer, isSneaking ? 20 : 2);
-		for (int var2 = 0; var2 < 32; ++var2) {
-			world.spawnParticle("portal", entityplayer.posX, entityplayer.posY + world.rand.nextDouble() * 2.0D,
-					entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
-		}
+        if (!world.isRemote) {
+            entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+            entityplayer.fallDistance = 0.0F;
+            if (telepoDim)
+                travelDimension(entityplayer, dimID);
+            decreasePlayerFood(entityplayer, isSneaking ? 20 : 2);
+        } else {
+            for (int var2 = 0; var2 < 32; ++var2) {
+                world.spawnParticle("portal", entityplayer.posX, entityplayer.posY + world.rand.nextDouble() * 2.0D,
+                        entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
+            }
+        }
 	}
 
 	private static void travelDimension(EntityPlayer player, int nowDim)
