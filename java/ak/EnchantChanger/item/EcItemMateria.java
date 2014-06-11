@@ -36,7 +36,7 @@ import java.util.List;
 
 public class EcItemMateria extends Item
 {
-	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "teleportTo", "Floating",
+	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
 			"Thunder", "Despell", "Haste", "Absorption" };
 	//	public static final String[] MateriaMagicJPNames = new String[]{"黒"   ,"白"   ,"瞬間移動","浮遊"    ,"雷"     ,"解呪"   ,"加速" ,"吸収"};
 	public static int MagicMateriaNum = MateriaMagicNames.length;
@@ -61,6 +61,7 @@ public class EcItemMateria extends Item
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
+        if (world.isRemote) return itemstack;
 		if (itemstack.stackSize > 1) {
 			return itemstack;
 		}
@@ -365,13 +366,16 @@ public class EcItemMateria extends Item
 		double viewX = entityplayer.getLookVec().xCoord;
 		double viewY = entityplayer.getLookVec().yCoord;
 		double viewZ = entityplayer.getLookVec().zCoord;
-        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
-        double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + 1.62D - (double)entityplayer.yOffset;
-        double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;
+/*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
+        double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
+        double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
+        double playerPosX = entityplayer.posX;
+        double playerPosY = entityplayer.posY + 1.62D - entityplayer.getYOffset();
+        double playerPosZ = entityplayer.posZ;
 		Vec3 playerPosition = world.getWorldVec3Pool().getVecFromPool(playerPosX,
 				playerPosY, playerPosZ);
 		Vec3 playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
-		MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, true);
+		MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, false);
 		if (MOP != null && MOP.typeOfHit == MovingObjectType.BLOCK) {
             int blockSide = MOP.sideHit;
             ForgeDirection direction = ForgeDirection.getOrientation(blockSide);

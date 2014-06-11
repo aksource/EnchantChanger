@@ -590,7 +590,7 @@ public class EnchantChanger {
         double viewZ = player.getLookVec().zCoord;
         double PlayerposX = player.posX;
         // player.prevPosX + (player.posX - player.prevPosX) * (double)var1;
-        double PlayerposY = player.posY + 1.62D - (double) player.yOffset;
+        double PlayerposY = player.posY + 1.62D - player.getYOffset();
         // player.prevPosY + (player.posY - player.prevPosY) * (double)var1;
         double PlayerposZ = player.posZ;
         // player.prevPosZ + (player.posZ - player.prevPosZ) * (double)var1;
