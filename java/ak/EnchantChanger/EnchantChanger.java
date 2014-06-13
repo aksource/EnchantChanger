@@ -252,7 +252,7 @@ public class EnchantChanger {
         config.save();
 
         itemMateria = (new EcItemMateria()).setHasSubtypes(true).setMaxDamage(0).setUnlocalizedName(
-                EcTextureDomain + "Materia").setTextureName(EcTextureDomain + "Materia").setCreativeTab(tabsEChanger);
+                EcTextureDomain + "Materia").setTextureName("ender_pearl").setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemMateria, "materia", "EnchantChanger");
         itemExExpBottle = new EcItemExExpBottle()
                 .setUnlocalizedName(EcTextureDomain + "ExExpBottle").setTextureName(EcTextureDomain + "ExExpBottle")
@@ -691,7 +691,7 @@ public class EnchantChanger {
         }
     }
     private void addStatusEffect() {
-        if (idMakoPoison < 127) {
+        if (idMakoPoison < Potion.potionTypes.length) {
             if (Potion.potionTypes[idMakoPoison] == null) {
                 potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
             } else {
