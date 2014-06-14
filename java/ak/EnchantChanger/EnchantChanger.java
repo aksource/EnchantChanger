@@ -298,7 +298,7 @@ public class EnchantChanger {
         GameRegistry.registerItem(itemPortableEnchantmentTable,
                 "portableenchantmenttable", "EnchantChanger");
         itemMasterMateria = new EcItemMasterMateria()
-                .setUnlocalizedName(EcTextureDomain + "itemMasterMateria").setTextureName(EcTextureDomain + "itemMasterMateria").setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1)
+                .setUnlocalizedName(EcTextureDomain + "itemMasterMateria").setTextureName("ender_pearl").setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1)
                 .setCreativeTab(tabsEChanger);
         GameRegistry.registerItem(itemMasterMateria, "mastermateria",
                 "EnchantChanger");
