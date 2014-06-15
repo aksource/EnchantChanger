@@ -41,6 +41,7 @@ public class PotionArrayTransformer implements IClassTransformer, Opcodes{
             }
         }
         if (mnode != null) {
+            AKInternalCorePlugin.logger.info("Transforming static init method");
             AbstractInsnNode oldInsnNode = mnode.instructions.get(2);
             AbstractInsnNode newInsnNode = new VarInsnNode(Opcodes.BIPUSH, Byte.MAX_VALUE);
             mnode.instructions.set(oldInsnNode, newInsnNode);

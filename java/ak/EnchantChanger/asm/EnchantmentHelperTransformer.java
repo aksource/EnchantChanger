@@ -1,5 +1,6 @@
 package ak.EnchantChanger.asm;
 
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -32,21 +33,32 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
         String targetMethodName = "func_77508_a";//getEnchantmentModifierDamage
         MethodNode mnode = null;
         for (MethodNode curMnode : classNode.methods) {
-            if (targetMethodName.equals(curMnode.name)) {
+            if (targetMethodName.equals(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(target, curMnode.name, curMnode.desc))) {
                 mnode = curMnode;
                 break;
             }
         }
         if (mnode != null) {
-            AbstractInsnNode oldInsnNode = mnode.instructions.get(19);
-            AbstractInsnNode newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
-            mnode.instructions.set(oldInsnNode, newInsnNode);
-            oldInsnNode = mnode.instructions.get(24);
-            newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
-            mnode.instructions.set(oldInsnNode, newInsnNode);
-            ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
-            classNode.accept(cw);
-            bytes = cw.toByteArray();
+            AKInternalCorePlugin.logger.info("Transforming getEnchantmentModifierDamage Method");
+            AbstractInsnNode oldInsnNode1 = null;
+            AbstractInsnNode oldInsnNode2 = null;
+
+            for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
+                if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 25) {
+                    if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
+                    else oldInsnNode2 = abstractInsnNode;
+                }
+            }
+
+            if (oldInsnNode1 != null && oldInsnNode2 != null) {
+                AbstractInsnNode newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
+                mnode.instructions.set(oldInsnNode1, newInsnNode);
+                newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
+                mnode.instructions.set(oldInsnNode2, newInsnNode);
+                ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
+                classNode.accept(cw);
+                bytes = cw.toByteArray();
+            }
         }
         return bytes;
     }

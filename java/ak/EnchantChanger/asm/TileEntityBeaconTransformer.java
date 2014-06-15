@@ -1,14 +1,12 @@
 package ak.EnchantChanger.asm;
 
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 /**
  * Created by A.K. on 14/04/22.
@@ -36,19 +34,33 @@ public class TileEntityBeaconTransformer implements IClassTransformer, Opcodes{
         String targetMethodDesc = "()V";
         MethodNode mnode = null;
         for (MethodNode curMnode : classNode.methods) {
-            if (targetMethodName.equals(curMnode.name) && targetMethodDesc.equals(curMnode.desc)) {
+            if (targetMethodName.equals(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(target, curMnode.name, curMnode.desc)) && targetMethodDesc.equals(curMnode.desc)) {
                 mnode = curMnode;
                 break;
             }
         }
         if (mnode != null) {
-            AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "beaconLevelRange", "I");
-            AbstractInsnNode newInsnNode2 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "beaconBaseRange", "I");
-            mnode.instructions.set(mnode.instructions.get(20), newInsnNode1);
-            mnode.instructions.set(mnode.instructions.get(22), newInsnNode2);
-            ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
-            classNode.accept(cw);
-            bytes = cw.toByteArray();
+            AKInternalCorePlugin.logger.info("Transforming func_146000_x Method");
+            AbstractInsnNode oldInsnNode1 = null;
+            AbstractInsnNode oldInsnNode2 = null;
+
+            for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
+                if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 10) {
+                    if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
+                    else oldInsnNode2 = abstractInsnNode;
+                }
+            }
+
+            if (oldInsnNode1 != null && oldInsnNode2 != null) {
+                AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "beaconLevelRange", "I");
+                AbstractInsnNode newInsnNode2 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "beaconBaseRange", "I");
+                mnode.instructions.set(oldInsnNode1, newInsnNode1);
+                mnode.instructions.set(oldInsnNode2, newInsnNode2);
+                ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
+//            ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_MAXS));
+                classNode.accept(cw);
+                bytes = cw.toByteArray();
+            }
         }
         return bytes;
     }
