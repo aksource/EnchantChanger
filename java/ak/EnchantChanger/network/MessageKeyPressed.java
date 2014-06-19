@@ -11,7 +11,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 /**
  * Created by A.K. on 14/06/02.
@@ -52,11 +51,11 @@ public class MessageKeyPressed implements IMessage, IMessageHandler<MessageKeyPr
             EcItemSword.doMagic(itemStack, player.worldObj, player);
         } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
             //ツールホルダーとの連携処理。
-            ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
-            if (mth.tools.getStackInSlot(mth.SlotNum) != null
-                    && mth.tools.getStackInSlot(mth.SlotNum).getItem() instanceof EcItemSword)
+            ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
+            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)) != null
+                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
             {
-                EcItemSword.doMagic(mth.tools.getStackInSlot(mth.SlotNum), player.worldObj, player);
+                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
     }

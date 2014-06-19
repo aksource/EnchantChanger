@@ -758,10 +758,10 @@ public class EnchantChanger {
         } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
-            if (mth.tools.getStackInSlot(mth.SlotNum) != null
-                    && mth.tools.getStackInSlot(mth.SlotNum).getItem() instanceof EcItemSword)
+            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)) != null
+                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
             {
-                EcItemSword.doMagic(mth.tools.getStackInSlot(mth.SlotNum), player.worldObj, player);
+                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
     }

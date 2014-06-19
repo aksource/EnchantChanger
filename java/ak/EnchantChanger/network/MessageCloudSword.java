@@ -42,8 +42,8 @@ public class MessageCloudSword implements IMessage, IMessageHandler<MessageCloud
                 sword.setSlotNum(itemStack, message.slotNum);
             } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
                 ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
-                if (mth.tools.getStackInSlot(mth.SlotNum) != null && mth.tools.getStackInSlot(mth.SlotNum).getItem() instanceof EcItemCloudSword) {
-                    EcItemCloudSword sword = (EcItemCloudSword) mth.tools.getStackInSlot(mth.SlotNum).getItem();
+                if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)) != null && mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemCloudSword) {
+                    EcItemCloudSword sword = (EcItemCloudSword) mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem();
                     sword.setSlotNum(itemStack, message.slotNum);
                 }
             }
