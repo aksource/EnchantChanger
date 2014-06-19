@@ -70,7 +70,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "1.8-universal", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
+@Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
 public class EnchantChanger {
 
     public static final String MOD_ID = "EnchantChanger";
