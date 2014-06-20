@@ -10,6 +10,7 @@ import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -25,7 +27,9 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 
 public class LivingEventHooks
 {
@@ -35,6 +39,8 @@ public class LivingEventHooks
 	private static final int FlightMptime = 20 * 3;
 	private static final int GGMptime = 20;
 	private static final int AbsorpMptime = 20 * 3;
+    private static final float originalJumpMovementFactor = 0.02F;
+    private static final float moveFactor = 0.4F;
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //	private int mptimer = FlightMptime;
 //    public boolean isMateriaKeyPressed = false;
@@ -52,6 +58,17 @@ public class LivingEventHooks
             ((EntityPlayer)event.entityLiving).xpCooldown = 0;
 		}
 	}
+
+    @SubscribeEvent
+    public void onPlayerFall(LivingFallEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)event.entityLiving;
+            if (checkFlightAvailable(player)) {
+                event.setCanceled(true);
+            }
+        }
+
+    }
 
     @SubscribeEvent
     public void fixLevitationDigSpeed(PlayerEvent.BreakSpeed event) {
@@ -114,7 +131,7 @@ public class LivingEventHooks
 			this.setModeToNBT(player, false);
 			return;
 		}
-		player.fallDistance = 0.0f;
+
 		if (player.worldObj.isRemote) {
 			boolean jump = ((EntityPlayerSP) player).movementInput.jump;
 			float var2 = 0.8F;
@@ -129,7 +146,8 @@ public class LivingEventHooks
 				}
 			}
 			boolean var4 = (float) player.getFoodStats().getFoodLevel() > 6.0F;
-            boolean var5 = this.getModeToNBT(player);
+
+            //Sprint判定。updatePlayerMoveStateしているので、再度判定する必要が有る。
 			if (((EntityPlayerSP) player).onGround && !var3
 					&& ((EntityPlayerSP) player).movementInput.moveForward >= var2
 					&& ! player.isSprinting() && var4 && !player.isUsingItem()
@@ -144,26 +162,17 @@ public class LivingEventHooks
 			if (this.sprintToggleTimer > 0) {
 				--this.sprintToggleTimer;
 			}
+            //Sprint判定ここまで。
+
 			if (this.flyToggleTimer > 0) {
 				--this.flyToggleTimer;
 			}
 
-//			if (player.onGround && this.getModeToNBT(player)) {
-//				this.setModeToNBT(player, false);
-//			}
-
+            boolean var5 = this.getModeToNBT(player);
 			if (var5) {
-				player.motionY = 0D;
-				player.jumpMovementFactor = 0.1f;
-				if (((EntityPlayerSP) player).movementInput.sneak) {
-					player.motionY -= 0.4D;
-				}
-
-				if (((EntityPlayerSP) player).movementInput.jump) {
-					player.motionY += 0.4D;
-				}
-
-			} else player.jumpMovementFactor = 0.02f;
+                movePlayerY(player);
+                movePlayerXZ(player);
+			}
 
 			if (player.onGround && var5) {
 				this.setModeToNBT(player, false);
@@ -176,7 +185,33 @@ public class LivingEventHooks
 		}
 	}
 
-	public void GreatGospel(EntityPlayer player)
+    private void movePlayerY(EntityPlayer player) {
+        EntityPlayerSP playerSP = (EntityPlayerSP)player;
+
+        player.motionY = 0.0D;
+
+        if (playerSP.movementInput.sneak) {
+            player.motionY -= moveFactor;
+        }
+
+        if (playerSP.movementInput.jump) {
+            player.motionY += moveFactor;
+        }
+    }
+
+    private void movePlayerXZ(EntityPlayer player) {
+        EntityPlayerSP playerSP = (EntityPlayerSP)player;
+        float moveForward = playerSP.movementInput.moveForward;
+        float moveStrafe = playerSP.movementInput.moveStrafe;
+
+        if (moveForward != 0 || moveStrafe != 0) {
+            player.motionX = player.motionZ = 0;
+        }
+        player.moveFlying(moveStrafe, moveForward, moveFactor);
+
+    }
+
+	private void GreatGospel(EntityPlayer player)
 	{
 		if (player.capabilities.isCreativeMode) {
 			return;
@@ -285,13 +320,4 @@ public class LivingEventHooks
 	{
         return ExtendedPlayerData.get(player).isLevitating();
 	}
-
-//	public void readPacketData(boolean var1, EntityPlayer player)
-//	{
-//		try {
-//			this.setModeToNBT(player, var1);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 }
