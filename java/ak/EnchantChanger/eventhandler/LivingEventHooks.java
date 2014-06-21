@@ -207,7 +207,7 @@ public class LivingEventHooks
         if (moveForward != 0 || moveStrafe != 0) {
             player.motionX = player.motionZ = 0;
         }
-        player.moveFlying(moveStrafe, moveForward, moveFactor);
+        player.moveFlying(moveStrafe, moveForward, moveFactor * 1.2F);
 
     }
 
