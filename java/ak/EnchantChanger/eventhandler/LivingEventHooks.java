@@ -1,7 +1,5 @@
 package ak.EnchantChanger.eventhandler;
 
-import java.util.List;
-
 import ak.EnchantChanger.CommonProxy;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
@@ -10,7 +8,8 @@ import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
-import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -19,17 +18,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
+
+import java.util.List;
 
 public class LivingEventHooks
 {
@@ -39,7 +36,6 @@ public class LivingEventHooks
 	private static final int FlightMptime = 20 * 3;
 	private static final int GGMptime = 20;
 	private static final int AbsorpMptime = 20 * 3;
-    private static final float originalJumpMovementFactor = 0.02F;
     private static final float moveFactor = 0.4F;
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //	private int mptimer = FlightMptime;
