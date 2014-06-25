@@ -166,7 +166,7 @@ public class EcItemMateria extends Item
 							Lv));
 					player.addExperienceLevel(-LevelUPEXP(item, false));
 					player.addChatMessage(new ChatComponentText(EntityName + " gets " + Message));
-					player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - 6);
+                    decreasePlayerFood(player, 6);
 				}
 			}
 		}
@@ -295,7 +295,7 @@ public class EcItemMateria extends Item
 			} else {
 				spawnPoint = world.getSpawnPoint();
 			}
-            point = world.getWorldVec3Pool().getVecFromPool(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
+            point = Vec3.createVectorHelper(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
 			teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), true, dimID);
 		} else {
             point = setTeleportPoint(world, entityplayer);
@@ -375,7 +375,7 @@ public class EcItemMateria extends Item
         double playerPosX = entityplayer.posX;
         double playerPosY = entityplayer.posY + 1.62D - entityplayer.getYOffset();
         double playerPosZ = entityplayer.posZ;
-		Vec3 playerPosition = world.getWorldVec3Pool().getVecFromPool(playerPosX,
+		Vec3 playerPosition = Vec3.createVectorHelper(playerPosX,
 				playerPosY, playerPosZ);
 		Vec3 playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
 		MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, false);
@@ -386,7 +386,7 @@ public class EcItemMateria extends Item
 			double blockPosY = MOP.blockY + direction.offsetY;
 			double blockPosZ = MOP.blockZ + 0.5D + direction.offsetZ;
             if (blockSide == 0) blockPosY--;
-			return world.getWorldVec3Pool().getVecFromPool(blockPosX, blockPosY, blockPosZ);
+			return Vec3.createVectorHelper(blockPosX, blockPosY, blockPosZ);
 		} else {
 			return null;
 		}
