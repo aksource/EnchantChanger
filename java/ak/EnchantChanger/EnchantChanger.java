@@ -595,7 +595,7 @@ public class EnchantChanger {
         // player.prevPosY + (player.posY - player.prevPosY) * (double)var1;
         double PlayerposZ = player.posZ;
         // player.prevPosZ + (player.posZ - player.prevPosZ) * (double)var1;
-        Vec3 PlayerPosition = world.getWorldVec3Pool().getVecFromPool(
+        Vec3 PlayerPosition = Vec3.createVectorHelper(
                 PlayerposX, PlayerposY, PlayerposZ);
         Vec3 PlayerLookVec = PlayerPosition.addVector(viewX * reach, viewY
                 * reach, viewZ * reach);
