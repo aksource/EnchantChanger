@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 /**
  * Created by A.K. on 14/03/13.
  */
-@IFMLLoadingPlugin.MCVersion("1.7.2")
 public class AKInternalCorePlugin implements IFMLLoadingPlugin {
     public static Logger logger = Logger.getLogger("AKInternalCore");
     public static int maxDamageModifier;
