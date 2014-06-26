@@ -1,6 +1,7 @@
 package ak.EnchantChanger;
 
 import ak.EnchantChanger.Client.ClientProxy;
+import ak.EnchantChanger.Client.renderer.RenderingOverlayEvent;
 import ak.EnchantChanger.block.EcBlockHugeMateria;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.block.EcBlockMakoReactor;
@@ -129,6 +130,9 @@ public class EnchantChanger {
     public static int aPBasePoint;
     public static int idMakoPoison;
 
+    public static int cloudInvXCoord = 0;
+    public static int cloudInvYCoord = 0;
+
     public static int EnchantmentMeteoId;
     public static Enchantment Meteo;
     public static int EndhantmentHolyId;
@@ -198,7 +202,7 @@ public class EnchantChanger {
                 "enableAPSystem", true).getBoolean(true);
         enableDungeonLoot = config.get(Configuration.CATEGORY_GENERAL,
                 "enableDungeonLoot", true).getBoolean(true);
-        aPBasePoint = config.get(Configuration.CATEGORY_GENERAL, "APBAsePoint",
+        aPBasePoint = config.get(Configuration.CATEGORY_GENERAL, "APBasePoint",
                 200).getInt();
         idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", 100, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
@@ -249,6 +253,8 @@ public class EnchantChanger {
                 .get(Configuration.CATEGORY_GENERAL, "ApSystemLevelLimit", enchantmentLevelLimitInit,
                         "Set Enchantmets Level Limit for AP System Format EnchantmentID:LimitLv(LimitLv = 0 > DefaultMaxLevel)")
                 .getStringList();
+        cloudInvXCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDxCoordinate", 0).getInt();
+        cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", 0).getInt();
         config.save();
 
         itemMateria = (new EcItemMateria()).setHasSubtypes(true).setMaxDamage(0).setUnlocalizedName(
@@ -345,15 +351,11 @@ public class EnchantChanger {
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
         FillBucketHook.buckets.put(blockLifeStream, bucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
         FMLCommonHandler.instance().bus().register(this);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
-//        packetPipeline.initialise();
-//        packetPipeline.registerPacket(KeyHandlingPacket.class);
-//        packetPipeline.registerPacket(LevitationPacket.class);
-//        packetPipeline.registerPacket(CloudSwordPacket.class);
-//        packetPipeline.registerPacket(KeyMateriaWindowPacket.class);
-//        packetPipeline.registerPacket(PlayerInfoPacket.class);
+
         GameRegistry.registerTileEntity(EcTileEntityMaterializer.class,
                 "container.materializer");
         GameRegistry.registerTileEntity(EcTileEntityHugeMateria.class,
@@ -477,7 +479,6 @@ public class EnchantChanger {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         loadMTH = Loader.isModLoaded("MultiToolHolders");
-//        packetPipeline.postInitialise();
     }
 
     private void initMaps() {

@@ -3,7 +3,6 @@ package ak.EnchantChanger.Client.gui;
 import ak.EnchantChanger.inventory.EcContainerPortableEnchantment;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -78,9 +77,9 @@ public class EcGuiPortableEnchantment extends GuiContainer
             int var7 = par1 - (var4 + 60);
             int var8 = par2 - (var5 + 14 + 19 * var6);
 
-            if (var7 >= 0 && var8 >= 0 && var7 < 108 && var8 < 19 && this.containerEnchantment.enchantItem(Minecraft.getMinecraft().thePlayer, var6))
+            if (var7 >= 0 && var8 >= 0 && var7 < 108 && var8 < 19 && this.containerEnchantment.enchantItem(mc.thePlayer, var6))
             {
-                Minecraft.getMinecraft().playerController.sendEnchantPacket(this.containerEnchantment.windowId, var6);
+                mc.playerController.sendEnchantPacket(this.containerEnchantment.windowId, var6);
             }
         }
     }
@@ -89,7 +88,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,int par3) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(enchantingTableGuiTextures);
+        mc.getTextureManager().bindTexture(enchantingTableGuiTextures);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
@@ -97,7 +96,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
-        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft().gameSettings, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         GL11.glViewport((scaledresolution.getScaledWidth() - 320) / 2 * scaledresolution.getScaleFactor(), (scaledresolution.getScaledHeight() - 240) / 2 * scaledresolution.getScaleFactor(), 320 * scaledresolution.getScaleFactor(), 240 * scaledresolution.getScaleFactor());
         GL11.glTranslatef(-0.34F, 0.23F, 0.0F);
         Project.gluPerspective(90.0F, 1.3333334F, 9.0F, 80.0F);
@@ -110,7 +109,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
         float f2 = 5.0F;
         GL11.glScalef(f2, f2, f2);
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(enchantingTableBookTextures);
+        mc.getTextureManager().bindTexture(enchantingTableBookTextures);
         GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
         float f3 = this.field_74208_u + (this.field_74209_t - this.field_74208_u) * par1;
         GL11.glTranslatef((1.0F - f3) * 0.2F, (1.0F - f3) * 0.1F, (1.0F - f3) * 0.25F);
@@ -146,7 +145,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.disableStandardItemLighting();
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, mc.displayWidth, mc.displayHeight);
         GL11.glPopMatrix();
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
@@ -158,7 +157,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
         {
             String s = EnchantmentNameParts.instance.generateNewRandomName();
             this.zLevel = 0.0F;
-            Minecraft.getMinecraft().getTextureManager().bindTexture(enchantingTableGuiTextures);
+            mc.getTextureManager().bindTexture(enchantingTableGuiTextures);
             int j1 = this.containerEnchantment.enchantLevels[i1];
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -169,14 +168,14 @@ public class EcGuiPortableEnchantment extends GuiContainer
             else
             {
                 String s1 = "" + j1;
-                FontRenderer fontrenderer = Minecraft.getMinecraft().standardGalacticFontRenderer;
+                FontRenderer fontrenderer = mc.standardGalacticFontRenderer;
                 int k1 = 6839882;
 
-                if (Minecraft.getMinecraft().thePlayer.experienceLevel < j1 && !Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
+                if (mc.thePlayer.experienceLevel < j1 && !mc.thePlayer.capabilities.isCreativeMode)
                 {
                     this.drawTexturedModalRect(k + 60, l + 14 + 19 * i1, 0, 185, 108, 19);
                     fontrenderer.drawSplitString(s, k + 62, l + 16 + 19 * i1, 104, (k1 & 16711422) >> 1);
-                    fontrenderer = Minecraft.getMinecraft().fontRenderer;
+                    fontrenderer = mc.fontRenderer;
                     k1 = 4226832;
                     fontrenderer.drawStringWithShadow(s1, k + 62 + 104 - fontrenderer.getStringWidth(s1), l + 16 + 19 * i1 + 7, k1);
                 }
@@ -196,7 +195,7 @@ public class EcGuiPortableEnchantment extends GuiContainer
                     }
 
                     fontrenderer.drawSplitString(s, k + 62, l + 16 + 19 * i1, 104, k1);
-                    fontrenderer = Minecraft.getMinecraft().fontRenderer;
+                    fontrenderer = mc.fontRenderer;
                     k1 = 8453920;
                     fontrenderer.drawStringWithShadow(s1, k + 62 + 104 - fontrenderer.getStringWidth(s1), l + 16 + 19 * i1 + 7, k1);
                 }

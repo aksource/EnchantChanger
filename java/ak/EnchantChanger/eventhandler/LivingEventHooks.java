@@ -177,7 +177,8 @@ public class LivingEventHooks
             PacketHandler.INSTANCE.sendToServer(new MessageLevitation(this.getModeToNBT(player)));
 
 		} else if (this.getModeToNBT(player) && MpCount(0, FlightMptime)) {
-				player.getFoodStats().addStats(-1, 1.0F);
+//				player.getFoodStats().addStats(-1, 1.0F);
+            player.getFoodStats().addExhaustion(4.0F);
 		}
 	}
 
@@ -220,7 +221,7 @@ public class LivingEventHooks
 		if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
 			player.capabilities.disableDamage = true;
 			if (MpCount(1, GGMptime))
-				player.getFoodStats().addStats(-1, 1.0f);
+                player.getFoodStats().addStats(-1, 1.0F);
 		} else {
 			player.capabilities.disableDamage = false;
 		}
