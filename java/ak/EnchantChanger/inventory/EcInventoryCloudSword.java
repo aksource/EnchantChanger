@@ -1,7 +1,6 @@
 package ak.EnchantChanger.inventory;
 
 import ak.EnchantChanger.item.EcItemCloudSword;
-import ak.EnchantChanger.item.EcItemCloudSwordCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,10 +10,7 @@ public class EcInventoryCloudSword implements IInventory{
     public EcCloudSwordData data;
 
     public EcInventoryCloudSword(ItemStack stack, World world) {
-        if(stack.getItem() instanceof EcItemCloudSword)
-            data = ((EcItemCloudSword)stack.getItem()).getSwordData(stack,world);
-        else if(stack.getItem() instanceof EcItemCloudSwordCore)
-            data = ((EcItemCloudSwordCore)stack.getItem()).getSwordData(stack, world);
+        data = EcItemCloudSword.getSwordData(stack, world);
     }
     @Override
     public int getSizeInventory()

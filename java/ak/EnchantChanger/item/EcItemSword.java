@@ -29,37 +29,10 @@ import java.util.Set;
 
 public class EcItemSword extends ItemSword {
 
-//	public boolean toggle = false;
-//	public static boolean pressMagicKey = false;
-
 	public EcItemSword(ToolMaterial toolMaterial) {
 		super(toolMaterial);
+        this.setNoRepair();
 	}
-
-//	@Override
-//	public void onUpdate(ItemStack par1ItemStack, World par2World,
-//			Entity par3Entity, int par4, boolean par5) {
-//		if (par3Entity instanceof EntityPlayer && par5) {
-//			if (par2World.isRemote) {
-//				this.toggle = pressMagicKey;
-//				EnchantChanger.packetPipeline.sendToServer(new KeyHandlingPacket(this.toggle));
-//			} else if (par1ItemStack.getItemDamage() > 0
-//					&& par2World.getTotalWorldTime() % 100L == 0L) {
-//				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage() - 1);
-//			}
-//			if (toggle) {
-//				pressMagicKey = false;
-//				doMagic(par1ItemStack, par2World, (EntityPlayer) par3Entity);
-//			}
-//		}
-//	}
-//For debug
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void addInformation(ItemStack item, EntityPlayer player, List par3List, boolean par4)
-//	{
-//		par3List.add(String.valueOf(item.getItemDamage()));
-//	}
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
@@ -94,11 +67,6 @@ public class EcItemSword extends ItemSword {
 	public static boolean hasFloat(ItemStack itemstack) {
 		return EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.EnchantmentFloatId, itemstack) > 0;
-	}
-
-	public Item setNoRepair() {
-		canRepair = false;
-		return this;
 	}
 
 	// 内蔵武器切り替え用攻撃メソッドの移植
@@ -153,7 +121,7 @@ public class EcItemSword extends ItemSword {
 
 					var2 += var4;
 					boolean var6 = false;
-					int var7 = EnchantmentHelper.getFireAspectModifier(player);
+					int var7 = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
 
 					if (par1Entity instanceof EntityLivingBase && var7 > 0
 							&& !par1Entity.isBurning()) {
@@ -269,7 +237,7 @@ public class EcItemSword extends ItemSword {
 
 					if (Enchantment.enchantmentsList[short1] != null) {
 						calc += Enchantment.enchantmentsList[short1]
-								.calcModifierLiving(short2, enemy);
+								.func_152376_a(short2, enemy.getCreatureAttribute());
 					}
 				}
 			}
@@ -279,13 +247,4 @@ public class EcItemSword extends ItemSword {
 
 	public void destroyTheItem(EntityPlayer player, ItemStack orig) {
 	}
-
-	// 魔法キーのトグル判定用パケット読み込み
-//	public void readPacketToggleData(boolean var1) {
-//		try {
-//			this.toggle = var1;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 }

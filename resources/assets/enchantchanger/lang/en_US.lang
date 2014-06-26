@@ -45,6 +45,10 @@ death.mako=%1$s was gone to lifestream
 #Container
 container.materializer=Enchant Changer
 container.hugeMateria=HugeMateria
+#EcitemSword
+enchantchanger.cloudswordcore.mode.active=Assault Mode
+enchantchanger.cloudswordcore.mode.inactive=Putting Away Mode
+
 #Key
 Key.EcMagic=Magic Key
 Key.EcMateria=Materia Window Key
