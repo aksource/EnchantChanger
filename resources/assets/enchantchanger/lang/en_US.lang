@@ -31,11 +31,11 @@ item.enchantchanger:PortableEnchantChanger.name=Soldier License
 #item.enchantchanger:PortableEnchantChanger.name=Portable Enchant Changer
 item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
-item.enchantchanger:bucketLifestream.name=Bucket of Life Stream
+item.enchantchanger:bucket_lifestream.name=Bucket of Life Stream
 #Enchantment
-enchantment.Meteo=Meteo
+enchantment.Meteor=Meteor
 enchantment.Holy=Holy
-enchantment.Teleport=Teleport
+enchantment.Teleporting=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
 #Potion

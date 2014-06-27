@@ -31,11 +31,11 @@ item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
 #item.enchantchanger:PortableEnchantChanger.name=携帯エンチャントチェンジャー
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
-item.enchantchanger:bucketLifestream.name=ライフストリーム入りバケツ
+item.enchantchanger:bucket_lifestream.name=ライフストリーム入りバケツ
 #Enchantment
-enchantment.Meteo=Meteo
+enchantment.Meteor=Meteor
 enchantment.Holy=Holy
-enchantment.Teleport=Teleport
+enchantment.Teleporting=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
 #Potion

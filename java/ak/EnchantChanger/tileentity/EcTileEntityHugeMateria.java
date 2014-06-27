@@ -294,8 +294,8 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 		for(i=0;i<256 + 3;i++){
 			MaterialArray[i]=null;
 		}
-		EnchArray[0][0] = EnchantChanger.EnchantmentMeteoId;
-		EnchArray[0][1] = EnchantChanger.EndhantmentHolyId;
+		EnchArray[0][0] = EnchantChanger.EnchantmentMeteorId;
+		EnchArray[0][1] = EnchantChanger.EnchantmentHolyId;
 		EnchArray[0][2] = EnchantChanger.EnchantmentTelepoId;
 		EnchArray[0][3] = EnchantChanger.EnchantmentFloatId;
 		EnchArray[0][4] = EnchantChanger.EnchantmentThunderId;
@@ -350,16 +350,16 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 		MaterialArray[51] = new ItemStack(Items.bow);
 		MaterialArray[61] = new ItemStack(Items.fishing_rod);
 		MaterialArray[62] = new ItemStack(Items.carrot_on_a_stick);
-		MaterialArray[EnchantChanger.EnchantmentMeteoId] = new ItemStack(Blocks.dragon_egg);
-		MaterialArray[EnchantChanger.EndhantmentHolyId] = new ItemStack(Items.golden_apple, 1, 1);
+		MaterialArray[EnchantChanger.EnchantmentMeteorId] = new ItemStack(Blocks.dragon_egg);
+		MaterialArray[EnchantChanger.EnchantmentHolyId] = new ItemStack(Items.golden_apple, 1, 1);
 		MaterialArray[EnchantChanger.EnchantmentTelepoId] = new ItemStack(Items.ender_pearl);
 		MaterialArray[EnchantChanger.EnchantmentFloatId] = new ItemStack(Items.ender_eye);
 		MaterialArray[EnchantChanger.EnchantmentThunderId] = new ItemStack(Blocks.gold_block);
 		MaterialArray[Enchantment.enchantmentsList.length] = new ItemStack(Items.milk_bucket);
 		MaterialArray[Enchantment.enchantmentsList.length + 1] = new ItemStack(Items.golden_boots);
 		MaterialArray[Enchantment.enchantmentsList.length + 2] = new ItemStack(Items.nether_wart);
-		magicArray.add(EnchantChanger.EnchantmentMeteoId);
-		magicArray.add(EnchantChanger.EndhantmentHolyId);
+		magicArray.add(EnchantChanger.EnchantmentMeteorId);
+		magicArray.add(EnchantChanger.EnchantmentHolyId);
 		magicArray.add(EnchantChanger.EnchantmentTelepoId);
 		magicArray.add(EnchantChanger.EnchantmentFloatId);
 		magicArray.add(EnchantChanger.EnchantmentThunderId);

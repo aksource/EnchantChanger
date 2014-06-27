@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -53,9 +54,22 @@ public class EcBlockMaterialize extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-		par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
-		return true;
+        if (EnchantChanger.Difficulty < 2 || checkCost(par5EntityPlayer)) {
+            par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
+        }
+        return true;
 	}
+
+    private boolean checkCost(EntityPlayer player) {
+        int expLv = player.experienceLevel;
+        if (expLv > EnchantChanger.enchantChangerCost) {
+            player.addExperienceLevel(-EnchantChanger.enchantChangerCost);
+            return true;
+        }
+        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open EnchantChanger", EnchantChanger.enchantChangerCost)));
+        return false;
+    }
+
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
 	{

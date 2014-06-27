@@ -1,5 +1,6 @@
 package ak.EnchantChanger.Client.renderer;
 
+import ak.EnchantChanger.entity.EcEntityMeteor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -10,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import ak.EnchantChanger.entity.EcEntityMeteo;
 import ak.EnchantChanger.EnchantChanger;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EcRenderItemThrowable extends Render
 {
 	private float RenderSize;
-	private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcMeteoPNG);
+	private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcMeteorPNG);
 	private static final ResourceLocation TEXTUREEXEXPBOTTLE = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcExpBottlePNG);
 
 	public EcRenderItemThrowable(float par2)
@@ -67,6 +67,6 @@ public class EcRenderItemThrowable extends Render
 	 * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
 	 */
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return entity instanceof EcEntityMeteo ? TEXTUREMETEO : entity instanceof EcEntityExExpBottle ? TEXTUREEXEXPBOTTLE : TextureMap.locationItemsTexture;
+		return entity instanceof EcEntityMeteor ? TEXTUREMETEO : entity instanceof EcEntityExExpBottle ? TEXTUREEXEXPBOTTLE : TextureMap.locationItemsTexture;
 	}
 }

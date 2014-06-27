@@ -3,16 +3,15 @@ package ak.EnchantChanger.item;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
-public class EcItemMaterializer extends Item
+public class EcItemMaterializer extends EcItem
 {
 
-	public EcItemMaterializer() {
-		super();
+	public EcItemMaterializer(String name) {
+		super(name);
 		maxStackSize = 1;
 		setMaxDamage(0);
 		this.setTextureName(EnchantChanger.EcTextureDomain + "PortableEnchantChanger");

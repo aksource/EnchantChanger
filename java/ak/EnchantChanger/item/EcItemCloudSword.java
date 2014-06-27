@@ -24,9 +24,9 @@ public class EcItemCloudSword extends EcItemSword
 	private EcInventoryCloudSword SwordData = null;
     private static final Map<Integer, EcInventoryCloudSword> swordInventoryMap = new HashMap<>();
 
-	public EcItemCloudSword()
+	public EcItemCloudSword(String name)
 	{
-		super(ToolMaterial.EMERALD);
+		super(ToolMaterial.EMERALD, name);
 	}
 
 	@Override

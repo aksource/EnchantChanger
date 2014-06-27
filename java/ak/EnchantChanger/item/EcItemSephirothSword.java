@@ -15,9 +15,9 @@ public class EcItemSephirothSword extends EcItemSword
 	public boolean SephirothSprintAttack;
 	public Entity SephirothSprintAttackEntity = null;
 
-	public EcItemSephirothSword()
+	public EcItemSephirothSword(String name)
 	{
-		super(ToolMaterial.EMERALD);
+		super(ToolMaterial.EMERALD, name);
 	}
 
 	@Override

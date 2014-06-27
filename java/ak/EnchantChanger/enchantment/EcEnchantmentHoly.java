@@ -13,6 +13,6 @@ public class EcEnchantmentHoly extends Enchantment
 	@Override
     public boolean canApplyTogether(Enchantment par1Enchantment)
     {
-    	return this != par1Enchantment && par1Enchantment.effectId != EnchantChanger.EnchantmentMeteoId &&par1Enchantment.effectId != EnchantChanger.EnchantmentThunderId&&par1Enchantment.effectId != EnchantChanger.EnchantmentTelepoId;
+    	return this != par1Enchantment && par1Enchantment.effectId != EnchantChanger.EnchantmentMeteorId &&par1Enchantment.effectId != EnchantChanger.EnchantmentThunderId&&par1Enchantment.effectId != EnchantChanger.EnchantmentTelepoId;
     }
 }

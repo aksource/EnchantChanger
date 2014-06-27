@@ -1,15 +1,18 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-public class EcItemExExpBottle extends Item
+public class EcItemExExpBottle extends EcItem
 {
+    public EcItemExExpBottle(String name) {
+        super(name);
+    }
+
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack par1ItemStack, int pass)
 	{

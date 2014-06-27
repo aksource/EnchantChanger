@@ -1,8 +1,8 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.entity.EcEntityMeteo;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.MateriaTeleporter;
+import ak.EnchantChanger.entity.EcEntityMeteor;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,20 +34,21 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class EcItemMateria extends Item
+public class EcItemMateria extends EcItem
 {
 	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
 			"Thunder", "Despell", "Haste", "Absorption" };
 	//	public static final String[] MateriaMagicJPNames = new String[]{"黒"   ,"白"   ,"瞬間移動","浮遊"    ,"雷"     ,"解呪"   ,"加速" ,"吸収"};
 	public static int MagicMateriaNum = MateriaMagicNames.length;
-	public static int[] magicEnch = new int[] { EnchantChanger.EnchantmentMeteoId, EnchantChanger.EndhantmentHolyId,
+	public static int[] magicEnch = new int[] { EnchantChanger.EnchantmentMeteorId, EnchantChanger.EnchantmentHolyId,
 			EnchantChanger.EnchantmentTelepoId, EnchantChanger.EnchantmentFloatId, EnchantChanger.EnchantmentThunderId };
 	public static boolean GGEnable = false;
-//	private boolean LvCap = EnchantChanger.enableLevelCap;
-//	private boolean Debug = EnchantChanger.debug;
-//	private boolean tera = EnchantChanger.YouAreTera;
 
-	@Override
+    public EcItemMateria(String name) {
+        super(name);
+    }
+
+    @Override
 	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)
 	{
 		if (entity instanceof EntityLiving) {
@@ -97,7 +98,7 @@ public class EcItemMateria extends Item
 				}
 				break;
 			case 3:
-				teleportTo(itemstack, world, entityplayer);
+				teleportTo(world, entityplayer);
 				break;
 			case 5:
 				Thunder(world, entityplayer);
@@ -277,11 +278,11 @@ public class EcItemMateria extends Item
 	{
 		ItemStack var6 = new ItemStack(this, 1, kind + 1);
 		if (kind < 5)
-			var6.addEnchantment(Enchantment.enchantmentsList[EnchantChanger.EnchantmentMeteoId + kind], 1);
+			var6.addEnchantment(Enchantment.enchantmentsList[EnchantChanger.EnchantmentMeteorId + kind], 1);
 		return new WeightedRandomChestContent(var6, par2, par3, par4);
 	}
 
-	public static void teleportTo(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public static void teleportTo(World world, EntityPlayer entityplayer)
 	{
 		if (!canMagic(entityplayer)/* || world.isRemote*/) {
 			return;
@@ -417,7 +418,7 @@ public class EcItemMateria extends Item
 		decreasePlayerFood(entityplayer, 6);
 		Vec3 EndPoint = setTeleportPoint(world, entityplayer);
 		if (EndPoint != null && !world.isRemote)
-			world.spawnEntityInWorld(new EcEntityMeteo(world, EndPoint.xCoord, (double) 200, EndPoint.zCoord, 0.0D,
+			world.spawnEntityInWorld(new EcEntityMeteor(world, EndPoint.xCoord, (double) 200, EndPoint.zCoord, 0.0D,
 					-1D, 0D, 0.0F, 0.0F));
 	}
 

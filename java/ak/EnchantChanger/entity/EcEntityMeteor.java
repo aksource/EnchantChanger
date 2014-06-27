@@ -6,6 +6,8 @@ import ak.EnchantChanger.EnchantChanger;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -16,26 +18,28 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 
-public class EcEntityMeteo extends Entity
+public class EcEntityMeteor extends Entity
 {
-    private int xTile = -1;
-    private int yTile = -1;
-    private int zTile = -1;
-    private Block inTile = Blocks.air;
-    private boolean inGround = false;
-    public EntityLiving shootingEntity;
+//    private int xTile = -1;
+//    private int yTile = -1;
+//    private int zTile = -1;
+//    private Block inTile = Blocks.air;
+//    private boolean inGround = false;
+    public EntityLivingBase shootingEntity;
     private int ticksAlive;
-    private int ticksInAir = 0;
+//    private int ticksInAir = 0;
     public double accelerationX;
     public double accelerationY;
     public double accelerationZ;
-    private float Explimit = EnchantChanger.powerMeteo;
-    private float Size = EnchantChanger.sizeMeteo;
-//    public EcEntityMeteo(World par1World)
-//    {
-//        super(par1World);
-//        this.setSize(Size, Size);
-//    }
+    private float Explimit = EnchantChanger.powerMeteor;
+    private String throwerName;
+    private float Size = EnchantChanger.sizeMeteor;
+
+    public EcEntityMeteor(World par1World)
+    {
+        super(par1World);
+        this.setSize(Size, Size);
+    }
 
     protected void entityInit() {}
 
@@ -50,7 +54,7 @@ public class EcEntityMeteo extends Entity
         return par1 < var3 * var3;
     }
 
-    public EcEntityMeteo(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch)
+    public EcEntityMeteor(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch)
     {
         super(par1World);
         this.setSize(Size, Size);
@@ -94,31 +98,31 @@ public class EcEntityMeteo extends Entity
             super.onUpdate();
             this.setFire(1);
 
-            if (this.inGround)
-            {
-                if (this.worldObj.getBlock(this.xTile, this.yTile, this.zTile) == this.inTile)
-                {
-                    ++this.ticksAlive;
-
-                    if (this.ticksAlive == 600)
-                    {
-                        this.setDead();
-                    }
-
-                    return;
-                }
-
-                this.inGround = false;
-                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
-                this.ticksAlive = 0;
-                this.ticksInAir = 0;
-            }
-            else
-            {
-                ++this.ticksInAir;
-            }
+//            if (this.inGround)
+//            {
+//                if (this.worldObj.getBlock(this.xTile, this.yTile, this.zTile) == this.inTile)
+//                {
+//                    ++this.ticksAlive;
+//
+//                    if (this.ticksAlive == 600)
+//                    {
+//                        this.setDead();
+//                    }
+//
+//                    return;
+//                }
+//
+//                this.inGround = false;
+//                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+//                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+//                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+//                this.ticksAlive = 0;
+//                this.ticksInAir = 0;
+//            }
+//            else
+//            {
+//                ++this.ticksInAir;
+//            }
 
             Vec3 var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
             Vec3 var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
@@ -132,14 +136,15 @@ public class EcEntityMeteo extends Entity
             }
 
             Entity var4 = null;
-            List var5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            @SuppressWarnings("unchecked")
+            List<Entity> var5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
+            EntityLivingBase entitylivingbase = this.getThrower();
 
-            for (Object object : var5)
+            for (Entity var9 : var5)
             {
-                Entity var9 = (Entity)object;
 
-                if (var9.canBeCollidedWith() && (!var9.isEntityEqual(this.shootingEntity) || this.ticksInAir >= 25))
+                if (var9.canBeCollidedWith() && (!var9.isEntityEqual(entitylivingbase)/* || this.ticksInAir >= 25*/))
                 {
                     float var10 = 0.3F;
                     AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
@@ -243,11 +248,18 @@ public class EcEntityMeteo extends Entity
      */
     public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        par1NBTTagCompound.setShort("xTile", (short)this.xTile);
-        par1NBTTagCompound.setShort("yTile", (short)this.yTile);
-        par1NBTTagCompound.setShort("zTile", (short)this.zTile);
-        par1NBTTagCompound.setByte("inTile", (byte)Block.getIdFromBlock(this.inTile));
-        par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
+//        par1NBTTagCompound.setShort("xTile", (short)this.xTile);
+//        par1NBTTagCompound.setShort("yTile", (short)this.yTile);
+//        par1NBTTagCompound.setShort("zTile", (short)this.zTile);
+//        par1NBTTagCompound.setByte("inTile", (byte)Block.getIdFromBlock(this.inTile));
+//        par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
+
+        if ((this.throwerName == null || this.throwerName.length() == 0) && this.shootingEntity != null && this.shootingEntity instanceof EntityPlayer)
+        {
+            this.throwerName = this.shootingEntity.getCommandSenderName();
+        }
+
+        par1NBTTagCompound.setString("ownerName", this.throwerName == null ? "" : this.throwerName);
     }
 
     /**
@@ -255,11 +267,17 @@ public class EcEntityMeteo extends Entity
      */
     public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        this.xTile = par1NBTTagCompound.getShort("xTile");
-        this.yTile = par1NBTTagCompound.getShort("yTile");
-        this.zTile = par1NBTTagCompound.getShort("zTile");
-        this.inTile = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
-        this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
+//        this.xTile = par1NBTTagCompound.getShort("xTile");
+//        this.yTile = par1NBTTagCompound.getShort("yTile");
+//        this.zTile = par1NBTTagCompound.getShort("zTile");
+//        this.inTile = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
+//        this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
+        this.throwerName = par1NBTTagCompound.getString("ownerName");
+
+        if (this.throwerName != null && this.throwerName.length() == 0)
+        {
+            this.throwerName = null;
+        }
     }
 
     /**
@@ -323,5 +341,15 @@ public class EcEntityMeteo extends Entity
     public int getBrightnessForRender(float par1)
     {
         return 15728880;
+    }
+
+    public EntityLivingBase getThrower()
+    {
+        if (this.shootingEntity == null && this.throwerName != null && this.throwerName.length() > 0)
+        {
+            this.shootingEntity = this.worldObj.getPlayerEntityByName(this.throwerName);
+        }
+
+        return this.shootingEntity;
     }
 }

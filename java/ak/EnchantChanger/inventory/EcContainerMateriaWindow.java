@@ -77,9 +77,9 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private int setMateriaDmgfromEnch(int enchID) {
-        if (enchID == EnchantChanger.EnchantmentMeteoId)
+        if (enchID == EnchantChanger.EnchantmentMeteorId)
             return 1;
-        else if (enchID == EnchantChanger.EndhantmentHolyId)
+        else if (enchID == EnchantChanger.EnchantmentHolyId)
             return 2;
         else if (enchID == EnchantChanger.EnchantmentTelepoId)
             return 3;

@@ -33,7 +33,6 @@ public class EcContainerMaterializer extends Container {
     private ArrayList<Integer> MateriaEnchList = new ArrayList<>();
     private ArrayList<Integer> MateriaEnchLvList = new ArrayList<>();
     private World worldPointer;
-    private boolean materiadecLv = EnchantChanger.enableDecMateriaLv;
     private static ArrayList<Integer> magicDmg = new ArrayList<>();
 
     public EcContainerMaterializer(World par1world, InventoryPlayer inventoryPlayer) {
@@ -137,8 +136,6 @@ public class EcContainerMaterializer extends Container {
                 return;
             }
             NBTTagList enchOnItem = enchitem.getEnchantmentTagList();
-            int itemdmg = enchitem.getItemDamage();
-            float dmgratio = (enchitem.getMaxDamage() == 0) ? 1 : (enchitem.getMaxDamage() - itemdmg) / enchitem.getMaxDamage();
             ItemStack Result = enchitem.copy();
             if (Result.hasTagCompound()) {
                 Result.getTagCompound().removeTag("ench");
@@ -211,12 +208,15 @@ public class EcContainerMaterializer extends Container {
                 List<EnchantmentData> subList = itemEnchantmentData.subList(0, endIndex);
                 int slotIndex = 0;
                 for (EnchantmentData data : subList) {
-                    int declv = (!materiadecLv) ? 0 : (dmgratio > 0.5F) ? 0 : (dmgratio > 0.25F) ? 1 : 2;
-                    int decreasedLv = (data.lv - declv < 0) ? 0 : data.lv - declv;
+                    int decreasedLv = EnchantChanger.getDecreasedLevel(enchitem, data.lv);
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
-                    ItemStack materia = new ItemStack(EnchantChanger.itemMateria, 1, damage);
-                    EnchantChanger.addEnchantmentToItem(materia, data.enchantment, decreasedLv);
-                    this.materializeResult.setInventorySlotContents(slotIndex + 1, materia);
+                    if (decreasedLv > 0) {
+                        ItemStack materia = new ItemStack(EnchantChanger.itemMateria, 1, damage);
+                        EnchantChanger.addEnchantmentToItem(materia, data.enchantment, decreasedLv);
+                        this.materializeResult.setInventorySlotContents(slotIndex + 1, materia);
+                    } else {
+                        this.materializeResult.setInventorySlotContents(slotIndex + 1, null);
+                    }
                     slotIndex++;
                 }
 
@@ -279,8 +279,8 @@ public class EcContainerMaterializer extends Container {
         return ret;
     }
     static {
-        magicDmg.add(EnchantChanger.EnchantmentMeteoId);
-        magicDmg.add(EnchantChanger.EndhantmentHolyId);
+        magicDmg.add(EnchantChanger.EnchantmentMeteorId);
+        magicDmg.add(EnchantChanger.EnchantmentHolyId);
         magicDmg.add(EnchantChanger.EnchantmentTelepoId);
         magicDmg.add(EnchantChanger.EnchantmentFloatId);
         magicDmg.add(EnchantChanger.EnchantmentThunderId);

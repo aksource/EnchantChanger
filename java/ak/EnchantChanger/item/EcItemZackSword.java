@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 
 public class EcItemZackSword extends EcItemSword
 {
-	public EcItemZackSword()
+	public EcItemZackSword(String name)
 	{
-		super(ToolMaterial.IRON);
+		super(ToolMaterial.IRON, name);
 	}
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{

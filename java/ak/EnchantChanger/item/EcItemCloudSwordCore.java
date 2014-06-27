@@ -31,9 +31,9 @@ public class EcItemCloudSwordCore extends EcItemSword
 	@SideOnly(Side.CLIENT)
 	private IIcon close;
 
-	public EcItemCloudSwordCore()
+	public EcItemCloudSwordCore(String name)
 	{
-		super(ToolMaterial.IRON);
+		super(ToolMaterial.IRON, name);
 	}
 	@Override
 	@SideOnly(Side.CLIENT)

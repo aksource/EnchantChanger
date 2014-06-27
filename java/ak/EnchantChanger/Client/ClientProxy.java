@@ -4,7 +4,7 @@ import ak.EnchantChanger.*;
 import ak.EnchantChanger.Client.renderer.*;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import ak.EnchantChanger.entity.EcEntityMeteo;
+import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -25,8 +25,8 @@ public class ClientProxy extends CommonProxy {
 	public void registerRenderInformation() {
 		RenderingRegistry.registerEntityRenderingHandler(
 				EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteo.class,
-				new EcRenderItemThrowable(EnchantChanger.sizeMeteo));
+		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
+				new EcRenderItemThrowable(EnchantChanger.sizeMeteor));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
 				new EcRenderApOrb());
         multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();

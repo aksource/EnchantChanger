@@ -11,7 +11,6 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagList;
@@ -29,9 +28,13 @@ import java.util.Set;
 
 public class EcItemSword extends ItemSword {
 
-	public EcItemSword(ToolMaterial toolMaterial) {
+	public EcItemSword(ToolMaterial toolMaterial, String name) {
 		super(toolMaterial);
+        String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
+        this.setUnlocalizedName(s);
+        this.setTextureName(s);
         this.setNoRepair();
+        this.setCreativeTab(EnchantChanger.tabsEChanger);
 	}
 
     @Override
@@ -47,16 +50,16 @@ public class EcItemSword extends ItemSword {
     public static void doMagic(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentMeteoId, par1ItemStack) > 0) {
+				EnchantChanger.EnchantmentMeteorId, par1ItemStack) > 0) {
 			EcItemMateria.Meteo(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EndhantmentHolyId, par1ItemStack) > 0) {
+				EnchantChanger.EnchantmentHolyId, par1ItemStack) > 0) {
 			EcItemMateria.Holy(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.EnchantmentTelepoId, par1ItemStack) > 0) {
-			EcItemMateria.teleportTo(par1ItemStack, par2World, par3EntityPlayer);
+			EcItemMateria.teleportTo(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.EnchantmentThunderId, par1ItemStack) > 0) {

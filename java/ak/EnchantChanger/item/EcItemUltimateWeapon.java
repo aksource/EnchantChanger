@@ -10,9 +10,9 @@ import net.minecraft.util.MathHelper;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 public class EcItemUltimateWeapon extends EcItemSword
 {
-	public EcItemUltimateWeapon()
+	public EcItemUltimateWeapon(String name)
 	{
-		super(ToolMaterial.EMERALD);
+		super(ToolMaterial.EMERALD, name);
 	}
 	@Override
 	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)

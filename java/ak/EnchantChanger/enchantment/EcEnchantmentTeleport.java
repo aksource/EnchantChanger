@@ -13,6 +13,6 @@ public class EcEnchantmentTeleport extends Enchantment
     @Override
     public boolean canApplyTogether(Enchantment par1Enchantment)
     {
-    	return this != par1Enchantment && par1Enchantment.effectId != EnchantChanger.EnchantmentMeteoId &&par1Enchantment.effectId != EnchantChanger.EndhantmentHolyId&&par1Enchantment.effectId != EnchantChanger.EnchantmentThunderId;
+    	return this != par1Enchantment && par1Enchantment.effectId != EnchantChanger.EnchantmentMeteorId &&par1Enchantment.effectId != EnchantChanger.EnchantmentHolyId &&par1Enchantment.effectId != EnchantChanger.EnchantmentThunderId;
     }
 }

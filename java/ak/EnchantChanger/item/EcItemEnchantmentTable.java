@@ -6,11 +6,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EcItemEnchantmentTable extends Item
+public class EcItemEnchantmentTable extends EcItem
 {
 
-	public EcItemEnchantmentTable() {
-		super();
+	public EcItemEnchantmentTable(String name) {
+		super(name);
 		maxStackSize = 1;
 		setMaxDamage(0);
         this.setTextureName(EnchantChanger.EcTextureDomain + "PortableEnchantmentTable");

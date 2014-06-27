@@ -247,16 +247,7 @@ public class LivingEventHooks
 			}
 		}
 	}
-//    private void openMateriaWindow(World world, EntityPlayer player) {
-//        EnchantChanger.packetPipeline.sendToServer(new KeyMateriaWindowPacket(this.isMateriaKeyPressed));
-//
-//        if (isMateriaKeyPressed && !world.isRemote && canOpenMateriaWindow(player)) {
-//            isMateriaKeyPressed = false;
-//            player.openGui(EnchantChanger.instance, EnchantChanger.guiIdMateriaWindow, world, MathHelper.ceiling_double_int(player.posX), MathHelper.ceiling_double_int(player.posY), MathHelper.ceiling_double_int(player.posZ));
-//        } else {
-//            isMateriaKeyPressed = false;
-//        }
-//    }
+
 	public boolean MpCount(int par1, int par2) {
 
 		Count[par1]++;

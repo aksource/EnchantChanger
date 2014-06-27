@@ -10,6 +10,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 
 /**
@@ -67,6 +68,16 @@ public class MessageKeyPressed implements IMessage, IMessageHandler<MessageKeyPr
     }
 
     private boolean canOpenMateriaWindow(EntityPlayer player) {
-        return ExtendedPlayerData.get(player).getSoldierMode();
+        return ExtendedPlayerData.get(player).getSoldierMode() && (EnchantChanger.Difficulty < 2 || checkCost(player));
+    }
+
+    private boolean checkCost(EntityPlayer player) {
+        int expLv = player.experienceLevel;
+        if (expLv > EnchantChanger.enchantChangerCost) {
+            player.addExperienceLevel(-EnchantChanger.enchantChangerCost);
+            return true;
+        }
+        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open materia window", EnchantChanger.enchantChangerCost)));
+        return false;
     }
 }

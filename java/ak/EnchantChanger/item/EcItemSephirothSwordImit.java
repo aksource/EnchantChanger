@@ -3,8 +3,8 @@ package ak.EnchantChanger.item;
 
 public class EcItemSephirothSwordImit extends EcItemSword
 {
-	public EcItemSephirothSwordImit()
+	public EcItemSephirothSwordImit(String name)
 	{
-		super(ToolMaterial.IRON);
+		super(ToolMaterial.IRON, name);
 	}
 }
