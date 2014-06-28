@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class EcMasterMateriaRecipe implements IRecipe
+public class EcRecipeMasterMateria implements IRecipe
 {
 	private ItemStack output = null;
     private static final int[][] enchantmentRecipeList = {{}, {0, 1, 2, 3, 4, 7}, {5, 6, 61, 62}, {16, 17, 18, 19, 20, 21}, {32, 33, 34, 35}, {48, 49, 50, 51}};

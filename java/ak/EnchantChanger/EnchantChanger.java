@@ -5,7 +5,7 @@ import ak.EnchantChanger.Client.renderer.RenderingOverlayEvent;
 import ak.EnchantChanger.block.EcBlockHugeMateria;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.block.EcBlockMakoReactor;
-import ak.EnchantChanger.block.EcBlockMaterialize;
+import ak.EnchantChanger.block.EcBlockMaterializer;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
@@ -18,8 +18,8 @@ import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.potion.EcPotionMako;
-import ak.EnchantChanger.recipe.EcMasterMateriaRecipe;
-import ak.EnchantChanger.recipe.EcMateriaRecipe;
+import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
+import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.MultiToolHolders.ItemMultiToolHolder;
@@ -299,7 +299,7 @@ public class EnchantChanger {
         itemPortableEnchantmentTable = (new EcItemEnchantmentTable("PortableEnchantmentTable"));
         itemMasterMateria = new EcItemMasterMateria("itemMasterMateria").setTextureName("ender_pearl").setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1);
         itemImitateSephirothSword = (new EcItemSephirothSwordImit("ImitateMasamuneBlade"));
-        blockEnchantChanger = (new EcBlockMaterialize()).setBlockName("EnchantChanger").setCreativeTab(tabsEChanger).setBlockTextureName(EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
+        blockEnchantChanger = (new EcBlockMaterializer()).setBlockName("EnchantChanger").setCreativeTab(tabsEChanger).setBlockTextureName(EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
         blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0).setBlockName("blockHugeMateria").setBlockTextureName("glass");
         itemHugeMateria = new EcItemHugeMateria("HugeMateria");
         fluidLifeStream = new Fluid("lifestream").setLuminosity(15);
@@ -390,11 +390,11 @@ public class EnchantChanger {
     }
 
     private void registerRecipes() {
-        RecipeSorter.register("EnchantChanger:MateriaRecipe", EcMateriaRecipe.class, Category.SHAPELESS, "after:FML");
-        RecipeSorter.register("EnchantChanger:MasterMateriaRecipe", EcMasterMateriaRecipe.class, Category.SHAPELESS, "after:FML");
+        RecipeSorter.register("EnchantChanger:MateriaRecipe", EcRecipeMateria.class, Category.SHAPELESS, "after:FML");
+        RecipeSorter.register("EnchantChanger:MasterMateriaRecipe", EcRecipeMasterMateria.class, Category.SHAPELESS, "after:FML");
         if (EnchantChanger.Difficulty < 2)
-            GameRegistry.addRecipe(new EcMateriaRecipe());
-        GameRegistry.addRecipe(new EcMasterMateriaRecipe());
+            GameRegistry.addRecipe(new EcRecipeMateria());
+        GameRegistry.addRecipe(new EcRecipeMasterMateria());
         GameRegistry.addShapelessRecipe(new ItemStack(itemMateria, 1, 0),
                 new ItemStack(Items.diamond, 1),
                 new ItemStack(Items.ender_pearl, 1));

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class EcMateriaRecipe implements IRecipe
+public class EcRecipeMateria implements IRecipe
 {
 	private ItemStack output = null;
 	@Override

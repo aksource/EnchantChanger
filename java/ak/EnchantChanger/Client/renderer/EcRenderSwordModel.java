@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EcSwordRenderer implements IItemRenderer
+public class EcRenderSwordModel implements IItemRenderer
 {
 	@SideOnly(Side.CLIENT)
 	private static final EcModelUltimateWeapon UModel = new EcModelUltimateWeapon();

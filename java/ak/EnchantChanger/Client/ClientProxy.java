@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy {
 
 		ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
-		IItemRenderer swordRenderer = new EcSwordRenderer();
+		IItemRenderer swordRenderer = new EcRenderSwordModel();
 		MinecraftForgeClient.registerItemRenderer(
 				EnchantChanger.itemSephirothSword,
 				swordRenderer);

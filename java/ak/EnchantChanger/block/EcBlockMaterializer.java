@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-public class EcBlockMaterialize extends BlockContainer
+public class EcBlockMaterializer extends BlockContainer
 {
     @SideOnly(Side.CLIENT)
 	private IIcon top;
@@ -22,7 +22,7 @@ public class EcBlockMaterialize extends BlockContainer
 	private IIcon side;
     @SideOnly(Side.CLIENT)
 	private IIcon bottom;
-	public EcBlockMaterialize()
+	public EcBlockMaterializer()
 	{
 		super(Material.rock);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
