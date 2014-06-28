@@ -2,9 +2,7 @@ package ak.EnchantChanger.asm;
 
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -20,7 +18,10 @@ public class PotionArrayTransformer implements IClassTransformer, Opcodes{
         if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
         try {
             AKInternalCorePlugin.logger.info("Start transforming Potion Class");
-            basicClass = extendPotionArray(name, basicClass);
+//            basicClass = extendPotionArray(name, basicClass);
+            ClassReader classReader = new ClassReader(basicClass);
+            ClassWriter classWriter = new ClassWriter(1);
+            classReader.accept(new CustomVisitor(name,classWriter), 8);
             AKInternalCorePlugin.logger.info("Finish transforming Potion Class");
             return basicClass;
         } catch (Exception e) {
@@ -50,5 +51,45 @@ public class PotionArrayTransformer implements IClassTransformer, Opcodes{
             bytes = cw.toByteArray();
         }
         return bytes;
+    }
+
+    //Custom ClassVisitor
+    class CustomVisitor extends ClassVisitor {
+        String owner;
+        public CustomVisitor(String owner ,ClassVisitor cv) {
+            super(Opcodes.ASM4,cv);
+            this.owner = owner;
+        }
+        static final String targetMethodName = "<clinit>";//static init method
+        static final String targetMethodDesc = "()V";
+
+        @Override
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+            if (targetMethodName.equals(name) && targetMethodDesc.equals(desc)) {
+                //static initメソッドの時のみ、Custom MethodVisitorを生成する。
+                AKInternalCorePlugin.logger.info("Transforming static init method");
+                return new CustomMethodVisitor(this.api, super.visitMethod(access, name, desc, signature, exceptions));
+            }
+            return super.visitMethod(access, name, desc, signature, exceptions);
+        }
+    }
+    //Custom MethodVisitor
+    class CustomMethodVisitor extends MethodVisitor {
+        public CustomMethodVisitor(int api, MethodVisitor mv) {
+            super(api, mv);
+        }
+
+        static final int targetOpcode = Opcodes.BIPUSH;
+        static final int targetOperand = 32;
+        static final int newOperand = Byte.MAX_VALUE;
+
+        @Override
+        public void visitIntInsn(int opcode, int operand) {
+            if (targetOpcode == opcode && targetOperand == operand) {
+                //BIPUSH 32を、BIPUSH Byte.MAX_VALUEに入れ替える。
+                AKInternalCorePlugin.logger.info("Change BIPUSH 32 to BIPUSH BYTE.MAX_VALUE");
+                super.visitIntInsn(opcode, newOperand);
+            } else super.visitIntInsn(opcode, operand);
+        }
     }
 }
