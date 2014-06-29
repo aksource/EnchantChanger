@@ -54,35 +54,41 @@ public class PotionArrayTransformer implements IClassTransformer, Opcodes{
         return bytes;
     }
 
-    //Custom ClassVisitor
+    /*Custom ClassVisitor
+    * visitMethodでメソッドを一から書き直すことが出来る。*/
     class CustomVisitor extends ClassVisitor {
+        //難読化後のクラス名。FMLDeobfuscatingRemapper.INSTANCE.mapMethodNameを使う際に使用。今回は使わない。
         String owner;
         public CustomVisitor(String owner ,ClassVisitor cv) {
             super(Opcodes.ASM4,cv);
             this.owner = owner;
         }
         static final String targetMethodName = "<clinit>";//static init method
-        static final String targetMethodDesc = "()V";
+        static final String targetMethodDesc = "()V";//static init method description
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
             if (targetMethodName.equals(name) && targetMethodDesc.equals(desc)) {
                 //static initメソッドの時のみ、Custom MethodVisitorを生成する。
                 AKInternalCorePlugin.logger.info("Transforming static init method");
+                /*通常は、メソッド頭にフックを付けたりするのに使用。
+                今回はInsnNodeの入れ替えなので、CustomMethodVisitorを生成して返している。*/
                 return new CustomMethodVisitor(this.api, super.visitMethod(access, name, desc, signature, exceptions));
             }
             return super.visitMethod(access, name, desc, signature, exceptions);
         }
     }
-    //Custom MethodVisitor
+
+    /*Custom MethodVisitor
+    * visit**Methodで、InsnNodeの入れ替えや、追加等出来る。*/
     class CustomMethodVisitor extends MethodVisitor {
         public CustomMethodVisitor(int api, MethodVisitor mv) {
             super(api, mv);
         }
 
-        static final int targetOpcode = Opcodes.BIPUSH;
-        static final int targetOperand = 32;
-        static final int newOperand = Byte.MAX_VALUE;
+        static final int targetOpcode = Opcodes.BIPUSH;//Byteをスタックに入れるOpcode
+        static final int targetOperand = 32;//もともとpushされる数字（Byte制限）
+        static final int newOperand = Byte.MAX_VALUE;//pushしたい数字。ここでは固定した数字しか扱えない。
 
         @Override
         public void visitIntInsn(int opcode, int operand) {
@@ -90,6 +96,12 @@ public class PotionArrayTransformer implements IClassTransformer, Opcodes{
                 //BIPUSH 32を、BIPUSH Byte.MAX_VALUEに入れ替える。
                 AKInternalCorePlugin.logger.info("Change BIPUSH 32 to BIPUSH BYTE.MAX_VALUE");
                 super.visitIntInsn(opcode, newOperand);
+                /*Configから数字を持ってきて、代入したい場合、以下のように記述するとよい。
+                * 第一引数：参照か、代入か。クラス変数か、インスタンス変数か。GETSTATIC, PUTSTATIC, GETFIELD or PUTFIELD.
+                * 第二引数：変数持っているクラスの完全修飾名。但し,"."は"/"に変換のこと。
+                * 第三引数：変数名。
+                * 第四引数：変数の形名。整数型は"I"*/
+                //super.visitFieldInsn(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxPotionArray", "I");
             } else super.visitIntInsn(opcode, operand);
         }
     }
