@@ -635,14 +635,14 @@ public class EnchantChanger {
         MovingObjectPosition MOP = world.rayTraceBlocks(PlayerPosition, PlayerLookVec);
         if (MOP != null)
             distBlock = MOP.hitVec.distanceTo(PlayerPosition);
-        List list = world.getEntitiesWithinAABBExcludingEntity(
+        @SuppressWarnings("unchecked")
+        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(
                 player,
                 player.boundingBox.addCoord(viewX * reach,
                         viewY * reach, viewZ * reach).expand(
                         (double) var1, (double) var1, (double) var1));
         double dist1 = distBlock;
-        for (Object object : list) {
-            Entity entity = (Entity) object;
+        for (Entity entity : list) {
 
             if (entity.canBeCollidedWith()) {
                 float f2 = entity.getCollisionBorderSize();
