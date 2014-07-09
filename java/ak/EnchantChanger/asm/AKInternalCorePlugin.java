@@ -19,8 +19,7 @@ public class AKInternalCorePlugin implements IFMLLoadingPlugin {
     public static int beaconLevelRange;
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{"ak.EnchantChanger.asm.PotionArrayTransformer",
-                "ak.EnchantChanger.asm.EnchantmentHelperTransformer",
+        return new String[]{"ak.EnchantChanger.asm.EnchantmentHelperTransformer",
                 "ak.EnchantChanger.asm.AnvilLevelTransformer",
                 "ak.EnchantChanger.asm.AnvilLevelClientTransformer",
                 "ak.EnchantChanger.asm.TileEntityBeaconTransformer"
