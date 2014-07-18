@@ -17,11 +17,11 @@ public class AKInternalCoreModContainer extends DummyModContainer {
         ModMetadata meta = getMetadata();
         meta.modId = "AKInternalCore";
         meta.name = "AKInternalCore";
-        meta.version = "1.0.0";
+        meta.version = "1.0.1";
         meta.authorList = Arrays.asList("A.K.");
         meta.description = "Change some constant number in vanilla";
-        meta.url = "";
-        meta.credits = "";
+        meta.url = "http://forum.minecraftuser.jp/viewtopic.php?f=13&t=6672";
+        meta.credits = "Special thanks to chicken_bones";
         this.setEnabledState(true);
     }
 
