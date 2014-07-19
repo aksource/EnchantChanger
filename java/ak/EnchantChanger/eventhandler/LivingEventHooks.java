@@ -21,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -70,6 +71,27 @@ public class LivingEventHooks
     public void fixLevitationDigSpeed(PlayerEvent.BreakSpeed event) {
         if (ExtendedPlayerData.get(event.entityPlayer).isLevitating()) {
             event.newSpeed = event.originalSpeed * 5.0f;
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingAttackEvent(LivingAttackEvent event) {
+        EntityPlayer player;
+        ItemStack itemStack;
+        if (event.source.getDamageType().equals("player") && event.source.getEntity() instanceof EntityPlayer) {
+            player = (EntityPlayer)event.source.getEntity();
+            itemStack = player.getCurrentEquippedItem();
+            if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
+                EcItemSword.addLimitGaugeValue(itemStack, 1);
+            }
+        }
+
+        if (event.entityLiving instanceof EntityPlayer) {
+            player = (EntityPlayer)event.entityLiving;
+            itemStack = player.getCurrentEquippedItem();
+            if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
+                EcItemSword.addLimitGaugeValue(itemStack, 5);
+            }
         }
     }
 
