@@ -1,29 +1,27 @@
 package ak.EnchantChanger.Client.renderer;
 
-import java.util.HashMap;
-
+import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.item.EcItemMateria;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.EnchantChanger;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public class EcRenderMateria implements IItemRenderer
 {
 	private static double vert[];
 	private static int face[];
-	public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<Integer, ResourceLocation>();
-	public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<Integer, ResourceLocation>();
+	public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<>();
+	public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<>();
 	private static final ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
 			"textures/gui/materia0.png");
 	private static final ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
@@ -99,6 +97,7 @@ public class EcRenderMateria implements IItemRenderer
         GL11.glTranslatef(x, y, z);
         GL11.glPopMatrix();
     }
+    @Deprecated
 	public void renderMateria(ItemStack item, float x, float y, float z, float size, ItemRenderType type)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
