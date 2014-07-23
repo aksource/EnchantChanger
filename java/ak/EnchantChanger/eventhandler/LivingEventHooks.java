@@ -7,6 +7,7 @@ import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessageLevitation;
+import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -14,6 +15,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -76,21 +78,25 @@ public class LivingEventHooks
 
     @SubscribeEvent
     public void onLivingAttackEvent(LivingAttackEvent event) {
-        EntityPlayer player;
-        ItemStack itemStack;
-        if (event.source.getDamageType().equals("player") && event.source.getEntity() instanceof EntityPlayer) {
-            player = (EntityPlayer)event.source.getEntity();
-            itemStack = player.getCurrentEquippedItem();
-            if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
-                EcItemSword.addLimitGaugeValue(itemStack, 1);
+        if (!event.entityLiving.worldObj.isRemote) {
+            EntityPlayer player;
+            ItemStack itemStack;
+            if (event.source.getDamageType().equals("player") && event.source.getEntity() instanceof EntityPlayer) {
+                player = (EntityPlayer)event.source.getEntity();
+                itemStack = player.getCurrentEquippedItem();
+                if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
+                    ExtendedPlayerData.get(player).addLimitGaugeValue(1);
+                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
+                }
             }
-        }
 
-        if (event.entityLiving instanceof EntityPlayer) {
-            player = (EntityPlayer)event.entityLiving;
-            itemStack = player.getCurrentEquippedItem();
-            if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
-                EcItemSword.addLimitGaugeValue(itemStack, 5);
+            if (event.entityLiving instanceof EntityPlayer) {
+                player = (EntityPlayer)event.entityLiving;
+                itemStack = player.getCurrentEquippedItem();
+                if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
+                    ExtendedPlayerData.get(player).addLimitGaugeValue(1);
+                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
+                }
             }
         }
     }

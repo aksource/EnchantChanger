@@ -1,6 +1,7 @@
 package ak.EnchantChanger.block;
 
 
+import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.EnchantChanger.EnchantChanger;
 import net.minecraft.block.Block;
@@ -57,6 +58,7 @@ public class EcBlockMaterializer extends BlockContainer
         if (EnchantChanger.Difficulty < 2 || checkCost(par5EntityPlayer)) {
             par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
         }
+        ExtendedPlayerData.get(par5EntityPlayer).setLimitGaugeValue(0);//test
         return true;
 	}
 

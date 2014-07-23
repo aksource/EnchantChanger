@@ -13,7 +13,6 @@ import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.AchievementList;
@@ -22,7 +21,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.Map.Entry;
@@ -30,7 +28,6 @@ import java.util.Set;
 
 public class EcItemSword extends ItemSword {
 
-    public static final int LIMIT_GAUGE_MAX = 100;
 	public EcItemSword(ToolMaterial toolMaterial, String name) {
 		super(toolMaterial);
         String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
@@ -253,32 +250,4 @@ public class EcItemSword extends ItemSword {
 
 	public void destroyTheItem(EntityPlayer player, ItemStack orig) {
 	}
-
-    private static NBTTagCompound getSwordNBT(ItemStack ecSword) {
-        if (!ecSword.hasTagCompound()) {
-            ecSword.setTagCompound(new NBTTagCompound());
-        }
-
-        NBTTagCompound nbt = ecSword.getTagCompound();
-
-        if (!nbt.hasKey("EcSword", Constants.NBT.TAG_COMPOUND)) {
-            nbt.setTag("EcSword", new NBTTagCompound());
-        }
-        return (NBTTagCompound)nbt.getTag("EcSword");
-    }
-
-    public static void addLimitGaugeValue(ItemStack ecSword, int value) {
-        NBTTagCompound swordTag = getSwordNBT(ecSword);
-        int prevValue = swordTag.getInteger("limitValue");
-        swordTag.setInteger("limitValue", MathHelper.clamp_int(prevValue + value, 0, LIMIT_GAUGE_MAX));
-    }
-
-    public static void setLimitGaugeValue(ItemStack ecSword, int value) {
-        NBTTagCompound swordTag = getSwordNBT(ecSword);
-        swordTag.setInteger("limitValue", MathHelper.clamp_int(value, 0, LIMIT_GAUGE_MAX));
-    }
-
-    public static int getLimitGaugeValue(ItemStack ecSword) {
-        return getSwordNBT(ecSword).getInteger("limitValue");
-    }
 }
