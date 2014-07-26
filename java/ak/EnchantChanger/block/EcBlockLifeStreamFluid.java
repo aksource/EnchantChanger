@@ -45,7 +45,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
 
     @Override
     public boolean displaceIfPossible(World world, int x, int y, int z) {
-        return !world.getBlock(x,  y,  z).getMaterial().isLiquid() || super.displaceIfPossible(world, x, y, z);
+        return !world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z);
     }
     @Override
     public void registerBlockIcons(IIconRegister register) {
