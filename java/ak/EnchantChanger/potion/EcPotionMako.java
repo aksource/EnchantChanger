@@ -1,7 +1,7 @@
 package ak.EnchantChanger.potion;
 
+import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.EnchantChanger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ public class EcPotionMako extends Potion {
 
     @Override
     public int getStatusIconIndex() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(newEffect);
+        ClientProxy.mc.getTextureManager().bindTexture(newEffect);
         return super.getStatusIconIndex();
     }
 

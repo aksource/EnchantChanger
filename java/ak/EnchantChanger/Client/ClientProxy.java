@@ -8,7 +8,9 @@ import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -21,6 +23,7 @@ public class ClientProxy extends CommonProxy {
     public static int customRenderPass;
     public static int multiPassRenderType;
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
+    public static Minecraft mc = Minecraft.getMinecraft();
 	@Override
 	public void registerRenderInformation() {
 		RenderingRegistry.registerEntityRenderingHandler(
@@ -66,4 +69,9 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(
 				EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
 	}
+
+    @Override
+    public EntityPlayer getPlayer() {
+        return Minecraft.getMinecraft().thePlayer;
+    }
 }

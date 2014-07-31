@@ -13,9 +13,9 @@ public class PacketHandler {
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(EnchantChanger.MOD_ID.toLowerCase());
 
     public static void init() {
-        INSTANCE.registerMessage(MessageKeyPressed.class, MessageKeyPressed.class, 0, Side.SERVER);
-        INSTANCE.registerMessage(MessageLevitation.class, MessageLevitation.class, 1, Side.SERVER);
-        INSTANCE.registerMessage(MessagePlayerProperties.class, MessagePlayerProperties.class, 2, Side.CLIENT);
-        INSTANCE.registerMessage(MessageCloudSword.class, MessageCloudSword.class, 3, Side.CLIENT);
+        INSTANCE.registerMessage(MessageKeyPressedHandler.class, MessageKeyPressed.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageLevitationHandler.class, MessageLevitation.class, 1, Side.SERVER);
+        INSTANCE.registerMessage(MessagePlayerPropertiesHandler.class, MessagePlayerProperties.class, 2, Side.CLIENT);
+        INSTANCE.registerMessage(MessageCloudSwordHandler.class, MessageCloudSword.class, 3, Side.CLIENT);
     }
 }

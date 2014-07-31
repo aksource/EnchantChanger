@@ -2,7 +2,6 @@ package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 

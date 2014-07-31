@@ -310,7 +310,7 @@ public class EnchantChanger {
 
         registerBlockAndItem();
         registerEnchantments();
-        PacketHandler.init();
+//        PacketHandler.init();
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
     }

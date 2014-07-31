@@ -28,6 +28,8 @@ public class CommonProxy implements IGuiHandler {
     public void registerTileEntitySpecialRenderer() {
     }
 
+    public EntityPlayer getPlayer() {return null;}
+
     //returns an instance of the Container you made earlier
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
