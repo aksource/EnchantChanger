@@ -10,7 +10,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Created by A.K. on 14/07/31.
  */
-@SideOnly(Side.SERVER)
 public class MessageLevitationHandler implements IMessageHandler<MessageLevitation, IMessage> {
     @Override
     public IMessage onMessage(MessageLevitation message, MessageContext ctx) {

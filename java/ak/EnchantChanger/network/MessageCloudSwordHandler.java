@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by A.K. on 14/07/31.
  */
-@SideOnly(Side.CLIENT)
 public class MessageCloudSwordHandler implements IMessageHandler<MessageCloudSword, IMessage> {
     @Override
     public IMessage onMessage(MessageCloudSword message, MessageContext ctx) {

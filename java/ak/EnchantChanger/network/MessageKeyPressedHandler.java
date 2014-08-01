@@ -17,7 +17,6 @@ import net.minecraft.util.MathHelper;
 /**
  * Created by A.K. on 14/07/31.
  */
-@SideOnly(Side.CLIENT)
 public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPressed, IMessage> {
     @Override
     public IMessage onMessage(MessageKeyPressed message, MessageContext ctx) {

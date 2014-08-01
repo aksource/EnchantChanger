@@ -1,7 +1,5 @@
 package ak.EnchantChanger;
 
-import ak.EnchantChanger.Client.ClientProxy;
-import ak.EnchantChanger.Client.renderer.RenderingOverlayEvent;
 import ak.EnchantChanger.block.EcBlockHugeMateria;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.block.EcBlockMakoReactor;
@@ -14,7 +12,6 @@ import ak.EnchantChanger.eventhandler.CommonTickHandler;
 import ak.EnchantChanger.eventhandler.FillBucketHook;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import ak.EnchantChanger.item.*;
-import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.potion.EcPotionMako;
@@ -22,15 +19,15 @@ import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
 import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import ak.MultiToolHolders.ItemMultiToolHolder;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -310,7 +307,7 @@ public class EnchantChanger {
 
         registerBlockAndItem();
         registerEnchantments();
-//        PacketHandler.init();
+        PacketHandler.init();
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
     }
@@ -354,8 +351,7 @@ public class EnchantChanger {
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
         FillBucketHook.buckets.put(blockLifeStream, bucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
-        FMLCommonHandler.instance().bus().register(this);
+        FMLCommonHandler.instance().bus().register(proxy);
         FMLCommonHandler.instance().bus().register(new CommonTickHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
 
@@ -760,44 +756,6 @@ public class EnchantChanger {
         }
     }
 
-    private byte getKeyIndex() {
-        byte key = -1;
-        if (ClientProxy.MagicKey.isPressed()) {
-            key = MagicKEY;
-        } else if (ClientProxy.MateriaKey.isPressed()) {
-            key = MateriaKEY;
-        }
-
-        return key;
-    }
-
-    @SubscribeEvent
-    public void KeyHandlingEvent(KeyInputEvent event) {
-        if (FMLClientHandler.instance().getClient().inGameHasFocus && FMLClientHandler.instance().getClientPlayerEntity() != null) {
-            EntityPlayer entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
-            byte keyIndex = getKeyIndex();
-            if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
-                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
-                switch(keyIndex) {
-                    case EnchantChanger.MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
-                }
-            }
-        }
-    }
-
-    private void doMagic(ItemStack itemStack, EntityPlayer player) {
-        if (itemStack.getItem() instanceof EcItemSword) {
-            EcItemSword.doMagic(itemStack, player.worldObj, player);
-        } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
-            //ツールホルダーとの連携処理。
-            ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
-            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)) != null
-                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
-            {
-                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
-            }
-        }
-    }
     @SubscribeEvent
     public void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 

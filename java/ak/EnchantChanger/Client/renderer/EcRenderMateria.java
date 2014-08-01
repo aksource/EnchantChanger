@@ -94,7 +94,7 @@ public class EcRenderMateria implements IItemRenderer
         mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
         GL11.glScalef(size, size, size);
         sphereModel.renderAll();
-        GL11.glTranslatef(x, y, z);
+//        GL11.glTranslatef(x, y, z);
         GL11.glPopMatrix();
     }
     @Deprecated
