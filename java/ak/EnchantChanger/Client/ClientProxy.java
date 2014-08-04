@@ -200,7 +200,7 @@ public class ClientProxy extends CommonProxy {
     private void doMagic(ItemStack itemStack, EntityPlayer player) {
         if (itemStack.getItem() instanceof EcItemSword) {
             EcItemSword.doMagic(itemStack, player.worldObj, player);
-        } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
+        } else if (EnchantChanger.loadMTH && itemStack.getItem() instanceof ItemMultiToolHolder) {
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
             if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)) != null
