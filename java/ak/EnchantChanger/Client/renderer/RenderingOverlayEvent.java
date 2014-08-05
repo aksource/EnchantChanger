@@ -10,15 +10,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderHorse;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.ForgeVersion;
 import org.lwjgl.opengl.GL11;
+
+import java.lang.reflect.Constructor;
 
 /**
  * Created by A.K. on 14/03/11.
@@ -30,9 +32,24 @@ public class RenderingOverlayEvent {
 
     @SubscribeEvent
     public void overlayEvent(RenderGameOverlayEvent.Text event) {
-        ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-        int width = res.getScaledWidth();
-        int height = res.getScaledHeight();
+        int width = mc.displayWidth;
+        int height = mc.displayHeight;
+        ScaledResolution res;
+        if (ForgeVersion.getBuildVersion() > 1147) {
+            res = new ScaledResolution(mc, width, height);
+            width = res.getScaledWidth();
+            height = res.getScaledHeight();
+        } else {
+            Class<?> scaledResolutionClass = ScaledResolution.class;
+            try {
+                Constructor<?> scaledResolutionConstructor = scaledResolutionClass.getConstructor(GameSettings.class, int.class, int.class);
+                res = (ScaledResolution)scaledResolutionConstructor.newInstance(mc.gameSettings, width, height);
+                width = res.getScaledWidth();
+                height = res.getScaledHeight();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         ItemStack holdItem = player.getCurrentEquippedItem();
         if (holdItem != null && holdItem.getItem() instanceof EcItemSword) {
