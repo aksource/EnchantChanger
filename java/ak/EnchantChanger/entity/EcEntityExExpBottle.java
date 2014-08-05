@@ -1,12 +1,12 @@
 package ak.EnchantChanger.entity;
 
+import cpw.mods.fml.common.registry.IThrowableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IThrowableEntity;
 
 public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEntity
 {

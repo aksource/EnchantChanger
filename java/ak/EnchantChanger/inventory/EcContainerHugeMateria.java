@@ -3,6 +3,8 @@ package ak.EnchantChanger.inventory;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -10,8 +12,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class EcContainerHugeMateria extends Container {

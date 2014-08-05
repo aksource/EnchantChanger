@@ -1,7 +1,7 @@
 package ak.EnchantChanger.block;
 
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

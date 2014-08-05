@@ -1,8 +1,7 @@
 package ak.EnchantChanger.block;
-import java.util.Random;
 
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 public class EcBlockHugeMateria extends BlockContainer
 {
 	public EcBlockHugeMateria()

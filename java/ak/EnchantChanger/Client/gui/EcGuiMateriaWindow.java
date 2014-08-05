@@ -1,7 +1,7 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.inventory.EcContainerMateriaWindow;
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.inventory.EcContainerMateriaWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;

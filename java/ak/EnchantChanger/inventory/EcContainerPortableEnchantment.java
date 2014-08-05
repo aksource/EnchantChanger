@@ -1,8 +1,5 @@
 package ak.EnchantChanger.inventory;
 
-import java.util.List;
-import java.util.Random;
-
 import ak.EnchantChanger.enchantment.EcPortableEnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +12,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class EcContainerPortableEnchantment extends Container
 {

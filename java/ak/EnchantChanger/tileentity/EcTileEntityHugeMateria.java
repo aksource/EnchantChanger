@@ -1,9 +1,10 @@
 package ak.EnchantChanger.tileentity;
-import java.util.ArrayList;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,10 +17,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.common.util.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
 public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	private static int[][] EnchArray;
 	private static ItemStack[] MaterialArray;

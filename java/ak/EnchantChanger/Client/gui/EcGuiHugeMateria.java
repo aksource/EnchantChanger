@@ -1,17 +1,16 @@
 package ak.EnchantChanger.Client.gui;
+
+import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.inventory.EcContainerHugeMateria;
+import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-
 import org.lwjgl.opengl.GL11;
-
-import ak.EnchantChanger.inventory.EcContainerHugeMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
-import ak.EnchantChanger.EnchantChanger;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EcGuiHugeMateria extends GuiContainer {
 

@@ -1,10 +1,10 @@
 package ak.EnchantChanger.inventory;
 
 
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.enchantment.EnchantmentData;
+import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;

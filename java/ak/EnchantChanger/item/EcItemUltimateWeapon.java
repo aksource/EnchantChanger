@@ -1,5 +1,6 @@
 package ak.EnchantChanger.item;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragonPart;
@@ -7,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.MathHelper;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 public class EcItemUltimateWeapon extends EcItemSword
 {
 	public EcItemUltimateWeapon(String name)

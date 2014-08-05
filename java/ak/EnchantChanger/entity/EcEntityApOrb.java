@@ -1,6 +1,7 @@
 package ak.EnchantChanger.entity;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.MultiToolHolders.ItemMultiToolHolder;
 import ak.MultiToolHolders.inventory.InventoryToolHolder;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -12,7 +13,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import ak.MultiToolHolders.ItemMultiToolHolder;
 
 public class EcEntityApOrb extends Entity
 {
