@@ -30,9 +30,9 @@ import java.util.List;
 
 public class LivingEventHooks
 {
-	private static final int FlightMptime = 20 * 3;
-	private static final int GGMptime = 20;
-	private static final int AbsorpMptime = 20 * 3;
+	public static final int mpTermFlight = 20 * 3;
+	private static final int mpTermGG = 20;
+	private static final int mpTermAbsorp = 20 * 3;
 	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	@SubscribeEvent
@@ -40,9 +40,9 @@ public class LivingEventHooks
 	{
 		if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
-			this.Flight(player);
-			this.GreatGospel(player);
-			this.Absorption(player.worldObj, player);
+			this.doFlight(player);
+			this.doGreatGospel(player);
+			this.doAbsorption(player.worldObj, player);
             //EXPOrb cooldown time set 0.
             ((EntityPlayer)event.entityLiving).xpCooldown = 0;
 		}
@@ -56,7 +56,6 @@ public class LivingEventHooks
                 event.setCanceled(true);
             }
         }
-
     }
 
     @SubscribeEvent
@@ -138,22 +137,24 @@ public class LivingEventHooks
         }
     }
 
-	public void Flight(EntityPlayer player)
+	public void doFlight(EntityPlayer player)
 	{
         boolean allowLevitation = checkFlightAvailable(player);
 		if (!allowLevitation) {
-			setModeToNBT(player, false);
+			setLevitationModeToNBT(player, false);
 			return;
 		}
 
 		if (player.worldObj.isRemote) {
-            EnchantChanger.proxy.flightClient(player);
-		} else if (getModeToNBT(player) && MpCount(0, FlightMptime)) {
-				player.getFoodStats().addStats(-1, 1.0F);
+            EnchantChanger.proxy.doFlightOnSide(player);
+		} else if (getLevitationModeToNBT(player) && MpCount(0, mpTermFlight)) {
+            player.getFoodStats().addStats(-1, 1.0F);
 		}
 	}
 
-	private void GreatGospel(EntityPlayer player)
+
+
+	private void doGreatGospel(EntityPlayer player)
 	{
 		if (player.capabilities.isCreativeMode) {
 			return;
@@ -165,17 +166,17 @@ public class LivingEventHooks
 		ItemStack playerItem = player.getCurrentEquippedItem();
 		if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
 			player.capabilities.disableDamage = true;
-			if (MpCount(1, GGMptime))
+			if (MpCount(1, mpTermGG))
                 player.getFoodStats().addStats(-1, 1.0F);
 		} else {
 			player.capabilities.disableDamage = false;
 		}
 	}
 
-	public void Absorption(World world, EntityPlayer player)
+	public void doAbsorption(World world, EntityPlayer player)
 	{
 		if (!world.isRemote && player.getFoodStats().getFoodLevel() < 20) {
-			if (!MpCount(3, AbsorpMptime)) {
+			if (!MpCount(3, mpTermAbsorp)) {
 				return;
 			}
 			ItemStack playerItem = player.getCurrentEquippedItem();
@@ -244,12 +245,12 @@ public class LivingEventHooks
 		return ret;
 	}
 
-	public static void setModeToNBT(EntityPlayer player, boolean levi)
+	public static void setLevitationModeToNBT(EntityPlayer player, boolean levi)
 	{
 		ExtendedPlayerData.get(player).setLevitating(levi);
 	}
 
-	public static boolean getModeToNBT(EntityPlayer player)
+	public static boolean getLevitationModeToNBT(EntityPlayer player)
 	{
         return ExtendedPlayerData.get(player).isLevitating();
 	}

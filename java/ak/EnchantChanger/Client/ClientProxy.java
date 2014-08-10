@@ -42,7 +42,7 @@ public class ClientProxy extends CommonProxy {
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
-    private static final float moveFactor = 0.4F;
+    public static final float moveFactor = 0.4F;
 
 	@Override
 	public void registerRenderInformation() {
@@ -97,7 +97,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void flightClient(EntityPlayer player) {
+    public void doFlightOnSide(EntityPlayer player) {
         boolean jump = ((EntityPlayerSP) player).movementInput.jump;
         float var2 = 0.8F;
         boolean var3 = ((EntityPlayerSP) player).movementInput.moveForward >= var2;
@@ -106,7 +106,7 @@ public class ClientProxy extends CommonProxy {
             if (this.flyToggleTimer == 0) {
                 this.flyToggleTimer = 7;
             } else {
-                LivingEventHooks.setModeToNBT(player, !LivingEventHooks.getModeToNBT(player));
+                LivingEventHooks.setLevitationModeToNBT(player, !LivingEventHooks.getLevitationModeToNBT(player));
                 this.flyToggleTimer = 0;
             }
         }
@@ -133,21 +133,21 @@ public class ClientProxy extends CommonProxy {
             --this.flyToggleTimer;
         }
 
-        boolean var5 = LivingEventHooks.getModeToNBT(player);
+        boolean var5 = LivingEventHooks.getLevitationModeToNBT(player);
         if (var5) {
             movePlayerY(player);
             movePlayerXZ(player);
         }
 
         if (player.onGround && var5) {
-            LivingEventHooks.setModeToNBT(player, false);
+            LivingEventHooks.setLevitationModeToNBT(player, false);
         }
 
-        PacketHandler.INSTANCE.sendToServer(new MessageLevitation(LivingEventHooks.getModeToNBT(player)));
+        PacketHandler.INSTANCE.sendToServer(new MessageLevitation(LivingEventHooks.getLevitationModeToNBT(player)));
     }
 
 
-    private void movePlayerY(EntityPlayer player) {
+    private static void movePlayerY(EntityPlayer player) {
         EntityPlayerSP playerSP = (EntityPlayerSP)player;
 
         player.motionY = 0.0D;
@@ -161,7 +161,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    private void movePlayerXZ(EntityPlayer player) {
+    private static void movePlayerXZ(EntityPlayer player) {
         EntityPlayerSP playerSP = (EntityPlayerSP)player;
         float moveForward = playerSP.movementInput.moveForward;
         float moveStrafe = playerSP.movementInput.moveStrafe;
@@ -174,9 +174,9 @@ public class ClientProxy extends CommonProxy {
 
     private byte getKeyIndex() {
         byte key = -1;
-        if (ClientProxy.MagicKey.isPressed()) {
+        if (MagicKey.isPressed()) {
             key = EnchantChanger.MagicKEY;
-        } else if (ClientProxy.MateriaKey.isPressed()) {
+        } else if (MateriaKey.isPressed()) {
             key = EnchantChanger.MateriaKEY;
         }
 

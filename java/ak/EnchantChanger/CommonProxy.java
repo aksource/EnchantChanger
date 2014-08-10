@@ -30,7 +30,7 @@ public class CommonProxy implements IGuiHandler {
 
     public EntityPlayer getPlayer() {return null;}
 
-    public void flightClient(EntityPlayer player) {}
+    public void doFlightOnSide(EntityPlayer player) {}
 
     //returns an instance of the Container you made earlier
     @Override

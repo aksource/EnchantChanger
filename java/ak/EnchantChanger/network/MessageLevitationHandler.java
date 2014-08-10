@@ -1,6 +1,6 @@
 package ak.EnchantChanger.network;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -12,7 +12,7 @@ public class MessageLevitationHandler implements IMessageHandler<MessageLevitati
     @Override
     public IMessage onMessage(MessageLevitation message, MessageContext ctx) {
         if (ctx.getServerHandler().playerEntity != null) {
-            EnchantChanger.livingeventhooks.setModeToNBT(ctx.getServerHandler().playerEntity, message.isLevitation);
+            LivingEventHooks.setLevitationModeToNBT(ctx.getServerHandler().playerEntity, message.isLevitation);
         }
         return null;
     }
