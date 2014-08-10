@@ -2,6 +2,7 @@ package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
+import ak.EnchantChanger.StatCheckUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -26,6 +27,10 @@ public class EcItemMaterializer extends EcItem
         boolean flag = !ExtendedPlayerData.get(par3EntityPlayer).getSoldierMode();
         ExtendedPlayerData.get(par3EntityPlayer).setSoldierMode(flag);
         par3EntityPlayer.addChatComponentMessage(new ChatComponentText("Materia Setting Mode : " + flag));
+        //For MCE2
+        ExtendedPlayerData.get(par3EntityPlayer).setSoldierWorkStartTime(par2World.getWorldTime());
+        ExtendedPlayerData.get(par3EntityPlayer).setMobKillCount(StatCheckUtils.getTotalMobKillCount(par3EntityPlayer));
+
         par1ItemStack.stackSize--;
 		return par1ItemStack;
 	}

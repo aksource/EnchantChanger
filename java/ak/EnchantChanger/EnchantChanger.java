@@ -12,6 +12,7 @@ import ak.EnchantChanger.eventhandler.CommonTickHandler;
 import ak.EnchantChanger.eventhandler.FillBucketHook;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import ak.EnchantChanger.item.*;
+import ak.EnchantChanger.modcoop.CoopMCE;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.potion.EcPotionMako;
@@ -159,6 +160,8 @@ public class EnchantChanger {
     public static int cloudInvXCoord = 0;
     public static int cloudInvYCoord = 0;
 
+    public static int soldierSalary = 1000;
+
     public static int EnchantmentMeteorId;
     public static Enchantment Meteor;
     public static int EnchantmentHolyId;
@@ -190,6 +193,7 @@ public class EnchantChanger {
     public static boolean loadIC = false;
     public static boolean loadTE = false;
     public static boolean loadUE = false;
+    public static boolean loadMCE = false;
     @Mod.Instance("EnchantChanger")
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
@@ -283,6 +287,7 @@ public class EnchantChanger {
         cloudInvXCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDxCoordinate", 0).getInt();
         cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", 0).getInt();
         enchantChangerCost = config.get(Configuration.CATEGORY_GENERAL, "EnchantChangerOpenCost", enchantChangerCost, "Cost to open EnchantChanger or Materia Window when mods difficulty is hard").getInt();
+        soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary" , soldierSalary, "Monthly Salary of soldier.").getInt();
         config.save();
 
         itemMateria = (new EcItemMateria("Materia")).setHasSubtypes(true).setMaxDamage(0).setTextureName("ender_pearl");
@@ -365,8 +370,14 @@ public class EnchantChanger {
 
         registerRecipes();
 
-        if (enableDungeonLoot)
+        if (enableDungeonLoot) {
             this.DungeonLootItemResist();
+        }
+        loadMTH = Loader.isModLoaded("MultiToolHolders");
+        loadMCE = Loader.isModLoaded("mceconomy2");
+        if (loadMCE) {
+            MinecraftForge.EVENT_BUS.register(new CoopMCE());
+        }
     }
 
     private void registerTileEntities() {
@@ -489,9 +500,7 @@ public class EnchantChanger {
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        loadMTH = Loader.isModLoaded("MultiToolHolders");
-    }
+    public void postInit(FMLPostInitializationEvent event) {  }
 
     private void initMaps() {
         makeMapFromArray(coefficientMap, enchantmentAPCoefficients);

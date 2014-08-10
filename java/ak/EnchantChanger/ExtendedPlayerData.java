@@ -24,6 +24,8 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     private boolean soldierMode;
     private long apCoolingTime;
     private int limitValue;
+    private long soldierWorkStartTime;
+    private int mobKillCount;
 
 //    public ExtendedPlayerData(EntityPlayer player) {
 //        this.player = player;
@@ -51,6 +53,8 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         nbt.setBoolean("soldierMode", this.soldierMode);
         nbt.setLong("apCoolingTime", this.apCoolingTime);
         nbt.setInteger("limitValue", this.limitValue);
+        nbt.setLong("soldierWorkStartTime", this.soldierWorkStartTime);
+        nbt.setInteger("mobKillCount", this.mobKillCount);
         compound.setTag(EXT_PROP_NAME, nbt);
     }
 
@@ -61,6 +65,8 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         this.soldierMode = nbt.getBoolean("soldierMode");
         this.apCoolingTime = nbt.getLong("apCoolingTime");
         this.limitValue = nbt.getInteger("limitValue");
+        this.soldierWorkStartTime = nbt.getLong("soldierWorkStartTime");
+        this.mobKillCount = nbt.getInteger("mobKillCount");
     }
 
     @Override
@@ -101,6 +107,22 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public int getLimitGaugeValue() {
         return limitValue;
+    }
+
+    public long getSoldierWorkStartTime() {
+        return soldierWorkStartTime;
+    }
+
+    public void setSoldierWorkStartTime(long soldierWorkStartTime) {
+        this.soldierWorkStartTime = soldierWorkStartTime;
+    }
+
+    public int getMobKillCount() {
+        return mobKillCount;
+    }
+
+    public void setMobKillCount(int mobKillCount) {
+        this.mobKillCount = mobKillCount;
     }
 
     public void saveProxyData(EntityPlayer player) {
