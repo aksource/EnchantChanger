@@ -217,7 +217,7 @@ public class LivingEventHooks
 			return false;
 		} else if (itemstack.getItem() instanceof EcItemMateria || itemstack.getItem() instanceof EcItemSword) {
 			if (itemstack.getItem() instanceof EcItemMateria) {
-				return itemstack.getItemDamage() == 4;
+				return ((EcItemMateria)itemstack.getItem()).isFloatingMateria(itemstack);
 			} else {
 				return EcItemSword.hasFloat(itemstack);
 			}

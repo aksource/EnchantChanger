@@ -107,7 +107,7 @@ public class EcItemMateria extends EcItem
 				Despell(entityplayer, entityplayer);
 				break;
 			case 7:
-				Haste(entityplayer, entityplayer);
+				doHaste(entityplayer, entityplayer);
 			}
 		}
 		return itemstack;
@@ -130,7 +130,7 @@ public class EcItemMateria extends EcItem
 				Despell(player, entity);
 				return;
 			case 7:
-				Haste(player, entity);
+				doHaste(player, entity);
 				player.addChatMessage(new ChatComponentText("Haste!"));
 				return;
 			default:
@@ -237,6 +237,10 @@ public class EcItemMateria extends EcItem
 			if (enchID == i) return true;
 		return false;
 	}
+
+    public boolean isFloatingMateria(ItemStack itemStack) {
+        return itemStack.getItemDamage() == 4;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -444,7 +448,7 @@ public class EcItemMateria extends EcItem
 		}
 	}
 
-	public void Haste(EntityPlayer player, EntityLivingBase entityliving)
+	public void doHaste(EntityPlayer player, EntityLivingBase entityliving)
 	{
 		entityliving.addPotionEffect(new PotionEffect(1, 20 * 60 * 5, 1));
 		decreasePlayerFood(player, 2);
