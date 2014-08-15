@@ -160,7 +160,7 @@ public class EnchantChanger {
     public static int cloudInvXCoord = 0;
     public static int cloudInvYCoord = 0;
 
-    public static int soldierSalary = 1000;
+    public static int soldierSalary = 10;
 
     public static int EnchantmentMeteorId;
     public static Enchantment Meteor;
