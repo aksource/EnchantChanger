@@ -14,6 +14,10 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+
 @SideOnly(Side.CLIENT)
 public class EcRenderSwordModel implements IItemRenderer
 {
@@ -29,11 +33,21 @@ public class EcRenderSwordModel implements IItemRenderer
     private static final ResourceLocation zackSwordBox = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/bustersword256-box.png");
     private static final ResourceLocation zackSwordCylinder = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/bustersword256-cylinder.png");
 
+    private static final ResourceLocation ultimateWeaponObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/ultimateweapon.obj");
+    private final IModelCustom ultimateWeaponModel;
+    private static final ResourceLocation ultimateWeaponSword = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-sword.png");
+    private static final ResourceLocation ultimateWeaponEmblem = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-emblem.png");
+    private static final ResourceLocation ultimateWeaponHandguard = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-handguard.png");
+    private static final ResourceLocation ultimateWeaponGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-grip.png");
+    private static final ResourceLocation ultimateWeaponPipe01 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe01.png");
+    private static final ResourceLocation ultimateWeaponPipe02 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe02.png");
+
     private Minecraft mc;
 
     public EcRenderSwordModel() {
         mc = Minecraft.getMinecraft();
         zackSwordModel = AdvancedModelLoader.loadModel(zackSwordObj);
+        ultimateWeaponModel = AdvancedModelLoader.loadModel(ultimateWeaponObj);
     }
 
 	@Override
@@ -66,7 +80,8 @@ public class EcRenderSwordModel implements IItemRenderer
 			SModel.renderItem(item, (EntityLivingBase) data[1]);
         }
 		if (item.getItem() instanceof EcItemUltimateWeapon) {
-            UModel.renderItem(item, (EntityLivingBase) data[1]);
+//            UModel.renderItem(item, (EntityLivingBase) data[1]);]
+            renderSwordModel(item, (EntityLivingBase) data[1], type);
         }
 	}
 
@@ -87,8 +102,9 @@ public class EcRenderSwordModel implements IItemRenderer
 //        if (item.getItem() instanceof EcItemSephirothSword
 //                || item.getItem() instanceof EcItemSephirothSwordImit)
 //            SModel.renderItem(item, (EntityLivingBase) data[1]);
-//        if (item.getItem() instanceof EcItemUltimateWeapon)
-//            UModel.renderItem(item, (EntityLivingBase) data[1]);
+        if (item.getItem() instanceof EcItemUltimateWeapon) {
+            renderUltimateWeaponModel(item, 0.12F);
+        }
         GL11.glPopMatrix();
     }
 
@@ -100,5 +116,32 @@ public class EcRenderSwordModel implements IItemRenderer
         zackSwordModel.renderPart("box");
         mc.renderEngine.bindTexture(zackSwordCylinder);
         zackSwordModel.renderPart("Cylinder");
+    }
+
+    private void renderUltimateWeaponModel(ItemStack item, float size) {
+        GL11.glScalef(size, size, size);
+        GL11.glEnable(GL_BLEND);
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        mc.renderEngine.bindTexture(ultimateWeaponSword);
+        ultimateWeaponModel.renderPart("sword");
+        GL11.glDisable(GL_BLEND);
+        mc.renderEngine.bindTexture(ultimateWeaponEmblem);
+        ultimateWeaponModel.renderPart("emblem01_e01");
+        ultimateWeaponModel.renderPart("emblem02_e02");
+        mc.renderEngine.bindTexture(ultimateWeaponPipe01);
+        ultimateWeaponModel.renderPart("pipe01_p01");
+        ultimateWeaponModel.renderPart("pipe02");
+        ultimateWeaponModel.renderPart("pipe03_p03");
+        ultimateWeaponModel.renderPart("pipe04_p04");
+        mc.renderEngine.bindTexture(ultimateWeaponPipe02);
+        ultimateWeaponModel.renderPart("pipe05_p05");
+        ultimateWeaponModel.renderPart("pipe06_p06");
+        ultimateWeaponModel.renderPart("pipe07_p07");
+        ultimateWeaponModel.renderPart("pipe08_p08");
+        mc.renderEngine.bindTexture(ultimateWeaponHandguard);
+        ultimateWeaponModel.renderPart("handguard01_h01");
+        ultimateWeaponModel.renderPart("handguard02_h02");
+        mc.renderEngine.bindTexture(ultimateWeaponGrip);
+        ultimateWeaponModel.renderPart("grip");
     }
 }
