@@ -26,7 +26,9 @@ import java.util.List;
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass{
     private static int[] sides = new int[]{2,5,3,4};
-    private static String[] baseBlocks = new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).toString(),GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).toString()};
+    public static String[][] baseBlocks = new String[][]{
+            {GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).modId, GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).name},
+            {GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).modId, GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).name}};
     @SideOnly(Side.CLIENT)
     private IIcon iconFront;
 
@@ -74,8 +76,9 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     public void getSubBlocks(Item itemblock, CreativeTabs tab, List list) {
         ItemStack makoReactorController = new ItemStack(this, 1, 0);
         NBTTagCompound nbt = new NBTTagCompound();
-        for (String base:baseBlocks) {
-            nbt.setString("baseBlock", base);
+        for (String[] baseUID:baseBlocks) {
+            String baseBlockName = String.format("%s:%s", baseUID[0], baseUID[1]);
+            nbt.setString("baseBlock", baseBlockName);
             makoReactorController.setTagCompound(nbt);
             list.add(makoReactorController);
         }
