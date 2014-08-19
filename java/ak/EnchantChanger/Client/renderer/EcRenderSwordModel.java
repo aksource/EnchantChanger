@@ -42,12 +42,18 @@ public class EcRenderSwordModel implements IItemRenderer
     private static final ResourceLocation ultimateWeaponPipe01 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe01.png");
     private static final ResourceLocation ultimateWeaponPipe02 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe02.png");
 
+    private static final ResourceLocation masamuneObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/masamune.obj");
+    private final IModelCustom masamuneModel;
+    private static final ResourceLocation masamuneSword = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-sword.png");
+    private static final ResourceLocation masamuneGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-grip.png");
+
     private Minecraft mc;
 
     public EcRenderSwordModel() {
         mc = Minecraft.getMinecraft();
         zackSwordModel = AdvancedModelLoader.loadModel(zackSwordObj);
         ultimateWeaponModel = AdvancedModelLoader.loadModel(ultimateWeaponObj);
+        masamuneModel = AdvancedModelLoader.loadModel(masamuneObj);
     }
 
 	@Override
@@ -77,7 +83,8 @@ public class EcRenderSwordModel implements IItemRenderer
         }
 		if (item.getItem() instanceof EcItemSephirothSword
 				|| item.getItem() instanceof EcItemSephirothSwordImit) {
-			SModel.renderItem(item, (EntityLivingBase) data[1]);
+//			SModel.renderItem(item, (EntityLivingBase) data[1]);
+            renderSwordModel(item, (EntityLivingBase) data[1], type);
         }
 		if (item.getItem() instanceof EcItemUltimateWeapon) {
 //            UModel.renderItem(item, (EntityLivingBase) data[1]);]
@@ -99,9 +106,10 @@ public class EcRenderSwordModel implements IItemRenderer
 //        if (item.getItem() instanceof EcItemCloudSwordCore)
 //            CCModel.renderItem(item, (EntityLivingBase) data[1],
 //                    ((EcItemCloudSwordCore) item.getItem()).isActive(item));
-//        if (item.getItem() instanceof EcItemSephirothSword
-//                || item.getItem() instanceof EcItemSephirothSwordImit)
-//            SModel.renderItem(item, (EntityLivingBase) data[1]);
+        if (item.getItem() instanceof EcItemSephirothSword
+                || item.getItem() instanceof EcItemSephirothSwordImit) {
+            renderMasamuneModel(item, 0.12F);
+        }
         if (item.getItem() instanceof EcItemUltimateWeapon) {
             renderUltimateWeaponModel(item, 0.12F);
         }
@@ -143,5 +151,13 @@ public class EcRenderSwordModel implements IItemRenderer
         ultimateWeaponModel.renderPart("handguard02_h02");
         mc.renderEngine.bindTexture(ultimateWeaponGrip);
         ultimateWeaponModel.renderPart("grip");
+    }
+
+    private void renderMasamuneModel(ItemStack itme, float size) {
+        GL11.glScalef(size, size, size);
+        mc.renderEngine.bindTexture(masamuneSword);
+        masamuneModel.renderPart("sword");
+        mc.renderEngine.bindTexture(masamuneGrip);
+        masamuneModel.renderPart("grip");
     }
 }
