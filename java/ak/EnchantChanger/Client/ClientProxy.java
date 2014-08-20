@@ -237,7 +237,7 @@ public class ClientProxy extends CommonProxy {
             if (heldItem.getItem() == EnchantChanger.itemSephirothSword) {
                 extendedReach = 5.0D;
             }
-            MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, 1.0F);
+            MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, timer.renderPartialTicks);
             if (MOP != null && MOP.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                 mc.objectMouseOver = MOP;
                 Entity pointedEntity = MOP.entityHit;
