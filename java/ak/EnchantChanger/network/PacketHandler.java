@@ -17,5 +17,6 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageLevitationHandler.class, MessageLevitation.class, 1, Side.SERVER);
         INSTANCE.registerMessage(MessagePlayerPropertiesHandler.class, MessagePlayerProperties.class, 2, Side.CLIENT);
         INSTANCE.registerMessage(MessageCloudSwordHandler.class, MessageCloudSword.class, 3, Side.CLIENT);
+        INSTANCE.registerMessage(MessageExtendedReachAttackHandler.class, MessageExtendedReachAttack.class, 4, Side.SERVER);
     }
 }

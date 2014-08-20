@@ -8,6 +8,7 @@ import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import ak.EnchantChanger.item.EcItemSword;
+import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
@@ -16,19 +17,29 @@ import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Timer;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
+
+import java.util.List;
 
 public class ClientProxy extends CommonProxy {
 	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
@@ -38,6 +49,7 @@ public class ClientProxy extends CommonProxy {
     public static int multiPassRenderType;
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
     public static Minecraft mc = Minecraft.getMinecraft();
+    private static Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
 
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
@@ -209,5 +221,89 @@ public class ClientProxy extends CommonProxy {
                 EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
+    }
+
+    @SubscribeEvent
+    public void mouseHandlingEvent(InputEvent.MouseInputEvent event) {
+        if (mc.gameSettings.keyBindAttack.getIsKeyPressed() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
+            changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
+        }
+    }
+
+    private void changeObjectMouseOver(EntityPlayer player) {
+        ItemStack heldItem = player.getCurrentEquippedItem();
+        if (heldItem != null && heldItem.getItem() instanceof EcItemSword) {
+            double extendedReach = 4.0D;
+            if (heldItem.getItem() == EnchantChanger.itemSephirothSword) {
+                extendedReach = 5.0D;
+            }
+            MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, 1.0F);
+            if (MOP != null && MOP.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+                mc.objectMouseOver = MOP;
+                Entity pointedEntity = MOP.entityHit;
+                if (pointedEntity instanceof EntityLivingBase || pointedEntity instanceof EntityItemFrame) {
+                    PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(pointedEntity));
+                }
+            }
+        }
+    }
+
+    private MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
+        MovingObjectPosition MOP = null;
+        if (viewingEntity != null) {
+            if (viewingEntity.worldObj != null) {
+                MOP = viewingEntity.rayTrace(reach, partialTicks);
+                Vec3 viewPosition = viewingEntity.getPosition(partialTicks);
+                double d1 = 0;
+
+                if (MOP != null) {
+                    d1 = MOP.hitVec.distanceTo(viewPosition);
+                }
+
+                Vec3 lookVector = viewingEntity.getLook(partialTicks);
+                Vec3 reachVector = viewPosition.addVector(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach);
+                Vec3 vec33 = null;
+                float f1 = 1.0F;
+                @SuppressWarnings("unchecked")
+                List<Entity> list = viewingEntity.worldObj.getEntitiesWithinAABBExcludingEntity(viewingEntity, viewingEntity.boundingBox.addCoord(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach).expand(f1, f1, f1));
+                double d2 = d1;
+                Entity pointedEntity = null;
+                for (Entity entity : list) {
+                    if (entity.canBeCollidedWith())  {
+                        float collisionSize = entity.getCollisionBorderSize();
+                        AxisAlignedBB axisalignedbb = entity.boundingBox.expand(collisionSize, collisionSize, collisionSize);
+                        MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(viewPosition, reachVector);
+
+                        if (axisalignedbb.isVecInside(viewPosition)) {
+                            if (0.0D < d2 || d2 == 0.0D) {
+                                pointedEntity = entity;
+                                vec33 = movingobjectposition == null ? viewPosition : movingobjectposition.hitVec;
+                                d2 = 0.0D;
+                            }
+                        } else if (movingobjectposition != null)  {
+                            double d3 = viewPosition.distanceTo(movingobjectposition.hitVec);
+
+                            if (d3 < d2 || d2 == 0.0D) {
+                                if (entity == viewingEntity.ridingEntity && !entity.canRiderInteract()) {
+                                    if (d2 == 0.0D) {
+                                        pointedEntity = entity;
+                                        vec33 = movingobjectposition.hitVec;
+                                    }
+                                } else {
+                                    pointedEntity = entity;
+                                    vec33 = movingobjectposition.hitVec;
+                                    d2 = d3;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pointedEntity != null && (d2 < d1 || MOP == null)) {
+                    MOP = new MovingObjectPosition(pointedEntity, vec33);
+                }
+            }
+        }
+        return MOP;
     }
 }
