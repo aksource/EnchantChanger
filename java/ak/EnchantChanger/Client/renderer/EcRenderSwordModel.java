@@ -14,9 +14,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 public class EcRenderSwordModel implements IItemRenderer
@@ -47,6 +45,13 @@ public class EcRenderSwordModel implements IItemRenderer
     private static final ResourceLocation masamuneSword = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-sword.png");
     private static final ResourceLocation masamuneGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-grip.png");
 
+    private static final ResourceLocation firstSwordObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/firstsword.obj");
+    private final IModelCustom firstSwordModel;
+    private static final ResourceLocation firstSwordEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-edge.png");
+    private static final ResourceLocation firstSwordCenter = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-center.png");
+    private static final ResourceLocation firstSwordCase = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-case.png");
+    private static final ResourceLocation firstSwordGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-grip.png");
+
     private Minecraft mc;
 
     public EcRenderSwordModel() {
@@ -54,6 +59,7 @@ public class EcRenderSwordModel implements IItemRenderer
         zackSwordModel = AdvancedModelLoader.loadModel(zackSwordObj);
         ultimateWeaponModel = AdvancedModelLoader.loadModel(ultimateWeaponObj);
         masamuneModel = AdvancedModelLoader.loadModel(masamuneObj);
+        firstSwordModel = AdvancedModelLoader.loadModel(firstSwordObj);
     }
 
 	@Override
@@ -78,8 +84,7 @@ public class EcRenderSwordModel implements IItemRenderer
             CModel.renderItem(item, (EntityLivingBase) data[1]);
         }
 		if (item.getItem() instanceof EcItemCloudSwordCore) {
-            CCModel.renderItem(item, (EntityLivingBase) data[1],
-                    ((EcItemCloudSwordCore) item.getItem()).isActive(item));
+            renderSwordModel(item, (EntityLivingBase) data[1], type);
         }
 		if (item.getItem() instanceof EcItemSephirothSword
 				|| item.getItem() instanceof EcItemSephirothSwordImit) {
@@ -103,9 +108,9 @@ public class EcRenderSwordModel implements IItemRenderer
         }
 //        if (item.getItem() instanceof EcItemCloudSword)
 //            CModel.renderItem(item, (EntityLivingBase) data[1]);
-//        if (item.getItem() instanceof EcItemCloudSwordCore)
-//            CCModel.renderItem(item, (EntityLivingBase) data[1],
-//                    ((EcItemCloudSwordCore) item.getItem()).isActive(item));
+        if (item.getItem() instanceof EcItemCloudSwordCore) {
+            renderFirstSwordModel(item, 0.12F);
+        }
         if (item.getItem() instanceof EcItemSephirothSword
                 || item.getItem() instanceof EcItemSephirothSwordImit) {
             renderMasamuneModel(item, 0.12F);
@@ -159,5 +164,32 @@ public class EcRenderSwordModel implements IItemRenderer
         masamuneModel.renderPart("sword");
         mc.renderEngine.bindTexture(masamuneGrip);
         masamuneModel.renderPart("grip");
+    }
+
+    private void renderFirstSwordModel(ItemStack item, float size) {
+        EcItemCloudSwordCore cloudSwordCore = (EcItemCloudSwordCore)item.getItem();
+        boolean isActive = cloudSwordCore.isActive(item);
+        GL11.glScalef(size, size, size);
+        mc.renderEngine.bindTexture(firstSwordCenter);
+        firstSwordModel.renderPart("centerplate_center");
+        mc.renderEngine.bindTexture(firstSwordGrip);
+        firstSwordModel.renderPart("grip_Cylinder");
+        if (isActive) {
+            mc.renderEngine.bindTexture(firstSwordEdge);
+            GL11.glPushMatrix();
+            GL11.glTranslatef(-0.5f, 0, 0);
+            firstSwordModel.renderPart("edge01");
+            GL11.glTranslatef(1.0f, 0, 0);
+            firstSwordModel.renderPart("edge02");
+            GL11.glPopMatrix();
+            mc.renderEngine.bindTexture(firstSwordCase);
+            firstSwordModel.renderPart("boxC");
+        } else {
+            mc.renderEngine.bindTexture(firstSwordEdge);
+            firstSwordModel.renderPart("edge01");
+            firstSwordModel.renderPart("edge02");
+            mc.renderEngine.bindTexture(firstSwordCase);
+            firstSwordModel.renderPart("boxO");
+        }
     }
 }
