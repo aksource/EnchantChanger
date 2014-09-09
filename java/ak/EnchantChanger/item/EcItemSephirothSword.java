@@ -75,4 +75,9 @@ public class EcItemSephirothSword extends EcItemSword
 		}
 		this.SephirothSprintAttack = false;
 	}
+
+    @Override
+    public double getReach(ItemStack itemStack) {
+        return 5.0D;
+    }
 }

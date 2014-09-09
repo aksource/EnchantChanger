@@ -26,7 +26,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class EcItemSword extends ItemSword {
+public class EcItemSword extends ItemSword implements ICustomReachItem {
 
 	public EcItemSword(ToolMaterial toolMaterial, String name) {
 		super(toolMaterial);
@@ -250,4 +250,9 @@ public class EcItemSword extends ItemSword {
 
 	public void destroyTheItem(EntityPlayer player, ItemStack orig) {
 	}
+
+    @Override
+    public double getReach(ItemStack itemStack) {
+        return 4.0D;
+    }
 }

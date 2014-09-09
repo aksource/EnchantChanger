@@ -8,6 +8,7 @@ import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import ak.EnchantChanger.item.EcItemSword;
+import ak.EnchantChanger.item.ICustomReachItem;
 import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessageLevitation;
@@ -232,11 +233,8 @@ public class ClientProxy extends CommonProxy {
 
     private void changeObjectMouseOver(EntityPlayer player) {
         ItemStack heldItem = player.getCurrentEquippedItem();
-        if (heldItem != null && heldItem.getItem() instanceof EcItemSword) {
-            double extendedReach = 4.0D;
-            if (heldItem.getItem() == EnchantChanger.itemSephirothSword) {
-                extendedReach = 5.0D;
-            }
+        if (heldItem != null && heldItem.getItem() instanceof ICustomReachItem) {
+            double extendedReach = ((ICustomReachItem)heldItem.getItem()).getReach(heldItem);
             MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, timer.renderPartialTicks);
             if (MOP != null && MOP.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                 mc.objectMouseOver = MOP;
