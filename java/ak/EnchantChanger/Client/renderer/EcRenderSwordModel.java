@@ -52,6 +52,16 @@ public class EcRenderSwordModel implements IItemRenderer
     private static final ResourceLocation firstSwordCase = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-case.png");
     private static final ResourceLocation firstSwordGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-grip.png");
 
+    private static final ResourceLocation unionSwordObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/unionsword.obj");
+    private final IModelCustom unionSwordModel;
+    private static final ResourceLocation organixEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/organix256-edge.png");;
+    private static final ResourceLocation organixGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/organix256-grip.png");;
+    private static final ResourceLocation butterflyedgeEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/butterflyedge256-edge.png");;
+    private static final ResourceLocation butterflyedgeGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/butterflyedge256-grip.png");;
+    private static final ResourceLocation runebladeEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-edge.png");;
+    private static final ResourceLocation runebladeHand = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-hand.png");;
+    private static final ResourceLocation runebladeGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-grip.png");;
+
     private Minecraft mc;
 
     public EcRenderSwordModel() {
@@ -60,6 +70,7 @@ public class EcRenderSwordModel implements IItemRenderer
         ultimateWeaponModel = AdvancedModelLoader.loadModel(ultimateWeaponObj);
         masamuneModel = AdvancedModelLoader.loadModel(masamuneObj);
         firstSwordModel = AdvancedModelLoader.loadModel(firstSwordObj);
+        unionSwordModel = AdvancedModelLoader.loadModel(unionSwordObj);
     }
 
 	@Override
@@ -76,23 +87,7 @@ public class EcRenderSwordModel implements IItemRenderer
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		if (item.getItem() instanceof EcItemZackSword) {
-//            ZModel.renderItem(item, (EntityLivingBase) data[1]);
-            renderSwordModel(item, (EntityLivingBase) data[1], type);
-        }
-		if (item.getItem() instanceof EcItemCloudSword) {
-            CModel.renderItem(item, (EntityLivingBase) data[1]);
-        }
-		if (item.getItem() instanceof EcItemCloudSwordCore) {
-            renderSwordModel(item, (EntityLivingBase) data[1], type);
-        }
-		if (item.getItem() instanceof EcItemSephirothSword
-				|| item.getItem() instanceof EcItemSephirothSwordImit) {
-//			SModel.renderItem(item, (EntityLivingBase) data[1]);
-            renderSwordModel(item, (EntityLivingBase) data[1], type);
-        }
-		if (item.getItem() instanceof EcItemUltimateWeapon) {
-//            UModel.renderItem(item, (EntityLivingBase) data[1]);]
+		if (item.getItem() instanceof EcItemSword) {
             renderSwordModel(item, (EntityLivingBase) data[1], type);
         }
 	}
@@ -106,8 +101,9 @@ public class EcRenderSwordModel implements IItemRenderer
         if (item.getItem() instanceof EcItemZackSword) {
             renderZackSwordModel(item, 0.12F);
         }
-//        if (item.getItem() instanceof EcItemCloudSword)
-//            CModel.renderItem(item, (EntityLivingBase) data[1]);
+        if (item.getItem() instanceof EcItemCloudSword) {
+            renderUnionSwordModel(item, 0.12F);
+        }
         if (item.getItem() instanceof EcItemCloudSwordCore) {
             renderFirstSwordModel(item, 0.12F);
         }
@@ -170,6 +166,10 @@ public class EcRenderSwordModel implements IItemRenderer
         EcItemCloudSwordCore cloudSwordCore = (EcItemCloudSwordCore)item.getItem();
         boolean isActive = cloudSwordCore.isActive(item);
         GL11.glScalef(size, size, size);
+        renderUnionSwordCore(isActive);
+    }
+
+    private void renderUnionSwordCore(boolean isActive) {
         mc.renderEngine.bindTexture(firstSwordCenter);
         firstSwordModel.renderPart("centerplate_center");
         mc.renderEngine.bindTexture(firstSwordGrip);
@@ -191,5 +191,44 @@ public class EcRenderSwordModel implements IItemRenderer
             mc.renderEngine.bindTexture(firstSwordCase);
             firstSwordModel.renderPart("boxO");
         }
+    }
+
+    private void renderUnionSwordModel(ItemStack item, float size) {
+        GL11.glScalef(size, size, size);
+        renderUnionSwordCore(false);
+        renderOrganix(false);
+        renderButterflyEdge("01", false);
+        renderButterflyEdge("02", false);
+        renderRuneBlade("01", false);
+        renderRuneBlade("02", false);
+    }
+
+    private void renderOrganix(boolean limitBreak) {
+        mc.renderEngine.bindTexture(organixEdge);
+        unionSwordModel.renderPart("Organix_Org");
+        mc.renderEngine.bindTexture(organixGrip);
+        unionSwordModel.renderPart("OGrip01_OG01");
+        unionSwordModel.renderPart("OGrip02_OG02");
+    }
+
+    private void renderButterflyEdge(String str, boolean limitBreak) {
+        String edge = String.format("ButterflyEdge%s_BE%s", str, str);
+        String grip = String.format("BGrip%s_BG%s", str, str);
+        mc.renderEngine.bindTexture(butterflyedgeEdge);
+        unionSwordModel.renderPart(edge);
+        mc.renderEngine.bindTexture(butterflyedgeGrip);
+        unionSwordModel.renderPart(grip);
+    }
+
+    private void renderRuneBlade(String str, boolean limitBreak) {
+        String edge = String.format("RuneBlade%s_RE%s", str, str);
+        String hand = String.format("RuneGuard%s_RH%s", str, str);
+        String grip = String.format("RGrip%s_RG%s", str, str);
+        mc.renderEngine.bindTexture(runebladeEdge);
+        unionSwordModel.renderPart(edge);
+        mc.renderEngine.bindTexture(runebladeHand);
+        unionSwordModel.renderPart(grip);
+        mc.renderEngine.bindTexture(runebladeGrip);
+        unionSwordModel.renderPart(grip);
     }
 }
