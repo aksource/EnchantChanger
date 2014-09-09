@@ -255,4 +255,9 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     public double getReach(ItemStack itemStack) {
         return 4.0D;
     }
+
+    //ServerOnly
+    public void doCtrlKeyAction(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+
+    }
 }

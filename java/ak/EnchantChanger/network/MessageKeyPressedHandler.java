@@ -23,6 +23,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
             switch(message.keyIndex) {
                 case EnchantChanger.MagicKEY :doMagic(player.getCurrentEquippedItem(), player); break;
                 case EnchantChanger.MateriaKEY:openMateriaWindow(player);break;
+                case EnchantChanger.CtrlKEY:doCtrlKeyAction(player.getCurrentEquippedItem(), player); break;
             }
         }
         return null;
@@ -34,10 +35,10 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
         } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
-            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)) != null
-                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
+            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)) != null
+                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
             {
-                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(mth.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
+                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
     }
@@ -50,6 +51,12 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private boolean canOpenMateriaWindow(EntityPlayer player) {
         return ExtendedPlayerData.get(player).getSoldierMode() && (EnchantChanger.Difficulty < 2 || checkCost(player));
+    }
+
+    private void doCtrlKeyAction(ItemStack itemStack, EntityPlayer player) {
+        if (itemStack.getItem() instanceof EcItemSword) {
+            ((EcItemSword)itemStack.getItem()).doCtrlKeyAction(itemStack, player.worldObj, player);
+        }
     }
 
     private boolean checkCost(EntityPlayer player) {

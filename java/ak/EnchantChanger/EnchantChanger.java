@@ -210,6 +210,7 @@ public class EnchantChanger {
 
     public static final byte MagicKEY = 0;
     public static final byte MateriaKEY = 1;
+    public static final byte CtrlKEY = 2;
 
     //Logger
     public static final Logger logger = Logger.getLogger("EnchantChanger");

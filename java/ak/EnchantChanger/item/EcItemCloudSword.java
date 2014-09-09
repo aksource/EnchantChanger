@@ -4,6 +4,7 @@ import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.inventory.EcCloudSwordData;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.network.MessageCloudSword;
+import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,24 +52,28 @@ public class EcItemCloudSword extends EcItemSword
 			this.doCastOffSwords(par1ItemStack, par2World, par3EntityPlayer);
 			return this.makeCloudSwordCore(par1ItemStack);
 		} else {
-			par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-			if (!par2World.isRemote) {
-    			increaseSlotNum(par1ItemStack);
-                int slot = getSlotNumFromItemStack(par1ItemStack);
-//                EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
-                PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte)slot), (EntityPlayerMP) par3EntityPlayer);
-//				if (swordData != null && getSlotNumFromItemStack(par1ItemStack) != 5 && swordData
-//						.getStackInSlot(slot) != null) {
-//					par3EntityPlayer.addChatMessage(new ChatComponentText(swordData
-//							.getStackInSlot(slot)
-//							.getDisplayName()));
-//				}
-			}
-			return par1ItemStack;
+            if (par2World.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(EnchantChanger.CtrlKEY));
+            }
+//			par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+//			if (!par2World.isRemote) {
+//    			increaseSlotNum(par1ItemStack);
+//                int slot = getSlotNumFromItemStack(par1ItemStack);
+//                PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte)slot), (EntityPlayerMP) par3EntityPlayer);
+//			}
+//			return par1ItemStack;
+            return super.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
 		}
 	}
 
-	@Override
+    @Override
+    public void doCtrlKeyAction(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+        increaseSlotNum(itemStack);
+        int slot = getSlotNumFromItemStack(itemStack);
+        PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte)slot), (EntityPlayerMP) entityPlayer);
+    }
+
+    @Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
 		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
 		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
@@ -180,19 +186,6 @@ public class EcItemCloudSword extends EcItemSword
 				this.makeCloudSwordCore(player.getCurrentEquippedItem()));
 	}
 
-/*	@Override
-	@SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		List slotItem;
-        EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
-        int slot = getSlotNumFromItemStack(par1ItemStack);
-		if (slot != 5 && swordData != null && swordData.getStackInSlot(slot) != null) {
-			slotItem = swordData.getStackInSlot(slot).getTooltip(par2EntityPlayer, par4);
-			par3List.addAll(slotItem);
-		}
-	}*/
-
 	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLiving, EntityLivingBase par3EntityLiving)
 	{
@@ -204,14 +197,4 @@ public class EcItemCloudSword extends EcItemSword
 		int newSlot = (getSlotNumFromItemStack(item) + 1) % 6;
 		setSlotNumToItemStack(item, newSlot);
 	}
-	//サーバー側で変更したスロットインデックスをクライアントに伝達。表示用。
-//	public void readSlotNumData(int data, ItemStack stack)
-//	{
-//		try {
-//			this.setSlotNum(stack, data);
-//			;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 }
