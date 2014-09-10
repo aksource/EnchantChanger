@@ -412,7 +412,7 @@ public class EnchantChanger {
                 " Y",
                 'X', Blocks.iron_block,
                 'Y', Items.iron_ingot);
-        if (EnchantChanger.Difficulty < 2)
+        if (EnchantChanger.Difficulty < 2) {
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
                     " X ",
@@ -421,7 +421,7 @@ public class EnchantChanger {
                     'X', Blocks.iron_block,
                     'Y', new ItemStack(itemMateria, 1, 0),
                     'Z', Items.iron_ingot);
-        else
+        } else {
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
                     " X ",
@@ -431,6 +431,7 @@ public class EnchantChanger {
                     'Y', new ItemStack(itemMateria, 1, 0),
                     'Z', Items.iron_ingot,
                     'D', Items.diamond);
+        }
         GameRegistry.addRecipe(
                 new ItemStack(itemSephirothSword, 1),
                 "  A", " B ", "C  ",
@@ -498,14 +499,14 @@ public class EnchantChanger {
                         "XXX",
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
-        for (String[] baseBlockUID : EcBlockMakoReactor.baseBlocks) {
-            Block baseBlock = GameRegistry.findBlock(baseBlockUID[0], baseBlockUID[1]);
-            String baseBlockName = String.format("%s:%s", baseBlockUID[0], baseBlockUID[1]);
-            ItemStack blockMakoReactorWall = new ItemStack(blockMakoReactor, 1, 1);
-            blockMakoReactorWall.setTagCompound(new NBTTagCompound());
-            blockMakoReactorWall.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);
-            GameRegistry.addShapelessRecipe(blockMakoReactorWall, baseBlock, itemMateria);
-        }
+//        for (String[] baseBlockUID : EcBlockMakoReactor.baseBlocks) {
+//            Block baseBlock = GameRegistry.findBlock(baseBlockUID[0], baseBlockUID[1]);
+//            String baseBlockName = String.format("%s:%s", baseBlockUID[0], baseBlockUID[1]);
+//            ItemStack blockMakoReactorWall = new ItemStack(blockMakoReactor, 1, 1);
+//            blockMakoReactorWall.setTagCompound(new NBTTagCompound());
+//            blockMakoReactorWall.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);
+//            GameRegistry.addShapelessRecipe(blockMakoReactorWall, baseBlock, itemMateria);
+//        }
     }
 
     @Mod.EventHandler
