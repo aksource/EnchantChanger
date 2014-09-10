@@ -194,41 +194,85 @@ public class EcRenderSwordModel implements IItemRenderer
     }
 
     private void renderUnionSwordModel(ItemStack item, float size) {
+        boolean isLimitBreak = mc.thePlayer.isSneaking();
+        GL11.glPushMatrix();
         GL11.glScalef(size, size, size);
-        renderUnionSwordCore(false);
-        renderOrganix(false);
-        renderButterflyEdge("01", false);
-        renderButterflyEdge("02", false);
-        renderRuneBlade("01", false);
-        renderRuneBlade("02", false);
+        renderUnionSwordCore(isLimitBreak);
+        renderOrganix(isLimitBreak);
+        renderButterflyEdge("01", isLimitBreak);
+        renderButterflyEdge("02", isLimitBreak);
+        renderRuneBlade("01", isLimitBreak, size);
+        renderRuneBlade("02", isLimitBreak, size);
+        GL11.glPopMatrix();
     }
 
     private void renderOrganix(boolean limitBreak) {
+        if (limitBreak) {
+            GL11.glPushMatrix();
+            GL11.glRotatef(-15F, 0F, 0F, 1.0F);
+            GL11.glTranslatef(0F, 2.0F, 0F);
+        }
         mc.renderEngine.bindTexture(organixEdge);
         unionSwordModel.renderPart("Organix_Org");
         mc.renderEngine.bindTexture(organixGrip);
         unionSwordModel.renderPart("OGrip01_OG01");
         unionSwordModel.renderPart("OGrip02_OG02");
+        if (limitBreak) {
+            GL11.glPopMatrix();
+        }
     }
 
     private void renderButterflyEdge(String str, boolean limitBreak) {
         String edge = String.format("ButterflyEdge%s_BE%s", str, str);
         String grip = String.format("BGrip%s_BG%s", str, str);
+        if (limitBreak) {
+            GL11.glPushMatrix();
+            GL11.glRotatef(15F, 0F, 0F, 1.0F);
+            GL11.glTranslatef(0F, 2.0F, 0F);
+        }
         mc.renderEngine.bindTexture(butterflyedgeEdge);
         unionSwordModel.renderPart(edge);
         mc.renderEngine.bindTexture(butterflyedgeGrip);
         unionSwordModel.renderPart(grip);
+        if (limitBreak) {
+            GL11.glPopMatrix();
+        }
     }
 
-    private void renderRuneBlade(String str, boolean limitBreak) {
+    private void renderRuneBlade(String str, boolean limitBreak, float size) {
         String edge = String.format("RuneBlade%s_RE%s", str, str);
         String hand = String.format("RuneGuard%s_RH%s", str, str);
         String grip = String.format("RGrip%s_RG%s", str, str);
+        if (limitBreak) {
+            GL11.glPushMatrix();
+            GL11.glTranslatef(0F, 5.0F, 0F);
+        }
         mc.renderEngine.bindTexture(runebladeEdge);
         unionSwordModel.renderPart(edge);
+
+        if (limitBreak) {
+            GL11.glPushMatrix();
+            GL11.glTranslated(-0.46925D, 0.68262D, 0D);
+            GL11.glRotatef(-45F, 0F, 0F, 1.0F);
+            GL11.glTranslated(0.46925D, -0.68262D, 0D);
+
+        }
         mc.renderEngine.bindTexture(runebladeHand);
-        unionSwordModel.renderPart(grip);
+        unionSwordModel.renderPart(hand);
+
+        if (limitBreak) {
+            GL11.glPopMatrix();
+            GL11.glPushMatrix();
+            GL11.glTranslated(-0.36411D, 0.68262D, 0D);
+            GL11.glRotatef(180F, 0F, 0F, 1.0F);
+            GL11.glTranslated(0.36411D, -0.68262D, 0D);
+
+        }
         mc.renderEngine.bindTexture(runebladeGrip);
         unionSwordModel.renderPart(grip);
+        if (limitBreak) {
+            GL11.glPopMatrix();
+            GL11.glPopMatrix();
+        }
     }
 }
