@@ -55,7 +55,7 @@ public class EcBlockMaterializer extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-        if (EnchantChanger.Difficulty < 2 || checkCost(par5EntityPlayer)) {
+        if (EnchantChanger.difficulty < 2 || checkCost(par5EntityPlayer)) {
             par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
         }
         ExtendedPlayerData.get(par5EntityPlayer).setLimitGaugeValue(0);//test

@@ -279,11 +279,11 @@ public class EcContainerMaterializer extends Container {
         return ret;
     }
     static {
-        magicDmg.add(EnchantChanger.EnchantmentMeteorId);
-        magicDmg.add(EnchantChanger.EnchantmentHolyId);
-        magicDmg.add(EnchantChanger.EnchantmentTelepoId);
-        magicDmg.add(EnchantChanger.EnchantmentFloatId);
-        magicDmg.add(EnchantChanger.EnchantmentThunderId);
+        magicDmg.add(EnchantChanger.idEnchantmentMeteor);
+        magicDmg.add(EnchantChanger.idEnchantmentHoly);
+        magicDmg.add(EnchantChanger.idEnchantmentTelepo);
+        magicDmg.add(EnchantChanger.idEnchantmentFloat);
+        magicDmg.add(EnchantChanger.idEnchantmentThunder);
     }
     //仕様変更。どうしようか迷っている。
 //	 public static int ExtraItemCheck(ItemStack par1ItemStack)

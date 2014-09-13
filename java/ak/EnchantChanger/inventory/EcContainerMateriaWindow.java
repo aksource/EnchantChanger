@@ -77,15 +77,15 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private int setMateriaDmgfromEnch(int enchID) {
-        if (enchID == EnchantChanger.EnchantmentMeteorId)
+        if (enchID == EnchantChanger.idEnchantmentMeteor)
             return 1;
-        else if (enchID == EnchantChanger.EnchantmentHolyId)
+        else if (enchID == EnchantChanger.idEnchantmentHoly)
             return 2;
-        else if (enchID == EnchantChanger.EnchantmentTelepoId)
+        else if (enchID == EnchantChanger.idEnchantmentTelepo)
             return 3;
-        else if (enchID == EnchantChanger.EnchantmentFloatId)
+        else if (enchID == EnchantChanger.idEnchantmentFloat)
             return 4;
-        else if (enchID == EnchantChanger.EnchantmentThunderId)
+        else if (enchID == EnchantChanger.idEnchantmentThunder)
             return 5;
         else
             return 0;

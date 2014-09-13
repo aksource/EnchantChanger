@@ -50,26 +50,26 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     public static void doMagic(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentMeteorId, par1ItemStack) > 0) {
+				EnchantChanger.idEnchantmentMeteor, par1ItemStack) > 0) {
 			EcItemMateria.Meteo(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentHolyId, par1ItemStack) > 0) {
+				EnchantChanger.idEnchantmentHoly, par1ItemStack) > 0) {
 			EcItemMateria.Holy(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentTelepoId, par1ItemStack) > 0) {
+				EnchantChanger.idEnchantmentTelepo, par1ItemStack) > 0) {
 			EcItemMateria.teleportTo(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentThunderId, par1ItemStack) > 0) {
+				EnchantChanger.idEnchantmentThunder, par1ItemStack) > 0) {
 			EcItemMateria.Thunder(par2World, par3EntityPlayer);
 		}
 	}
 
 	public static boolean hasFloat(ItemStack itemstack) {
 		return EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.EnchantmentFloatId, itemstack) > 0;
+				EnchantChanger.idEnchantmentFloat, itemstack) > 0;
 	}
 
 	// 内蔵武器切り替え用攻撃メソッドの移植

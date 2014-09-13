@@ -50,7 +50,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
     }
 
     private boolean canOpenMateriaWindow(EntityPlayer player) {
-        return ExtendedPlayerData.get(player).getSoldierMode() && (EnchantChanger.Difficulty < 2 || checkCost(player));
+        return ExtendedPlayerData.get(player).getSoldierMode() && (EnchantChanger.difficulty < 2 || checkCost(player));
     }
 
     private void doCtrlKeyAction(ItemStack itemStack, EntityPlayer player) {

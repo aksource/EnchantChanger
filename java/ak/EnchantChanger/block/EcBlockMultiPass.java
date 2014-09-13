@@ -29,12 +29,12 @@ public class EcBlockMultiPass extends BlockContainer {
 
     @Override
     public boolean renderAsNormalBlock() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isOpaqueCube() {
-        return false;
+        return true;
     }
 
     @Override

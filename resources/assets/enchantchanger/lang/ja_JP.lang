@@ -2,6 +2,8 @@
 tile.EnchantChanger.name=エンチャントチェンジャー
 tile.HugeMateria.name=ヒュージマテリア
 tile.lifestream.name=液体ライフストリーム
+tile.makoreactor-machine.name=魔晄炉操作ブロック
+tile.makoreactor-case.name=魔晄炉ケースブロック
 #Item
 ItemMateria.Base.name=不活性マテリア
 ItemMateria.name=マテリア
@@ -41,7 +43,7 @@ enchantment.Thunder=Thunder
 #Potion
 EC|MakoPoison=魔晄中毒
 #death
-death.mako=%1$sは星に還った
+death.attack.mako=%1$sは星に還った
 #Container
 container.materializer=エンチャントチェンジャー
 container.hugeMateria=ヒュージマテリア

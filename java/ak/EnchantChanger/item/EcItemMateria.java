@@ -37,11 +37,11 @@ import java.util.List;
 public class EcItemMateria extends EcItem
 {
 	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
-			"Thunder", "Despell", "Haste", "Absorption" };
+			"enchantmentThunder", "Despell", "Haste", "Absorption" };
 	//	public static final String[] MateriaMagicJPNames = new String[]{"黒"   ,"白"   ,"瞬間移動","浮遊"    ,"雷"     ,"解呪"   ,"加速" ,"吸収"};
 	public static int MagicMateriaNum = MateriaMagicNames.length;
-	public static int[] magicEnch = new int[] { EnchantChanger.EnchantmentMeteorId, EnchantChanger.EnchantmentHolyId,
-			EnchantChanger.EnchantmentTelepoId, EnchantChanger.EnchantmentFloatId, EnchantChanger.EnchantmentThunderId };
+	public static int[] magicEnch = new int[] { EnchantChanger.idEnchantmentMeteor, EnchantChanger.idEnchantmentHoly,
+			EnchantChanger.idEnchantmentTelepo, EnchantChanger.idEnchantmentFloat, EnchantChanger.idEnchantmentThunder};
 	public static boolean GGEnable = false;
 
     public EcItemMateria(String name) {
@@ -163,7 +163,7 @@ public class EcItemMateria extends EcItem
 					return;
 				}
 				if (player.experienceLevel > LevelUPEXP(item, false) || player.capabilities.isCreativeMode) {
-					entity.addPotionEffect(new PotionEffect(potionNum, 20 * 60 * EnchantChanger.MateriaPotionMinutes,
+					entity.addPotionEffect(new PotionEffect(potionNum, 20 * 60 * EnchantChanger.minutesMateriaEffects,
 							Lv));
 					player.addExperienceLevel(-LevelUPEXP(item, false));
 					player.addChatMessage(new ChatComponentText(EntityName + " gets " + Message));
@@ -271,7 +271,7 @@ public class EcItemMateria extends EcItem
 		int nextLv = next ? 1 : 0;
 		if (EnchantmentKind == 256)
 			return 0;
-		if (Lv < 5 || EnchantChanger.Difficulty == 0) {
+		if (Lv < 5 || EnchantChanger.difficulty == 0) {
 			return Enchantment.enchantmentsList[EnchantmentKind].getMinEnchantability(Lv + nextLv);
 		} else {
 			return Enchantment.enchantmentsList[EnchantmentKind].getMaxEnchantability(Lv + nextLv);
@@ -282,7 +282,7 @@ public class EcItemMateria extends EcItem
 	{
 		ItemStack var6 = new ItemStack(this, 1, kind + 1);
 		if (kind < 5)
-			var6.addEnchantment(Enchantment.enchantmentsList[EnchantChanger.EnchantmentMeteorId + kind], 1);
+			var6.addEnchantment(Enchantment.enchantmentsList[EnchantChanger.idEnchantmentMeteor + kind], 1);
 		return new WeightedRandomChestContent(var6, par2, par3, par4);
 	}
 
@@ -463,7 +463,7 @@ public class EcItemMateria extends EcItem
 
 	private static boolean canMagic(EntityPlayer player)
 	{
-		return player.getFoodStats().getFoodLevel() > 0 || EnchantChanger.YouAreTera
+		return player.getFoodStats().getFoodLevel() > 0 || EnchantChanger.flagYOUARETERRA
 				|| player.capabilities.isCreativeMode;
 	}
 }

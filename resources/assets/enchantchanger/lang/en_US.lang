@@ -2,6 +2,8 @@
 tile.EnchantChanger.name=Enchant Changer
 tile.HugeMateria.name=HugeMateria
 tile.lifestream.name=Fluid Life Stream
+tile.makoreactor-machine.name=Mako Reactor Machine Block
+tile.makoreactor-case.name=Mako Reactor Casing Block
 #Item
 ItemMateria.Base.name=Inactive Materia
 ItemMateria.name=Materia
@@ -41,7 +43,7 @@ enchantment.Thunder=Thunder
 #Potion
 EC|MakoPoison=Mako Poison
 #death
-death.mako=%1$s was gone to lifestream
+death.attack.mako=%1$s was gone to lifestream
 #Container
 container.materializer=Enchant Changer
 container.hugeMateria=HugeMateria

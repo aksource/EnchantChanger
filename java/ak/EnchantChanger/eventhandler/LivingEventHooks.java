@@ -159,7 +159,7 @@ public class LivingEventHooks
 		if (player.capabilities.isCreativeMode) {
 			return;
 		}
-		if ((player.getFoodStats().getFoodLevel() < 0 && !EnchantChanger.YouAreTera) || !EcItemMateria.GGEnable) {
+		if ((player.getFoodStats().getFoodLevel() < 0 && !EnchantChanger.flagYOUARETERRA) || !EcItemMateria.GGEnable) {
 			player.capabilities.disableDamage = false;
 			return;
 		}
@@ -182,7 +182,7 @@ public class LivingEventHooks
 			ItemStack playerItem = player.getCurrentEquippedItem();
 			if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
 				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
-						EnchantChanger.AbsorpBoxSize, EnchantChanger.AbsorpBoxSize, EnchantChanger.AbsorpBoxSize));
+						EnchantChanger.sizeAbsorbBox, EnchantChanger.sizeAbsorbBox, EnchantChanger.sizeAbsorbBox));
                 for (Object aEntityList : EntityList) {
                     Entity entity = (Entity) aEntityList;
                     if (entity instanceof EntityLiving) {
@@ -208,7 +208,7 @@ public class LivingEventHooks
     private boolean checkFlightAvailable(EntityPlayer player) {
         return checkFlightItemInInv(player)
                 && !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
-                .getFoodLevel() < 0 && !EnchantChanger.YouAreTera));
+                .getFoodLevel() < 0 && !EnchantChanger.flagYOUARETERRA));
     }
 
 	public static boolean checkFlightItem(ItemStack itemstack)

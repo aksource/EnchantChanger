@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
  * Created by A.K. on 14/03/08.
  */
 public class EcTileMultiPass extends TileEntity {
-    public String baseBlock;
+    public String baseBlock = "";
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);

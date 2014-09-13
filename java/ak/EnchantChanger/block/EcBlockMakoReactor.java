@@ -2,6 +2,7 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,8 +38,11 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     }
 
     @Override
-    public IIcon getIcon(int side, int meta) {
-        return super.getIcon(side, meta);
+    public IIcon getIcon(int side  , int meta) {
+        if (meta == 0) {
+            return (side == 2) ? this.iconFront : this.blockIcon;
+        }
+        return this.blockIcon;
     }
 
     @Override
@@ -47,12 +51,15 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
             EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
             if (side == tile.face) {
                 return this.iconFront;
-            } else return this.blockIcon;
-        } else return super.getIcon(world, x, y, z, side);
+            }
+            return this.blockIcon;
+        }
+        return this.blockIcon;
     }
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
+        super.registerBlockIcons(iconRegister);
         this.iconFront = iconRegister.registerIcon(EnchantChanger.EcTextureDomain + "makoreactor-front");
     }
 
@@ -60,26 +67,29 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase setter, ItemStack item) {
         super.onBlockPlacedBy(world, x, y, z, setter, item);
         int l = MathHelper.floor_double((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
-        tile.face = (byte) sides[l];
+        EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
+        if (tile instanceof EcTileEntityMakoReactor) {
+            ((EcTileEntityMakoReactor)tile).face = (byte) sides[l];
+        }
+        if (item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
+            tile.baseBlock = item.getTagCompound().getString("EnchantChanger|baseBlock");
+        }
     }
 
     @Override
     public TileEntity createNewTileEntity(World var1, int meta) {
-        if (meta == 0) {
-            return new EcTileEntityMakoReactor();
-        } else return null;
+        return (meta == 0) ? new EcTileEntityMakoReactor(): super.createNewTileEntity(var1, meta);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item itemblock, CreativeTabs tab, List list) {
-        ItemStack makoReactorController = new ItemStack(this, 1, 0);
-        NBTTagCompound nbt = new NBTTagCompound();
+        ItemStack makoReactorController;
         for (String[] baseUID:baseBlocks) {
+            makoReactorController = new ItemStack(this, 1, 0);
+            makoReactorController.setTagCompound(new NBTTagCompound());
             String baseBlockName = String.format("%s:%s", baseUID[0], baseUID[1]);
-            nbt.setString("baseBlock", baseBlockName);
-            makoReactorController.setTagCompound(nbt);
+            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);;
             list.add(makoReactorController);
         }
     }
