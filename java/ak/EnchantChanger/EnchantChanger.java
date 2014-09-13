@@ -19,8 +19,9 @@ import ak.EnchantChanger.potion.EcPotionMako;
 import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
 import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import com.ibm.icu.impl.IllegalIcuArgumentException;
+import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -95,14 +96,14 @@ public class EnchantChanger {
     public static Potion potionMako;
     public static DamageSource damageSourceMako;
 
-    public static boolean enableLevelCap;
-    public static boolean debug;
+    public static boolean enableLevelCap = true;
+    public static boolean debug = false;
     public static float powerMeteor;
     public static float sizeMeteor;
-    public static int[] extraSwordIDs;
-    public static int[] extraToolIDs;
-    public static int[] extraBowIDs;
-    public static int[] extraArmorIDs;
+    public static int[] extraSwordIDs = new int[]{267};
+    public static int[] extraToolIDs = new int[]{257};
+    public static int[] extraBowIDs = new int[]{261};
+    public static int[] extraArmorIDs = new int[]{298};
 
     private static String[] enchantmentLevelLimits = new String[]{
             "0:10",
@@ -145,33 +146,34 @@ public class EnchantChanger {
             "62:1"
     };
     public static HashMap<Integer, Integer> coefficientMap = new HashMap<>();
-    public static boolean enableDecMateriaLv;
-    public static boolean YouAreTera;
-    public static int MateriaPotionMinutes;
-    public static int Difficulty;
+    public static boolean enableDecMateriaLv = false;
+    public static boolean flagYOUARETERRA = false;
+    public static int minutesMateriaEffects = 10;
+    public static int difficulty = 2;
     public static int enchantChangerCost = 5;
-    public static double AbsorpBoxSize = 5D;
+    public static double sizeAbsorbBox = 5D;
 //    public static int MaxLv = 127;
-    public static boolean enableAPSystem;
-    public static boolean enableDungeonLoot;
-    public static int aPBasePoint;
-    public static int idMakoPoison;
+    public static boolean enableAPSystem = true;
+    public static boolean enableDungeonLoot = true;
+    public static int pointAPBase = 200;
+    public static int idMakoPoison = 100;
 
     public static int cloudInvXCoord = 0;
     public static int cloudInvYCoord = 0;
 
     public static int soldierSalary = 10;
+    public static int lifeStreamLakeRatio = 256;
 
-    public static int EnchantmentMeteorId;
-    public static Enchantment Meteor;
-    public static int EnchantmentHolyId;
-    public static Enchantment Holy;
-    public static int EnchantmentTelepoId;
-    public static Enchantment Telepo;
-    public static int EnchantmentFloatId;
-    public static Enchantment Float;
-    public static int EnchantmentThunderId;
-    public static Enchantment Thunder;
+    public static int idEnchantmentMeteor = 240;
+    public static Enchantment enchantmentMeteor;
+    public static int idEnchantmentHoly = 241;
+    public static Enchantment enchantmentHoly;
+    public static int idEnchantmentTelepo = 242;
+    public static Enchantment enchantmentTelepo;
+    public static int idEnchantmentFloat = 243;
+    public static Enchantment enchantmentFloat;
+    public static int idEnchantmentThunder = 244;
+    public static Enchantment enchantmentThunder;
 
     public static final String EcMeteorPNG = "textures/items/Meteo.png";
     public static final String EcExpBottlePNG = "textures/items/ExExpBottle.png";
@@ -223,70 +225,70 @@ public class EnchantChanger {
         enableLevelCap = config
                 .get(Configuration.CATEGORY_GENERAL,
                         "enableLevelCap",
-                        true,
+                        enableLevelCap,
                         "TRUE:You cannot change a Materia to a enchantment over max level of the enchantment.")
-                .getBoolean(true);
-        debug = config.get(Configuration.CATEGORY_GENERAL, "debug mode", false,
-                "デバッグ用").getBoolean(false);
+                .getBoolean(enableLevelCap);
+        debug = config.get(Configuration.CATEGORY_GENERAL, "debug mode", debug,
+                "デバッグ用").getBoolean(debug);
         enableAPSystem = config.get(Configuration.CATEGORY_GENERAL,
-                "enableAPSystem", true).getBoolean(true);
+                "enableAPSystem", enableAPSystem).getBoolean(enableAPSystem);
         enableDungeonLoot = config.get(Configuration.CATEGORY_GENERAL,
-                "enableDungeonLoot", true).getBoolean(true);
-        aPBasePoint = config.get(Configuration.CATEGORY_GENERAL, "APBasePoint",
-                200).getInt();
-        idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", 100, "Mako Poison Effect Id").getInt();
+                "enableDungeonLoot", enableDungeonLoot).getBoolean(enableDungeonLoot);
+        pointAPBase = config.get(Configuration.CATEGORY_GENERAL, "APBasePoint",
+                pointAPBase).getInt();
+        idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", idMakoPoison, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
-                "Extra SwordIds", new int[]{267},
+                "Extra SwordIds", extraSwordIDs,
                 "Put Ids which you want to operate as  swords.").getIntList();
         extraToolIDs = config.get(Configuration.CATEGORY_GENERAL,
-                "Extra ToolIds", new int[]{257},
+                "Extra ToolIds", extraToolIDs,
                 "Put Ids which you want to operate as  tools.").getIntList();
         extraBowIDs = config.get(Configuration.CATEGORY_GENERAL,
-                "Extra BowIds", new int[]{261},
+                "Extra BowIds", extraBowIDs,
                 "Put Ids which you want to operate as  bows.").getIntList();
         extraArmorIDs = config.get(Configuration.CATEGORY_GENERAL,
-                "Extra ArmorIds", new int[]{298},
+                "Extra ArmorIds", extraArmorIDs,
                 "Put Ids which you want to operate as  armors.").getIntList();
 
         enableDecMateriaLv = config
-                .get(Configuration.CATEGORY_GENERAL, "enableDecMateriaLv", false,
+                .get(Configuration.CATEGORY_GENERAL, "enableDecMateriaLv", enableDecMateriaLv,
                         "TRUE:The level of extracted Materia is decreased by the item damage")
-                .getBoolean(false);
-        YouAreTera = config
+                .getBoolean(enableDecMateriaLv);
+        flagYOUARETERRA = config
                 .get(Configuration.CATEGORY_GENERAL,
-                        "YouAreTera",
-                        false,
+                        "flagYOUARETERRA",
+                        flagYOUARETERRA,
                         "TRUE:You become Tera in FF4. It means that you can use Magic Materia when your MP is exhausted")
-                .getBoolean(false);
+                .getBoolean(flagYOUARETERRA);
         powerMeteor = (float) config.get(Configuration.CATEGORY_GENERAL,
                 "METEOR POWER", 10, "This is a power of Meteor").getInt();
         sizeMeteor = (float) config.get(Configuration.CATEGORY_GENERAL,
                 "Meteor Size", 10, "This is a Size of Meteor").getInt();
-        MateriaPotionMinutes = config.get(Configuration.CATEGORY_GENERAL,
-                "Materia Potion Minutes", 10,
+        minutesMateriaEffects = config.get(Configuration.CATEGORY_GENERAL,
+                "Materia Potion Minutes", minutesMateriaEffects,
                 "How long minutes Materia put potion effect to MOB or ANIMAL")
                 .getInt();
-        Difficulty = config.get(Configuration.CATEGORY_GENERAL, "Difficulty",
-                1, "Difficulty of this MOD. 0 = Easy, 1 = Normal, 2 = Hard")
+        difficulty = config.get(Configuration.CATEGORY_GENERAL, "Difficulty",
+                difficulty, "Difficulty of this MOD. 0 = Easy, 1 = Normal, 2 = Hard")
                 .getInt();
-        EnchantmentMeteorId = config.get(Configuration.CATEGORY_GENERAL,
-                "EnchantmentMeteorId", 240).getInt();
-        EnchantmentHolyId = config.get(Configuration.CATEGORY_GENERAL,
-                "EnchantmentHolyId", 241).getInt();
-        EnchantmentTelepoId = config.get(Configuration.CATEGORY_GENERAL,
-                "EnchantmentTelepoId", 242).getInt();
-        EnchantmentFloatId = config.get(Configuration.CATEGORY_GENERAL,
-                "EnchantmentFloatId", 243).getInt();
-        EnchantmentThunderId = config.get(Configuration.CATEGORY_GENERAL,
-                "EnchantmentThunderId", 244).getInt();
+        idEnchantmentMeteor = config.get(Configuration.CATEGORY_GENERAL,
+                "EnchantmentMeteorId", idEnchantmentMeteor).getInt();
+        idEnchantmentHoly = config.get(Configuration.CATEGORY_GENERAL,
+                "EnchantmentHolyId", idEnchantmentHoly).getInt();
+        idEnchantmentTelepo = config.get(Configuration.CATEGORY_GENERAL,
+                "EnchantmentTelepoId", idEnchantmentTelepo).getInt();
+        idEnchantmentFloat = config.get(Configuration.CATEGORY_GENERAL,
+                "EnchantmentFloatId", idEnchantmentFloat).getInt();
+        idEnchantmentThunder = config.get(Configuration.CATEGORY_GENERAL,
+                "EnchantmentThunderId", idEnchantmentThunder).getInt();
         enchantmentLevelLimits = config
                 .get(Configuration.CATEGORY_GENERAL, "ApSystemLevelLimit", enchantmentLevelLimits,
                         "Set Enchantmets Level Limit for AP System Format EnchantmentID:LimitLv(LimitLv = 0 > DefaultMaxLevel)")
                 .getStringList();
         enchantmentAPCoefficients = config.get(Configuration.CATEGORY_GENERAL, "ApSystemCoefficientList", enchantmentAPCoefficients,
                 "Set Coefficients of AP System. Format EnchantmentsID:Coefficient").getStringList();
-        cloudInvXCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDxCoordinate", 0).getInt();
-        cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", 0).getInt();
+        cloudInvXCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDxCoordinate", cloudInvXCoord).getInt();
+        cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", cloudInvYCoord).getInt();
         enchantChangerCost = config.get(Configuration.CATEGORY_GENERAL, "EnchantChangerOpenCost", enchantChangerCost, "Cost to open EnchantChanger or Materia Window when mods difficulty is hard").getInt();
         soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary" , soldierSalary, "Monthly Salary of soldier.").getInt();
         config.save();
@@ -319,17 +321,18 @@ public class EnchantChanger {
     }
 
     private void registerEnchantments() {
-        Meteor = new EcEnchantmentMeteo(EnchantChanger.EnchantmentMeteorId, 0).setName("Meteor");
-        Holy = new EcEnchantmentHoly(EnchantChanger.EnchantmentHolyId, 0).setName("Holy");
-        Telepo = new EcEnchantmentTeleport(EnchantChanger.EnchantmentTelepoId, 0).setName("Teleporting");
-        Float = new EcEnchantmentFloat(EnchantChanger.EnchantmentFloatId, 0).setName("Floating");
-        Thunder = new EcEnchantmentThunder(EnchantChanger.EnchantmentThunderId, 0).setName("Thunder");
+        enchantmentMeteor = new EcEnchantmentMeteo(EnchantChanger.idEnchantmentMeteor, 0).setName("Meteor");
+        enchantmentHoly = new EcEnchantmentHoly(EnchantChanger.idEnchantmentHoly, 0).setName("Holy");
+        enchantmentTelepo = new EcEnchantmentTeleport(EnchantChanger.idEnchantmentTelepo, 0).setName("Teleporting");
+        enchantmentFloat = new EcEnchantmentFloat(EnchantChanger.idEnchantmentFloat, 0).setName("Floating");
+        enchantmentThunder = new EcEnchantmentThunder(EnchantChanger.idEnchantmentThunder, 0).setName("Thunder");
     }
 
 
     private void registerBlockAndItem() {
         GameRegistry.registerBlock(blockEnchantChanger, "EnchantChanger");
         GameRegistry.registerBlock(blockHugeMateria, "blockhugemateria");
+        GameRegistry.registerBlock(blockMakoReactor, EcItemBlockMakoReactor.class, "blockmakoreactor");
         GameRegistry.registerBlock(blockLifeStream, "life_stream");
         FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLifeStream), new ItemStack(Items.bucket));
 
@@ -386,12 +389,14 @@ public class EnchantChanger {
                 "container.materializer");
         GameRegistry.registerTileEntity(EcTileEntityHugeMateria.class,
                 "container.hugeMateria");
+        GameRegistry.registerTileEntity(EcTileEntityMakoReactor.class, "container.makoReactor");
+        GameRegistry.registerTileEntity(EcTileMultiPass.class, "tile.multipass");
     }
 
     private void registerEntities() {
         EntityRegistry.registerModEntity(EcEntityExExpBottle.class,
                 "itemExExpBottle", 0, this, 250, 5, true);
-        EntityRegistry.registerModEntity(EcEntityMeteor.class, "Meteor", 1, this,
+        EntityRegistry.registerModEntity(EcEntityMeteor.class, "enchantmentMeteor", 1, this,
                 250, 5, true);
         EntityRegistry.registerModEntity(EcEntityApOrb.class, "apOrb", 2, this,
                 64, 1, false);
@@ -400,7 +405,7 @@ public class EnchantChanger {
     private void registerRecipes() {
         RecipeSorter.register("EnchantChanger:MateriaRecipe", EcRecipeMateria.class, Category.SHAPELESS, "after:FML");
         RecipeSorter.register("EnchantChanger:MasterMateriaRecipe", EcRecipeMasterMateria.class, Category.SHAPELESS, "after:FML");
-        if (EnchantChanger.Difficulty < 2)
+        if (EnchantChanger.difficulty < 2)
             GameRegistry.addRecipe(new EcRecipeMateria());
         GameRegistry.addRecipe(new EcRecipeMasterMateria());
         GameRegistry.addShapelessRecipe(new ItemStack(itemMateria, 1, 0),
@@ -412,7 +417,7 @@ public class EnchantChanger {
                 " Y",
                 'X', Blocks.iron_block,
                 'Y', Items.iron_ingot);
-        if (EnchantChanger.Difficulty < 2) {
+        if (EnchantChanger.difficulty < 2) {
             GameRegistry.addRecipe(
                     new ItemStack(ItemCloudSwordCore, 1),
                     " X ",
@@ -482,7 +487,7 @@ public class EnchantChanger {
                 new ItemStack(itemMasterMateria, 1, 3),
                 new ItemStack(itemMasterMateria, 1, 4),
                 new ItemStack(itemMasterMateria, 1, 5));
-        if (Difficulty == 0)
+        if (difficulty == 0)
             GameRegistry.addRecipe(
                     new ItemStack(Items.experience_bottle, 8),
                     "XXX", "XYX", "XXX",
@@ -499,14 +504,14 @@ public class EnchantChanger {
                         "XXX",
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
-//        for (String[] baseBlockUID : EcBlockMakoReactor.baseBlocks) {
-//            Block baseBlock = GameRegistry.findBlock(baseBlockUID[0], baseBlockUID[1]);
-//            String baseBlockName = String.format("%s:%s", baseBlockUID[0], baseBlockUID[1]);
-//            ItemStack blockMakoReactorWall = new ItemStack(blockMakoReactor, 1, 1);
-//            blockMakoReactorWall.setTagCompound(new NBTTagCompound());
-//            blockMakoReactorWall.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);
-//            GameRegistry.addShapelessRecipe(blockMakoReactorWall, baseBlock, itemMateria);
-//        }
+        for (String[] baseBlockUID : EcBlockMakoReactor.baseBlocks) {
+            Block baseBlock = GameRegistry.findBlock(baseBlockUID[0], baseBlockUID[1]);
+            String baseBlockName = String.format("%s:%s", baseBlockUID[0], baseBlockUID[1]);
+            ItemStack blockMakoReactorWall = new ItemStack(blockMakoReactor, 1, 1);
+            blockMakoReactorWall.setTagCompound(new NBTTagCompound());
+            blockMakoReactorWall.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);
+            GameRegistry.addShapelessRecipe(blockMakoReactorWall, baseBlock, itemMateria);
+        }
     }
 
     @Mod.EventHandler
@@ -515,37 +520,37 @@ public class EnchantChanger {
     private void initMaps() {
         makeMapFromArray(coefficientMap, enchantmentAPCoefficients);
         for (Integer integer : coefficientMap.keySet()) {
-            apLimit.put(integer, coefficientMap.get(integer) * aPBasePoint);
+            apLimit.put(integer, coefficientMap.get(integer) * pointAPBase);
         }
-        magicEnchantment.add(EnchantmentMeteorId);
-        magicEnchantment.add(EnchantmentFloatId);
-        magicEnchantment.add(EnchantmentHolyId);
-        magicEnchantment.add(EnchantmentTelepoId);
-        magicEnchantment.add(EnchantmentThunderId);
-//        apLimit.put(0, 2 * aPBasePoint);
-//        apLimit.put(1, 1 * aPBasePoint);
-//        apLimit.put(2, 1 * aPBasePoint);
-//        apLimit.put(3, 1 * aPBasePoint);
-//        apLimit.put(4, 1 * aPBasePoint);
-//        apLimit.put(5, 1 * aPBasePoint);
-//        apLimit.put(6, 1 * aPBasePoint);
-//        apLimit.put(7, 1 * aPBasePoint);
-//        apLimit.put(16, 2 * aPBasePoint);
-//        apLimit.put(17, 1 * aPBasePoint);
-//        apLimit.put(18, 1 * aPBasePoint);
-//        apLimit.put(19, 1 * aPBasePoint);
-//        apLimit.put(20, 1 * aPBasePoint);
-//        apLimit.put(21, 3 * aPBasePoint);
-//        apLimit.put(32, 1 * aPBasePoint);
-//        apLimit.put(33, 1 * aPBasePoint);
-//        apLimit.put(34, 1 * aPBasePoint);
-//        apLimit.put(35, 2 * aPBasePoint);
-//        apLimit.put(48, 2 * aPBasePoint);
-//        apLimit.put(49, 1 * aPBasePoint);
-//        apLimit.put(50, 1 * aPBasePoint);
-//        apLimit.put(51, 1 * aPBasePoint);
-//        apLimit.put(61, 1 * aPBasePoint);
-//        apLimit.put(62, 1 * aPBasePoint);
+        magicEnchantment.add(idEnchantmentMeteor);
+        magicEnchantment.add(idEnchantmentFloat);
+        magicEnchantment.add(idEnchantmentHoly);
+        magicEnchantment.add(idEnchantmentTelepo);
+        magicEnchantment.add(idEnchantmentThunder);
+//        apLimit.put(0, 2 * pointAPBase);
+//        apLimit.put(1, 1 * pointAPBase);
+//        apLimit.put(2, 1 * pointAPBase);
+//        apLimit.put(3, 1 * pointAPBase);
+//        apLimit.put(4, 1 * pointAPBase);
+//        apLimit.put(5, 1 * pointAPBase);
+//        apLimit.put(6, 1 * pointAPBase);
+//        apLimit.put(7, 1 * pointAPBase);
+//        apLimit.put(16, 2 * pointAPBase);
+//        apLimit.put(17, 1 * pointAPBase);
+//        apLimit.put(18, 1 * pointAPBase);
+//        apLimit.put(19, 1 * pointAPBase);
+//        apLimit.put(20, 1 * pointAPBase);
+//        apLimit.put(21, 3 * pointAPBase);
+//        apLimit.put(32, 1 * pointAPBase);
+//        apLimit.put(33, 1 * pointAPBase);
+//        apLimit.put(34, 1 * pointAPBase);
+//        apLimit.put(35, 2 * pointAPBase);
+//        apLimit.put(48, 2 * pointAPBase);
+//        apLimit.put(49, 1 * pointAPBase);
+//        apLimit.put(50, 1 * pointAPBase);
+//        apLimit.put(51, 1 * pointAPBase);
+//        apLimit.put(61, 1 * pointAPBase);
+//        apLimit.put(62, 1 * pointAPBase);
         makeMapFromArray(levelLimitMap, enchantmentLevelLimits);
     }
 
@@ -743,7 +748,7 @@ public class EnchantChanger {
             if (Potion.potionTypes[idMakoPoison] == null) {
                 potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
             } else {
-                throw new IllegalIcuArgumentException("idMakoPoison:id has been used another MOD");
+                throw new IllegalArgumentException("idMakoPoison:id has been used another MOD");
             }
         } else {
             throw new IllegalArgumentException("idMakoPoison:Only set from 24 to 127");
@@ -800,16 +805,16 @@ public class EnchantChanger {
     }
     //ライフストリームの地底湖を生成するつもりのコード
     @SubscribeEvent
-    public void populateLifeStreamLake(PopulateChunkEvent.Post event) {
-        if (event.rand.nextInt(30) == 0) {
+    public void populateLifeStreamLake(PopulateChunkEvent.Populate event) {
+        if (event.rand.nextInt(lifeStreamLakeRatio) == 0) {
             int k = event.chunkX * 16;
             int l = event.chunkZ * 16;
             int x,y,z;
             x = k + event.rand.nextInt(16) + 8;
-            y = event.rand.nextInt(256);
+            y = event.rand.nextInt(16);
             z = l + event.rand.nextInt(16) + 8;
             (new WorldGenLakes(blockLifeStream)).generate(event.world, event.rand, x, y, z);
-            logger.fine(String.format("LifeStreamLake is generated at (%d, %d, %d)", x, y, z));
+            logger.info(String.format("LifeStreamLake is generated at (%d, %d, %d)", x, y, z));
         }
     }
 }
