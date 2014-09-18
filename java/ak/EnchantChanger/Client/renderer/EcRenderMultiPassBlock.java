@@ -107,12 +107,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
         if (ecTileMultiPass.baseBlock.equals("")) return false;
         Block block1;
         if (ClientProxy.customRenderPass == 0) {
-            String[] strings = ecTileMultiPass.baseBlock.split(":");
-            if (strings.length > 1) {
-                block1 = GameRegistry.findBlock(strings[0], strings[1]);
-            } else {
-                block1 = GameRegistry.findBlock("minecraft", strings[0]);
-            }
+            block1 = ecTileMultiPass.getBaseBlock();
             renderer.renderStandardBlock(block1, x, y, z);
         } else {
             renderer.renderStandardBlock(block, x, y, z);
