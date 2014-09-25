@@ -1,7 +1,7 @@
 ﻿#Block
 tile.EnchantChanger.name=Enchant Changer
 tile.HugeMateria.name=HugeMateria
-tile.lifestream.name=Fluid Life Stream
+tile.lifestream.name=Fluid Mako
 tile.makoreactor-machine.name=Mako Reactor Machine Block
 tile.makoreactor-case.name=Mako Reactor Casing Block
 #Item
@@ -33,7 +33,7 @@ item.enchantchanger:PortableEnchantChanger.name=Soldier License
 #item.enchantchanger:PortableEnchantChanger.name=Portable Enchant Changer
 item.enchantchanger:PortableEnchantmentTable.name=Portable Enchantment Table
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 Masamune Blade(Imitation)
-item.enchantchanger:bucket_lifestream.name=Bucket of Life Stream
+item.enchantchanger:bucket_lifestream.name=Bucket of Mako
 #Enchantment
 enchantment.Meteor=Meteor
 enchantment.Holy=Holy

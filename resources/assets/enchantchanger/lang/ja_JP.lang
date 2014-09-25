@@ -1,7 +1,7 @@
 ﻿#Block
 tile.EnchantChanger.name=エンチャントチェンジャー
 tile.HugeMateria.name=ヒュージマテリア
-tile.lifestream.name=液体ライフストリーム
+tile.lifestream.name=魔晄
 tile.makoreactor-machine.name=魔晄炉操作ブロック
 tile.makoreactor-case.name=魔晄炉ケースブロック
 #Item
@@ -33,7 +33,7 @@ item.enchantchanger:PortableEnchantChanger.name=ソルジャーの証し
 #item.enchantchanger:PortableEnchantChanger.name=携帯エンチャントチェンジャー
 item.enchantchanger:PortableEnchantmentTable.name=携帯エンチャントテーブル
 item.enchantchanger:ImitateMasamuneBlade.name=1/1 マサムネブレード
-item.enchantchanger:bucket_lifestream.name=ライフストリーム入りバケツ
+item.enchantchanger:bucket_lifestream.name=魔晄入りバケツ
 #Enchantment
 enchantment.Meteor=Meteor
 enchantment.Holy=Holy
