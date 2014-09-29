@@ -51,19 +51,19 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 			EntityPlayer par3EntityPlayer) {
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.idEnchantmentMeteor, par1ItemStack) > 0) {
-			EcItemMateria.Meteo(par2World, par3EntityPlayer);
+			EcItemMateria.doMeteor(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.idEnchantmentHoly, par1ItemStack) > 0) {
-			EcItemMateria.Holy(par2World, par3EntityPlayer);
+			EcItemMateria.doHoly(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.idEnchantmentTelepo, par1ItemStack) > 0) {
-			EcItemMateria.teleportTo(par2World, par3EntityPlayer);
+			EcItemMateria.teleportPlayer(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
 				EnchantChanger.idEnchantmentThunder, par1ItemStack) > 0) {
-			EcItemMateria.Thunder(par2World, par3EntityPlayer);
+			EcItemMateria.doThunder(par2World, par3EntityPlayer);
 		}
 	}
 

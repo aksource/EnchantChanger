@@ -37,8 +37,7 @@ import java.util.List;
 public class EcItemMateria extends EcItem
 {
 	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
-			"enchantmentThunder", "Despell", "Haste", "Absorption" };
-	//	public static final String[] MateriaMagicJPNames = new String[]{"黒"   ,"白"   ,"瞬間移動","浮遊"    ,"雷"     ,"解呪"   ,"加速" ,"吸収"};
+			"Thunder", "Despell", "Haste", "Absorption" };
 	public static int MagicMateriaNum = MateriaMagicNames.length;
 	public static int[] magicEnch = new int[] { EnchantChanger.idEnchantmentMeteor, EnchantChanger.idEnchantmentHoly,
 			EnchantChanger.idEnchantmentTelepo, EnchantChanger.idEnchantmentFloat, EnchantChanger.idEnchantmentThunder};
@@ -87,24 +86,24 @@ public class EcItemMateria extends EcItem
 		} else {
 			switch (itemstack.getItemDamage()) {
 			case 1:
-				Meteo(world, entityplayer);
+				doMeteor(world, entityplayer);
 				break;
 			case 2:
 				if (entityplayer.isSneaking()) {
 					GGEnable = !GGEnable;
 					entityplayer.addChatMessage(new ChatComponentText("Great Gospel Mode " + GGEnable));
 				} else {
-					Holy(world, entityplayer);
+					doHoly(world, entityplayer);
 				}
 				break;
 			case 3:
-				teleportTo(world, entityplayer);
+				teleportPlayer(world, entityplayer);
 				break;
 			case 5:
-				Thunder(world, entityplayer);
+				doThunder(world, entityplayer);
 				break;
 			case 6:
-				Despell(entityplayer, entityplayer);
+				doDespell(entityplayer, entityplayer);
 				break;
 			case 7:
 				doHaste(entityplayer, entityplayer);
@@ -127,7 +126,7 @@ public class EcItemMateria extends EcItem
 		if (item.getItemDamage() > 0) {
 			switch (item.getItemDamage()) {
 			case 6:
-				Despell(player, entity);
+				doDespell(player, entity);
 				return;
 			case 7:
 				doHaste(player, entity);
@@ -286,7 +285,7 @@ public class EcItemMateria extends EcItem
 		return new WeightedRandomChestContent(var6, par2, par3, par4);
 	}
 
-	public static void teleportTo(World world, EntityPlayer entityplayer)
+	public static void teleportPlayer(World world, EntityPlayer entityplayer)
 	{
 		if (!canMagic(entityplayer)/* || world.isRemote*/) {
 			return;
@@ -295,13 +294,16 @@ public class EcItemMateria extends EcItem
 		if (entityplayer.isSneaking()) {
 			ChunkCoordinates spawnPoint;
 			int dimID = world.provider.dimensionId;
+            boolean shouldTravel;
 			if (entityplayer.getBedLocation(dimID) != null) {
 				spawnPoint = entityplayer.getBedLocation(dimID);
+                shouldTravel = false;
 			} else {
-				spawnPoint = world.getSpawnPoint();
+                spawnPoint = world.getSpawnPoint();
+                shouldTravel = true;
 			}
-            point = Vec3.createVectorHelper(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
-			teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), true, dimID);
+            point = Vec3.createVectorHelper(spawnPoint.posX + 0.5D, spawnPoint.posY, spawnPoint.posZ + 0.5D);
+            teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), shouldTravel, dimID);
 		} else {
             point = setTeleportPoint(world, entityplayer);
 			if (point != null) {
@@ -312,13 +314,18 @@ public class EcItemMateria extends EcItem
 	}
 
 	private static void teleportToChunkCoord(World world, EntityPlayer entityplayer, Vec3 vector,
-			boolean isSneaking, boolean telepoDim, int dimID)
-	{
+			boolean isSneaking, boolean telepoDim, int dimID) {
         if (!world.isRemote) {
-            entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+//            if (vector == null) {
+//                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
+//                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
+//            } else {
+//                entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+//            }
             entityplayer.fallDistance = 0.0F;
-            if (telepoDim)
+            if (telepoDim) {
                 travelDimension(entityplayer, dimID);
+            }
             decreasePlayerFood(entityplayer, isSneaking ? 20 : 2);
         } else {
             for (int var2 = 0; var2 < 32; ++var2) {
@@ -326,6 +333,7 @@ public class EcItemMateria extends EcItem
                         entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
             }
         }
+        entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
 	}
 
 	private static void travelDimension(EntityPlayer player, int nowDim)
@@ -338,8 +346,7 @@ public class EcItemMateria extends EcItem
 	}
 
 	public static void transferPlayerToDimension(ServerConfigurationManager serverConf,
-			EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter)
-	{
+			EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter) {
 		int j = par1EntityPlayerMP.dimension;
 		WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
 		par1EntityPlayerMP.dimension = par2;
@@ -357,8 +364,7 @@ public class EcItemMateria extends EcItem
 		serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 		serverConf.syncPlayerInventory(par1EntityPlayerMP);
 
-		for (Object object : par1EntityPlayerMP.getActivePotionEffects())
-		{
+		for (Object object : par1EntityPlayerMP.getActivePotionEffects()) {
 			PotionEffect potioneffect = (PotionEffect) object;
 			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP
 					.getEntityId(), potioneffect));
@@ -367,8 +373,7 @@ public class EcItemMateria extends EcItem
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
 	}
 
-	public static Vec3 setTeleportPoint(World world, EntityPlayer entityplayer)
-	{
+	public static Vec3 setTeleportPoint(World world, EntityPlayer entityplayer) {
         double var1 = 1.0D;
 		double distLimit = 150.0D;
 		double viewX = entityplayer.getLookVec().xCoord;
@@ -378,7 +383,7 @@ public class EcItemMateria extends EcItem
         double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
         double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
         double playerPosX = entityplayer.posX;
-        double playerPosY = entityplayer.posY + 1.62D - entityplayer.getYOffset();
+        double playerPosY = entityplayer.posY + 1.62D/*1.62D - entityplayer.getYOffset()*/;
         double playerPosZ = entityplayer.posZ;
 		Vec3 playerPosition = Vec3.createVectorHelper(playerPosX,
 				playerPosY, playerPosZ);
@@ -397,24 +402,24 @@ public class EcItemMateria extends EcItem
 		}
 	}
 
-	public static void Holy(World world, EntityPlayer entityplayer)
+	public static void doHoly(World world, EntityPlayer entityplayer)
 	{
 		if (!canMagic(entityplayer)) {
 			return;
 		}
 		decreasePlayerFood(entityplayer, 6);
-		List EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
+        @SuppressWarnings("unchecked")
+		List<EntityLivingBase> EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
 				entityplayer.boundingBox.expand(5D, 5D, 5D));
-		for (Object object : EntityList) {
-			Entity entity = (Entity) object;
-			if (((EntityLivingBase) entity).isEntityUndead()) {
-				int var1 = MathHelper.floor_float(((EntityLivingBase) entity).getMaxHealth() / 2);
-				entity.attackEntityFrom(DamageSource.magic, var1);
+		for (EntityLivingBase entityLivingBase : EntityList) {
+			if (entityLivingBase.isEntityUndead()) {
+				int var1 = MathHelper.floor_float(entityLivingBase.getMaxHealth() / 2);
+                entityLivingBase.attackEntityFrom(DamageSource.magic, var1);
 			}
 		}
 	}
 
-	public static void Meteo(World world, EntityPlayer entityplayer)
+	public static void doMeteor(World world, EntityPlayer entityplayer)
 	{
 		if (!canMagic(entityplayer)) {
 			return;
@@ -426,7 +431,7 @@ public class EcItemMateria extends EcItem
 					-1D, 0D, 0.0F, 0.0F));
 	}
 
-	public static void Thunder(World world, EntityPlayer entityplayer)
+	public static void doThunder(World world, EntityPlayer entityplayer)
 	{
 		if (!canMagic(entityplayer)) {
 			return;
@@ -437,7 +442,7 @@ public class EcItemMateria extends EcItem
 			world.spawnEntityInWorld(new EntityLightningBolt(world, EndPoint.xCoord, EndPoint.yCoord, EndPoint.zCoord));
 	}
 
-	public void Despell(EntityPlayer player, Entity entity)
+	public void doDespell(EntityPlayer player, Entity entity)
 	{
 		if (entity instanceof EntityLiving) {
 			((EntityLiving) entity).clearActivePotions();
