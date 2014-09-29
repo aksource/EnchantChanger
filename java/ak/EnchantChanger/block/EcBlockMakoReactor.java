@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,11 +70,20 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         int l = MathHelper.floor_double((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
         if (tile instanceof EcTileEntityMakoReactor) {
-            ((EcTileEntityMakoReactor)tile).face = (byte) sides[l];
+            ((EcTileEntityMakoReactor)tile).setFace( (byte) sides[l]);
         }
         if (item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
             tile.baseBlock = item.getTagCompound().getString("EnchantChanger|baseBlock");
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor)world.getTileEntity(x, y, z);
+        if (tile != null && tile.isActivated()) {
+            player.openGui(EnchantChanger.instance, EnchantChanger.guiIdMakoReactor, world, x, y, z);
+        }
+        return true;
     }
 
     @Override

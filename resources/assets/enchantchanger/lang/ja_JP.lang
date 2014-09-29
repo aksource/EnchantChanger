@@ -47,6 +47,7 @@ death.attack.mako=%1$sは星に還った
 #Container
 container.materializer=エンチャントチェンジャー
 container.hugeMateria=ヒュージマテリア
+container.makoreactor=魔晄炉
 #EcitemSword
 enchantchanger.cloudswordcore.mode.active=攻撃モード
 enchantchanger.cloudswordcore.mode.inactive=収納モード

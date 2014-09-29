@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -80,6 +81,15 @@ public class EcBlockMultiPass extends BlockContainer {
             return list;
         }
         return list;
+    }
+
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        ItemStack pickItem = super.getPickBlock(target, world, x, y, z);
+        EcTileMultiPass tile = (EcTileMultiPass)world.getTileEntity(x, y, z);
+        pickItem.setTagCompound(new NBTTagCompound());
+        pickItem.getTagCompound().setString("EnchantChanger|baseBlock", tile.baseBlock);
+        return pickItem;
     }
 
     @Override

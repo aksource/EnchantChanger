@@ -47,6 +47,7 @@ death.attack.mako=%1$s was gone to lifestream
 #Container
 container.materializer=Enchant Changer
 container.hugeMateria=HugeMateria
+container.makoreactor=Mako Reactor
 #EcitemSword
 enchantchanger.cloudswordcore.mode.active=Assault Mode
 enchantchanger.cloudswordcore.mode.inactive=Putting Away Mode

@@ -1,15 +1,15 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
-import cpw.mods.fml.common.IFuelHandler;
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 
 /**
  * Created by A.K. on 14/03/06.
  */
-public class EcItemBucketLifeStream extends ItemBucket implements IFuelHandler{
+public class EcItemBucketLifeStream extends ItemBucket {
     public EcItemBucketLifeStream(Block block, String name) {
         super(block);
         String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
@@ -18,7 +18,12 @@ public class EcItemBucketLifeStream extends ItemBucket implements IFuelHandler{
     }
 
     @Override
-    public int getBurnTime(ItemStack fuel) {
-        return 20 * 1000 * 10;
+    public boolean hasContainerItem(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return new ItemStack(Items.bucket);
     }
 }

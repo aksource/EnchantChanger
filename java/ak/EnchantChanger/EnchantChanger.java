@@ -21,7 +21,6 @@ import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -184,6 +183,7 @@ public class EnchantChanger {
     public static final String EcUltimateWeaponPNG = "textures/item/UltimaWeapon.png";
     public static final String EcGuiMaterializer = "textures/gui/materializer.png";
     public static final String EcGuiHuge = "textures/gui/HugeMateriaContainer.png";
+    public static final String EcGuiMako = "textures/gui/MakoReactorContainer.png";
     public static final String EcGuiMateriaWindow = "textures/gui/MaterializingContainer.png";
     public static final String EcPotionEffect = "textures/gui/potioneffect.png";
     public static final String EcHugetex = "textures/item/hugemateriatex.png";
@@ -204,6 +204,7 @@ public class EnchantChanger {
     public static int guiIdPortableEnchantmentTable = 1;
     public static int guiIdHugeMateria = 2;
     public static int guiIdMateriaWindow = 3;
+    public static int guiIdMakoReactor = 4;
     public static final HashMap<Integer, Integer> apLimit = new HashMap<>();
     public static final HashSet<Integer> magicEnchantment = new HashSet<>();
     public static final CreativeTabs tabsEChanger = new CreativeTabEC(
@@ -390,7 +391,7 @@ public class EnchantChanger {
         GameRegistry.registerTileEntity(EcTileEntityHugeMateria.class,
                 "container.hugeMateria");
         GameRegistry.registerTileEntity(EcTileEntityMakoReactor.class, "container.makoReactor");
-        GameRegistry.registerTileEntity(EcTileMultiPass.class, "tile.multipass");
+//        GameRegistry.registerTileEntity(EcTileMultiPass.class, "tile.multipass");
     }
 
     private void registerEntities() {
@@ -721,27 +722,33 @@ public class EnchantChanger {
             int ench = EnchantChanger.getMateriaEnchKind(materia);
             int lv = EnchantChanger.getMateriaEnchLv(materia);
             return !(Enchantment.enchantmentsList[ench].getMaxLevel() < lv);
-        } else return true;
+        }
+        return true;
     }
 
     public static boolean isEnchantmentValid(Enchantment ench, ItemStack par1ItemStack) {
         if (ench == null) {
             return false;
-        } else if (ench instanceof EnchantmentDurability) {
-            return par1ItemStack.isItemStackDamageable() || ench.type.canEnchantItem(par1ItemStack.getItem());
-        } else if (ench instanceof EnchantmentDigging) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
-        } else if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
-            return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem());
-        } else if (ench instanceof EnchantmentThorns) {
-            return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem());
-        } else if (ench instanceof EnchantmentUntouching) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
-        } else if (ench instanceof EcEnchantmentMeteo || ench instanceof EcEnchantmentHoly || ench instanceof EcEnchantmentTeleport || ench instanceof EcEnchantmentFloat || ench instanceof EcEnchantmentThunder) {
-            return par1ItemStack.getItem() instanceof EcItemSword;
-        } else {
-            return ench.type.canEnchantItem(par1ItemStack.getItem());
         }
+        if (ench instanceof EnchantmentDurability) {
+            return par1ItemStack.isItemStackDamageable() || ench.type.canEnchantItem(par1ItemStack.getItem());
+        }
+        if (ench instanceof EnchantmentDigging) {
+            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
+        }
+        if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
+            return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem());
+        }
+        if (ench instanceof EnchantmentThorns) {
+            return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem());
+        }
+        if (ench instanceof EnchantmentUntouching) {
+            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
+        }
+        if (ench instanceof EcEnchantmentMeteo || ench instanceof EcEnchantmentHoly || ench instanceof EcEnchantmentTeleport || ench instanceof EcEnchantmentFloat || ench instanceof EcEnchantmentThunder) {
+            return par1ItemStack.getItem() instanceof EcItemSword;
+        }
+        return ench.type.canEnchantItem(par1ItemStack.getItem());
     }
     private void addStatusEffect() {
         if (idMakoPoison < Potion.potionTypes.length) {

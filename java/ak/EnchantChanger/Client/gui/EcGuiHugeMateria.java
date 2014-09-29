@@ -54,23 +54,23 @@ public class EcGuiHugeMateria extends GuiContainer {
 //		this.drawTexturedModalRect(x + 115, y + 51 + 18 - var1, 176, 50 + 18 - var1, 18, var1 + 1);
 
 	}
-	protected void keyTyped(char c, int keycode)
-	{
-		if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode())
-		{
+
+    @Override
+	protected void keyTyped(char c, int keycode) {
+		if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
 			Minecraft.getMinecraft().thePlayer.closeScreen();
 		}
 	}
 
-	public void updateScreen()
-	{
+    @Override
+	public void updateScreen() {
 		super.updateScreen();
-		if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() || Minecraft.getMinecraft().thePlayer.isDead)
-		{
+		if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() || Minecraft.getMinecraft().thePlayer.isDead) {
 			Minecraft.getMinecraft().thePlayer.closeScreen();
 		}
 	}
 
+    @Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;
