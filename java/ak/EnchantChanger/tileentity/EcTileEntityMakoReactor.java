@@ -56,7 +56,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     private ItemStack[] items = new ItemStack[materiafuelresult];
     private ItemStack[] smeltingItems = new ItemStack[slotsMaterial.length];
     public int smeltingTime = 0;
-    private int smeltingClientTime;
     private int creatingHugeMateriaPoint = 0;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     private ChunkPosition HMCoord = null;
@@ -188,15 +187,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             } else {
                 smeltingTime = 0;
             }
-        } else {
-            if (isSmelting()) {
-                ++smeltingClientTime;
-                if (smeltingClientTime == maxSmeltingTime || smeltingTime == 0) {
-                    smeltingClientTime = 0;
-                }
-            }
         }
-
         if (upToDate) {
             this.markDirty();
         }
@@ -420,7 +411,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @SideOnly(Side.CLIENT)
     public int getSmeltingTimeScaled(int scale) {
-        return this.smeltingClientTime * scale / maxSmeltingTime;
+        return this.smeltingTime * scale / maxSmeltingTime;
     }
 
     @Override

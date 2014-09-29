@@ -3,9 +3,12 @@ package ak.EnchantChanger.inventory;
 import ak.EnchantChanger.item.EcItemBucketLifeStream;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -17,6 +20,7 @@ import static ak.EnchantChanger.tileentity.EcTileEntityMakoReactor.*;
  */
 public class EcContainerMakoReactor extends Container {
     private EcTileEntityMakoReactor tileEntityMakoReactor;
+    private int lastSmeltingTime;
     public EcContainerMakoReactor(InventoryPlayer inventoryPlayer, EcTileEntityMakoReactor te) {
         this.tileEntityMakoReactor = te;
         int i;
@@ -55,7 +59,36 @@ public class EcContainerMakoReactor extends Container {
     public boolean canInteractWith(EntityPlayer entityPlayer) {
         return this.tileEntityMakoReactor.isUseableByPlayer(entityPlayer);
     }
+    public void addCraftingToCrafters(ICrafting par1ICrafting)
+    {
+        super.addCraftingToCrafters(par1ICrafting);
+        par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
+    }
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
 
+        for (Object object :  this.crafters)
+        {
+            ICrafting var2 = (ICrafting)object;
+
+            if (this.lastSmeltingTime != this.tileEntityMakoReactor.smeltingTime)
+            {
+                var2.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
+            }
+
+        }
+
+        this.lastSmeltingTime = this.tileEntityMakoReactor.smeltingTime;
+    }
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int par1, int par2)
+    {
+        if (par1 == 0)
+        {
+            this.tileEntityMakoReactor.smeltingTime = par2;
+        }
+    }
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack retItem = null;
