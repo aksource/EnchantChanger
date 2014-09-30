@@ -5,6 +5,8 @@ import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.item.EcItemBucketLifeStream;
 import ak.EnchantChanger.item.EcItemMateria;
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.tileentity.IEnergyInfo;
 import com.google.common.collect.Range;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
@@ -35,8 +37,11 @@ import java.util.List;
 /**
  * Created by A.K. on 14/03/11.
  */
-@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore")
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler {
+@Optional.InterfaceList(
+        {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore"),
+        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore")}
+)
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo {
     public static final int maxSmeltingTime = 200;
     public static final int smeltingCost = 5;
     public static final int[] slotsMaterial = new int[]{0,1,2};
@@ -53,12 +58,16 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             {Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air},
             {Blocks.air, Blocks.air, Blocks.air, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.air, Blocks.air, Blocks.air}
     };
+    public static final int stepRFValue = 10;
+    public static final int maxRFCapacity = 100000000;
     private ItemStack[] items = new ItemStack[materiafuelresult];
     private ItemStack[] smeltingItems = new ItemStack[slotsMaterial.length];
-    public int smeltingTime = 0;
-    private int creatingHugeMateriaPoint = 0;
+    public int smeltingTime;
+    private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     private ChunkPosition HMCoord = null;
+    private int outputMaxRFValue;
+    private int storedRFEnergy;
 
 //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
     public byte face;
@@ -109,6 +118,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         nbt.setInteger("hmcoordx", HMCoord.chunkPosX);
         nbt.setInteger("hmcoordy", HMCoord.chunkPosY);
         nbt.setInteger("hmcoordz", HMCoord.chunkPosZ);
+
+        nbt.setInteger("outputMaxRFValue", outputMaxRFValue);
+        nbt.setInteger("storedRFEnergy", storedRFEnergy);
     }
 
     @Override
@@ -143,6 +155,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         int hmcoordy = nbt.getInteger("hmcoordy");
         int hmcoordz = nbt.getInteger("hmcoordz");
         HMCoord = new ChunkPosition(hmcoordx, hmcoordy, hmcoordz);
+
+        outputMaxRFValue = nbt.getInteger("outputMaxRFValue");
+        storedRFEnergy = nbt.getInteger("storedRFEnergy");
     }
 
     @Override
@@ -472,5 +487,87 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
         return new FluidTankInfo[]{tank.getInfo()};
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+        return 0;//発電のみ
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+        int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), i));
+        if (!b) {
+            addRFEnergy(-extract);
+        }
+        return extract;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getEnergyStored(ForgeDirection forgeDirection) {
+        return getStoredRFEnergy();
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+        return maxRFCapacity;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public boolean canConnectEnergy(ForgeDirection forgeDirection) {
+        return true;
+    }
+
+    public int getOutputMaxRFValue() {
+        return outputMaxRFValue;
+    }
+
+    public void setOutputMaxRFValue(int outputMaxRFValue) {
+        this.outputMaxRFValue = outputMaxRFValue;
+    }
+
+    public void stepOutputMaxRFValue(int stepValue) {
+        this.outputMaxRFValue += stepRFValue;
+    }
+
+    public int getStoredRFEnergy() {
+        return storedRFEnergy;
+    }
+
+    public void setStoredRFEnergy(int storedRFEnergy) {
+        this.storedRFEnergy = storedRFEnergy;
+    }
+
+    public void addRFEnergy(int add) {
+        this.storedRFEnergy += add;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getInfoEnergyPerTick() {
+        return (getStoredRFEnergy() < maxRFCapacity)? getInfoMaxEnergyPerTick(): 10;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getInfoMaxEnergyPerTick() {
+        return getOutputMaxRFValue();
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getInfoEnergyStored() {
+        return getStoredRFEnergy();
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getInfoMaxEnergyStored() {
+        return maxRFCapacity;
     }
 }

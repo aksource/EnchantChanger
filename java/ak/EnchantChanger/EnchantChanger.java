@@ -380,6 +380,7 @@ public class EnchantChanger {
         }
         loadMTH = Loader.isModLoaded("MultiToolHolders");
         loadMCE = Loader.isModLoaded("mceconomy2");
+        loadTE = Loader.isModLoaded("CoFHCore");
         if (loadMCE) {
             MinecraftForge.EVENT_BUS.register(new CoopMCE());
         }
