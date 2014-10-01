@@ -59,6 +59,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             {Blocks.air, Blocks.air, Blocks.air, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.air, Blocks.air, Blocks.air}
     };
     public static final int STEP_RF_VALUE = 10;
+    public static final int MAX_OUTPU_RF_VALUE = 100000;
     public static final int MAX_RF_CAPACITY = 100000000;
     private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
     private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
@@ -66,7 +67,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     private ChunkPosition HMCoord = null;
-    private int outputMaxRFValue;
+    private int outputMaxRFValue = 100;
     private int storedRFEnergy;
 
 //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
@@ -535,7 +536,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public void stepOutputMaxRFValue(int stepValue) {
-        this.outputMaxRFValue += STEP_RF_VALUE;
+        if (this.outputMaxRFValue + stepValue > 10 && this.outputMaxRFValue + stepValue < MAX_OUTPU_RF_VALUE) {
+            this.outputMaxRFValue += STEP_RF_VALUE;
+        }
     }
 
     public int getStoredRFEnergy() {

@@ -2,9 +2,15 @@ package ak.EnchantChanger.Client.gui;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.inventory.EcContainerMakoReactor;
+import ak.EnchantChanger.network.MessageRFStepping;
+import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -15,10 +21,13 @@ import java.util.List;
 /**
  * Created by A.K. on 14/09/23.
  */
+@SideOnly(Side.CLIENT)
 public class EcGuiMakoReactor extends GuiContainer {
+    public static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiMako);
     private EcTileEntityMakoReactor tileEntity;
     private InventoryPlayer inventoryPlayer;
-    private static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiMako);
+    private EcGuiMakoReactorButton prevButton;
+    private EcGuiMakoReactorButton nextButton;
 
     public EcGuiMakoReactor(InventoryPlayer invPlayer, EcTileEntityMakoReactor te) {
         super(new EcContainerMakoReactor(invPlayer, te));
@@ -26,9 +35,47 @@ public class EcGuiMakoReactor extends GuiContainer {
         tileEntity = te;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void initGui() {
+        super.initGui();
+        if (EnchantChanger.loadTE) {
+            this.prevButton = new EcGuiMakoReactorButton(1, this.guiLeft + 126, this.guiTop + 24, false);
+            this.nextButton = new EcGuiMakoReactorButton(2, this.guiLeft + 144, this.guiTop + 24, true);
+            this.buttonList.add(this.prevButton);
+            this.buttonList.add(this.nextButton);
+        }
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        if (EnchantChanger.loadTE) {
+            boolean pushed = false;
+            EntityPlayer player = this.mc.thePlayer;
+            int step;
+            step = EcTileEntityMakoReactor.STEP_RF_VALUE;
+            if (player.isSneaking()) {
+                step *= 10;
+            }
+            if (button.equals(this.prevButton)) {
+                tileEntity.stepOutputMaxRFValue(-step);
+                pushed = true;
+            }
+
+            if (button.equals(this.nextButton)) {
+                tileEntity.stepOutputMaxRFValue(step);
+                pushed = true;
+            }
+
+            if (pushed) {
+                PacketHandler.INSTANCE.sendToServer(new MessageRFStepping(tileEntity.getOutputMaxRFValue(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord));
+            }
+        }
+    }
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getInventoryName()), 115, 6, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getInventoryName()), 25, 3, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getInventoryName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
@@ -36,6 +83,9 @@ public class EcGuiMakoReactor extends GuiContainer {
             List<String> list = new ArrayList<>();
             list.add(String.format("Mako : %dmB", tileEntity.tank.getFluidAmount()));
             drawHoveringText(list, mouseX - x, mouseZ - y, fontRendererObj);
+        }
+        if (EnchantChanger.loadTE) {
+            fontRendererObj.drawString(StatCollector.translateToLocal(String.format("Max %d RF/t", tileEntity.getInfoMaxEnergyPerTick())), 115, 6, 4210752);
         }
     }
 
@@ -69,6 +119,10 @@ public class EcGuiMakoReactor extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
+        if (EnchantChanger.loadTE) {
+            this.prevButton.enabled = tileEntity.getOutputMaxRFValue() - EcTileEntityMakoReactor.STEP_RF_VALUE >= 10;
+            this.nextButton.enabled = tileEntity.getOutputMaxRFValue() + EcTileEntityMakoReactor.STEP_RF_VALUE <= EcTileEntityMakoReactor.MAX_OUTPU_RF_VALUE;
+        }
         if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() || Minecraft.getMinecraft().thePlayer.isDead) {
             Minecraft.getMinecraft().thePlayer.closeScreen();
         }
