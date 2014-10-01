@@ -6,10 +6,12 @@ import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -102,5 +104,43 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
             makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);;
             list.add(makoReactorController);
         }
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor)world.getTileEntity(x, y, z);
+        if (tile != null) {
+            for (int i1 = 0; i1 < tile.getSizeInventory(); ++i1) {
+                ItemStack itemstack = tile.getStackInSlot(i1);
+
+                if (itemstack != null) {
+                    float f = world.rand.nextFloat() * 0.8F + 0.1F;
+                    float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+                    float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
+
+                    while (itemstack.stackSize > 0) {
+                        int j1 = world.rand.nextInt(21) + 10;
+
+                        if (j1 > itemstack.stackSize) {
+                            j1 = itemstack.stackSize;
+                        }
+
+                        itemstack.stackSize -= j1;
+                        EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+
+                        if (itemstack.hasTagCompound()) {
+                            entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+                        }
+
+                        float f3 = 0.05F;
+                        entityitem.motionX = (double) ((float) world.rand.nextGaussian() * f3);
+                        entityitem.motionY = (double) ((float) world.rand.nextGaussian() * f3 + 0.2F);
+                        entityitem.motionZ = (double) ((float) world.rand.nextGaussian() * f3);
+                        world.spawnEntityInWorld(entityitem);
+                    }
+                }
+            }
+        }
+        super.breakBlock(world, x, y, z, block, meta);
     }
 }

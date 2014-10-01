@@ -24,14 +24,14 @@ public class EcContainerMakoReactor extends Container {
     public EcContainerMakoReactor(InventoryPlayer inventoryPlayer, EcTileEntityMakoReactor te) {
         this.tileEntityMakoReactor = te;
         int i;
-        for (i = 0; i < slotsMaterial.length; i++) {
-            addSlotToContainer(new Slot(te, slotsMaterial[i], 26 + i * 18, 14));
+        for (i = 0; i < SLOTS_MATERIAL.length; i++) {
+            addSlotToContainer(new Slot(te, SLOTS_MATERIAL[i], 26 + i * 18, 14));
         }
 
-        addSlotToContainer(new Slot(te, slotsFuel[0], 44, 55));
+        addSlotToContainer(new Slot(te, SLOTS_FUEL[0], 44, 55));
 
-        for (i = 0; i < slotsResult.length; i++) {
-            addSlotToContainer(new Slot(te, slotsResult[i], 115 + i * 18, 46) {
+        for (i = 0; i < SLOTS_RESULT.length; i++) {
+            addSlotToContainer(new Slot(te, SLOTS_RESULT[i], 115 + i * 18, 46) {
                 @Override
                 public boolean isItemValid(ItemStack itemStack) {
                     return false;
@@ -96,19 +96,19 @@ public class EcContainerMakoReactor extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack item = slot.getStack();
             retItem = item.copy();
-            if (slotIndex >= 0 && slotIndex < materiafuelresult) {
-                if (!mergeItemStack(item, materiafuelresult, materiafuelresult + 36, true)) {
+            if (slotIndex >= 0 && slotIndex < SUM_OF_ALLSLOTS) {
+                if (!mergeItemStack(item, SUM_OF_ALLSLOTS, SUM_OF_ALLSLOTS + 36, true)) {
                     return null;
                 }
                 slot.onSlotChange(item, retItem);
             } else {
                 if (item.getItem() instanceof EcItemBucketLifeStream || item.getItem() instanceof EcItemMateria) {
-                    if (!mergeItemStack(item, slotsFuel[0], slotsFuel[slotsFuel.length - 1], false)) {
+                    if (!mergeItemStack(item, SLOTS_FUEL[0], SLOTS_FUEL[SLOTS_FUEL.length - 1], false)) {
                         return null;
                     }
                 }
                 if (FurnaceRecipes.smelting().getSmeltingResult(item) != null) {
-                    if (!mergeItemStack(item, slotsMaterial[0], slotsMaterial[slotsMaterial.length - 1], false)) {
+                    if (!mergeItemStack(item, SLOTS_MATERIAL[0], SLOTS_MATERIAL[SLOTS_MATERIAL.length - 1], false)) {
                         return null;
                     }
                 }

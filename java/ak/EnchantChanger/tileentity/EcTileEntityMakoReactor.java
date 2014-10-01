@@ -42,26 +42,26 @@ import java.util.List;
         @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore")}
 )
 public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo {
-    public static final int maxSmeltingTime = 200;
-    public static final int smeltingCost = 5;
-    public static final int[] slotsMaterial = new int[]{0,1,2};
-    public static final int[] slotsFuel = new int[]{3};
-    public static final int[] slotsResult = new int[]{4,5,6};
-    public static final int materiafuelresult = slotsMaterial.length + slotsFuel.length + slotsResult.length;
-    public static final Range<Integer> rangeMaterialSlot = Range.closedOpen(0, 3);
-    public static final Range<Integer> rangeFuelBucketSlot = Range.closedOpen(3, 4);
-    private static final int maxCreatingPoint = 1000 * 1024;
-    private static final Block[][] blocks = new Block[][]{
+    public static final int MAX_SMELTING_TIME = 200;
+    public static final int SMELTING_MAKO_COST = 5;
+    public static final int[] SLOTS_MATERIAL = new int[]{0,1,2};
+    public static final int[] SLOTS_FUEL = new int[]{3};
+    public static final int[] SLOTS_RESULT = new int[]{4,5,6};
+    public static final int SUM_OF_ALLSLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
+    public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
+    public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
+    private static final int MAX_HM_CREATING_COST = 1000 * 1024;
+    private static final Block[][] CONSTRUSTING_BLOCKS = new Block[][]{
             {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
             {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
             {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
             {Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air},
             {Blocks.air, Blocks.air, Blocks.air, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.air, Blocks.air, Blocks.air}
     };
-    public static final int stepRFValue = 10;
-    public static final int maxRFCapacity = 100000000;
-    private ItemStack[] items = new ItemStack[materiafuelresult];
-    private ItemStack[] smeltingItems = new ItemStack[slotsMaterial.length];
+    public static final int STEP_RF_VALUE = 10;
+    public static final int MAX_RF_CAPACITY = 100000000;
+    private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
+    private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
     public int smeltingTime;
     private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
@@ -166,27 +166,27 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         if (!this.worldObj.isRemote && isActivated()) {
             //HugeMateria生成処理
             if (canMakeHugeMateria()) {
-                creatingHugeMateriaPoint -= maxCreatingPoint;
+                creatingHugeMateriaPoint -= MAX_HM_CREATING_COST;
                 setHugeMateria(HMCoord.chunkPosX, HMCoord.chunkPosY, HMCoord.chunkPosZ);
             }
 
             //魔晄バケツ・マテリアからの搬入処理
-            if (!tank.isFull() && items[slotsFuel[0]] != null && isMako(items[slotsFuel[0]])) {
-                int makoAmount = getMakoFromItem(items[slotsFuel[0]]);
+            if (!tank.isFull() && items[SLOTS_FUEL[0]] != null && isMako(items[SLOTS_FUEL[0]])) {
+                int makoAmount = getMakoFromItem(items[SLOTS_FUEL[0]]);
                 if (tank.getFluidAmount() + makoAmount <= tank.getCapacity()) {
                     tank.fill(new FluidStack(EnchantChanger.fluidLifeStream, makoAmount), true);
-                    items[slotsFuel[0]].stackSize--;
-                    if (items[slotsFuel[0]].stackSize <= 0) {
-                        setInventorySlotContents(slotsFuel[0], items[slotsFuel[0]].getItem().getContainerItem(items[slotsFuel[0]]));
+                    items[SLOTS_FUEL[0]].stackSize--;
+                    if (items[SLOTS_FUEL[0]].stackSize <= 0) {
+                        setInventorySlotContents(SLOTS_FUEL[0], items[SLOTS_FUEL[0]].getItem().getContainerItem(items[SLOTS_FUEL[0]]));
                     }
                     upToDate = true;
                 }
             }
 
             if (canSmelting()) {
-                for (int i = 0; i < slotsMaterial.length; i++) {
-                    if (smeltingItems[i] == null && canSmeltThisItem(items[slotsMaterial[i]])) {
-                        smeltingItems[i] = decrStackSize(slotsMaterial[i], 1);
+                for (int i = 0; i < SLOTS_MATERIAL.length; i++) {
+                    if (smeltingItems[i] == null && canSmeltThisItem(items[SLOTS_MATERIAL[i]])) {
+                        smeltingItems[i] = decrStackSize(SLOTS_MATERIAL[i], 1);
                         upToDate = true;
                     }
                 }
@@ -194,7 +194,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
             if (isSmelting()) {
                 ++smeltingTime;
-                if (smeltingTime == maxSmeltingTime) {
+                if (smeltingTime == MAX_SMELTING_TIME) {
                     smeltItems();
                     smeltingTime = 0;
                     upToDate = true;
@@ -218,20 +218,20 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     private void smeltItems() {
-        tank.drain(smeltingCost, true);
-        creatingHugeMateriaPoint += smeltingCost;
+        tank.drain(SMELTING_MAKO_COST, true);
+        creatingHugeMateriaPoint += SMELTING_MAKO_COST;
         ItemStack smelted;
         for (int i = 0; i < smeltingItems.length; i++) {
             if (smeltingItems[i] != null) {
                 smelted = getSmeltedItem(smeltingItems[i]);
-                if (items[slotsResult[i]] == null) {
-                    items[slotsResult[i]] = smelted.copy();
+                if (items[SLOTS_RESULT[i]] == null) {
+                    items[SLOTS_RESULT[i]] = smelted.copy();
                     smeltingItems[i] = null;
                 } else {
-                    if (items[slotsResult[i]].isItemEqual(smelted)
-                            && ItemStack.areItemStackTagsEqual(items[slotsResult[i]], smelted)
-                            && items[slotsResult[i]].stackSize < items[slotsResult[i]].getMaxStackSize()) {
-                        items[slotsResult[i]].stackSize += smelted.stackSize;
+                    if (items[SLOTS_RESULT[i]].isItemEqual(smelted)
+                            && ItemStack.areItemStackTagsEqual(items[SLOTS_RESULT[i]], smelted)
+                            && items[SLOTS_RESULT[i]].stackSize < items[SLOTS_RESULT[i]].getMaxStackSize()) {
+                        items[SLOTS_RESULT[i]].stackSize += smelted.stackSize;
                         smeltingItems[i] = null;
                     }
                 }
@@ -241,7 +241,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean canSmelting() {
-        return tank.getFluidAmount() >= smeltingCost;
+        return tank.getFluidAmount() >= SMELTING_MAKO_COST;
     }
 
     public boolean isSmelting() {
@@ -264,7 +264,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
                 for (int z = -1; z <= 1; z++) {
                     checkBlock = worldObj.getBlock(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
                     index = (x + 1) + (z + 1) * 3;
-                    if (!blocks[y + 1][index].equals(Blocks.air) && !blocks[y + 1][index].equals(checkBlock)) {
+                    if (!CONSTRUSTING_BLOCKS[y + 1][index].equals(Blocks.air) && !CONSTRUSTING_BLOCKS[y + 1][index].equals(checkBlock)) {
                         return false;
                     }
                 }
@@ -288,7 +288,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
                 return false;
             }
         }
-        return creatingHugeMateriaPoint > maxCreatingPoint;
+        return creatingHugeMateriaPoint > MAX_HM_CREATING_COST;
     }
 
     public boolean canSmeltThisItem(ItemStack itemStack) {
@@ -318,14 +318,14 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         if (side == 0) {
-            return slotsResult;
+            return SLOTS_RESULT;
         }
 
         if (side == 1) {
-            return slotsMaterial;
+            return SLOTS_MATERIAL;
         }
 
-        return slotsFuel;
+        return SLOTS_FUEL;
     }
 
     @Override
@@ -335,7 +335,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @Override
     public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return side != 0 || rangeFuelBucketSlot.contains(slot) || item.getItem() instanceof ItemBucket;
+        return side != 0 || RANGE_FUEL_SLOTS.contains(slot) || item.getItem() instanceof ItemBucket;
     }
 
     @Override
@@ -426,17 +426,17 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @SideOnly(Side.CLIENT)
     public int getSmeltingTimeScaled(int scale) {
-        return this.smeltingTime * scale / maxSmeltingTime;
+        return this.smeltingTime * scale / MAX_SMELTING_TIME;
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack item) {
         if (slot < items.length) {
-            if (rangeMaterialSlot.contains(slot)) {
+            if (RANGE_MATERIAL_SLOTS.contains(slot)) {
                 return canSmeltThisItem(item);
             }
 
-            if (rangeFuelBucketSlot.contains(slot)) {
+            if (RANGE_FUEL_SLOTS.contains(slot)) {
                 return item != null && item.getItem() instanceof EcItemBucketLifeStream;
             }
         }
@@ -495,12 +495,15 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         return 0;//発電のみ
     }
 
+    private int nowRF;
+
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), i));
         if (!b) {
             addRFEnergy(-extract);
+            nowRF = extract;
         }
         return extract;
     }
@@ -514,7 +517,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int getMaxEnergyStored(ForgeDirection forgeDirection) {
-        return maxRFCapacity;
+        return MAX_RF_CAPACITY;
     }
 
     @Optional.Method(modid = "CoFHCore")
@@ -532,7 +535,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public void stepOutputMaxRFValue(int stepValue) {
-        this.outputMaxRFValue += stepRFValue;
+        this.outputMaxRFValue += STEP_RF_VALUE;
     }
 
     public int getStoredRFEnergy() {
@@ -550,7 +553,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int getInfoEnergyPerTick() {
-        return (getStoredRFEnergy() < maxRFCapacity)? getInfoMaxEnergyPerTick(): 10;
+        return (getStoredRFEnergy() < MAX_RF_CAPACITY)? getInfoMaxEnergyPerTick(): nowRF;
     }
 
     @Optional.Method(modid = "CoFHCore")
@@ -568,6 +571,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int getInfoMaxEnergyStored() {
-        return maxRFCapacity;
+        return MAX_RF_CAPACITY;
     }
 }
