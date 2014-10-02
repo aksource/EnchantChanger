@@ -5,6 +5,7 @@ import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.item.EcItemBucketLifeStream;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.modcoop.CoopTE;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IEnergyInfo;
 import com.google.common.collect.Range;
@@ -24,6 +25,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -31,7 +33,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +48,8 @@ import java.util.List;
 public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo {
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
+    public static final int MAX_GENERATING_RF_TIME = 200;
+    public static final int GENERATING_RF_MAKO_COST = 5;
     public static final int[] SLOTS_MATERIAL = new int[]{0,1,2};
     public static final int[] SLOTS_FUEL = new int[]{3};
     public static final int[] SLOTS_RESULT = new int[]{4,5,6};
@@ -51,19 +57,20 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
     public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
     private static final int MAX_HM_CREATING_COST = 1000 * 1024;
-    private static final Block[][] CONSTRUSTING_BLOCKS = new Block[][]{
-            {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
-            {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
-            {Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block},
-            {Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.iron_block, Blocks.air},
-            {Blocks.air, Blocks.air, Blocks.air, Blocks.air, Blocks.iron_block, Blocks.air, Blocks.air, Blocks.air, Blocks.air}
+    private static final int[][] CONSTRUCTING_BLOCKS_INFO = new int[][]{
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 2, 1, 1, 1, 1},
+            {1, 1, 1, 1, 2, 1, 1, 1, 1},
+            {0, 1, 0, 1, 2, 1, 0, 1, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0, 0}
     };
     public static final int STEP_RF_VALUE = 10;
-    public static final int MAX_OUTPU_RF_VALUE = 100000;
+    public static final int MAX_OUTPUT_RF_VALUE = 100000;
     public static final int MAX_RF_CAPACITY = 100000000;
     private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
     private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
     public int smeltingTime;
+    public int generatingRFTime = 0;
     private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     private ChunkPosition HMCoord = null;
@@ -122,6 +129,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
         nbt.setInteger("outputMaxRFValue", outputMaxRFValue);
         nbt.setInteger("storedRFEnergy", storedRFEnergy);
+        nbt.setInteger("generatingRFTime", generatingRFTime);
     }
 
     @Override
@@ -159,12 +167,24 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
         outputMaxRFValue = nbt.getInteger("outputMaxRFValue");
         storedRFEnergy = nbt.getInteger("storedRFEnergy");
+        generatingRFTime = nbt.getInteger("generatingRFTime");
     }
 
     @Override
     public void updateEntity() {
         boolean upToDate = false;
         if (!this.worldObj.isRemote && isActivated()) {
+
+            //RFの出力
+            if (isGenerating()) {
+                --generatingRFTime;
+                addRFEnergy(getOutputMaxRFValue());
+                if (generatingRFTime <= 0) {
+                    tank.drain(GENERATING_RF_MAKO_COST * getGeneratingRFMakoCost(), true);
+                    generatingRFTime = MAX_GENERATING_RF_TIME;
+                }
+            }
+
             //HugeMateria生成処理
             if (canMakeHugeMateria()) {
                 creatingHugeMateriaPoint -= MAX_HM_CREATING_COST;
@@ -259,13 +279,20 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             return false;
         }
         Block checkBlock;
+        int checkBlockMeta;
         int index;
+        String blockName;
         for (int y = -1 ; y <= 3; y++) {
             for (int x = -1 ; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     checkBlock = worldObj.getBlock(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
+                    checkBlockMeta = worldObj.getBlockMetadata(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
                     index = (x + 1) + (z + 1) * 3;
-                    if (!CONSTRUSTING_BLOCKS[y + 1][index].equals(Blocks.air) && !CONSTRUSTING_BLOCKS[y + 1][index].equals(checkBlock)) {
+                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 1 && !isBaseBlock(checkBlock, checkBlockMeta)) {
+                        return false;
+                    }
+
+                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 2 && !checkBlock.equals(Blocks.air)) {
                         return false;
                     }
                 }
@@ -274,12 +301,47 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         return true;
     }
 
+    public boolean isBaseBlock(Block checkBlock, int checkMeta) {
+        int[] oreIDs = OreDictionary.getOreIDs(getBaseBlockItemStack());
+        ItemStack checkStack = new ItemStack(checkBlock, 1, checkMeta);
+        if (oreIDs.length > 0) {
+            for (int oreid : oreIDs) {
+                ArrayList<ItemStack> oreList = OreDictionary.getOres(OreDictionary.getOreName(oreid));
+                for (ItemStack itemStack : oreList) {
+                    if (itemStack.isItemEqual(checkStack)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return getBaseBlock().equals(checkBlock) && getBlockMetadata() == checkMeta;
+    }
+
+    public boolean isGenerating() {
+        if (!EnchantChanger.loadTE) return false;
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity tileEntity = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            if (CoopTE.isIEnergyConnection(tileEntity)) {
+                return isPowered() && getStoredRFEnergy() + getOutputMaxRFValue() <= MAX_RF_CAPACITY;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPowered() {
+        return this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+    }
+
     public boolean isMako(ItemStack itemStack) {
         return itemStack.getItem() instanceof EcItemBucketLifeStream || itemStack.getItem() instanceof EcItemMateria;
     }
 
     public int getMakoFromItem(ItemStack itemStack) {
         return (itemStack.getItem() instanceof EcItemBucketLifeStream) ? 1000:5;
+    }
+
+    public int getGeneratingRFMakoCost() {
+        return getOutputMaxRFValue() / STEP_RF_VALUE;
     }
 
     public boolean canMakeHugeMateria() {
@@ -336,7 +398,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @Override
     public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return side != 0 || RANGE_FUEL_SLOTS.contains(slot) || item.getItem() instanceof ItemBucket;
+        return side != 1 || RANGE_FUEL_SLOTS.contains(slot) || item.getItem() instanceof ItemBucket;
     }
 
     @Override
@@ -438,7 +500,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             }
 
             if (RANGE_FUEL_SLOTS.contains(slot)) {
-                return item != null && item.getItem() instanceof EcItemBucketLifeStream;
+                return item != null && isMako(item);
             }
         }
         return false;
@@ -536,8 +598,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public void stepOutputMaxRFValue(int stepValue) {
-        if (this.outputMaxRFValue + stepValue > 10 && this.outputMaxRFValue + stepValue < MAX_OUTPU_RF_VALUE) {
-            this.outputMaxRFValue += STEP_RF_VALUE;
+        if (this.outputMaxRFValue + stepValue >= 10 && this.outputMaxRFValue + stepValue <= MAX_OUTPUT_RF_VALUE) {
+            this.outputMaxRFValue += stepValue;
         }
     }
 

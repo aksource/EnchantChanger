@@ -13,7 +13,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,7 +21,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,9 +31,7 @@ import java.util.List;
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass{
     private static int[] sides = new int[]{2,5,3,4};
-    public static String[][] baseBlocks = new String[][]{
-            {GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).modId, GameRegistry.findUniqueIdentifierFor(Blocks.iron_block).name},
-            {GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).modId, GameRegistry.findUniqueIdentifierFor(Blocks.gold_block).name}};
+    public static String[] baseBlocksOreName = new String[]{"blockIron", "blockGold"};
     @SideOnly(Side.CLIENT)
     private IIcon iconFront;
 
@@ -76,6 +75,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         }
         if (item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
             tile.baseBlock = item.getTagCompound().getString("EnchantChanger|baseBlock");
+            tile.baseMeta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
         }
     }
 
@@ -97,12 +97,17 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item itemblock, CreativeTabs tab, List list) {
         ItemStack makoReactorController;
-        for (String[] baseUID:baseBlocks) {
-            makoReactorController = new ItemStack(this, 1, 0);
-            makoReactorController.setTagCompound(new NBTTagCompound());
-            String baseBlockName = String.format("%s:%s", baseUID[0], baseUID[1]);
-            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);;
-            list.add(makoReactorController);
+        ArrayList<ItemStack> ores;
+        for (String baseOreName: baseBlocksOreName) {
+            ores = OreDictionary.getOres(baseOreName);
+            for (ItemStack itemStack : ores) {
+                makoReactorController = new ItemStack(this, 1, 0);
+                makoReactorController.setTagCompound(new NBTTagCompound());
+                GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+                makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+                makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
+                list.add(makoReactorController);
+            }
         }
     }
 

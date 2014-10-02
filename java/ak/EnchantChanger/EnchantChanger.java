@@ -64,10 +64,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
@@ -506,13 +503,23 @@ public class EnchantChanger {
                         "XXX",
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
-        for (String[] baseBlockUID : EcBlockMakoReactor.baseBlocks) {
-            Block baseBlock = GameRegistry.findBlock(baseBlockUID[0], baseBlockUID[1]);
-            String baseBlockName = String.format("%s:%s", baseBlockUID[0], baseBlockUID[1]);
-            ItemStack blockMakoReactorWall = new ItemStack(blockMakoReactor, 1, 1);
-            blockMakoReactorWall.setTagCompound(new NBTTagCompound());
-            blockMakoReactorWall.getTagCompound().setString("EnchantChanger|baseBlock", baseBlockName);
-            GameRegistry.addShapelessRecipe(blockMakoReactorWall, baseBlock, itemMateria);
+        ItemStack makoReactorController;
+        ArrayList<ItemStack> ores;
+        for (String baseOreName: EcBlockMakoReactor.baseBlocksOreName) {
+            ores = OreDictionary.getOres(baseOreName);
+            for (ItemStack itemStack : ores) {
+                makoReactorController = new ItemStack(blockMakoReactor, 1, 0);
+                makoReactorController.setTagCompound(new NBTTagCompound());
+                GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+                makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+                makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
+                GameRegistry.addRecipe(makoReactorController,
+                        "BBB",
+                        "BMB",
+                        "BBB",
+                        'B', itemStack,
+                        'M', new ItemStack(itemMateria, 1, 0));
+            }
         }
     }
 

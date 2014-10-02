@@ -10,10 +10,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,18 +51,15 @@ public class EcGuiMakoReactor extends GuiContainer {
     protected void actionPerformed(GuiButton button) {
         if (EnchantChanger.loadTE) {
             boolean pushed = false;
-            EntityPlayer player = this.mc.thePlayer;
             int step;
             step = EcTileEntityMakoReactor.STEP_RF_VALUE;
-            if (player.isSneaking()) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                 step *= 10;
             }
             if (button.equals(this.prevButton)) {
                 tileEntity.stepOutputMaxRFValue(-step);
                 pushed = true;
-            }
-
-            if (button.equals(this.nextButton)) {
+            } else if (button.equals(this.nextButton)) {
                 tileEntity.stepOutputMaxRFValue(step);
                 pushed = true;
             }
@@ -85,7 +82,7 @@ public class EcGuiMakoReactor extends GuiContainer {
             drawHoveringText(list, mouseX - x, mouseZ - y, fontRendererObj);
         }
         if (EnchantChanger.loadTE) {
-            fontRendererObj.drawString(StatCollector.translateToLocal(String.format("Max %d RF/t", tileEntity.getInfoMaxEnergyPerTick())), 115, 6, 4210752);
+            fontRendererObj.drawString(StatCollector.translateToLocal(String.format("Max %d RF/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
         }
     }
 
@@ -121,7 +118,7 @@ public class EcGuiMakoReactor extends GuiContainer {
         super.updateScreen();
         if (EnchantChanger.loadTE) {
             this.prevButton.enabled = tileEntity.getOutputMaxRFValue() - EcTileEntityMakoReactor.STEP_RF_VALUE >= 10;
-            this.nextButton.enabled = tileEntity.getOutputMaxRFValue() + EcTileEntityMakoReactor.STEP_RF_VALUE <= EcTileEntityMakoReactor.MAX_OUTPU_RF_VALUE;
+            this.nextButton.enabled = tileEntity.getOutputMaxRFValue() + EcTileEntityMakoReactor.STEP_RF_VALUE <= EcTileEntityMakoReactor.MAX_OUTPUT_RF_VALUE;
         }
         if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() || Minecraft.getMinecraft().thePlayer.isDead) {
             Minecraft.getMinecraft().thePlayer.closeScreen();

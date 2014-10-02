@@ -103,12 +103,12 @@ public class EcContainerMakoReactor extends Container {
                 slot.onSlotChange(item, retItem);
             } else {
                 if (item.getItem() instanceof EcItemBucketLifeStream || item.getItem() instanceof EcItemMateria) {
-                    if (!mergeItemStack(item, SLOTS_FUEL[0], SLOTS_FUEL[SLOTS_FUEL.length - 1], false)) {
+                    if (!mergeItemStack(item, SLOTS_FUEL[0], SLOTS_FUEL[SLOTS_FUEL.length - 1] + 1, false)) {
                         return null;
                     }
                 }
                 if (FurnaceRecipes.smelting().getSmeltingResult(item) != null) {
-                    if (!mergeItemStack(item, SLOTS_MATERIAL[0], SLOTS_MATERIAL[SLOTS_MATERIAL.length - 1], false)) {
+                    if (!mergeItemStack(item, SLOTS_MATERIAL[0], SLOTS_MATERIAL[SLOTS_MATERIAL.length - 1] + 1, false)) {
                         return null;
                     }
                 }

@@ -2,6 +2,7 @@ package ak.EnchantChanger.tileentity;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -13,16 +14,20 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class EcTileMultiPass extends TileEntity {
     public String baseBlock = "";
+    public int baseMeta = 0;
+
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         baseBlock = nbt.getString("baseBlock");
+        baseMeta = nbt.getInteger("baseMeta");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         nbt.setString("baseBlock", baseBlock);
+        nbt.setInteger("baseMeta", baseMeta);
     }
 
     @Override
@@ -49,5 +54,13 @@ public class EcTileMultiPass extends TileEntity {
             throw new IllegalArgumentException(String.format("[EnchantChanger]EcTileMultiPass does not proper baseblock coordinates x:%d, y:%d, z:%d", this.xCoord, this.yCoord, this.zCoord));
         }
         return block;
+    }
+
+    public int getBaseMeta() {
+        return baseMeta;
+    }
+
+    public ItemStack getBaseBlockItemStack() {
+        return new ItemStack(getBaseBlock(), 1, getBaseMeta());
     }
 }
