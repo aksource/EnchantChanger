@@ -42,7 +42,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     @Override
     public IIcon getIcon(int side  , int meta) {
         if (meta == 0) {
-            return (side == 2) ? this.iconFront : this.blockIcon;
+            return (side == 4) ? this.iconFront : this.blockIcon;
         }
         return this.blockIcon;
     }

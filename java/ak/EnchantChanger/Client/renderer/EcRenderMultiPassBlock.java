@@ -28,22 +28,38 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        return renderMap.get(type) == helper;
+        return helper == ItemRendererHelper.BLOCK_3D || renderMap.get(type) == helper;
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         if (item.getItem() instanceof ItemBlock && item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
             RenderBlocks renderBlocks = (RenderBlocks)data[0];
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+            if (type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED) {
+                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+            }
+
             for (int pass = 0; pass < 2 ; pass++) {
                 if (pass == 0) {
                     String[] strings = item.getTagCompound().getString("EnchantChanger|baseBlock").split(":");
                     Block base = GameRegistry.findBlock(strings[0], strings[1]);
-                    renderBlocks.renderBlockAsItem(base, 0, 1.0F);
+                    int meta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.99F, 0.99F, 0.99F);
+                    renderBlocks.renderBlockAsItem(base, meta, 1.0F);
+                    GL11.glPopMatrix();
+
                 } else {
+
                     Block multiPassBlock = Block.getBlockFromItem(item.getItem());
                     renderBlocks.renderBlockAsItem(multiPassBlock, item.getItemDamage(), 1.0F);
+
                 }
+            }
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            if (type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED) {
+                GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
             }
         }
     }
