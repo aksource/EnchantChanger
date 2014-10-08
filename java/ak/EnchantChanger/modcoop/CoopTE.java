@@ -1,28 +1,22 @@
 package ak.EnchantChanger.modcoop;
 
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.tileentity.IEnergyInfo;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Created by A.K. on 14/10/02.
  */
 public class CoopTE {
 
-    public static void addTETab(GuiContainer guiContainer, TileEntity tileEntity) {
-        if (tileEntity instanceof IEnergyInfo) {
-
-        }
+    public static boolean isIEnergyHandler(TileEntity tileEntity) {
+        return tileEntity instanceof IEnergyHandler;
     }
 
-    public static void renderTETab(GuiContainer guiContainer, TileEntity tileEntity) {
-        if (tileEntity instanceof IEnergyInfo) {
-
+    public static int getNeedRF(TileEntity tileEntity, ForgeDirection direction, int maxRF) {
+        if (tileEntity instanceof IEnergyHandler) {
+            return ((IEnergyHandler)tileEntity).receiveEnergy(direction, maxRF, false);
         }
-    }
-
-    public static boolean isIEnergyConnection(TileEntity tileEntity) {
-        return tileEntity instanceof IEnergyConnection;
+        return 0;
     }
 }

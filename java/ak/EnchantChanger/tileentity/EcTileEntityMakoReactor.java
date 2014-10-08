@@ -5,7 +5,9 @@ import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.item.EcItemBucketLifeStream;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.modcoop.CoopTE;
+import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IEnergyInfo;
 import com.google.common.collect.Range;
@@ -43,9 +45,10 @@ import java.util.List;
  */
 @Optional.InterfaceList(
         {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore"),
-        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore")}
+        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore"),
+        @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
 )
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo {
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler{
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
@@ -67,10 +70,11 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public static final int STEP_RF_VALUE = 10;
     public static final int MAX_OUTPUT_RF_VALUE = 100000;
     public static final int MAX_RF_CAPACITY = 100000000;
+    public static final int GF_POWER = 3;
     private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
     private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
     public int smeltingTime;
-    public int generatingRFTime = 0;
+    public int generatingRFTime = MAX_GENERATING_RF_TIME;
     private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     private ChunkPosition HMCoord = null;
@@ -130,6 +134,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         nbt.setInteger("outputMaxRFValue", outputMaxRFValue);
         nbt.setInteger("storedRFEnergy", storedRFEnergy);
         nbt.setInteger("generatingRFTime", generatingRFTime);
+        nbt.setInteger("nowRF", nowRF);
     }
 
     @Override
@@ -168,6 +173,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         outputMaxRFValue = nbt.getInteger("outputMaxRFValue");
         storedRFEnergy = nbt.getInteger("storedRFEnergy");
         generatingRFTime = nbt.getInteger("generatingRFTime");
+        nowRF = nbt.getInteger("nowRF");
     }
 
     @Override
@@ -175,14 +181,15 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         boolean upToDate = false;
         if (!this.worldObj.isRemote && isActivated()) {
 
-            //RFの出力
+            //RFの生成と出力
             if (isGenerating()) {
-                --generatingRFTime;
-                addRFEnergy(getOutputMaxRFValue());
-                if (generatingRFTime <= 0) {
-                    tank.drain(GENERATING_RF_MAKO_COST * getGeneratingRFMakoCost(), true);
-                    generatingRFTime = MAX_GENERATING_RF_TIME;
+                if (tank.getFluidAmount() >= GENERATING_RF_MAKO_COST * getGeneratingRFMakoCost()) {
+                    generatingRF();
+                    upToDate = true;
                 }
+                if (extractRF()) upToDate = true;
+
+                if (extractGF()) upToDate = true;
             }
 
             //HugeMateria生成処理
@@ -261,6 +268,56 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         this.markDirty();
     }
 
+    public void generatingRF() {
+        --generatingRFTime;
+        addRFEnergy(getOutputMaxRFValue());
+        if (generatingRFTime <= 0) {
+            tank.drain(GENERATING_RF_MAKO_COST * getGeneratingRFMakoCost(), true);
+            generatingRFTime = MAX_GENERATING_RF_TIME;
+            creatingHugeMateriaPoint += getGeneratingRFMakoCost();
+        }
+    }
+
+    public boolean extractRF() {
+        boolean upToDate = false;
+        int needToExtract;
+        TileEntity neighborTile;
+        int extractable;
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+            extractable = Math.min(getOutputMaxRFValue(), getStoredRFEnergy());
+            if (extractable <= 0) break;
+            neighborTile = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            if (CoopTE.isIEnergyHandler(neighborTile)) {
+                needToExtract = CoopTE.getNeedRF(neighborTile, direction, extractable);
+                extractEnergy(direction, needToExtract, false);
+                if (needToExtract > 0) {
+                    upToDate = true;
+                }
+            }
+        }
+        return upToDate;
+    }
+
+    public boolean extractGF() {
+        boolean upToDate = false;
+        int needToExtract;
+        TileEntity neighborTile;
+        int extractable;
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+            extractable = Math.min(getOutputMaxRFValue(), getStoredRFEnergy());
+            if (extractable <= 0) break;
+            neighborTile = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            if (CoopSS.isGFEnergyHandler(neighborTile)) {
+                needToExtract = CoopSS.getNeedGF(neighborTile, direction, extractable);
+                drawEnergy(direction, GF_POWER, needToExtract, false);
+                if (needToExtract > 0) {
+                    upToDate = true;
+                }
+            }
+        }
+        return upToDate;
+    }
+
     public boolean canSmelting() {
         return tank.getFluidAmount() >= SMELTING_MAKO_COST;
     }
@@ -318,14 +375,11 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean isGenerating() {
-        if (!EnchantChanger.loadTE) return false;
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-            TileEntity tileEntity = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-            if (CoopTE.isIEnergyConnection(tileEntity)) {
-                return isPowered() && getStoredRFEnergy() + getOutputMaxRFValue() <= MAX_RF_CAPACITY;
-            }
-        }
-        return false;
+        return isEnergyNetworkModLoaded() && isPowered() && getStoredRFEnergy() + getOutputMaxRFValue() <= MAX_RF_CAPACITY;
+    }
+
+    public boolean isEnergyNetworkModLoaded() {
+        return EnchantChanger.loadTE || EnchantChanger.loadSS;
     }
 
     public boolean isPowered() {
@@ -586,7 +640,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public boolean canConnectEnergy(ForgeDirection forgeDirection) {
-        return true;
+        TileEntity tile = this.worldObj.getTileEntity(xCoord + forgeDirection.offsetX, yCoord + forgeDirection.offsetY, zCoord + forgeDirection.offsetZ);
+        return tile instanceof IEnergyConnection;
     }
 
     public int getOutputMaxRFValue() {
@@ -618,7 +673,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int getInfoEnergyPerTick() {
-        return (getStoredRFEnergy() < MAX_RF_CAPACITY)? getInfoMaxEnergyPerTick(): nowRF;
+        return nowRF;
     }
 
     @Optional.Method(modid = "CoFHCore")
@@ -636,6 +691,53 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     @Optional.Method(modid = "CoFHCore")
     @Override
     public int getInfoMaxEnergyStored() {
+        return MAX_RF_CAPACITY;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public int addEnergy(ForgeDirection from, int power, int speed, boolean simulate) {
+        return 0;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public int drawEnergy(ForgeDirection from, int power, int speed, boolean simulate) {
+        int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), speed));
+        if (!simulate) {
+            addRFEnergy(-extract);
+            nowRF = extract;
+        }
+        return extract;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public boolean canInterface(ForgeDirection from) {
+        return true;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public int getPowerStored(ForgeDirection from) {
+        return 3;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public long getSpeedStored(ForgeDirection from) {
+        return getStoredRFEnergy();
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public int getMaxPowerStored(ForgeDirection from) {
+        return 3;
+    }
+
+    @Optional.Method(modid = "SextiarySector")
+    @Override
+    public long getMaxSpeedStored(ForgeDirection from) {
         return MAX_RF_CAPACITY;
     }
 }

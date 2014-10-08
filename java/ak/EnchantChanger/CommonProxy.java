@@ -80,8 +80,15 @@ public class CommonProxy implements IGuiHandler {
         }
         if (id == EnchantChanger.guiIdMakoReactor) {
             TileEntity t = world.getTileEntity(x, y, z);
-            if (t != null)
+            if (t != null) {
+                if (EnchantChanger.loadTE) {
+                    return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor)t);
+                }
+                if (EnchantChanger.loadSS) {
+                    return new EcGuiMakoReactorGF(player.inventory, (EcTileEntityMakoReactor)t);
+                }
                 return new EcGuiMakoReactor(player.inventory, (EcTileEntityMakoReactor) t);
+            }
         }
         return null;
     }

@@ -193,6 +193,7 @@ public class EnchantChanger {
     public static boolean loadTE = false;
     public static boolean loadUE = false;
     public static boolean loadMCE = false;
+    public static boolean loadSS = false;
     @Mod.Instance("EnchantChanger")
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
@@ -377,6 +378,7 @@ public class EnchantChanger {
         }
         loadMTH = Loader.isModLoaded("MultiToolHolders");
         loadMCE = Loader.isModLoaded("mceconomy2");
+        loadSS = Loader.isModLoaded("SextiarySector");
         loadTE = Loader.isModLoaded("CoFHCore");
         if (loadMCE) {
             MinecraftForge.EVENT_BUS.register(new CoopMCE());
@@ -503,28 +505,33 @@ public class EnchantChanger {
                         "XXX",
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
-        ItemStack makoReactorController;
-        ArrayList<ItemStack> ores;
+
         for (String baseOreName: EcBlockMakoReactor.baseBlocksOreName) {
-            ores = OreDictionary.getOres(baseOreName);
-            for (ItemStack itemStack : ores) {
-                makoReactorController = new ItemStack(blockMakoReactor, 1, 0);
-                makoReactorController.setTagCompound(new NBTTagCompound());
-                GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
-                makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
-                makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
-                GameRegistry.addRecipe(makoReactorController,
-                        "BBB",
-                        "BMB",
-                        "BBB",
-                        'B', itemStack,
-                        'M', new ItemStack(itemMateria, 1, 0));
-            }
+            addOreDictRecipe(baseOreName);
         }
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {  }
+
+    private void addOreDictRecipe(String OreDictName) {
+        ItemStack makoReactorController;
+        ArrayList<ItemStack> ores = OreDictionary.getOres(OreDictName);
+        if (ores.isEmpty()) return;
+        for (ItemStack itemStack : ores) {
+            makoReactorController = new ItemStack(blockMakoReactor, 1, 0);
+            makoReactorController.setTagCompound(new NBTTagCompound());
+            GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+            makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
+            GameRegistry.addRecipe(makoReactorController,
+                    "BBB",
+                    "BMB",
+                    "BBB",
+                    'B', itemStack,
+                    'M', new ItemStack(itemMateria, 1, 0));
+        }
+    }
 
     private void initMaps() {
         makeMapFromArray(coefficientMap, enchantmentAPCoefficients);
