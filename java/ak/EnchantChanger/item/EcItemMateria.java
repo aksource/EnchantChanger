@@ -190,18 +190,24 @@ public class EcItemMateria extends EcItem
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List itemList)
 	{
 		itemList.add(new ItemStack(this, 1, 0));
+        ItemStack stack1, stack2, stack3, stack4;
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null && !this.isMagicEnch(i)) {
-				ItemStack stack1 = new ItemStack(this, 1, 0);
+				stack1 = new ItemStack(this, 1, 0);
 				stack1.addEnchantment(Enchantment.enchantmentsList[i], 1);
 				itemList.add(stack1);
-				ItemStack stack2 = new ItemStack(this, 1, 0);
-				stack2.addEnchantment(Enchantment.enchantmentsList[i], 10);
-				itemList.add(stack2);
-				if (EnchantChanger.debug) {
-					ItemStack stack3 = new ItemStack(this, 1, 0);
-					stack3.addEnchantment(Enchantment.enchantmentsList[i], 127);
-					itemList.add(stack3);
+                if (Enchantment.enchantmentsList[i].getMaxLevel() > 1) {
+                    stack2 = new ItemStack(this, 1, 0);
+                    stack2.addEnchantment(Enchantment.enchantmentsList[i], Enchantment.enchantmentsList[i].getMaxLevel());
+                    itemList.add(stack2);
+                    stack3 = new ItemStack(this, 1, 0);
+                    stack3.addEnchantment(Enchantment.enchantmentsList[i], 10);
+                    itemList.add(stack3);
+                }
+                if (EnchantChanger.debug) {
+					stack4 = new ItemStack(this, 1, 0);
+					stack4.addEnchantment(Enchantment.enchantmentsList[i], 127);
+					itemList.add(stack4);
 				}
 			}
 		}
