@@ -78,8 +78,8 @@ public class EcRecipeMasterMateria implements IRecipe
 	public boolean checkEnchmateria(ItemStack[] items, int num)
 	{
 		boolean ret = true;
-		for(ItemStack itemStack : items) {
-			ret = ret && checkEnch(itemStack, num);
+		for(int index = 0; index < enchantmentRecipeList[num].length;index++) {
+			ret = ret && checkEnch(items[index], num);
 		}
 		return ret;
 	}
@@ -87,7 +87,7 @@ public class EcRecipeMasterMateria implements IRecipe
 	{
 		boolean ret=false;
 		for(int i : enchantmentRecipeList[num]) {
-			if(EnchantmentHelper.getEnchantmentLevel(i, materia) == Enchantment.enchantmentsList[i].getMaxLevel()) {
+			if(EnchantmentHelper.getEnchantmentLevel(i, materia) >= Enchantment.enchantmentsList[i].getMaxLevel()) {
 				ret = true;
 				break;
 			}
