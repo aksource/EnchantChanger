@@ -93,8 +93,13 @@ public class EcRenderMateria implements IItemRenderer
         if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslatef(0.3f, 0.2f, 0);
         mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
         GL11.glScalef(size, size, size);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         sphereModel.renderAll();
-//        GL11.glTranslatef(x, y, z);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glEnable(GL11.GL_BLEND);
         GL11.glPopMatrix();
     }
     @Deprecated

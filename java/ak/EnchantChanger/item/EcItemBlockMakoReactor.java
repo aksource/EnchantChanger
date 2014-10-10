@@ -27,11 +27,16 @@ public class EcItemBlockMakoReactor extends ItemBlock {
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
         String baseName = super.getItemStackDisplayName(itemStack);
-        String[] strings = itemStack.getTagCompound().getString("EnchantChanger|baseBlock").split(":");
-        Block base = GameRegistry.findBlock(strings[0], strings[1]);
-        int meta = itemStack.getTagCompound().getInteger("EnchantChanger|baseMeta");
-        String baseBlockName = new ItemStack(base, 1, meta).getDisplayName();
-        return String.format("%s (%s)", baseName, baseBlockName);
+        if (!itemStack.hasTagCompound()) return baseName;
+        String baseBlockUniqueName = itemStack.getTagCompound().getString("EnchantChanger|baseBlock");
+        if (!baseBlockUniqueName.equals("")) {
+            String[] strings = baseBlockUniqueName.split(":");
+            Block base = GameRegistry.findBlock(strings[0], strings[1]);
+            int meta = itemStack.getTagCompound().getInteger("EnchantChanger|baseMeta");
+            String baseBlockDisplayName = new ItemStack(base, 1, meta).getDisplayName();
+            return String.format("%s (%s)", baseName, baseBlockDisplayName);
+        }
+        return baseName;
     }
 
     @Override

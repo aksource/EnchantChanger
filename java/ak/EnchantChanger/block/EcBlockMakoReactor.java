@@ -1,5 +1,6 @@
 package ak.EnchantChanger.block;
 
+import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
@@ -14,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass{
     private static int[] sides = new int[]{2,5,3,4};
-    public static String[] baseBlocksOreName = new String[]{"blockIron", "blockGold"};
+    public static List<String> baseBlocksOreName = new ArrayList<>();
     @SideOnly(Side.CLIENT)
     private IIcon iconFront;
 
@@ -49,14 +51,14 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
 
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        if (world.getBlockMetadata(x, y, z) == 0) {
+        if (ClientProxy.customRenderPass == 1 && world.getBlockMetadata(x, y, z) == 0) {
             EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
             if (side == tile.face) {
                 return this.iconFront;
             }
             return this.blockIcon;
         }
-        return this.blockIcon;
+        return super.getIcon(world, x, y, z, side);
     }
 
     @Override
@@ -72,10 +74,6 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
         if (tile instanceof EcTileEntityMakoReactor) {
             ((EcTileEntityMakoReactor)tile).setFace( (byte) sides[l]);
-        }
-        if (item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
-            tile.baseBlock = item.getTagCompound().getString("EnchantChanger|baseBlock");
-            tile.baseMeta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
         }
     }
 
@@ -98,14 +96,17 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     public void getSubBlocks(Item itemblock, CreativeTabs tab, List list) {
         ItemStack makoReactorController;
         ArrayList<ItemStack> ores;
+        Block block;
+        int blockMeta;
         for (String baseOreName: baseBlocksOreName) {
             ores = OreDictionary.getOres(baseOreName);
             for (ItemStack itemStack : ores) {
                 makoReactorController = new ItemStack(this, 1, 0);
                 makoReactorController.setTagCompound(new NBTTagCompound());
                 GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+                blockMeta = ((ItemBlock)itemStack.getItem()).getMetadata(itemStack.getItemDamage());
                 makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
-                makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
+                makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", blockMeta);
                 list.add(makoReactorController);
             }
         }
@@ -147,5 +148,30 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
             }
         }
         super.breakBlock(world, x, y, z, block, meta);
+    }
+    static {
+        baseBlocksOreName.add("blockIron");
+        baseBlocksOreName.add("blockGold");
+        baseBlocksOreName.add("blockCopper");
+        baseBlocksOreName.add("blockTin");
+        baseBlocksOreName.add("blockBronze");
+        baseBlocksOreName.add("blockBrass");
+        baseBlocksOreName.add("blockSteel");
+        baseBlocksOreName.add("blockUranium");
+        baseBlocksOreName.add("blockOsmium");
+        baseBlocksOreName.add("blockIridium");
+        baseBlocksOreName.add("blockSilver");
+        baseBlocksOreName.add("blockZinc");
+        baseBlocksOreName.add("blockTungsten");
+        baseBlocksOreName.add("blockLead");
+        baseBlocksOreName.add("blockAluminium");
+        baseBlocksOreName.add("blockNickel");
+        baseBlocksOreName.add("blockPlatinum");
+        baseBlocksOreName.add("blockMithril");
+        baseBlocksOreName.add("blockLumium");
+        baseBlocksOreName.add("blockInvar");
+        baseBlocksOreName.add("blockElectrum");
+        baseBlocksOreName.add("blockEnderium");
+        baseBlocksOreName.add("blockNickel");
     }
 }

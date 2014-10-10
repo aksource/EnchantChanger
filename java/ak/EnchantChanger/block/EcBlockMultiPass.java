@@ -2,17 +2,17 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -55,11 +55,23 @@ public class EcBlockMultiPass extends BlockContainer {
     }
 
     @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        EcTileMultiPass tileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
+        if (tileMultiPass != null && ClientProxy.customRenderPass == 0) {
+            Block block = tileMultiPass.getBaseBlock();
+            return block.getIcon(world, x, y, z, side);
+        }
+        return this.blockIcon;
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase setter, ItemStack item) {
         super.onBlockPlacedBy(world, x, y, z, setter, item);
-        String base = (item.getTagCompound() != null)? item.getTagCompound().getString("EnchantChanger|baseBlock"): GameRegistry.findUniqueIdentifierFor(Blocks.stone).toString();
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
-        tile.baseBlock = base;
+        if (item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
+            tile.baseBlock = item.getTagCompound().getString("EnchantChanger|baseBlock");
+            tile.baseMeta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
+        }
     }
 
     @Override
@@ -77,6 +89,7 @@ public class EcBlockMultiPass extends BlockContainer {
             ItemStack dropItemBlock = new ItemStack(this, 1, this.damageDropped(metadata));
             dropItemBlock.setTagCompound(new NBTTagCompound());
             dropItemBlock.getTagCompound().setString("EnchantChanger|baseBlock", tileMultiPass.baseBlock);
+            dropItemBlock.getTagCompound().setInteger("EnchantChanger|baseMeta", tileMultiPass.baseMeta);
             list.add(dropItemBlock);
             return list;
         }
@@ -89,6 +102,7 @@ public class EcBlockMultiPass extends BlockContainer {
         EcTileMultiPass tile = (EcTileMultiPass)world.getTileEntity(x, y, z);
         pickItem.setTagCompound(new NBTTagCompound());
         pickItem.getTagCompound().setString("EnchantChanger|baseBlock", tile.baseBlock);
+        pickItem.getTagCompound().setInteger("EnchantChanger|baseMeta", tile.baseMeta);
         return pickItem;
     }
 

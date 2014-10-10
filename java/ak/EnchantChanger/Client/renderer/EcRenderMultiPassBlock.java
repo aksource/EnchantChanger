@@ -46,7 +46,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
                     Block base = GameRegistry.findBlock(strings[0], strings[1]);
                     int meta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
                     GL11.glPushMatrix();
-                    GL11.glScalef(0.99F, 0.99F, 0.99F);
+                    GL11.glScalef(0.999F, 0.999F, 0.999F);
                     renderBlocks.renderBlockAsItem(base, meta, 1.0F);
                     GL11.glPopMatrix();
 
@@ -121,13 +121,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
         if (!(world.getTileEntity(x, y, z) instanceof EcTileMultiPass)) return false;
         EcTileMultiPass ecTileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
         if (ecTileMultiPass.baseBlock.equals("")) return false;
-        Block block1;
-        if (ClientProxy.customRenderPass == 0) {
-            block1 = ecTileMultiPass.getBaseBlock();
-            renderer.renderStandardBlock(block1, x, y, z);
-        } else {
-            renderer.renderStandardBlock(block, x, y, z);
-        }
+        renderer.renderStandardBlock(block, x, y, z);
         return true;
     }
 
@@ -140,6 +134,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
     public int getRenderId() {
         return ClientProxy.multiPassRenderType;
     }
+
     static {
         renderMap.put(ItemRenderType.ENTITY, ItemRendererHelper.ENTITY_ROTATION);
         renderMap.put(ItemRenderType.EQUIPPED, ItemRendererHelper.EQUIPPED_BLOCK);
