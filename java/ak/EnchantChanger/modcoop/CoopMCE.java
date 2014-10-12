@@ -1,8 +1,8 @@
 package ak.EnchantChanger.modcoop;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.StatCheckUtils;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.StatCheckUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -38,7 +38,7 @@ public class CoopMCE {
         int nowKill = StatCheckUtils.getTotalMobKillCount(entityPlayer);
         int tempKill = nowKill - prevKill;
         if (tempKill > 0) {
-            MCEconomyAPI.addPlayerMP(entityPlayer, tempKill * EnchantChanger.soldierSalary, false);
+            MCEconomyAPI.addPlayerMP(entityPlayer, tempKill * ConfigurationUtils.soldierSalary, false);
             int playerX = MathHelper.ceiling_double_int(entityPlayer.posX);
             int playerY = MathHelper.ceiling_double_int(entityPlayer.posY);
             int playerZ = MathHelper.ceiling_double_int(entityPlayer.posZ);

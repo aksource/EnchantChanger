@@ -8,6 +8,7 @@ import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
@@ -118,7 +119,7 @@ public class LivingEventHooks
     }
 
     private void spawnAPOrb(EntityLiving dead, EntityPlayer killer) {
-        if (EnchantChanger.enableAPSystem && killer.getCurrentEquippedItem() != null && killer.getCurrentEquippedItem().isItemEnchanted() && !dead.worldObj.isRemote) {
+        if (ConfigurationUtils.enableAPSystem && killer.getCurrentEquippedItem() != null && killer.getCurrentEquippedItem().isItemEnchanted() && !dead.worldObj.isRemote) {
             int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
             long lastTime = ExtendedPlayerData.get(killer).getApCoolingTime();
             if (lastTime != 0 && lastTime - dead.worldObj.getTotalWorldTime() < 20) exp = 2;
@@ -159,7 +160,7 @@ public class LivingEventHooks
 		if (player.capabilities.isCreativeMode) {
 			return;
 		}
-		if ((player.getFoodStats().getFoodLevel() < 0 && !EnchantChanger.flagYOUARETERRA) || !EcItemMateria.GGEnable) {
+		if ((player.getFoodStats().getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA) || !EcItemMateria.GGEnable) {
 			player.capabilities.disableDamage = false;
 			return;
 		}
@@ -182,7 +183,7 @@ public class LivingEventHooks
 			ItemStack playerItem = player.getCurrentEquippedItem();
 			if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
 				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
-						EnchantChanger.sizeAbsorbBox, EnchantChanger.sizeAbsorbBox, EnchantChanger.sizeAbsorbBox));
+						ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
                 for (Object aEntityList : EntityList) {
                     Entity entity = (Entity) aEntityList;
                     if (entity instanceof EntityLiving) {
@@ -208,7 +209,7 @@ public class LivingEventHooks
     private boolean checkFlightAvailable(EntityPlayer player) {
         return checkFlightItemInInv(player)
                 && !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
-                .getFoodLevel() < 0 && !EnchantChanger.flagYOUARETERRA));
+                .getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA));
     }
 
 	public static boolean checkFlightItem(ItemStack itemstack)

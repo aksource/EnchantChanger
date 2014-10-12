@@ -1,6 +1,6 @@
 package ak.EnchantChanger.enchantment;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
@@ -13,6 +13,6 @@ public class EcEnchantmentHoly extends Enchantment
 	@Override
     public boolean canApplyTogether(Enchantment par1Enchantment)
     {
-    	return this != par1Enchantment && par1Enchantment.effectId != EnchantChanger.idEnchantmentMeteor &&par1Enchantment.effectId != EnchantChanger.idEnchantmentThunder &&par1Enchantment.effectId != EnchantChanger.idEnchantmentTelepo;
+    	return this != par1Enchantment && par1Enchantment.effectId != ConfigurationUtils.idEnchantmentMeteor &&par1Enchantment.effectId != ConfigurationUtils.idEnchantmentThunder &&par1Enchantment.effectId != ConfigurationUtils.idEnchantmentTelepo;
     }
 }

@@ -3,6 +3,8 @@ package ak.EnchantChanger.item;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.MateriaTeleporter;
 import ak.EnchantChanger.entity.EcEntityMeteor;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,8 +41,8 @@ public class EcItemMateria extends EcItem
 	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
 			"Thunder", "Despell", "Haste", "Absorption" };
 	public static int MagicMateriaNum = MateriaMagicNames.length;
-	public static int[] magicEnch = new int[] { EnchantChanger.idEnchantmentMeteor, EnchantChanger.idEnchantmentHoly,
-			EnchantChanger.idEnchantmentTelepo, EnchantChanger.idEnchantmentFloat, EnchantChanger.idEnchantmentThunder};
+	public static int[] magicEnch = new int[] { ConfigurationUtils.idEnchantmentMeteor, ConfigurationUtils.idEnchantmentHoly,
+			ConfigurationUtils.idEnchantmentTelepo, ConfigurationUtils.idEnchantmentFloat, ConfigurationUtils.idEnchantmentThunder};
 	public static boolean GGEnable = false;
 
     public EcItemMateria(String name) {
@@ -67,7 +69,7 @@ public class EcItemMateria extends EcItem
 		}
 		if (itemstack.getItemDamage() == 0 && itemstack.isItemEnchanted()) {
 //			int EnchantmentKind = EnchantChanger.getMateriaEnchKind(itemstack);
-			int Lv = EnchantChanger.getMateriaEnchLv(itemstack);
+			int Lv = EnchantmentUtils.getMateriaEnchLv(itemstack);
 			if (entityplayer.isSneaking() && Lv > 1) {
 				//				entityplayer.addExperienceLevel(LevelUPEXP(itemstack, false));
 				ItemStack expBottle;
@@ -114,11 +116,11 @@ public class EcItemMateria extends EcItem
 
 	public void addMateriaLv(ItemStack item, int addLv)
 	{
-		int EnchantmentKind = EnchantChanger.getMateriaEnchKind(item);
-		int Lv = EnchantChanger.getMateriaEnchLv(item);
+		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
+		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
 		NBTTagCompound nbt = item.getTagCompound();
 		nbt.removeTag("ench");
-		EnchantChanger.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
+		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
 	}
 
 	public void MateriaPotionEffect(ItemStack item, EntityLiving entity, EntityPlayer player)
@@ -135,8 +137,8 @@ public class EcItemMateria extends EcItem
 			default:
 			}
 		} else {
-			int EnchantmentKind = EnchantChanger.getMateriaEnchKind(item);
-			int Lv = EnchantChanger.getMateriaEnchLv(item);
+			int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
+			int Lv = EnchantmentUtils.getMateriaEnchLv(item);
 			if (EnchantmentKind != 256) {
 				int potionNum;
 				String Message;
@@ -162,7 +164,7 @@ public class EcItemMateria extends EcItem
 					return;
 				}
 				if (player.experienceLevel > LevelUPEXP(item, false) || player.capabilities.isCreativeMode) {
-					entity.addPotionEffect(new PotionEffect(potionNum, 20 * 60 * EnchantChanger.minutesMateriaEffects,
+					entity.addPotionEffect(new PotionEffect(potionNum, 20 * 60 * ConfigurationUtils.minutesMateriaEffects,
 							Lv));
 					player.addExperienceLevel(-LevelUPEXP(item, false));
 					player.addChatMessage(new ChatComponentText(EntityName + " gets " + Message));
@@ -204,7 +206,7 @@ public class EcItemMateria extends EcItem
                     stack3.addEnchantment(Enchantment.enchantmentsList[i], 10);
                     itemList.add(stack3);
                 }
-                if (EnchantChanger.debug) {
+                if (ConfigurationUtils.debug) {
 					stack4 = new ItemStack(this, 1, 0);
 					stack4.addEnchantment(Enchantment.enchantmentsList[i], 127);
 					itemList.add(stack4);
@@ -225,7 +227,7 @@ public class EcItemMateria extends EcItem
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         if (par1ItemStack.isItemEnchanted()) {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                Enchantment enchantment = EnchantChanger.enchKind(par1ItemStack);
+                Enchantment enchantment = EnchantmentUtils.enchKind(par1ItemStack);
                 String enchantmentType = "Type : " + StatCollector.translateToLocal("enchantmenttype." + enchantment.type.name());
                 String enchantmentInfo = "Info : " + StatCollector.translateToLocal("info." + enchantment.getName());
                 par3List.add(enchantmentType);
@@ -260,9 +262,9 @@ public class EcItemMateria extends EcItem
 		if (item.getItemDamage() > 0)
 			return EnumRarity.rare;
 		else {
-			if (EnchantChanger.getMateriaEnchKind(item) == 256 || EnchantChanger.getMateriaEnchLv(item) < 6)
+			if (EnchantmentUtils.getMateriaEnchKind(item) == 256 || EnchantmentUtils.getMateriaEnchLv(item) < 6)
 				return EnumRarity.common;
-			else if (EnchantChanger.getMateriaEnchLv(item) < 11)
+			else if (EnchantmentUtils.getMateriaEnchLv(item) < 11)
 				return EnumRarity.uncommon;
 			else
 				return EnumRarity.rare;
@@ -271,12 +273,12 @@ public class EcItemMateria extends EcItem
 
 	public int LevelUPEXP(ItemStack item, boolean next)
 	{
-		int EnchantmentKind = EnchantChanger.getMateriaEnchKind(item);
-		int Lv = EnchantChanger.getMateriaEnchLv(item);
+		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
+		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
 		int nextLv = next ? 1 : 0;
 		if (EnchantmentKind == 256)
 			return 0;
-		if (Lv < 5 || EnchantChanger.difficulty == 0) {
+		if (Lv < 5 || ConfigurationUtils.difficulty == 0) {
 			return Enchantment.enchantmentsList[EnchantmentKind].getMinEnchantability(Lv + nextLv);
 		} else {
 			return Enchantment.enchantmentsList[EnchantmentKind].getMaxEnchantability(Lv + nextLv);
@@ -287,7 +289,7 @@ public class EcItemMateria extends EcItem
 	{
 		ItemStack var6 = new ItemStack(this, 1, kind + 1);
 		if (kind < 5)
-			var6.addEnchantment(Enchantment.enchantmentsList[EnchantChanger.idEnchantmentMeteor + kind], 1);
+			var6.addEnchantment(Enchantment.enchantmentsList[ConfigurationUtils.idEnchantmentMeteor + kind], 1);
 		return new WeightedRandomChestContent(var6, par2, par3, par4);
 	}
 
@@ -474,7 +476,7 @@ public class EcItemMateria extends EcItem
 
 	private static boolean canMagic(EntityPlayer player)
 	{
-		return player.getFoodStats().getFoodLevel() > 0 || EnchantChanger.flagYOUARETERRA
+		return player.getFoodStats().getFoodLevel() > 0 || ConfigurationUtils.flagYOUARETERRA
 				|| player.capabilities.isCreativeMode;
 	}
 }

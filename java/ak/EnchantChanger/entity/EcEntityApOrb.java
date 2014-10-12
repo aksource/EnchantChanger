@@ -1,6 +1,8 @@
 package ak.EnchantChanger.entity;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import ak.MultiToolHolders.inventory.InventoryToolHolder;
 import net.minecraft.block.material.Material;
@@ -248,12 +250,12 @@ public class EcEntityApOrb extends Entity
 			prevAp = enchantList.getCompoundTagAt(j).getInteger("ap");
 			enchantmentId =  enchantList.getCompoundTagAt(j).getShort("id");
 			enchantmentLv = enchantList.getCompoundTagAt(j).getShort("lvl");
-			if (checkLevelLimit(Enchantment.enchantmentsList[enchantmentId], enchantmentLv) || EnchantChanger.magicEnchantment.contains(Integer.valueOf((int) enchantmentId))) {
+			if (checkLevelLimit(Enchantment.enchantmentsList[enchantmentId], enchantmentLv) || EnchantmentUtils.magicEnchantment.contains(Integer.valueOf((int) enchantmentId))) {
 				continue;
 			}
 			nowAp = prevAp + this.apValue;
-			if (EnchantChanger.isApLimit(enchantmentId, enchantmentLv, nowAp)) {
-				nowAp -= EnchantChanger.getApLimit(enchantmentId, enchantmentLv);
+			if (EnchantmentUtils.isApLimit(enchantmentId, enchantmentLv, nowAp)) {
+				nowAp -= EnchantmentUtils.getApLimit(enchantmentId, enchantmentLv);
 				if (enchantmentLv < Short.MAX_VALUE)
 					enchantList.getCompoundTagAt(j).setShort("lvl", (short) (enchantmentLv + 1));
 			}
@@ -265,14 +267,14 @@ public class EcEntityApOrb extends Entity
 	{
 		if (ench == null) {
 			return true;
-		} else if (EnchantChanger.levelLimitMap.containsKey(Integer.valueOf(ench.effectId))) {
-			if (EnchantChanger.levelLimitMap.get(Integer.valueOf(ench.effectId)) == 0) {
+		} else if (EnchantmentUtils.levelLimitMap.containsKey(Integer.valueOf(ench.effectId))) {
+			if (EnchantmentUtils.levelLimitMap.get(Integer.valueOf(ench.effectId)) == 0) {
 				return ench.getMaxLevel() <= nowLevel;
 			} else {
-				return EnchantChanger.levelLimitMap.get(Integer.valueOf(ench.effectId)) <= nowLevel;
+				return EnchantmentUtils.levelLimitMap.get(Integer.valueOf(ench.effectId)) <= nowLevel;
 			}
 		} else
-            return ench.getMaxLevel() == 1 ||  EnchantChanger.enableLevelCap && ench.getMaxLevel() <= nowLevel;
+            return ench.getMaxLevel() == 1 ||  ConfigurationUtils.enableLevelCap && ench.getMaxLevel() <= nowLevel;
 	}
 
 	public int getTextureByXP()

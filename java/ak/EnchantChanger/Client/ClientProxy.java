@@ -3,17 +3,19 @@ package ak.EnchantChanger.Client;
 import ak.EnchantChanger.Client.renderer.*;
 import ak.EnchantChanger.CommonProxy;
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
+import ak.EnchantChanger.api.ICustomReachItem;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
 import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.item.ICustomReachItem;
 import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -42,6 +44,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
+import static ak.EnchantChanger.api.Constants.MagicKEY;
+
 public class ClientProxy extends CommonProxy {
 	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
 			Keyboard.KEY_V, "EnchantChanger");
@@ -63,7 +67,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(
 				EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
-				new EcRenderItemThrowable(EnchantChanger.sizeMeteor));
+				new EcRenderItemThrowable(ConfigurationUtils.sizeMeteor));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
 				new EcRenderApOrb());
         multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
@@ -188,9 +192,9 @@ public class ClientProxy extends CommonProxy {
     private byte getKeyIndex() {
         byte key = -1;
         if (MagicKey.isPressed()) {
-            key = EnchantChanger.MagicKEY;
+            key = Constants.MagicKEY;
         } else if (MateriaKey.isPressed()) {
-            key = EnchantChanger.MateriaKEY;
+            key = Constants.MateriaKEY;
         }
 
         return key;
@@ -204,7 +208,7 @@ public class ClientProxy extends CommonProxy {
             if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
                 PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
                 switch(keyIndex) {
-                    case EnchantChanger.MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
+                    case MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
                 }
             }
         }

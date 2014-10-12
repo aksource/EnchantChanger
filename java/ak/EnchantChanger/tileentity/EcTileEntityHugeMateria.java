@@ -3,6 +3,8 @@ package ak.EnchantChanger.tileentity;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;
@@ -237,7 +239,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 						lv = 1;
 					else
 						lv = 1 + lvPlus;
-					EnchantChanger.addEnchantmentToItem(result, Enchantment.enchantmentsList[EnchArray[dmg][i]], lv);
+					EnchantmentUtils.addEnchantmentToItem(result, Enchantment.enchantmentsList[EnchArray[dmg][i]], lv);
 				}
 				return true;
 			}
@@ -258,7 +260,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 			result = materia.copy();
 			NBTTagCompound nbt = result.getTagCompound();
 			nbt.removeTag("ench");
-			EnchantChanger.addEnchantmentToItem(materia, Enchantment.enchantmentsList[EnchantChanger.getMateriaEnchKind(materia)], EnchantChanger.getMateriaEnchLv(materia) + 1 + lvPlus);
+			EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia)], EnchantmentUtils.getMateriaEnchLv(materia) + 1 + lvPlus);
 			return true;
 		}
 		else
@@ -295,11 +297,11 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 		for(i=0;i<256 + 3;i++){
 			MaterialArray[i]=null;
 		}
-		EnchArray[0][0] = EnchantChanger.idEnchantmentMeteor;
-		EnchArray[0][1] = EnchantChanger.idEnchantmentHoly;
-		EnchArray[0][2] = EnchantChanger.idEnchantmentTelepo;
-		EnchArray[0][3] = EnchantChanger.idEnchantmentFloat;
-		EnchArray[0][4] = EnchantChanger.idEnchantmentThunder;
+		EnchArray[0][0] = ConfigurationUtils.idEnchantmentMeteor;
+		EnchArray[0][1] = ConfigurationUtils.idEnchantmentHoly;
+		EnchArray[0][2] = ConfigurationUtils.idEnchantmentTelepo;
+		EnchArray[0][3] = ConfigurationUtils.idEnchantmentFloat;
+		EnchArray[0][4] = ConfigurationUtils.idEnchantmentThunder;
 		EnchArray[0][5] = Enchantment.enchantmentsList.length;
 		EnchArray[0][6] = Enchantment.enchantmentsList.length + 1;
 		EnchArray[0][7] = Enchantment.enchantmentsList.length + 2;
@@ -351,19 +353,19 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 		MaterialArray[51] = new ItemStack(Items.bow);
 		MaterialArray[61] = new ItemStack(Items.fishing_rod);
 		MaterialArray[62] = new ItemStack(Items.carrot_on_a_stick);
-		MaterialArray[EnchantChanger.idEnchantmentMeteor] = new ItemStack(Blocks.dragon_egg);
-		MaterialArray[EnchantChanger.idEnchantmentHoly] = new ItemStack(Items.golden_apple, 1, 1);
-		MaterialArray[EnchantChanger.idEnchantmentTelepo] = new ItemStack(Items.ender_pearl);
-		MaterialArray[EnchantChanger.idEnchantmentFloat] = new ItemStack(Items.ender_eye);
-		MaterialArray[EnchantChanger.idEnchantmentThunder] = new ItemStack(Blocks.gold_block);
+		MaterialArray[ConfigurationUtils.idEnchantmentMeteor] = new ItemStack(Blocks.dragon_egg);
+		MaterialArray[ConfigurationUtils.idEnchantmentHoly] = new ItemStack(Items.golden_apple, 1, 1);
+		MaterialArray[ConfigurationUtils.idEnchantmentTelepo] = new ItemStack(Items.ender_pearl);
+		MaterialArray[ConfigurationUtils.idEnchantmentFloat] = new ItemStack(Items.ender_eye);
+		MaterialArray[ConfigurationUtils.idEnchantmentThunder] = new ItemStack(Blocks.gold_block);
 		MaterialArray[Enchantment.enchantmentsList.length] = new ItemStack(Items.milk_bucket);
 		MaterialArray[Enchantment.enchantmentsList.length + 1] = new ItemStack(Items.golden_boots);
 		MaterialArray[Enchantment.enchantmentsList.length + 2] = new ItemStack(Items.nether_wart);
-		magicArray.add(EnchantChanger.idEnchantmentMeteor);
-		magicArray.add(EnchantChanger.idEnchantmentHoly);
-		magicArray.add(EnchantChanger.idEnchantmentTelepo);
-		magicArray.add(EnchantChanger.idEnchantmentFloat);
-		magicArray.add(EnchantChanger.idEnchantmentThunder);
+		magicArray.add(ConfigurationUtils.idEnchantmentMeteor);
+		magicArray.add(ConfigurationUtils.idEnchantmentHoly);
+		magicArray.add(ConfigurationUtils.idEnchantmentTelepo);
+		magicArray.add(ConfigurationUtils.idEnchantmentFloat);
+		magicArray.add(ConfigurationUtils.idEnchantmentThunder);
 		magicArray.add(Enchantment.enchantmentsList.length);
 		magicArray.add(Enchantment.enchantmentsList.length + 1);
 		magicArray.add(Enchantment.enchantmentsList.length + 2);

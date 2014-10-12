@@ -1,7 +1,8 @@
 package ak.EnchantChanger.Client.renderer;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -22,40 +23,40 @@ public class EcRenderMateria implements IItemRenderer
 	private static int face[];
 	public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<>();
 	public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<>();
-	private static final ResourceLocation materia0 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia0 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia0.png");
-	private static final ResourceLocation materia1 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia1 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia1.png");
-	private static final ResourceLocation materia3 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia3 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia3.png");
-	private static final ResourceLocation materia4 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia4 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia4.png");
-	private static final ResourceLocation materia5 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia5 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia5.png");
-	private static final ResourceLocation materia6 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia6 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia6.png");
-	private static final ResourceLocation materia7 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia7 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia7.png");
-	private static final ResourceLocation materia8 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia8 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia8.png");
-	private static final ResourceLocation materia9 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia9 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia9.png");
-	private static final ResourceLocation materia10 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia10 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia10.png");
-	private static final ResourceLocation materia11 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia11 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia11.png");
-	private static final ResourceLocation materia12 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia12 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia12.png");
-	private static final ResourceLocation materia13 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia13 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia13.png");
-	private static final ResourceLocation materia14 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia14 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia14.png");
-	private static final ResourceLocation materia15 = new ResourceLocation(EnchantChanger.EcAssetsDomain,
+	private static final ResourceLocation materia15 = new ResourceLocation(Constants.EcAssetsDomain,
 			"textures/gui/materia15.png");
 	private static final ResourceLocation[] materiaRes = new ResourceLocation[] { materia0, materia1, null, materia3,
 			materia4, materia5, materia6, materia7, materia8, materia9, materia10, materia11, materia12, materia13,
 			materia14, materia15 };
-    private static final ResourceLocation materiaObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/spherelight.obj");
+    private static final ResourceLocation materiaObj = new ResourceLocation(Constants.EcAssetsDomain, "models/spherelight.obj");
     private final IModelCustom sphereModel;
 
     public EcRenderMateria() {
@@ -160,8 +161,8 @@ public class EcRenderMateria implements IItemRenderer
 			}
 		} else if (!item.isItemEnchanted())
 			return materia0;
-		else if (materiaMap.containsKey(EnchantChanger.getMateriaEnchKind(item))) {
-			return materiaMap.get(EnchantChanger.getMateriaEnchKind(item));
+		else if (materiaMap.containsKey(EnchantmentUtils.getMateriaEnchKind(item))) {
+			return materiaMap.get(EnchantmentUtils.getMateriaEnchKind(item));
 		} else
 			return materia10;
 	}

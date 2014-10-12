@@ -1,6 +1,8 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
+import ak.EnchantChanger.api.ICustomReachItem;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.Enchantment;
@@ -30,11 +32,11 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 
 	public EcItemSword(ToolMaterial toolMaterial, String name) {
 		super(toolMaterial);
-        String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
+        String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
         this.setTextureName(s);
         this.setNoRepair();
-        this.setCreativeTab(EnchantChanger.tabsEChanger);
+        this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
 	}
 
     @Override
@@ -50,26 +52,26 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     public static void doMagic(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.idEnchantmentMeteor, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentMeteor, par1ItemStack) > 0) {
 			EcItemMateria.doMeteor(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.idEnchantmentHoly, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentHoly, par1ItemStack) > 0) {
 			EcItemMateria.doHoly(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.idEnchantmentTelepo, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentTelepo, par1ItemStack) > 0) {
 			EcItemMateria.teleportPlayer(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.idEnchantmentThunder, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentThunder, par1ItemStack) > 0) {
 			EcItemMateria.doThunder(par2World, par3EntityPlayer);
 		}
 	}
 
 	public static boolean hasFloat(ItemStack itemstack) {
 		return EnchantmentHelper.getEnchantmentLevel(
-				EnchantChanger.idEnchantmentFloat, itemstack) > 0;
+				ConfigurationUtils.idEnchantmentFloat, itemstack) > 0;
 	}
 
 	// 内蔵武器切り替え用攻撃メソッドの移植

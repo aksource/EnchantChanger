@@ -1,6 +1,7 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -12,7 +13,7 @@ public class EcItemEnchantmentTable extends EcItem
 		super(name);
 		maxStackSize = 1;
 		setMaxDamage(0);
-        this.setTextureName(EnchantChanger.EcTextureDomain + "PortableEnchantmentTable");
+        this.setTextureName(Constants.EcTextureDomain + "PortableEnchantmentTable");
 	}
 
 	/**
@@ -20,7 +21,7 @@ public class EcItemEnchantmentTable extends EcItem
 	 */
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{
-		par3EntityPlayer.openGui(EnchantChanger.instance, EnchantChanger.guiIdPortableEnchantmentTable,par2World,0,0,0);
+		par3EntityPlayer.openGui(EnchantChanger.instance, Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE,par2World,0,0,0);
 
 		return par1ItemStack;
 	}

@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMaterializer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class EcGuiMaterializer extends GuiContainer
 {
-	private static final ResourceLocation gui = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMaterializer);
+	private static final ResourceLocation gui = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMaterializer);
 	public EcGuiMaterializer (World world, InventoryPlayer inventoryPlayer)
 	{
 		//the container is instanciated and passed to the superclass for handling

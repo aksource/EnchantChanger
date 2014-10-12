@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.models;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ public class EcModelCloudSwordCore2 extends ModelBase
     ModelRenderer tsuka;
     //private Minecraft MC = FMLClientHandler.instance().getClient();
 //    private int SwordMode=0;
-    private ResourceLocation tex = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcCloudSwordCore2PNG);
+    private ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcCloudSwordCore2PNG);
     public EcModelCloudSwordCore2()
     {
         textureWidth = 64;

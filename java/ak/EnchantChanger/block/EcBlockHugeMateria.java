@@ -1,6 +1,7 @@
 package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -54,7 +55,7 @@ public class EcBlockHugeMateria extends BlockContainer
 		else
 		{
 			if(par1World.getBlock(par2, par3, par4) != null)
-				par5EntityPlayer.openGui(EnchantChanger.instance,EnchantChanger.guiIdHugeMateria,par1World,par2,par3,par4);
+				par5EntityPlayer.openGui(EnchantChanger.instance, Constants.GUI_ID_HUGE_MATERIA,par1World,par2,par3,par4);
 			return true;
 		}
 

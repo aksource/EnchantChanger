@@ -1,7 +1,7 @@
 package ak.EnchantChanger.Client.renderer;
 
 import ak.EnchantChanger.Client.models.*;
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,42 +25,42 @@ public class EcRenderSwordModel implements IItemRenderer
 	private static final EcModelSephirothSword SModel = new EcModelSephirothSword();
 	private static final EcModelZackSword ZModel = new EcModelZackSword();
 
-    private static final ResourceLocation zackSwordObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/bustersword.obj");
+    private static final ResourceLocation zackSwordObj = new ResourceLocation(Constants.EcAssetsDomain, "models/bustersword.obj");
     private final IModelCustom zackSwordModel;
-    private static final ResourceLocation zackSwordEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/bustersword256-edge.png");
-    private static final ResourceLocation zackSwordBox = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/bustersword256-box.png");
-    private static final ResourceLocation zackSwordCylinder = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/bustersword256-cylinder.png");
+    private static final ResourceLocation zackSwordEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/bustersword256-edge.png");
+    private static final ResourceLocation zackSwordBox = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/bustersword256-box.png");
+    private static final ResourceLocation zackSwordCylinder = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/bustersword256-cylinder.png");
 
-    private static final ResourceLocation ultimateWeaponObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/ultimateweapon.obj");
+    private static final ResourceLocation ultimateWeaponObj = new ResourceLocation(Constants.EcAssetsDomain, "models/ultimateweapon.obj");
     private final IModelCustom ultimateWeaponModel;
-    private static final ResourceLocation ultimateWeaponSword = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-sword.png");
-    private static final ResourceLocation ultimateWeaponEmblem = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-emblem.png");
-    private static final ResourceLocation ultimateWeaponHandguard = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-handguard.png");
-    private static final ResourceLocation ultimateWeaponGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-grip.png");
-    private static final ResourceLocation ultimateWeaponPipe01 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe01.png");
-    private static final ResourceLocation ultimateWeaponPipe02 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/ultimateweapon256-pipe02.png");
+    private static final ResourceLocation ultimateWeaponSword = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-sword.png");
+    private static final ResourceLocation ultimateWeaponEmblem = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-emblem.png");
+    private static final ResourceLocation ultimateWeaponHandguard = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-handguard.png");
+    private static final ResourceLocation ultimateWeaponGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-grip.png");
+    private static final ResourceLocation ultimateWeaponPipe01 = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-pipe01.png");
+    private static final ResourceLocation ultimateWeaponPipe02 = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/ultimateweapon256-pipe02.png");
 
-    private static final ResourceLocation masamuneObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/masamune.obj");
+    private static final ResourceLocation masamuneObj = new ResourceLocation(Constants.EcAssetsDomain, "models/masamune.obj");
     private final IModelCustom masamuneModel;
-    private static final ResourceLocation masamuneSword = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-sword.png");
-    private static final ResourceLocation masamuneGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/masamune256-grip.png");
+    private static final ResourceLocation masamuneSword = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/masamune256-sword.png");
+    private static final ResourceLocation masamuneGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/masamune256-grip.png");
 
-    private static final ResourceLocation firstSwordObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/firstsword.obj");
+    private static final ResourceLocation firstSwordObj = new ResourceLocation(Constants.EcAssetsDomain, "models/firstsword.obj");
     private final IModelCustom firstSwordModel;
-    private static final ResourceLocation firstSwordEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-edge.png");
-    private static final ResourceLocation firstSwordCenter = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-center.png");
-    private static final ResourceLocation firstSwordCase = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-case.png");
-    private static final ResourceLocation firstSwordGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/firstsword256-grip.png");
+    private static final ResourceLocation firstSwordEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/firstsword256-edge.png");
+    private static final ResourceLocation firstSwordCenter = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/firstsword256-center.png");
+    private static final ResourceLocation firstSwordCase = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/firstsword256-case.png");
+    private static final ResourceLocation firstSwordGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/firstsword256-grip.png");
 
-    private static final ResourceLocation unionSwordObj = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/unionsword.obj");
+    private static final ResourceLocation unionSwordObj = new ResourceLocation(Constants.EcAssetsDomain, "models/unionsword.obj");
     private final IModelCustom unionSwordModel;
-    private static final ResourceLocation organixEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/organix256-edge.png");;
-    private static final ResourceLocation organixGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/organix256-grip.png");;
-    private static final ResourceLocation butterflyedgeEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/butterflyedge256-edge.png");;
-    private static final ResourceLocation butterflyedgeGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/butterflyedge256-grip.png");;
-    private static final ResourceLocation runebladeEdge = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-edge.png");;
-    private static final ResourceLocation runebladeHand = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-hand.png");;
-    private static final ResourceLocation runebladeGrip = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/runeblade256-grip.png");;
+    private static final ResourceLocation organixEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-edge.png");;
+    private static final ResourceLocation organixGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-grip.png");;
+    private static final ResourceLocation butterflyedgeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-edge.png");;
+    private static final ResourceLocation butterflyedgeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-grip.png");;
+    private static final ResourceLocation runebladeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-edge.png");;
+    private static final ResourceLocation runebladeHand = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-hand.png");;
+    private static final ResourceLocation runebladeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-grip.png");;
 
     private Minecraft mc;
 

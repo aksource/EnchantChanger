@@ -5,6 +5,7 @@ import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.item.EcItemCloudSword;
 import ak.EnchantChanger.item.EcItemSword;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -115,7 +116,7 @@ public class RenderingOverlayEvent {
         for (int i = 0; i < 6; i++) {
             int xShift = (i == slot) ? 16 : 0;
             toRenderItem = (i == 5)?core : swordData.getStackInSlot(i);
-            renderInventorySlot(toRenderItem, EnchantChanger.cloudInvXCoord + xShift, EnchantChanger.cloudInvYCoord + i * 16);
+            renderInventorySlot(toRenderItem, ConfigurationUtils.cloudInvXCoord + xShift, ConfigurationUtils.cloudInvYCoord + i * 16);
         }
 
     }

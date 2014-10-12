@@ -1,6 +1,7 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -39,9 +40,9 @@ public class EcItemCloudSwordCore extends EcItemSword
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister)
 	{
-		this.itemIcon = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-close");
-		this.open = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-open");
-		this.close = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "FirstSword-close");
+		this.itemIcon = par1IconRegister.registerIcon(Constants.EcTextureDomain + "FirstSword-close");
+		this.open = par1IconRegister.registerIcon(Constants.EcTextureDomain + "FirstSword-open");
+		this.close = par1IconRegister.registerIcon(Constants.EcTextureDomain + "FirstSword-close");
 	}
 
     @Override

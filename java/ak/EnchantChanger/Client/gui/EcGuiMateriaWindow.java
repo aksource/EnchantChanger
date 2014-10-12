@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMateriaWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
  * Created by A.K. on 14/02/27.
  */
 public class EcGuiMateriaWindow extends GuiContainer {
-    private static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain, EnchantChanger.EcGuiMateriaWindow);
+    private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMateriaWindow);
     private ItemStack itemStack;
     public EcGuiMateriaWindow(World world, InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
         super(new EcContainerMateriaWindow(world, inventoryPlayer, item, slotnum));

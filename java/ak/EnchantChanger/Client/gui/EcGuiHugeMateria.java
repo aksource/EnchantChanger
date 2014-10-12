@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.relauncher.Side;
@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 public class EcGuiHugeMateria extends GuiContainer {
 
 	private EcTileEntityHugeMateria tileEntity;
-	private static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiHuge);
+	private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiHuge);
 	public EcGuiHugeMateria (InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te)
 	{
 		//the container is instanciated and passed to the superclass for handling

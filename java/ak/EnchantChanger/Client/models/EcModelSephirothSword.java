@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.models;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -17,7 +17,7 @@ public class EcModelSephirothSword extends ModelBase
 {
   //fields
 	ModelRenderer Sword;
-	private ResourceLocation tex = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcSephirothSwordPNG);
+	private ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcSephirothSwordPNG);
 	public EcModelSephirothSword()
 	{
 		textureWidth = 64;

@@ -1,9 +1,11 @@
 package ak.EnchantChanger.inventory;
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.enchantment.EnchantmentData;
+import ak.EnchantChanger.api.EnchantmentData;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,7 +70,7 @@ public class EcContainerMateriaWindow extends Container {
                     id = enchantments.getCompoundTagAt(i).getShort("id");
                     dmg = this.setMateriaDmgfromEnch(id);
                     materia = new ItemStack(EnchantChanger.itemMateria, 1, dmg);
-                    EnchantChanger.addEnchantmentToItem(materia, Enchantment.enchantmentsList[id], lv);
+                    EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.enchantmentsList[id], lv);
                     this.materiaInventory.setInventorySlotContents(slotnum, materia);
                     slotnum++;
                 }
@@ -77,15 +79,15 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private int setMateriaDmgfromEnch(int enchID) {
-        if (enchID == EnchantChanger.idEnchantmentMeteor)
+        if (enchID == ConfigurationUtils.idEnchantmentMeteor)
             return 1;
-        else if (enchID == EnchantChanger.idEnchantmentHoly)
+        else if (enchID == ConfigurationUtils.idEnchantmentHoly)
             return 2;
-        else if (enchID == EnchantChanger.idEnchantmentTelepo)
+        else if (enchID == ConfigurationUtils.idEnchantmentTelepo)
             return 3;
-        else if (enchID == EnchantChanger.idEnchantmentFloat)
+        else if (enchID == ConfigurationUtils.idEnchantmentFloat)
             return 4;
-        else if (enchID == EnchantChanger.idEnchantmentThunder)
+        else if (enchID == ConfigurationUtils.idEnchantmentThunder)
             return 5;
         else
             return 0;
@@ -107,7 +109,7 @@ public class EcContainerMateriaWindow extends Container {
             }
 
             for (EnchantmentData data :  enchantmentList) {
-                EnchantChanger.addEnchantmentToItem(openItem, data.enchantment, data.lv);
+                EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
             }
         }
     }
@@ -156,8 +158,8 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private boolean checkEnchantmentValid(ItemStack itemStack) {
-        Enchantment enchantment = EnchantChanger.enchKind(itemStack);
-        return EnchantChanger.isEnchantmentValid(enchantment, openItem);
+        Enchantment enchantment = EnchantmentUtils.enchKind(itemStack);
+        return EnchantmentUtils.isEnchantmentValid(enchantment, openItem);
     }
 
     @Override
@@ -178,7 +180,7 @@ public class EcContainerMateriaWindow extends Container {
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
             if (slotItem != null && slotItem.isItemEnchanted()) {
-                enchData = new EnchantmentData(EnchantChanger.enchKind(slotItem), EnchantChanger.enchLv(slotItem));
+                enchData = new EnchantmentData(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
                 list.add(enchData);
             }
         }

@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import cpw.mods.fml.relauncher.Side;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public class EcGuiMakoReactor extends GuiContainer {
-    public static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiMako);
+    public static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMako);
     private EcTileEntityMakoReactor tileEntity;
     private InventoryPlayer inventoryPlayer;
     private EcGuiMakoReactorButton prevButton;

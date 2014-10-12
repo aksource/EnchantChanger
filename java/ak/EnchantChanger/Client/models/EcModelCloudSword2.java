@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.models;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -26,7 +26,7 @@ public class EcModelCloudSword2 extends ModelBase
     ModelRenderer Batterfly2;
     ModelRenderer rune2;
     //private Minecraft MC = FMLClientHandler.instance().getClient();
-    private ResourceLocation tex = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcCloudSword2PNG);
+    private ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcCloudSword2PNG);
 
     public EcModelCloudSword2()
     {

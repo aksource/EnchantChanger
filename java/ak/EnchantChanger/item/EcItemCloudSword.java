@@ -1,6 +1,7 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcCloudSwordData;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.network.MessageCloudSword;
@@ -53,7 +54,7 @@ public class EcItemCloudSword extends EcItemSword
 			return this.makeCloudSwordCore(par1ItemStack);
 		} else {
             if (par2World.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(EnchantChanger.CtrlKEY));
+                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
             }
 //			par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
 //			if (!par2World.isRemote) {

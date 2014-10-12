@@ -1,8 +1,8 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.StatCheckUtils;
+import ak.EnchantChanger.api.Constants;
+import ak.EnchantChanger.utils.StatCheckUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -15,13 +15,13 @@ public class EcItemMaterializer extends EcItem
 		super(name);
 		maxStackSize = 1;
 		setMaxDamage(0);
-		this.setTextureName(EnchantChanger.EcTextureDomain + "PortableEnchantChanger");
+		this.setTextureName(Constants.EcTextureDomain + "PortableEnchantChanger");
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
 	{
-//		par3EntityPlayer.openGui(EnchantChanger.instance, EnchantChanger.guiIdMaterializer,par2World,0,0,0);
+//		par3EntityPlayer.openGui(EnchantChanger.instance, EnchantChanger.GUI_ID_MATERIALIZER,par2World,0,0,0);
         if (par2World.isRemote) return par1ItemStack;
 //        NBTTagCompound nbt = par3EntityPlayer.getEntityData();
         boolean flag = !ExtendedPlayerData.get(par3EntityPlayer).getSoldierMode();

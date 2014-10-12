@@ -2,7 +2,9 @@ package ak.EnchantChanger.network;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.EcItemSword;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -11,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import static ak.EnchantChanger.api.Constants.*;
 
 /**
  * Created by A.K. on 14/07/31.
@@ -21,9 +24,9 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
         EntityPlayer player = ctx.getServerHandler().playerEntity;
         if (player != null && player.getCurrentEquippedItem() != null && message.keyIndex != -1) {
             switch(message.keyIndex) {
-                case EnchantChanger.MagicKEY :doMagic(player.getCurrentEquippedItem(), player); break;
-                case EnchantChanger.MateriaKEY:openMateriaWindow(player);break;
-                case EnchantChanger.CtrlKEY:doCtrlKeyAction(player.getCurrentEquippedItem(), player); break;
+                case MagicKEY :doMagic(player.getCurrentEquippedItem(), player); break;
+                case MateriaKEY:openMateriaWindow(player);break;
+                case CtrlKEY:doCtrlKeyAction(player.getCurrentEquippedItem(), player); break;
             }
         }
         return null;
@@ -45,12 +48,12 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private void openMateriaWindow(EntityPlayer player) {
         if (canOpenMateriaWindow(player)) {
-            player.openGui(EnchantChanger.instance, EnchantChanger.guiIdMateriaWindow, player.worldObj, MathHelper.ceiling_double_int(player.posX), MathHelper.ceiling_double_int(player.posY), MathHelper.ceiling_double_int(player.posZ));
+            player.openGui(EnchantChanger.instance, Constants.GUI_ID_MATERIA_WINDOW, player.worldObj, MathHelper.ceiling_double_int(player.posX), MathHelper.ceiling_double_int(player.posY), MathHelper.ceiling_double_int(player.posZ));
         }
     }
 
     private boolean canOpenMateriaWindow(EntityPlayer player) {
-        return ExtendedPlayerData.get(player).getSoldierMode() && (EnchantChanger.difficulty < 2 || checkCost(player));
+        return ExtendedPlayerData.get(player).getSoldierMode() && (ConfigurationUtils.difficulty < 2 || checkCost(player));
     }
 
     private void doCtrlKeyAction(ItemStack itemStack, EntityPlayer player) {
@@ -61,11 +64,11 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private boolean checkCost(EntityPlayer player) {
         int expLv = player.experienceLevel;
-        if (expLv > EnchantChanger.enchantChangerCost) {
-            player.addExperienceLevel(-EnchantChanger.enchantChangerCost);
+        if (expLv > ConfigurationUtils.enchantChangerCost) {
+            player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }
-        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open materia window", EnchantChanger.enchantChangerCost)));
+        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open materia window", ConfigurationUtils.enchantChangerCost)));
         return false;
     }
 }

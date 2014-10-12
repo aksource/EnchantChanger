@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.models;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -18,7 +18,7 @@ public class EcModelZackSword extends ModelBase
 {
   //fields
     ModelRenderer Sword;
-    private ResourceLocation tex = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcZackSwordPNG);
+    private ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcZackSwordPNG);
 	public EcModelZackSword()
 	{
 		textureWidth = 128;

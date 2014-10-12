@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.models;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -21,8 +21,8 @@ public class EcModelUltimateWeapon extends ModelBase
 	//fields
 	ModelRenderer				Sword;
 	//private Minecraft MC = FMLClientHandler.instance().getClient();
-	private ResourceLocation	tex	= new ResourceLocation(EnchantChanger.EcAssetsDomain,
-											EnchantChanger.EcUltimateWeaponPNG);
+	private ResourceLocation	tex	= new ResourceLocation(Constants.EcAssetsDomain,
+											Constants.EcUltimateWeaponPNG);
 
 	public EcModelUltimateWeapon()
 	{

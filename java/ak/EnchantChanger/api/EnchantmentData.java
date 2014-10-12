@@ -1,4 +1,4 @@
-package ak.EnchantChanger.enchantment;
+package ak.EnchantChanger.api;
 
 import net.minecraft.enchantment.Enchantment;
 

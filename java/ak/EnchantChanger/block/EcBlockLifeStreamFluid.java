@@ -1,6 +1,7 @@
 package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -49,8 +50,8 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     }
     @Override
     public void registerBlockIcons(IIconRegister register) {
-        stillIcon = register.registerIcon(EnchantChanger.EcTextureDomain + "lifestream_still");
-        flowingIcon = register.registerIcon(EnchantChanger.EcTextureDomain + "lifestream_flow");
+        stillIcon = register.registerIcon(Constants.EcTextureDomain + "lifestream_still");
+        flowingIcon = register.registerIcon(Constants.EcTextureDomain + "lifestream_flow");
     }
 
     @Override

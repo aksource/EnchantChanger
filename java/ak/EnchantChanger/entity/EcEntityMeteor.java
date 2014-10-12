@@ -1,6 +1,6 @@
 package ak.EnchantChanger.entity;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,9 +25,9 @@ public class EcEntityMeteor extends Entity
     public double accelerationX;
     public double accelerationY;
     public double accelerationZ;
-    private float Explimit = EnchantChanger.powerMeteor;
+    private float Explimit = ConfigurationUtils.powerMeteor;
     private String throwerName;
-    private float Size = EnchantChanger.sizeMeteor;
+    private float Size = ConfigurationUtils.sizeMeteor;
 
     public EcEntityMeteor(World par1World)
     {

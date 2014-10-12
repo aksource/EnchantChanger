@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMakoReactor;
 import ak.EnchantChanger.network.MessageRFStepping;
 import ak.EnchantChanger.network.PacketHandler;
@@ -20,7 +20,7 @@ import java.util.List;
  * Created by A.K. on 14/10/07.
  */
 public class EcGuiMakoReactorGF extends GuiContainer {
-    public static final ResourceLocation GUI = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcGuiMako);
+    public static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMako);
     private EcTileEntityMakoReactor tileEntity;
     private InventoryPlayer inventoryPlayer;
     private EcGuiMakoReactorButton prevButton;

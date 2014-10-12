@@ -1,6 +1,6 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class EcItemBucketLifeStream extends ItemBucket {
     public EcItemBucketLifeStream(Block block, String name) {
         super(block);
-        String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
+        String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
         this.setTextureName(s);
     }

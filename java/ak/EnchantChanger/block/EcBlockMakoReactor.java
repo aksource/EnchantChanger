@@ -2,6 +2,7 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -64,7 +65,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
         super.registerBlockIcons(iconRegister);
-        this.iconFront = iconRegister.registerIcon(EnchantChanger.EcTextureDomain + "makoreactor-front");
+        this.iconFront = iconRegister.registerIcon(Constants.EcTextureDomain + "makoreactor-front");
     }
 
     @Override
@@ -81,7 +82,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor)world.getTileEntity(x, y, z);
         if (tile != null && tile.isActivated()) {
-            player.openGui(EnchantChanger.instance, EnchantChanger.guiIdMakoReactor, world, x, y, z);
+            player.openGui(EnchantChanger.instance, Constants.GUI_ID_MAKO_REACTOR, world, x, y, z);
         }
         return true;
     }

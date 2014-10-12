@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.renderer;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import cpw.mods.fml.relauncher.Side;
@@ -17,8 +17,8 @@ import org.lwjgl.opengl.GL12;
 public class EcRenderItemThrowable extends Render
 {
 	private float RenderSize;
-	private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcMeteorPNG);
-	private static final ResourceLocation TEXTUREEXEXPBOTTLE = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcExpBottlePNG);
+	private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcMeteorPNG);
+	private static final ResourceLocation TEXTUREEXEXPBOTTLE = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcExpBottlePNG);
 
 	public EcRenderItemThrowable(float par2)
 	{

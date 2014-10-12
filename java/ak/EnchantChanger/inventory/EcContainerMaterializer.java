@@ -2,9 +2,11 @@ package ak.EnchantChanger.inventory;
 
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.enchantment.EnchantmentData;
+import ak.EnchantChanger.api.EnchantmentData;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -150,7 +152,7 @@ public class EcContainerMaterializer extends Container {
                         var2 = enchOnItem.getCompoundTagAt(i).getShort("lvl");
                         this.itemEnchantmentData.add( new EnchantmentData(Enchantment.enchantmentsList[var1], var2));
                         if (i >= 8) {
-                           EnchantChanger.addEnchantmentToItem(Result, itemEnchantmentData.get(i).enchantment, itemEnchantmentData.get(i).lv);
+                           EnchantmentUtils.addEnchantmentToItem(Result, itemEnchantmentData.get(i).enchantment, itemEnchantmentData.get(i).lv);
                         }
                     }
             }
@@ -160,10 +162,10 @@ public class EcContainerMaterializer extends Container {
                     if (materiaitem == null) {
                         continue;
                     }
-                    int enchLv = EnchantChanger.enchLv(materiaitem);
-                    Enchantment enchKind = EnchantChanger.enchKind(materiaitem);
+                    int enchLv = EnchantmentUtils.enchLv(materiaitem);
+                    Enchantment enchKind = EnchantmentUtils.enchKind(materiaitem);
 
-                    if (!EnchantChanger.isEnchantmentValid(enchKind, enchitem) || !EnchantChanger.checkLvCap(materiaitem)) {
+                    if (!EnchantmentUtils.isEnchantmentValid(enchKind, enchitem) || !EnchantmentUtils.checkLvCap(materiaitem)) {
                         for (int i1 = 0; i1 < ResultSlotNum; i1++) {
                             this.materializeResult.setInventorySlotContents(i1, null);
                         }
@@ -189,11 +191,11 @@ public class EcContainerMaterializer extends Container {
                 }
 
                 for (EnchantmentData data : itemEnchantmentData) {
-                    EnchantChanger.addEnchantmentToItem(Result, data.enchantment, data.lv);
+                    EnchantmentUtils.addEnchantmentToItem(Result, data.enchantment, data.lv);
                 }
                 this.itemEnchantmentData.clear();
                 for (int i2 = 0; i2 < this.MateriaEnchList.size(); i2++) {
-                    EnchantChanger.addEnchantmentToItem(Result, Enchantment.enchantmentsList[this.MateriaEnchList.get(i2)], this.MateriaEnchLvList.get(i2));
+                    EnchantmentUtils.addEnchantmentToItem(Result, Enchantment.enchantmentsList[this.MateriaEnchList.get(i2)], this.MateriaEnchLvList.get(i2));
                 }
                 this.MateriaEnchList.clear();
                 this.MateriaEnchLvList.clear();
@@ -208,11 +210,11 @@ public class EcContainerMaterializer extends Container {
                 List<EnchantmentData> subList = itemEnchantmentData.subList(0, endIndex);
                 int slotIndex = 0;
                 for (EnchantmentData data : subList) {
-                    int decreasedLv = EnchantChanger.getDecreasedLevel(enchitem, data.lv);
+                    int decreasedLv = EnchantmentUtils.getDecreasedLevel(enchitem, data.lv);
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
                     if (decreasedLv > 0) {
                         ItemStack materia = new ItemStack(EnchantChanger.itemMateria, 1, damage);
-                        EnchantChanger.addEnchantmentToItem(materia, data.enchantment, decreasedLv);
+                        EnchantmentUtils.addEnchantmentToItem(materia, data.enchantment, decreasedLv);
                         this.materializeResult.setInventorySlotContents(slotIndex + 1, materia);
                     } else {
                         this.materializeResult.setInventorySlotContents(slotIndex + 1, null);
@@ -279,11 +281,11 @@ public class EcContainerMaterializer extends Container {
         return ret;
     }
     static {
-        magicDmg.add(EnchantChanger.idEnchantmentMeteor);
-        magicDmg.add(EnchantChanger.idEnchantmentHoly);
-        magicDmg.add(EnchantChanger.idEnchantmentTelepo);
-        magicDmg.add(EnchantChanger.idEnchantmentFloat);
-        magicDmg.add(EnchantChanger.idEnchantmentThunder);
+        magicDmg.add(ConfigurationUtils.idEnchantmentMeteor);
+        magicDmg.add(ConfigurationUtils.idEnchantmentHoly);
+        magicDmg.add(ConfigurationUtils.idEnchantmentTelepo);
+        magicDmg.add(ConfigurationUtils.idEnchantmentFloat);
+        magicDmg.add(ConfigurationUtils.idEnchantmentThunder);
     }
     //仕様変更。どうしようか迷っている。
 //	 public static int ExtraItemCheck(ItemStack par1ItemStack)

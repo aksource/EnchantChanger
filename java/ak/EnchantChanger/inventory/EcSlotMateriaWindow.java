@@ -1,7 +1,7 @@
 package ak.EnchantChanger.inventory;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -21,7 +21,7 @@ public class EcSlotMateriaWindow extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
-        return par1ItemStack.getItem() instanceof EcItemMateria && checkEnchantmentValid(par1ItemStack) && EnchantChanger.checkLvCap(par1ItemStack);
+        return par1ItemStack.getItem() instanceof EcItemMateria && checkEnchantmentValid(par1ItemStack) && EnchantmentUtils.checkLvCap(par1ItemStack);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class EcSlotMateriaWindow extends Slot {
     }
 
     private boolean checkEnchantmentValid(ItemStack itemStack) {
-        Enchantment enchantment = EnchantChanger.enchKind(itemStack);
-        return EnchantChanger.isEnchantmentValid(enchantment, openItem);
+        Enchantment enchantment = EnchantmentUtils.enchKind(itemStack);
+        return EnchantmentUtils.isEnchantmentValid(enchantment, openItem);
     }
 }

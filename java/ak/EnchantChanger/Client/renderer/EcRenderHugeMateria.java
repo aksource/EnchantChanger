@@ -1,7 +1,7 @@
 package ak.EnchantChanger.Client.renderer;
 
 import ak.EnchantChanger.Client.models.EcModelHMateria;
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,9 +17,9 @@ public class EcRenderHugeMateria extends TileEntitySpecialRenderer
 {
 	private EcModelHMateria Hmateria = new EcModelHMateria();
 
-	private static final ResourceLocation tex = new ResourceLocation(EnchantChanger.EcAssetsDomain,EnchantChanger.EcHugetex);
-    private static final ResourceLocation texture16 = new ResourceLocation(EnchantChanger.EcAssetsDomain, "textures/item/hugemateria16.png");
-    private static final ResourceLocation objHugeMateria = new ResourceLocation(EnchantChanger.EcAssetsDomain, "models/hugemateria.obj");
+	private static final ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcHugetex);
+    private static final ResourceLocation texture16 = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/hugemateria16.png");
+    private static final ResourceLocation objHugeMateria = new ResourceLocation(Constants.EcAssetsDomain, "models/hugemateria.obj");
     private final IModelCustom modelHugeMateria;
     public EcRenderHugeMateria() {
         modelHugeMateria = AdvancedModelLoader.loadModel(objHugeMateria);

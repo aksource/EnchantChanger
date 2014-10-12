@@ -1,10 +1,9 @@
 package ak.EnchantChanger.tileentity;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.MakoUtils;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
-import ak.EnchantChanger.item.EcItemBucketLifeStream;
-import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.modcoop.CoopTE;
 import cofh.api.energy.IEnergyConnection;
@@ -199,8 +198,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             }
 
             //魔晄バケツ・マテリアからの搬入処理
-            if (!tank.isFull() && items[SLOTS_FUEL[0]] != null && isMako(items[SLOTS_FUEL[0]])) {
-                int makoAmount = getMakoFromItem(items[SLOTS_FUEL[0]]);
+            if (!tank.isFull() && items[SLOTS_FUEL[0]] != null && MakoUtils.isMako(items[SLOTS_FUEL[0]])) {
+                int makoAmount = MakoUtils.getMakoFromItem(items[SLOTS_FUEL[0]]);
                 if (tank.getFluidAmount() + makoAmount <= tank.getCapacity()) {
                     tank.fill(new FluidStack(EnchantChanger.fluidLifeStream, makoAmount), true);
                     items[SLOTS_FUEL[0]].stackSize--;
@@ -386,13 +385,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         return this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
     }
 
-    public boolean isMako(ItemStack itemStack) {
-        return itemStack.getItem() instanceof EcItemBucketLifeStream || itemStack.getItem() instanceof EcItemMateria;
-    }
 
-    public int getMakoFromItem(ItemStack itemStack) {
-        return (itemStack.getItem() instanceof EcItemBucketLifeStream) ? 1000:5;
-    }
 
     public int getGeneratingRFMakoCost() {
         return getOutputMaxRFValue() / STEP_RF_VALUE;
@@ -554,7 +547,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             }
 
             if (RANGE_FUEL_SLOTS.contains(slot)) {
-                return item != null && isMako(item);
+                return item != null && MakoUtils.isMako(item);
             }
         }
         return false;

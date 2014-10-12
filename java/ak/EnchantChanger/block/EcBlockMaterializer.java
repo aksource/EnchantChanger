@@ -3,7 +3,9 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
+import ak.EnchantChanger.utils.ConfigurationUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -32,9 +34,9 @@ public class EcBlockMaterializer extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
-		this.top = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "EnchantChanger-top");
-		this.side = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "EnchantChanger-side");
-		this.bottom = par1IconRegister.registerIcon(EnchantChanger.EcTextureDomain + "EnchantChanger-bottom");
+		this.top = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-top");
+		this.side = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-side");
+		this.bottom = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-bottom");
 	}
 	@Override
 	public boolean renderAsNormalBlock()
@@ -55,7 +57,7 @@ public class EcBlockMaterializer extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-        if (EnchantChanger.difficulty < 2 || checkCost(par5EntityPlayer)) {
+        if (ConfigurationUtils.difficulty < 2 || checkCost(par5EntityPlayer)) {
             par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
         }
         ExtendedPlayerData.get(par5EntityPlayer).setLimitGaugeValue(0);//test
@@ -64,11 +66,11 @@ public class EcBlockMaterializer extends BlockContainer
 
     private boolean checkCost(EntityPlayer player) {
         int expLv = player.experienceLevel;
-        if (expLv > EnchantChanger.enchantChangerCost) {
-            player.addExperienceLevel(-EnchantChanger.enchantChangerCost);
+        if (expLv > ConfigurationUtils.enchantChangerCost) {
+            player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }
-        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open EnchantChanger", EnchantChanger.enchantChangerCost)));
+        player.addChatComponentMessage(new ChatComponentText(String.format("Need %dLevel to open EnchantChanger", ConfigurationUtils.enchantChangerCost)));
         return false;
     }
 

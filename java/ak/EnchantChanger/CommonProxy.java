@@ -1,6 +1,7 @@
 package ak.EnchantChanger;
 
 import ak.EnchantChanger.Client.gui.*;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.*;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
@@ -31,25 +32,25 @@ public class CommonProxy implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
-        if (id == EnchantChanger.guiIdMaterializer) {
+        if (id == Constants.GUI_ID_MATERIALIZER) {
             return new EcContainerMaterializer(world, player.inventory);
         }
-        if (id == EnchantChanger.guiIdPortableEnchantmentTable) {
+        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
             return new EcContainerPortableEnchantment(player.inventory, world, x, y, z);
         }
-        if (id == EnchantChanger.guiIdHugeMateria) {
+        if (id == Constants.GUI_ID_HUGE_MATERIA) {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null)
                 return new EcContainerHugeMateria(player.inventory, (EcTileEntityHugeMateria) t);
         }
-        if (id == EnchantChanger.guiIdMateriaWindow) {
+        if (id == Constants.GUI_ID_MATERIA_WINDOW) {
             ItemStack heldItem = player.getCurrentEquippedItem();
             int slot = player.inventory.currentItem;
             if (heldItem != null) {
                 return new EcContainerMateriaWindow(world, player.inventory, heldItem, slot);
             }
         }
-        if (id == EnchantChanger.guiIdMakoReactor) {
+        if (id == Constants.GUI_ID_MAKO_REACTOR) {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null)
                 return new EcContainerMakoReactor(player.inventory, (EcTileEntityMakoReactor) t);
@@ -60,25 +61,25 @@ public class CommonProxy implements IGuiHandler {
     //returns an instance of the Gui you made earlier
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        if (id == EnchantChanger.guiIdMaterializer) {
+        if (id == Constants.GUI_ID_MATERIALIZER) {
             return new EcGuiMaterializer(world, player.inventory);
         }
-        if (id == EnchantChanger.guiIdPortableEnchantmentTable) {
+        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
             return new EcGuiPortableEnchantment(player.inventory, world, x, y, z);
         }
-        if (id == EnchantChanger.guiIdHugeMateria) {
+        if (id == Constants.GUI_ID_HUGE_MATERIA) {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null)
                 return new EcGuiHugeMateria(player.inventory, (EcTileEntityHugeMateria) t);
         }
-        if (id == EnchantChanger.guiIdMateriaWindow) {
+        if (id == Constants.GUI_ID_MATERIA_WINDOW) {
             ItemStack heldItem = player.getCurrentEquippedItem();
             int slot = player.inventory.currentItem;
             if (heldItem != null) {
                 return new EcGuiMateriaWindow(world, player.inventory, heldItem, slot);
             }
         }
-        if (id == EnchantChanger.guiIdMakoReactor) {
+        if (id == Constants.GUI_ID_MAKO_REACTOR) {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null) {
                 if (EnchantChanger.loadTE) {

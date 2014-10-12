@@ -2,6 +2,7 @@ package ak.EnchantChanger.recipe;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -49,7 +50,7 @@ public class EcRecipeMateria implements IRecipe
 				this.output = materia1.copy();
 				this.output.stackSize = 1;
 				output.getTagCompound().removeTag("ench");
-				EnchantChanger.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantChanger.getMateriaEnchKind(materia1)], EnchantChanger.getMateriaEnchLv(materia1) + 1);
+				EnchantmentUtils.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia1)], EnchantmentUtils.getMateriaEnchLv(materia1) + 1);
 				flag = true;
 			}
 		}
@@ -57,20 +58,20 @@ public class EcRecipeMateria implements IRecipe
 		{
 			if(materia1.getItemDamage() == 0)
 			{
-				if(expBottle != null && EnchantChanger.getMateriaEnchLv(materia1) < 5 && materia1.isItemEnchanted())
+				if(expBottle != null && EnchantmentUtils.getMateriaEnchLv(materia1) < 5 && materia1.isItemEnchanted())
 				{
 					this.output = materia1.copy();
 					this.output.stackSize = 1;
 					output.getTagCompound().removeTag("ench");
-					EnchantChanger.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantChanger.getMateriaEnchKind(materia1)], EnchantChanger.getMateriaEnchLv(materia1) + 1);
+					EnchantmentUtils.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia1)], EnchantmentUtils.getMateriaEnchLv(materia1) + 1);
 					flag = true;
 				}
-				else if(exExpBottle != null && EnchantChanger.getMateriaEnchLv(materia1) >= 5 && materia1.isItemEnchanted())
+				else if(exExpBottle != null && EnchantmentUtils.getMateriaEnchLv(materia1) >= 5 && materia1.isItemEnchanted())
 				{
 					this.output = materia1.copy();
 					this.output.stackSize = 1;
 					output.getTagCompound().removeTag("ench");
-					EnchantChanger.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantChanger.getMateriaEnchKind(materia1)], EnchantChanger.getMateriaEnchLv(materia1) + 1);
+					EnchantmentUtils.addEnchantmentToItem(output, Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia1)], EnchantmentUtils.getMateriaEnchLv(materia1) + 1);
 					flag = true;
 				}
 				else if( expBottle == null && exExpBottle == null)

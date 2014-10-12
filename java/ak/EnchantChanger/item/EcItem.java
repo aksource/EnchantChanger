@@ -1,6 +1,6 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.Constants;
 import net.minecraft.item.Item;
 
 /**
@@ -9,9 +9,9 @@ import net.minecraft.item.Item;
 public class EcItem extends Item {
     public EcItem(String name) {
         super();
-        String s = String.format("%s%s", EnchantChanger.EcTextureDomain, name);
+        String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
         this.setTextureName(s);
-        this.setCreativeTab(EnchantChanger.tabsEChanger);
+        this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }
 }
