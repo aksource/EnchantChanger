@@ -59,7 +59,7 @@ public class EcBlockMultiPass extends BlockContainer {
         EcTileMultiPass tileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
         if (tileMultiPass != null && ClientProxy.customRenderPass == 0) {
             Block block = tileMultiPass.getBaseBlock();
-            return block.getIcon(world, x, y, z, side);
+            return block.getIcon(side, tileMultiPass.getBaseMeta());
         }
         return this.blockIcon;
     }
