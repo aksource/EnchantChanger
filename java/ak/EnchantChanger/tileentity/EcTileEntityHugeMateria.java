@@ -28,6 +28,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	private static ItemStack[] MaterialArray;
 	private static ArrayList<Integer> magicArray;
 	private ItemStack result = null;
+    private int consumedExpBottle = 0;
 	private ItemStack[] Hugeitemstacks = new ItemStack[5];
 	public int MaterializingTime = 0;
 	public float angle = 0;
@@ -205,25 +206,22 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 	{
 		ItemStack hMateria = this.getStackInSlot(0);
 		ItemStack base = this.getStackInSlot(1);
-		ItemStack diamond = this.getStackInSlot(2);
+		ItemStack expBottle = this.getStackInSlot(2);
 		ItemStack material = this.getStackInSlot(3);
 		ItemStack resultItem = this.getStackInSlot(4);
-		int lvPlus = 0;
-		if(diamond != null && diamond.getItem() == Items.diamond)
-			lvPlus = 9;
-		if(base == null || !(base .getItem() instanceof EcItemMateria) || resultItem != null || material == null || (diamond!= null && diamond.getItem() != Items.diamond))
+		if(base == null || !(base .getItem() instanceof EcItemMateria) || resultItem != null || material == null || (expBottle!= null && !isBottle(expBottle)))
 			return false;
 		else
 		{
 			if(hMateria != null && hMateria.getItem() instanceof EcItemMasterMateria)
 			{
 				int dmg = hMateria.getItemDamage();
-                return dmg >= 0 && dmg < 6 && makeResult(material, dmg, lvPlus);
+                return dmg >= 0 && dmg < 6 && makeResult(material, dmg);
 			}
-			return materiaLvUp(material,lvPlus);
+			return materiaLvUp(material,expBottle);
 		}
 	}
-	private boolean makeResult(ItemStack material, int dmg, int lvPlus)
+	private boolean makeResult(ItemStack material, int dmg)
 	{
 		for(int i= 0;i<EnchArray[dmg].length;i++)
 		{
@@ -234,18 +232,22 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 				else
 					result = new ItemStack(EnchantChanger.itemMateria,1,0);
 				if(EnchArray[dmg][i] >= 0 && EnchArray[dmg][i] < Enchantment.enchantmentsList.length){
-					int lv;
-					if(Enchantment.enchantmentsList[EnchArray[dmg][i]].getMaxLevel() == 1)
-						lv = 1;
-					else
-						lv = 1 + lvPlus;
-					EnchantmentUtils.addEnchantmentToItem(result, Enchantment.enchantmentsList[EnchArray[dmg][i]], lv);
+					EnchantmentUtils.addEnchantmentToItem(result, Enchantment.enchantmentsList[EnchArray[dmg][i]], 1);
 				}
 				return true;
 			}
 		}
 		return false;
 	}
+
+    public boolean isBottle(ItemStack item) {
+        return item != null && (item.getItem().equals(Items.experience_bottle) || item.getItem().equals(EnchantChanger.itemExExpBottle));
+    }
+
+    private boolean containMasterMateria() {
+        return this.getStackInSlot(0) != null && this.getStackInSlot(0).getItem() instanceof EcItemMasterMateria;
+    }
+
 	private boolean isValidItem(ItemStack item1, ItemStack item2)
 	{
 		if(item1.getItemDamage() == OreDictionary.WILDCARD_VALUE)
@@ -253,25 +255,37 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
 		else
 			return item1.isItemEqual(item2);
 	}
-	private boolean materiaLvUp(ItemStack materia, int lvPlus)
+	private boolean materiaLvUp(ItemStack materia, ItemStack bottle)
 	{
-		if(materia.getItem() instanceof EcItemMateria && materia.getItemDamage() > 0 && materia.isItemEnchanted())
-		{
+		if(materia.getItem() instanceof EcItemMateria
+                && bottle != null
+                && materia.getItemDamage() == 0
+                && materia.isItemEnchanted()) {
+            Enchantment enchantment = Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia)];
+            int lv = EnchantmentUtils.getMateriaEnchLv(materia);
+            ItemStack lvUpItem = EnchantmentUtils.getLvUpitem(enchantment, lv);
+            consumedExpBottle = lvUpItem.stackSize;
+            if (!lvUpItem.isItemEqual(bottle) || lvUpItem.stackSize > bottle.stackSize) {
+                return false;
+            }
 			result = materia.copy();
-			NBTTagCompound nbt = result.getTagCompound();
-			nbt.removeTag("ench");
-			EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.enchantmentsList[EnchantmentUtils.getMateriaEnchKind(materia)], EnchantmentUtils.getMateriaEnchLv(materia) + 1 + lvPlus);
+            result.getTagCompound().removeTag("ench");
+			EnchantmentUtils.addEnchantmentToItem(result, enchantment, lv + 1);
 			return true;
 		}
-		else
-			return false;
+		return false;
 	}
 	public boolean makeMateria()
 	{
-		for(int i=1;i < 4;i++)
-		{
-			if(this.getStackInSlot(i) != null)
-				this.decrStackSize(i, 1);
+		for(int i=1;i < 4;i++) {
+            if (i != 2) {
+                this.decrStackSize(i, 1);
+            } else {
+                if (!containMasterMateria() && consumedExpBottle > 0) {
+                    this.decrStackSize(i, consumedExpBottle);
+                    consumedExpBottle = 0;
+                }
+            }
 		}
 		this.setInventorySlotContents(4, result);
 		return true;

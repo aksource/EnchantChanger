@@ -1,5 +1,6 @@
 package ak.EnchantChanger.utils;
 
+import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.item.EcItemSword;
 import net.minecraft.enchantment.*;
@@ -9,28 +10,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.WeightedRandom;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by A.K. on 14/10/12.
  */
 public class EnchantmentUtils {
 
-    public static final HashMap<Integer, Integer> apLimit = new HashMap<>();
-    public static final HashSet<Integer> magicEnchantment = new HashSet<>();
-    public static HashMap<Integer, Integer> levelLimitMap = new HashMap<>();
-    public static HashMap<Integer, Integer> coefficientMap = new HashMap<>();
+    public static final HashMap<Integer, Integer> AP_LIMIT = new HashMap<>();
+    public static final HashSet<Integer> MAGIC_ENCHANTMENT = new HashSet<>();
+    public static final HashMap<Integer, Integer> LEVEL_LIMIT_MAP = new HashMap<>();
+    public static final HashMap<Integer, Integer> COEFFICIENT_MAP = new HashMap<>();
+    public static final Set<EnchantmentData> ENCHANTMENT_DATA_SET = new HashSet<>();
 
     public static boolean isApLimit(int Id, int Lv, int ap) {
         return getApLimit(Id, Lv) < ap;
     }
 
     public static int getApLimit(int Id, int Lv) {
-        if (apLimit.containsKey(Id)) {
-            return apLimit.get(Id) * (Lv / 5 + 1);
+        if (AP_LIMIT.containsKey(Id)) {
+            return AP_LIMIT.get(Id) * (Lv / 5 + 1);
         } else
             return 150 * (Lv / 5 + 1);
     }
@@ -142,40 +143,34 @@ public class EnchantmentUtils {
     }
 
     public static void initMaps() {
-        makeMapFromArray(coefficientMap, ConfigurationUtils.enchantmentAPCoefficients);
-        for (Integer integer : coefficientMap.keySet()) {
-            apLimit.put(integer, coefficientMap.get(integer) * ConfigurationUtils.pointAPBase);
+        makeMapFromArray(COEFFICIENT_MAP, ConfigurationUtils.enchantmentAPCoefficients);
+        for (Integer integer : COEFFICIENT_MAP.keySet()) {
+            AP_LIMIT.put(integer, COEFFICIENT_MAP.get(integer) * ConfigurationUtils.pointAPBase);
         }
-        magicEnchantment.add(ConfigurationUtils.idEnchantmentMeteor);
-        magicEnchantment.add(ConfigurationUtils.idEnchantmentFloat);
-        magicEnchantment.add(ConfigurationUtils.idEnchantmentHoly);
-        magicEnchantment.add(ConfigurationUtils.idEnchantmentTelepo);
-        magicEnchantment.add(ConfigurationUtils.idEnchantmentThunder);
-//        apLimit.put(0, 2 * pointAPBase);
-//        apLimit.put(1, 1 * pointAPBase);
-//        apLimit.put(2, 1 * pointAPBase);
-//        apLimit.put(3, 1 * pointAPBase);
-//        apLimit.put(4, 1 * pointAPBase);
-//        apLimit.put(5, 1 * pointAPBase);
-//        apLimit.put(6, 1 * pointAPBase);
-//        apLimit.put(7, 1 * pointAPBase);
-//        apLimit.put(16, 2 * pointAPBase);
-//        apLimit.put(17, 1 * pointAPBase);
-//        apLimit.put(18, 1 * pointAPBase);
-//        apLimit.put(19, 1 * pointAPBase);
-//        apLimit.put(20, 1 * pointAPBase);
-//        apLimit.put(21, 3 * pointAPBase);
-//        apLimit.put(32, 1 * pointAPBase);
-//        apLimit.put(33, 1 * pointAPBase);
-//        apLimit.put(34, 1 * pointAPBase);
-//        apLimit.put(35, 2 * pointAPBase);
-//        apLimit.put(48, 2 * pointAPBase);
-//        apLimit.put(49, 1 * pointAPBase);
-//        apLimit.put(50, 1 * pointAPBase);
-//        apLimit.put(51, 1 * pointAPBase);
-//        apLimit.put(61, 1 * pointAPBase);
-//        apLimit.put(62, 1 * pointAPBase);
-        makeMapFromArray(levelLimitMap, ConfigurationUtils.enchantmentLevelLimits);
+        MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentMeteor);
+        MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentFloat);
+        MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentHoly);
+        MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentTelepo);
+        MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentThunder);
+        makeMapFromArray(LEVEL_LIMIT_MAP, ConfigurationUtils.enchantmentLevelLimits);
+        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+            if (enchantment != null) {
+                for (int lv = enchantment.getMinLevel(); lv <= enchantment.getMaxLevel(); lv++) {
+                    ENCHANTMENT_DATA_SET.add(new EnchantmentData(enchantment, lv));
+                }
+            }
+        }
+    }
+
+    public static EnchantmentData getEnchantmentData(Random rand) {
+        return (EnchantmentData) WeightedRandom.getRandomItem(rand, ENCHANTMENT_DATA_SET);
+    }
+
+    public static ItemStack getLvUpitem(Enchantment enchantment, int lv) {
+        if (lv < enchantment.getMaxLevel()) {
+            return new ItemStack(Items.experience_bottle, lv, 0);
+        }
+        return new ItemStack(EnchantChanger.itemExExpBottle, lv / enchantment.getMaxLevel(), 0);
     }
 
     private static void makeMapFromArray(Map<Integer, Integer> map, String[] array) {

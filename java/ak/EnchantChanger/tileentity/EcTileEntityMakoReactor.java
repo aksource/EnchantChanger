@@ -6,6 +6,8 @@ import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.modcoop.CoopTE;
+import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IEnergyInfo;
@@ -14,6 +16,7 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -52,9 +55,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
     public static final int GENERATING_RF_MAKO_COST = 5;
-    public static final int[] SLOTS_MATERIAL = new int[]{0,1,2};
+    public static final int[] SLOTS_MATERIAL = new int[]{0, 1, 2};
     public static final int[] SLOTS_FUEL = new int[]{3};
-    public static final int[] SLOTS_RESULT = new int[]{4,5,6};
+    public static final int[] SLOTS_RESULT = new int[]{4, 5, 6, 7};
     public static final int SUM_OF_ALLSLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
     public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
     public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
@@ -263,6 +266,12 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
                     }
                 }
             }
+        }
+        if (this.worldObj.rand.nextInt(ConfigurationUtils.materiaGeneratingRatio) == 0 && items[SLOTS_RESULT[SLOTS_RESULT.length - 1]] == null) {
+            ItemStack materia = new ItemStack(EnchantChanger.itemMateria);
+            EnchantmentData enchantmentData = EnchantmentUtils.getEnchantmentData(this.worldObj.rand);
+            EnchantmentUtils.addEnchantmentToItem(materia, enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
+            items[SLOTS_RESULT[SLOTS_RESULT.length - 1]] = materia;
         }
         this.markDirty();
     }

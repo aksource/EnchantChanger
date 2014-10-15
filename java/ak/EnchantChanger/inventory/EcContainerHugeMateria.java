@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -118,7 +117,7 @@ public class EcContainerHugeMateria extends Container {
 						return null;
 					}
 				}
-				else if(itemstack.getItem() == Items.diamond)
+				else if(tileEntity.isBottle(itemstack))
 				{
 					if (!this.mergeItemStack(itemstack, 2, 3, false))
 					{

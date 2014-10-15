@@ -2,7 +2,7 @@ package ak.EnchantChanger.inventory;
 
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.EnchantmentData;
+import ak.EnchantChanger.api.EnchantmentLvPair;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -29,8 +29,8 @@ public class EcContainerMaterializer extends Container {
     public IInventory materializeSource = new EcSlotMaterializer(this, "MaterializerSource", SourceSlotNum);
     protected EcTileEntityMaterializer tileEntity;
     protected InventoryPlayer InvPlayer;
-    private ArrayList<EnchantmentData> itemEnchantmentData = new ArrayList<>();
-    private ArrayList<EnchantmentData> enchantmentRemoveData = new ArrayList<>();
+    private ArrayList<EnchantmentLvPair> itemEnchantmentLvPair = new ArrayList<>();
+    private ArrayList<EnchantmentLvPair> enchantmentRemoveData = new ArrayList<>();
 
     private ArrayList<Integer> MateriaEnchList = new ArrayList<>();
     private ArrayList<Integer> MateriaEnchLvList = new ArrayList<>();
@@ -150,9 +150,9 @@ public class EcContainerMaterializer extends Container {
                         enchOnItem.getCompoundTagAt(i).setInteger("ap", 0);
                         var1 = enchOnItem.getCompoundTagAt(i).getShort("id");
                         var2 = enchOnItem.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentData.add( new EnchantmentData(Enchantment.enchantmentsList[var1], var2));
+                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair(Enchantment.enchantmentsList[var1], var2));
                         if (i >= 8) {
-                           EnchantmentUtils.addEnchantmentToItem(Result, itemEnchantmentData.get(i).enchantment, itemEnchantmentData.get(i).lv);
+                           EnchantmentUtils.addEnchantmentToItem(Result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
                     }
             }
@@ -171,17 +171,17 @@ public class EcContainerMaterializer extends Container {
                         }
                         this.MateriaEnchList.clear();
                         this.MateriaEnchLvList.clear();
-                        this.itemEnchantmentData.clear();
+                        this.itemEnchantmentLvPair.clear();
                         return;
                     }
 
-                    for (EnchantmentData data : this.itemEnchantmentData) {
+                    for (EnchantmentLvPair data : this.itemEnchantmentLvPair) {
                         if (!data.enchantment.canApplyTogether(enchKind)) {
                             this.enchantmentRemoveData.add(data);
                         }
                     }
 
-                    this.itemEnchantmentData.removeAll(this.enchantmentRemoveData);
+                    this.itemEnchantmentLvPair.removeAll(this.enchantmentRemoveData);
                     this.enchantmentRemoveData.clear();
 
                     if (!this.MateriaEnchList.contains(enchKind.effectId)) {
@@ -190,10 +190,10 @@ public class EcContainerMaterializer extends Container {
                     }
                 }
 
-                for (EnchantmentData data : itemEnchantmentData) {
+                for (EnchantmentLvPair data : itemEnchantmentLvPair) {
                     EnchantmentUtils.addEnchantmentToItem(Result, data.enchantment, data.lv);
                 }
-                this.itemEnchantmentData.clear();
+                this.itemEnchantmentLvPair.clear();
                 for (int i2 = 0; i2 < this.MateriaEnchList.size(); i2++) {
                     EnchantmentUtils.addEnchantmentToItem(Result, Enchantment.enchantmentsList[this.MateriaEnchList.get(i2)], this.MateriaEnchLvList.get(i2));
                 }
@@ -206,10 +206,10 @@ public class EcContainerMaterializer extends Container {
                     this.materializeResult.setInventorySlotContents(i, null);
                 }
             } else if (enchOnItem != null) {//extract enchantment from Item
-                int endIndex = itemEnchantmentData.size() > 7 ? 7 :itemEnchantmentData.size();
-                List<EnchantmentData> subList = itemEnchantmentData.subList(0, endIndex);
+                int endIndex = itemEnchantmentLvPair.size() > 7 ? 7 : itemEnchantmentLvPair.size();
+                List<EnchantmentLvPair> subList = itemEnchantmentLvPair.subList(0, endIndex);
                 int slotIndex = 0;
-                for (EnchantmentData data : subList) {
+                for (EnchantmentLvPair data : subList) {
                     int decreasedLv = EnchantmentUtils.getDecreasedLevel(enchitem, data.lv);
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
                     if (decreasedLv > 0) {
@@ -225,7 +225,7 @@ public class EcContainerMaterializer extends Container {
                 this.materializeResult.setInventorySlotContents(0, Result);
                 this.MateriaEnchList.clear();
                 this.MateriaEnchLvList.clear();
-                this.itemEnchantmentData.clear();
+                this.itemEnchantmentLvPair.clear();
             } else {
                 for (int i = 0; i < ResultSlotNum; i++) {
                     this.materializeResult.setInventorySlotContents(i, null);
@@ -233,7 +233,7 @@ public class EcContainerMaterializer extends Container {
 
                 this.MateriaEnchList.clear();
                 this.MateriaEnchLvList.clear();
-                this.itemEnchantmentData.clear();
+                this.itemEnchantmentLvPair.clear();
             }
         }
     }

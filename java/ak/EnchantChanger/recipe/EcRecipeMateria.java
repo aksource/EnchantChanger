@@ -4,7 +4,6 @@ import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -36,10 +35,10 @@ public class EcRecipeMateria implements IRecipe
 				else
 					return false;
 			}
-			else if(craftitem.getItem() == Items.experience_bottle && expBottle == null && exExpBottle == null && materia2 == null)
+/*			else if(craftitem.getItem() == Items.experience_bottle && expBottle == null && exExpBottle == null && materia2 == null)
 				expBottle = craftitem;
 			else if(craftitem.getItem() == EnchantChanger.itemExExpBottle && expBottle == null && exExpBottle == null && materia2 == null)
-				exExpBottle = craftitem;
+				exExpBottle = craftitem;*/
 			else
 				return false;
 		}

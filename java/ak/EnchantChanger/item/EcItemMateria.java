@@ -1,6 +1,5 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.MateriaTeleporter;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -16,7 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -68,23 +66,22 @@ public class EcItemMateria extends EcItem
 			return itemstack;
 		}
 		if (itemstack.getItemDamage() == 0 && itemstack.isItemEnchanted()) {
-//			int EnchantmentKind = EnchantChanger.getMateriaEnchKind(itemstack);
-			int Lv = EnchantmentUtils.getMateriaEnchLv(itemstack);
-			if (entityplayer.isSneaking() && Lv > 1) {
-				//				entityplayer.addExperienceLevel(LevelUPEXP(itemstack, false));
-				ItemStack expBottle;
-				if (Lv > 5)
-					expBottle = new ItemStack(EnchantChanger.itemExExpBottle);
-				else
-					expBottle = new ItemStack(Items.experience_bottle);
-				if (!world.isRemote)
-					entityplayer.dropPlayerItemWithRandomChoice(expBottle, false);
-				this.addMateriaLv(itemstack, -1);
-			} else if ((entityplayer.experienceLevel >= LevelUPEXP(itemstack, true) || entityplayer.capabilities.isCreativeMode)
-					&& Lv != 0) {
-				entityplayer.addExperienceLevel(-LevelUPEXP(itemstack, true));
-				this.addMateriaLv(itemstack, 1);
-			}
+            //NO-OP YEAH!
+//			int Lv = EnchantmentUtils.getMateriaEnchLv(itemstack);
+//			if (entityplayer.isSneaking() && Lv > 1) {
+//				ItemStack expBottle;
+//				if (Lv > 5)
+//					expBottle = new ItemStack(EnchantChanger.itemExExpBottle);
+//				else
+//					expBottle = new ItemStack(Items.experience_bottle);
+//				if (!world.isRemote)
+//					entityplayer.dropPlayerItemWithRandomChoice(expBottle, false);
+//				this.addMateriaLv(itemstack, -1);
+//			} else if ((entityplayer.experienceLevel >= LevelUPEXP(itemstack, true) || entityplayer.capabilities.isCreativeMode)
+//					&& Lv != 0) {
+//				entityplayer.addExperienceLevel(-LevelUPEXP(itemstack, true));
+//				this.addMateriaLv(itemstack, 1);
+//			}
 		} else {
 			switch (itemstack.getItemDamage()) {
 			case 1:
@@ -192,7 +189,7 @@ public class EcItemMateria extends EcItem
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List itemList)
 	{
 		itemList.add(new ItemStack(this, 1, 0));
-        ItemStack stack1, stack2, stack3, stack4;
+        ItemStack stack1, stack2, /*stack3, */stack4;
 		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
 			if (Enchantment.enchantmentsList[i] != null && !this.isMagicEnch(i)) {
 				stack1 = new ItemStack(this, 1, 0);
@@ -202,9 +199,9 @@ public class EcItemMateria extends EcItem
                     stack2 = new ItemStack(this, 1, 0);
                     stack2.addEnchantment(Enchantment.enchantmentsList[i], Enchantment.enchantmentsList[i].getMaxLevel());
                     itemList.add(stack2);
-                    stack3 = new ItemStack(this, 1, 0);
-                    stack3.addEnchantment(Enchantment.enchantmentsList[i], 10);
-                    itemList.add(stack3);
+//                    stack3 = new ItemStack(this, 1, 0);
+//                    stack3.addEnchantment(Enchantment.enchantmentsList[i], 10);
+//                    itemList.add(stack3);
                 }
                 if (ConfigurationUtils.debug) {
 					stack4 = new ItemStack(this, 1, 0);

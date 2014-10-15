@@ -1,7 +1,7 @@
 package ak.EnchantChanger.inventory;
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.EnchantmentData;
+import ak.EnchantChanger.api.EnchantmentLvPair;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -102,13 +102,13 @@ public class EcContainerMateriaWindow extends Container {
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory) {
         if (par1IInventory == this.materiaInventory) {
-            ArrayList<EnchantmentData> enchantmentList = getEnchantmentListFromInventory();
+            ArrayList<EnchantmentLvPair> enchantmentList = getEnchantmentListFromInventory();
 
             if (openItem.isItemEnchanted()) {
                 openItem.getTagCompound().removeTag("ench");
             }
 
-            for (EnchantmentData data :  enchantmentList) {
+            for (EnchantmentLvPair data :  enchantmentList) {
                 EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
             }
         }
@@ -173,14 +173,14 @@ public class EcContainerMateriaWindow extends Container {
             return super.slotClick(slot, mouse, keyboard, par4EntityPlayer);
     }
 
-    private ArrayList<EnchantmentData> getEnchantmentListFromInventory() {
-        ArrayList<EnchantmentData> list = new ArrayList<>();
+    private ArrayList<EnchantmentLvPair> getEnchantmentListFromInventory() {
+        ArrayList<EnchantmentLvPair> list = new ArrayList<>();
         ItemStack slotItem;
-        EnchantmentData enchData;
+        EnchantmentLvPair enchData;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
             if (slotItem != null && slotItem.isItemEnchanted()) {
-                enchData = new EnchantmentData(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
+                enchData = new EnchantmentLvPair(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
                 list.add(enchData);
             }
         }

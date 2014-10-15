@@ -89,7 +89,7 @@ public class EcGuiMakoReactorGF extends GuiContainer {
 
         int smelt = tileEntity.getSmeltingTimeScaled(33);
 
-        this.drawTexturedModalRect(x + 81, y + 21, 176, 0, smelt, 41);
+        this.drawTexturedModalRect(x + 81, y + 26, 176, 0, smelt, 41);
 
         if (!tileEntity.tank.isEmpty()) {
             int fluidAmount = tileEntity.getFluidAmountScaled(50);

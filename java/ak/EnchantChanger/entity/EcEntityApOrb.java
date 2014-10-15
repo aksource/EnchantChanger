@@ -250,7 +250,7 @@ public class EcEntityApOrb extends Entity
 			prevAp = enchantList.getCompoundTagAt(j).getInteger("ap");
 			enchantmentId =  enchantList.getCompoundTagAt(j).getShort("id");
 			enchantmentLv = enchantList.getCompoundTagAt(j).getShort("lvl");
-			if (checkLevelLimit(Enchantment.enchantmentsList[enchantmentId], enchantmentLv) || EnchantmentUtils.magicEnchantment.contains(Integer.valueOf((int) enchantmentId))) {
+			if (checkLevelLimit(Enchantment.enchantmentsList[enchantmentId], enchantmentLv) || EnchantmentUtils.MAGIC_ENCHANTMENT.contains(Integer.valueOf((int) enchantmentId))) {
 				continue;
 			}
 			nowAp = prevAp + this.apValue;
@@ -267,11 +267,11 @@ public class EcEntityApOrb extends Entity
 	{
 		if (ench == null) {
 			return true;
-		} else if (EnchantmentUtils.levelLimitMap.containsKey(Integer.valueOf(ench.effectId))) {
-			if (EnchantmentUtils.levelLimitMap.get(Integer.valueOf(ench.effectId)) == 0) {
+		} else if (EnchantmentUtils.LEVEL_LIMIT_MAP.containsKey(Integer.valueOf(ench.effectId))) {
+			if (EnchantmentUtils.LEVEL_LIMIT_MAP.get(Integer.valueOf(ench.effectId)) == 0) {
 				return ench.getMaxLevel() <= nowLevel;
 			} else {
-				return EnchantmentUtils.levelLimitMap.get(Integer.valueOf(ench.effectId)) <= nowLevel;
+				return EnchantmentUtils.LEVEL_LIMIT_MAP.get(Integer.valueOf(ench.effectId)) <= nowLevel;
 			}
 		} else
             return ench.getMaxLevel() == 1 ||  ConfigurationUtils.enableLevelCap && ench.getMaxLevel() <= nowLevel;

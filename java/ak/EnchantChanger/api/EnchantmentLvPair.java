@@ -5,10 +5,10 @@ import net.minecraft.enchantment.Enchantment;
 /**
  * Created by A.K. on 14/02/27.
  */
-public class EnchantmentData {
+public class EnchantmentLvPair {
     public Enchantment enchantment;
     public int lv;
-    public EnchantmentData(Enchantment enchantmentId, int enchantmentLv) {
+    public EnchantmentLvPair(Enchantment enchantmentId, int enchantmentLv) {
         this.enchantment = enchantmentId;
         this.lv = enchantmentLv;
     }
@@ -18,7 +18,7 @@ public class EnchantmentData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EnchantmentData that = (EnchantmentData) o;
+        EnchantmentLvPair that = (EnchantmentLvPair) o;
 
         if (lv != that.lv) return false;
         if (enchantment != null ? !enchantment.equals(that.enchantment) : that.enchantment != null) return false;
@@ -35,6 +35,6 @@ public class EnchantmentData {
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        return new EnchantmentData(this.enchantment, this.lv);
+        return new EnchantmentLvPair(this.enchantment, this.lv);
     }
 }

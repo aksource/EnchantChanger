@@ -35,7 +35,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import java.util.logging.Logger;
 
 import static ak.EnchantChanger.Recipes.registerRecipes;
-import static ak.EnchantChanger.utils.ConfigurationUtils.*;
+import static ak.EnchantChanger.utils.ConfigurationUtils.enableDungeonLoot;
+import static ak.EnchantChanger.utils.ConfigurationUtils.initConfig;
 import static ak.EnchantChanger.utils.RegistrationUtils.*;
 
 @Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
@@ -114,7 +115,6 @@ public class EnchantChanger {
 
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
-        EnchantmentUtils.initMaps();
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
         FillBucketHook.buckets.put(blockLifeStream, itemBucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
@@ -147,6 +147,7 @@ public class EnchantChanger {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        EnchantmentUtils.initMaps();
         MakoUtils.init();
     }
 

@@ -4,6 +4,7 @@ import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
 import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
@@ -58,15 +59,25 @@ public class MakoUtils {
     }
 
     public static int getMakoFromItem(ItemStack itemStack) {
+        int coefficient = 1;
+        if (itemStack.isItemEnchanted()) {
+            NBTTagList enchantmentList = itemStack.getEnchantmentTagList();
+            for (int i = 0; i < enchantmentList.tagCount(); i++) {
+                if (enchantmentList.getCompoundTagAt(i).getShort("lvl") > 0) {
+                    coefficient *= enchantmentList.getCompoundTagAt(i).getShort("lvl");
+                    break;
+                }
+            }
+        }
         ItemStack copyItemWild = itemStack.copy();
         copyItemWild.setItemDamage(OreDictionary.WILDCARD_VALUE);
         ItemStackWrapper itemStackWrapper = ItemStackWrapper.getItemStackWrappaer(itemStack);
         ItemStackWrapper copyWrapper = ItemStackWrapper.getItemStackWrappaer(copyItemWild);
         if (MAKO_AMOUNT_MAP.containsKey(copyWrapper)) {
-            return MAKO_AMOUNT_MAP.get(copyWrapper);
+            return MAKO_AMOUNT_MAP.get(copyWrapper) * coefficient;
         }
         if (MAKO_AMOUNT_MAP.containsKey(itemStackWrapper)) {
-            return MAKO_AMOUNT_MAP.get(itemStackWrapper);
+            return MAKO_AMOUNT_MAP.get(itemStackWrapper) * coefficient;
         }
         return 0;
     }

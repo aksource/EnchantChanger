@@ -25,19 +25,25 @@ public class EcContainerMakoReactor extends Container {
         this.tileEntityMakoReactor = te;
         int i;
         for (i = 0; i < SLOTS_MATERIAL.length; i++) {
-            addSlotToContainer(new Slot(te, SLOTS_MATERIAL[i], 26 + i * 18, 14));
+            addSlotToContainer(new Slot(te, SLOTS_MATERIAL[i], 26 + i * 18, 19));
         }
 
         addSlotToContainer(new Slot(te, SLOTS_FUEL[0], 44, 55));
 
-        for (i = 0; i < SLOTS_RESULT.length; i++) {
-            addSlotToContainer(new Slot(te, SLOTS_RESULT[i], 115 + i * 18, 46) {
+        for (i = 0; i < SLOTS_RESULT.length - 1; i++) {
+            addSlotToContainer(new Slot(te, SLOTS_RESULT[i], 116 + i * 18, 46) {
                 @Override
                 public boolean isItemValid(ItemStack itemStack) {
                     return false;
                 }
             });
         }
+        addSlotToContainer(new Slot(te, SLOTS_RESULT[SLOTS_RESULT.length - 1], 116 + 18, 46 + 18) {
+            @Override
+            public boolean isItemValid(ItemStack itemStack) {
+                return false;
+            }
+        });
 
         bindPlayerInventory(inventoryPlayer);
     }
