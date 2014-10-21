@@ -206,7 +206,7 @@ public class EcContainerMaterializer extends Container {
                     this.materializeResult.setInventorySlotContents(i, null);
                 }
             } else if (enchOnItem != null) {//extract enchantment from Item
-                int endIndex = itemEnchantmentLvPair.size() > 7 ? 7 : itemEnchantmentLvPair.size();
+                int endIndex = itemEnchantmentLvPair.size() > 8 ? 8 : itemEnchantmentLvPair.size();
                 List<EnchantmentLvPair> subList = itemEnchantmentLvPair.subList(0, endIndex);
                 int slotIndex = 0;
                 for (EnchantmentLvPair data : subList) {
