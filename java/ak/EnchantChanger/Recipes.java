@@ -38,9 +38,9 @@ public class Recipes {
         if (ConfigurationUtils.difficulty < 2)
             GameRegistry.addRecipe(new EcRecipeMateria());
         GameRegistry.addRecipe(new EcRecipeMasterMateria());
-        GameRegistry.addShapelessRecipe(new ItemStack(itemMateria, 1, 0),
-                new ItemStack(Items.diamond, 1),
-                new ItemStack(Items.ender_pearl, 1));
+//        GameRegistry.addShapelessRecipe(new ItemStack(itemMateria, 1, 0),
+//                new ItemStack(Items.diamond, 1),
+//                new ItemStack(Items.ender_pearl, 1));
         GameRegistry.addRecipe(new ItemStack(itemZackSword, 1),
                 " X",
                 "XX",
@@ -117,12 +117,12 @@ public class Recipes {
                 new ItemStack(itemMasterMateria, 1, 3),
                 new ItemStack(itemMasterMateria, 1, 4),
                 new ItemStack(itemMasterMateria, 1, 5));
-        if (ConfigurationUtils.difficulty == 0)
-            GameRegistry.addRecipe(
-                    new ItemStack(Items.experience_bottle, 8),
-                    "XXX", "XYX", "XXX",
-                    'X', new ItemStack(Items.potionitem, 1, 0),
-                    'Y', new ItemStack(Items.diamond, 1));
+//        if (ConfigurationUtils.difficulty == 0)
+//            GameRegistry.addRecipe(
+//                    new ItemStack(Items.experience_bottle, 8),
+//                    "XXX", "XYX", "XXX",
+//                    'X', new ItemStack(Items.potionitem, 1, 0),
+//                    'Y', new ItemStack(Items.diamond, 1));
         GameRegistry.addRecipe(new ItemStack(itemExExpBottle, 8),
                 "XXX", "XYX", "XXX",
                 'X', new ItemStack(Items.experience_bottle, 1, 0),
