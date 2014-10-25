@@ -54,13 +54,13 @@ public class EcRenderSwordModel implements IItemRenderer
 
     private static final ResourceLocation unionSwordObj = new ResourceLocation(Constants.EcAssetsDomain, "models/unionsword.obj");
     private final IModelCustom unionSwordModel;
-    private static final ResourceLocation organixEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-edge.png");;
-    private static final ResourceLocation organixGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-grip.png");;
-    private static final ResourceLocation butterflyedgeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-edge.png");;
-    private static final ResourceLocation butterflyedgeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-grip.png");;
-    private static final ResourceLocation runebladeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-edge.png");;
-    private static final ResourceLocation runebladeHand = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-hand.png");;
-    private static final ResourceLocation runebladeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-grip.png");;
+    private static final ResourceLocation organixEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-edge.png");
+    private static final ResourceLocation organixGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/organix256-grip.png");
+    private static final ResourceLocation butterflyedgeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-edge.png");
+    private static final ResourceLocation butterflyedgeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/butterflyedge256-grip.png");
+    private static final ResourceLocation runebladeEdge = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-edge.png");
+    private static final ResourceLocation runebladeHand = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-hand.png");
+    private static final ResourceLocation runebladeGrip = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/runeblade256-grip.png");
 
     private Minecraft mc;
 

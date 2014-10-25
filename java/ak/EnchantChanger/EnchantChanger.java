@@ -95,7 +95,7 @@ public class EnchantChanger {
         itemPortableEnchantChanger = (new EcItemMaterializer("PortableEnchantChanger"));
         itemPortableEnchantmentTable = (new EcItemEnchantmentTable("PortableEnchantmentTable"));
         itemMasterMateria = new EcItemMasterMateria("itemMasterMateria").setTextureName("ender_pearl").setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1);
-        itemImitateSephirothSword = (new EcItemSephirothSwordImit("ImitateMasamuneBlade"));
+        itemImitateSephirothSword = (new EcItemSephirothSwordImit("ImitateMasamuneBlade")).setTextureName(Constants.EcTextureDomain + "MasamuneBlade");
         blockEnchantChanger = (new EcBlockMaterializer()).setBlockName("EnchantChanger").setCreativeTab(Constants.TAB_ENCHANT_CHANGER).setBlockTextureName(Constants.EcTextureDomain + "EnchantChanger-top").setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
         blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0).setBlockName("blockHugeMateria").setBlockTextureName("glass");
         itemHugeMateria = new EcItemHugeMateria("HugeMateria");
