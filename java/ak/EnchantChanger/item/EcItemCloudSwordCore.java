@@ -2,13 +2,13 @@ package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -25,7 +25,6 @@ import java.util.List;
 public class EcItemCloudSwordCore extends EcItemSword
 {
 	public static Entity Attackentity = null;
-//	private ItemStack[] swords = new ItemStack[5];
 	private int nowAttackingSwordSlot;
 	@SideOnly(Side.CLIENT)
 	private IIcon open;
@@ -65,7 +64,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 			return par1ItemStack;
 		}else{
 			if(!isActive(par1ItemStack) && canUnion(par3EntityPlayer)){
-                EcInventoryCloudSword swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
+                IInventory swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
 				unionSword(par3EntityPlayer, swordData);
 				return makeCloudSword(par1ItemStack);
 			}else{
@@ -77,13 +76,13 @@ public class EcItemCloudSwordCore extends EcItemSword
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5){
 		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
-        if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
-            EcInventoryCloudSword swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
-            if(swordData == null)
-                EcItemCloudSword.addInventoryFromItemStack(par1ItemStack, par2World);
-            swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
-            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
-        }
+//        if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
+//            EcInventoryCloudSword swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
+//            if(swordData == null)
+//                EcItemCloudSword.addInventoryFromItemStack(par1ItemStack, par2World);
+//            swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
+//            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
+//        }
 		if(par2World.isRemote){
 			if(isActive(par1ItemStack)){
 				this.itemIcon = this.open;
@@ -99,7 +98,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 //	}
 	public static ItemStack makeCloudSword(ItemStack stack)
 	{
-		ItemStack ChangeSword = new ItemStack(EnchantChanger.itemCloudSword);
+		ItemStack ChangeSword = new ItemStack(EnchantChanger.itemCloudSword, 1, stack.getItemDamage());
 		ChangeSword.setTagCompound(stack.getTagCompound());
 		return ChangeSword;
 	}
@@ -117,13 +116,13 @@ public class EcItemCloudSwordCore extends EcItemSword
 		canRepair = false;
 		return this;
 	}
-	@Override
-	public void onCreated(ItemStack item, World world, EntityPlayer player)
-	{
-		int uId = world.getUniqueDataId("CloudSwordStorage");
-        EcItemCloudSword.setCloudSwordStorageUID(item, uId);
-        EcItemCloudSword.addInventoryFromItemStack(item, world);
-	}
+//	@Override
+//	public void onCreated(ItemStack item, World world, EntityPlayer player)
+//	{
+//		int uId = world.getUniqueDataId("CloudSwordStorage");
+//        EcItemCloudSword.setCloudSwordStorageUID(item, uId);
+//        EcItemCloudSword.addInventoryFromItemStack(item, world);
+//	}
 	public boolean isActive(ItemStack itemStack)
 	{
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
@@ -179,7 +178,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 		player.inventory.setInventorySlotContents(this.nowAttackingSwordSlot, null);
 	}
 	
-	public void unionSword(EntityPlayer player, EcInventoryCloudSword swordData)
+	public void unionSword(EntityPlayer player, IInventory swordData)
 	{
 		int Index = 0;
 		int CurrentSlot = player.inventory.currentItem;

@@ -2,7 +2,6 @@ package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.EcCloudSwordData;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.network.MessageCloudSword;
 import ak.EnchantChanger.network.MessageKeyPressed;
@@ -11,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -18,14 +18,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class EcItemCloudSword extends EcItemSword
 {
-    @Deprecated
-	private EcInventoryCloudSword SwordData = null;
-    private static final Map<Integer, EcInventoryCloudSword> swordInventoryMap = new HashMap<>();
+//    @Deprecated
+//	private EcInventoryCloudSword SwordData = null;
+//    private static final Map<Integer, EcInventoryCloudSword> swordInventoryMap = new HashMap<>();
 
 	public EcItemCloudSword(String name)
 	{
@@ -36,14 +33,15 @@ public class EcItemCloudSword extends EcItemSword
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
         int slot = getSlotNumFromItemStack(stack);
-        EcInventoryCloudSword swordData = getInventoryFromItemStack(stack);
+        IInventory swordData = getInventoryFromItemStack(stack);
 		if (slot == 5 || swordData == null)
 			return false;
-		else if (swordData.getStackInSlot(slot) != null) {
+		if (swordData.getStackInSlot(slot) != null) {
 			this.attackTargetEntityWithTheItem(entity, player, swordData.getStackInSlot(slot), false);
+            swordData.markDirty();
 			return true;
-		} else
-			return false;
+		}
+        return false;
 	}
 
 	@Override
@@ -74,17 +72,17 @@ public class EcItemCloudSword extends EcItemSword
         PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte)slot), (EntityPlayerMP) entityPlayer);
     }
 
-    @Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
-		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
-            EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
-            if(swordData == null)
-                addInventoryFromItemStack(par1ItemStack, par2World);
-                swordData = getInventoryFromItemStack(par1ItemStack);
-            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
-		}
-	}
+//    @Override
+//	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
+//		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+//		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
+//            EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
+//            if(swordData == null)
+//                addInventoryFromItemStack(par1ItemStack, par2World);
+//                swordData = getInventoryFromItemStack(par1ItemStack);
+//            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
+//		}
+//	}
 
     public static int getSlotNumFromItemStack(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
@@ -106,54 +104,55 @@ public class EcItemCloudSword extends EcItemSword
         nbt.setInteger("slot", slotNum);
     }
 
-    public static EcInventoryCloudSword getInventoryFromItemStack(ItemStack itemStack) {
-        int uid = getCloudSwordStorageUID(itemStack);
-        return swordInventoryMap.get(uid);
+    public static IInventory getInventoryFromItemStack(ItemStack itemStack) {
+//        int uid = getCloudSwordStorageUID(itemStack);
+//        return swordInventoryMap.get(uid);
+        return new EcInventoryCloudSword(itemStack);
     }
 
-    public static void addInventoryFromItemStack(ItemStack itemStack, World world) {
-        int uid = getCloudSwordStorageUID(itemStack);
-        swordInventoryMap.put(uid, new EcInventoryCloudSword(itemStack, world));
-    }
+//    public static void addInventoryFromItemStack(ItemStack itemStack, World world) {
+//        int uid = getCloudSwordStorageUID(itemStack);
+//        swordInventoryMap.put(uid, new EcInventoryCloudSword(itemStack, world));
+//    }
 
-	public static EcCloudSwordData getSwordData(ItemStack var1, World var2)
-	{
-		int uId = getCloudSwordStorageUID(var1);
-		String var3 = String.format("swords_%s", uId);
-		EcCloudSwordData var4 = (EcCloudSwordData) var2.loadItemData(EcCloudSwordData.class, var3);
+//	public static EcCloudSwordData getSwordData(ItemStack var1, World var2)
+//	{
+//		int uId = getCloudSwordStorageUID(var1);
+//		String var3 = String.format("swords_%s", uId);
+//		EcCloudSwordData var4 = (EcCloudSwordData) var2.loadItemData(EcCloudSwordData.class, var3);
+//
+//		if (var4 == null) {
+//			var4 = new EcCloudSwordData(var3);
+//			var4.markDirty();
+//			var2.setItemData(var3, var4);
+//		}
+//
+//		return var4;
+//	}
 
-		if (var4 == null) {
-			var4 = new EcCloudSwordData(var3);
-			var4.markDirty();
-			var2.setItemData(var3, var4);
-		}
+//    public static int getCloudSwordStorageUID(ItemStack itemStack) {
+//        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        return nbt.getInteger("CloudSwordStorage");
+//    }
 
-		return var4;
-	}
-
-    public static int getCloudSwordStorageUID(ItemStack itemStack) {
-        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        return nbt.getInteger("CloudSwordStorage");
-    }
-
-    public static void setCloudSwordStorageUID(ItemStack itemStack, int uid) {
-        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        nbt.setInteger("CloudSwordStorage", uid);
-    }
+//    public static void setCloudSwordStorageUID(ItemStack itemStack, int uid) {
+//        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        nbt.setInteger("CloudSwordStorage", uid);
+//    }
 
 	public ItemStack makeCloudSwordCore(ItemStack stack)
 	{
-		ItemStack ChangeSwordCore = new ItemStack(EnchantChanger.ItemCloudSwordCore);
+		ItemStack ChangeSwordCore = new ItemStack(EnchantChanger.ItemCloudSwordCore, 1, stack.getItemDamage());
 		ChangeSwordCore.setTagCompound(stack.getTagCompound());
 		return ChangeSwordCore;
 	}
@@ -161,7 +160,7 @@ public class EcItemCloudSword extends EcItemSword
 	public void doCastOffSwords(ItemStack ItemStack, World world, EntityPlayer player)
 	{
 		if (!world.isRemote) {
-            EcInventoryCloudSword swordData = getInventoryFromItemStack(ItemStack);
+            IInventory swordData = getInventoryFromItemStack(ItemStack);
 			for (int i = 0; i < 5; i++) {
 				int j;
 				for (j = 0; j < 9; j++) {
@@ -179,7 +178,7 @@ public class EcItemCloudSword extends EcItemSword
 
 	public void destroyTheItem(EntityPlayer player, ItemStack orig)
 	{
-        EcInventoryCloudSword swordData = getInventoryFromItemStack(orig);
+        IInventory swordData = getInventoryFromItemStack(orig);
 		swordData.setInventorySlotContents(getSlotNumFromItemStack(orig),  null);
 		MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, orig));
 		this.doCastOffSwords(orig, player.worldObj, player);

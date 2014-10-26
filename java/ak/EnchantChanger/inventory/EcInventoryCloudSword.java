@@ -1,68 +1,21 @@
 package ak.EnchantChanger.inventory;
 
-import ak.EnchantChanger.item.EcItemCloudSword;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 
-public class EcInventoryCloudSword implements IInventory{
-    public EcCloudSwordData data;
+public class EcInventoryCloudSword extends InventoryBasic{
+    public ItemStack sword;
 
-    public EcInventoryCloudSword(ItemStack stack, World world) {
-        data = EcItemCloudSword.getSwordData(stack, world);
-    }
-    @Override
-    public int getSizeInventory()
-    {
-        return 5;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int var1)
-    {
-        return data.swords[var1];
-    }
-
-    @Override
-    public ItemStack decrStackSize(int var1, int var2)
-    {
-        if(data.swords[var1] != null)
-        {
-            ItemStack var3;
-            if(data.swords[var1].stackSize <= var2)
-            {
-                var3 = data.swords[var1];
-                data.swords[var1] = null;
-                this.markDirty();
-                return var3;
-            }
-            else
-            {
-                var3 = data.swords[var1].splitStack(var2);
-
-                if (data.swords[var1].stackSize == 0)
-                {
-                    data.swords[var1] = null;
-                }
-
-                this.markDirty();
-                return var3;
-            }
+    public EcInventoryCloudSword(ItemStack stack) {
+        super("CloudSwordData", false, 5);
+        this.sword = stack;
+        if (!sword.hasTagCompound()) {
+            sword.setTagCompound(new NBTTagCompound());
         }
-        else
-            return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int var1)
-    {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int var1, ItemStack var2) {
-        data.swords[var1] = var2;
+        readFromNBT(sword.getTagCompound());
     }
 
     @Override
@@ -70,31 +23,52 @@ public class EcInventoryCloudSword implements IInventory{
         return 1;
     }
 
-	@Override
-	public void markDirty() {
-		data.upDate = true;
-	}
-
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1) {
-        return true;
+    public void markDirty() {
+        super.markDirty();
+        writeToNBT(sword.getTagCompound());
     }
 
     @Override
-    public void openInventory() {}
+    public void openInventory() {
+        super.openInventory();
+        if (!sword.hasTagCompound()) {
+            sword.setTagCompound(new NBTTagCompound());
+        }
+        readFromNBT(sword.getTagCompound());
+    }
 
     @Override
-    public void closeInventory() {}
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        return false;
+    public void closeInventory() {
+        super.closeInventory();
+        writeToNBT(sword.getTagCompound());
     }
-    @Override
-    public String getInventoryName() {
-        return "CloudSwordData";
+
+    public void readFromNBT(NBTTagCompound nbt) {
+        NBTTagList tagList = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+
+        for (int var3 = 0; var3 < tagList.tagCount(); ++var3) {
+            NBTTagCompound var4 = tagList.getCompoundTagAt(var3);
+            int var5 = var4.getByte("Slot") & 255;
+
+            if (var5 >= 0 && var5 < this.getSizeInventory()) {
+                this.setInventorySlotContents(var5, ItemStack.loadItemStackFromNBT(var4));
+            }
+        }
     }
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
+
+    public void writeToNBT(NBTTagCompound nbt) {
+        NBTTagList tagList = new NBTTagList();
+
+        for (int var3 = 0; var3 < this.getSizeInventory(); ++var3) {
+            if (this.getStackInSlot(var3) != null) {
+                NBTTagCompound var4 = new NBTTagCompound();
+                var4.setByte("Slot", (byte)var3);
+                this.getStackInSlot(var3).writeToNBT(var4);
+                tagList.appendTag(var4);
+            }
+        }
+
+        nbt.setTag("Items", tagList);
     }
 }

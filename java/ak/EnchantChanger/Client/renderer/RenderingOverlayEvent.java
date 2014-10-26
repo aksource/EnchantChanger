@@ -2,7 +2,6 @@ package ak.EnchantChanger.Client.renderer;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.item.EcItemCloudSword;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -16,6 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeVersion;
@@ -109,7 +109,7 @@ public class RenderingOverlayEvent {
     }
 
     private void renderCloudSwordInventory(ItemStack holdItem, float partialTicks) {
-        EcInventoryCloudSword swordData = EcItemCloudSword.getInventoryFromItemStack(holdItem);
+        IInventory swordData = EcItemCloudSword.getInventoryFromItemStack(holdItem);
         int slot = EcItemCloudSword.getSlotNumFromItemStack(holdItem);
         ItemStack core = new ItemStack(EnchantChanger.ItemCloudSwordCore, 1, holdItem.getItemDamage());
         ItemStack toRenderItem;
