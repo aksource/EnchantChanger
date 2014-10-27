@@ -7,6 +7,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
@@ -44,6 +45,9 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
                 if (pass == 0) {
                     String[] strings = item.getTagCompound().getString("EnchantChanger|baseBlock").split(":");
                     Block base = GameRegistry.findBlock(strings[0], strings[1]);
+                    if (base == null) {
+                        base = Blocks.stone;
+                    }
                     int meta = item.getTagCompound().getInteger("EnchantChanger|baseMeta");
                     GL11.glPushMatrix();
                     GL11.glScalef(0.999F, 0.999F, 0.999F);
