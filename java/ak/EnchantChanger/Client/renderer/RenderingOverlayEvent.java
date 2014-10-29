@@ -56,7 +56,7 @@ public class RenderingOverlayEvent {
         if (holdItem != null && holdItem.getItem() instanceof EcItemSword) {
             int slot = player.inventory.currentItem;
             renderLimitGauge(player, slot, width, height, event.partialTicks);
-            if (holdItem.getItem() instanceof EcItemCloudSword) {
+            if (ConfigurationUtils.enableCloudSwordDisplay && holdItem.getItem() instanceof EcItemCloudSword) {
                 renderCloudSwordInventory(holdItem, event.partialTicks);
             }
         }

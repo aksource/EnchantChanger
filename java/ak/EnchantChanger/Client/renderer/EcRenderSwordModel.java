@@ -88,12 +88,14 @@ public class EcRenderSwordModel implements IItemRenderer
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		if (item.getItem() instanceof EcItemSword) {
-            renderSwordModel(item, (EntityLivingBase) data[1], type);
+            EntityLivingBase entityLivingBase = (EntityLivingBase)data[1];
+            boolean isHanded = ItemStack.areItemStacksEqual(item, entityLivingBase.getHeldItem());
+            renderSwordModel(item, entityLivingBase, type, isHanded);
         }
 	}
 
     //Obj仕様renderメソッド
-    private void renderSwordModel(ItemStack item, EntityLivingBase entityLivingBase, ItemRenderType type) {
+    private void renderSwordModel(ItemStack item, EntityLivingBase entityLivingBase, ItemRenderType type, boolean isHanded) {
         GL11.glPushMatrix();
         GL11.glTranslatef(0.7F, 0.38F, 0.0F);
         GL11.glRotatef(40.0F, 0.0F, 0.0F, 1.0F);
@@ -102,14 +104,14 @@ public class EcRenderSwordModel implements IItemRenderer
             renderZackSwordModel(item, 0.12F);
         }
         if (item.getItem() instanceof EcItemCloudSword) {
-            renderUnionSwordModel(item, 0.12F);
+            renderUnionSwordModel(item, 0.12F, isHanded);
         }
         if (item.getItem() instanceof EcItemCloudSwordCore) {
             renderFirstSwordModel(item, 0.12F);
         }
         if (item.getItem() instanceof EcItemSephirothSword
                 || item.getItem() instanceof EcItemSephirothSwordImit) {
-            renderMasamuneModel(item, 0.12F);
+            renderMasamuneModel(item, 0.12F, isHanded);
         }
         if (item.getItem() instanceof EcItemUltimateWeapon) {
             renderUltimateWeaponModel(item, 0.12F);
@@ -154,12 +156,17 @@ public class EcRenderSwordModel implements IItemRenderer
         ultimateWeaponModel.renderPart("grip");
     }
 
-    private void renderMasamuneModel(ItemStack itme, float size) {
+    private void renderMasamuneModel(ItemStack itme, float size, boolean isHanded) {
         GL11.glScalef(size, size, size);
         mc.renderEngine.bindTexture(masamuneSword);
         masamuneModel.renderPart("sword");
         mc.renderEngine.bindTexture(masamuneGrip);
         masamuneModel.renderPart("grip");
+        if (!isHanded) {
+            //黒テクスチャなので流用
+            mc.renderEngine.bindTexture(butterflyedgeGrip);
+            masamuneModel.renderPart("sheath");
+        }
     }
 
     private void renderFirstSwordModel(ItemStack item, float size) {
@@ -193,8 +200,8 @@ public class EcRenderSwordModel implements IItemRenderer
         }
     }
 
-    private void renderUnionSwordModel(ItemStack item, float size) {
-        boolean isLimitBreak = mc.thePlayer.isSneaking();
+    private void renderUnionSwordModel(ItemStack item, float size, boolean isHanded) {
+        boolean isLimitBreak = mc.thePlayer.isSneaking() && isHanded;
         GL11.glPushMatrix();
         GL11.glScalef(size, size, size);
         renderUnionSwordCore(isLimitBreak);

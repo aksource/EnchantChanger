@@ -20,6 +20,7 @@ import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
@@ -100,7 +101,11 @@ public class ClientProxy extends CommonProxy {
 				materiaRenderer);
 		MinecraftForgeClient.registerItemRenderer(
 				EnchantChanger.itemMasterMateria, materiaRenderer);
-	}
+
+        EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
+        MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
+        FMLCommonHandler.instance().bus().register(ecRenderPlayerBack);
+    }
 
 	@Override
 	public void registerTileEntitySpecialRenderer() {
