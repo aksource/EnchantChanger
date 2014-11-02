@@ -9,4 +9,10 @@ public class EcEnchantmentFloat extends Enchantment
     {
         super(var1, var2, EnumEnchantmentType.weapon);
     }
+
+    @Override
+    public boolean isAllowedOnBooks()
+    {
+        return false;
+    }
 }

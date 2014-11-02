@@ -15,4 +15,10 @@ public class EcEnchantmentMeteo extends Enchantment
     {
     	return this != par1Enchantment && par1Enchantment.effectId != ConfigurationUtils.idEnchantmentHoly &&par1Enchantment.effectId != ConfigurationUtils.idEnchantmentTelepo &&par1Enchantment.effectId != ConfigurationUtils.idEnchantmentThunder;
     }
+
+    @Override
+    public boolean isAllowedOnBooks()
+    {
+        return false;
+    }
 }
