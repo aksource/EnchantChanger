@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -20,24 +19,24 @@ public class EcItemSephirothSword extends EcItemSword
 		super(ToolMaterial.EMERALD, name);
 	}
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
-	{
-		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-		if (par3EntityPlayer.isSneaking()) {
-			if (!par3EntityPlayer.capabilities.isCreativeMode)
-				par3EntityPlayer.setHealth(1);
-			par3EntityPlayer.addPotionEffect(new PotionEffect(1, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(3, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(5, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(8, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(11, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(12, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(13, 1200, 3));
-			par3EntityPlayer.addPotionEffect(new PotionEffect(16, 1200, 3));
-		}
-		return par1ItemStack;
-	}
+//	@Override
+//	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer player)
+//	{
+//		player.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+//		if (player.isSneaking()) {
+//			if (!player.capabilities.isCreativeMode)
+//				player.setHealth(1);
+//			player.addPotionEffect(new PotionEffect(1, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(3, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(5, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(8, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(11, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(12, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(13, 1200, 3));
+//			player.addPotionEffect(new PotionEffect(16, 1200, 3));
+//		}
+//		return par1ItemStack;
+//	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)
@@ -46,7 +45,7 @@ public class EcItemSephirothSword extends EcItemSword
 			SephirothSprintAttack = true;
 			SephirothSprintAttackEntity = entity;
 		}
-		return false;
+		return super.onLeftClickEntity(itemstack, player, entity);
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
@@ -38,6 +37,8 @@ public class EcItemMateria extends EcItem
 {
 	public static final String[] MateriaMagicNames = new String[] { "Black", "White", "Teleport", "Floating",
 			"Thunder", "Despell", "Haste", "Absorption" };
+    public static final String[] MAGIC_NAME = new String[] { "enchantment.Meteo", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
+            "enchantment.Thunder", "enchantment.Despell", "enchantment.Haste", "enchantment.Absorption" };
 	public static int MagicMateriaNum = MateriaMagicNames.length;
 	public static int[] magicEnch = new int[] { ConfigurationUtils.idEnchantmentMeteor, ConfigurationUtils.idEnchantmentHoly,
 			ConfigurationUtils.idEnchantmentTelepo, ConfigurationUtils.idEnchantmentFloat, ConfigurationUtils.idEnchantmentThunder};
@@ -111,14 +112,14 @@ public class EcItemMateria extends EcItem
 		return itemstack;
 	}
 
-	public void addMateriaLv(ItemStack item, int addLv)
-	{
-		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
-		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
-		NBTTagCompound nbt = item.getTagCompound();
-		nbt.removeTag("ench");
-		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
-	}
+//	public void addMateriaLv(ItemStack item, int addLv)
+//	{
+//		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
+//		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
+//		NBTTagCompound nbt = item.getTagCompound();
+//		nbt.removeTag("ench");
+//		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
+//	}
 
 	public void MateriaPotionEffect(ItemStack item, EntityLiving entity, EntityPlayer player)
 	{
@@ -199,9 +200,6 @@ public class EcItemMateria extends EcItem
                     stack2 = new ItemStack(this, 1, 0);
                     stack2.addEnchantment(Enchantment.enchantmentsList[i], Enchantment.enchantmentsList[i].getMaxLevel());
                     itemList.add(stack2);
-//                    stack3 = new ItemStack(this, 1, 0);
-//                    stack3.addEnchantment(Enchantment.enchantmentsList[i], 10);
-//                    itemList.add(stack3);
                 }
                 if (ConfigurationUtils.debug) {
 					stack4 = new ItemStack(this, 1, 0);
@@ -212,8 +210,8 @@ public class EcItemMateria extends EcItem
 		}
 		for (int i = 0; i < MagicMateriaNum; i++) {
 			ItemStack magic = new ItemStack(this, 1, 1 + i);
-			if (i < magicEnch.length)
-				magic.addEnchantment(Enchantment.enchantmentsList[magicEnch[i]], 1);
+//			if (i < magicEnch.length)
+//				magic.addEnchantment(Enchantment.enchantmentsList[magicEnch[i]], 1);
 			itemList.add(magic);
 		}
 	}
@@ -222,16 +220,23 @@ public class EcItemMateria extends EcItem
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-        if (par1ItemStack.isItemEnchanted()) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            String type, info;
+            if (par1ItemStack.isItemEnchanted()) {
                 Enchantment enchantment = EnchantmentUtils.enchKind(par1ItemStack);
-                String enchantmentType = "Type : " + StatCollector.translateToLocal("enchantmenttype." + enchantment.type.name());
-                String enchantmentInfo = "Info : " + StatCollector.translateToLocal("info." + enchantment.getName());
-                par3List.add(enchantmentType);
-                par3List.add(enchantmentInfo);
+                type = enchantment.type.name();
+                info = enchantment.getName();
             } else {
-                par3List.add("Press " + EnumChatFormatting.BLUE + EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " Key to get more Info.");
+                type = "ecsword";
+                info = MAGIC_NAME[(par1ItemStack.getItemDamage() - 1) % MAGIC_NAME.length];
             }
+
+            String enchantmentType = "Type : " + StatCollector.translateToLocal("enchantmenttype." + type);
+            String enchantmentInfo = "Info : " + StatCollector.translateToLocal("info." + info);
+            par3List.add(enchantmentType);
+            par3List.add(enchantmentInfo);
+        } else {
+            par3List.add("Press " + EnumChatFormatting.BLUE + EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " Key to get more Info.");
         }
     }
 

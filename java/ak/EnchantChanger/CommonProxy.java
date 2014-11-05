@@ -24,6 +24,8 @@ public class CommonProxy implements IGuiHandler {
     public void registerTileEntitySpecialRenderer() {
     }
 
+    public void registerExtraMateriaRendering(NBTTagCompound nbt) {}
+
     public EntityPlayer getPlayer() {return null;}
 
     public void doFlightOnSide(EntityPlayer player) {}
@@ -47,7 +49,7 @@ public class CommonProxy implements IGuiHandler {
             ItemStack heldItem = player.getCurrentEquippedItem();
             int slot = player.inventory.currentItem;
             if (heldItem != null) {
-                return new EcContainerMateriaWindow(world, player.inventory, heldItem, slot);
+                return new EcContainerMateriaWindow(player.inventory, heldItem, slot);
             }
         }
         if (id == Constants.GUI_ID_MAKO_REACTOR) {
@@ -76,7 +78,7 @@ public class CommonProxy implements IGuiHandler {
             ItemStack heldItem = player.getCurrentEquippedItem();
             int slot = player.inventory.currentItem;
             if (heldItem != null) {
-                return new EcGuiMateriaWindow(world, player.inventory, heldItem, slot);
+                return new EcGuiMateriaWindow(player.inventory, heldItem, slot);
             }
         }
         if (id == Constants.GUI_ID_MAKO_REACTOR) {

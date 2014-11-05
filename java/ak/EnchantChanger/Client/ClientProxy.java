@@ -33,6 +33,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -112,6 +113,15 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(
 				EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
 	}
+
+    @Override
+    public void registerExtraMateriaRendering(NBTTagCompound nbt) {
+        if (nbt.hasKey("enchantId") && nbt.hasKey("materiaTexId")) {
+            int enchantId = nbt.getInteger("enchantId");
+            int texId = nbt.getInteger("materiaTexId");
+            EcRenderMateria.registerExtraMateria(enchantId, texId);
+        }
+    }
 
     @Override
     public EntityPlayer getPlayer() {

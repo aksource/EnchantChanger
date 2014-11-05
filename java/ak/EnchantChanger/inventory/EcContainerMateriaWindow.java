@@ -4,6 +4,7 @@ import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.EnchantmentLvPair;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
+import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
@@ -14,24 +15,24 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by A.K..
  */
 public class EcContainerMateriaWindow extends Container {
-//    private World worldPointer;
     private InventoryPlayer invPlayer;
     private int openSlotNum;
     private ItemStack openItem;
     public int maxSlot = 16;
     public IInventory materiaInventory = new EcSlotMateriaInventory(this, "MateriaWindow", maxSlot);
+    private boolean initializing = false;
 
-    public EcContainerMateriaWindow(World world, InventoryPlayer inventoryPlayer, ItemStack item, int slot) {
-//        this.worldPointer = world;
+    public EcContainerMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slot) {
         this.invPlayer = inventoryPlayer;
         this.openSlotNum = slot;
         this.openItem = item;
@@ -59,11 +60,21 @@ public class EcContainerMateriaWindow extends Container {
 
     private void initMateriaInventory() {
         ItemStack item = this.invPlayer.getStackInSlot(this.openSlotNum);
-        if (item != null && item.isItemEnchanted()) {
+        if (item == null) return;
+        ItemStack materia;
+        int slotnum = 0;
+        if (EnchantmentUtils.hasMagic(item)) {
+            byte[] magic = EnchantmentUtils.getMagic(item);
+            for (byte b : magic) {
+                materia = new ItemStack(EnchantChanger.itemMateria, 1, b);
+                this.materiaInventory.setInventorySlotContents(slotnum, materia);
+                slotnum++;
+            }
+        }
+
+        if (item.isItemEnchanted()) {
             NBTTagList enchantments = item.getEnchantmentTagList();
-            ItemStack materia;
             int id, lv, dmg;
-            int slotnum = 0;
             for (int i = 0; i < enchantments.tagCount(); i++) {
                 lv = enchantments.getCompoundTagAt(i).getShort("lvl");
                 if (lv > 0 && slotnum < 16) {
@@ -76,6 +87,7 @@ public class EcContainerMateriaWindow extends Container {
                 }
             }
         }
+        this.initializing = true;
     }
 
     private int setMateriaDmgfromEnch(int enchID) {
@@ -101,11 +113,22 @@ public class EcContainerMateriaWindow extends Container {
 
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory) {
+        if (!initializing) return;
         if (par1IInventory == this.materiaInventory) {
+            NBTTagCompound nbt = openItem.getTagCompound();
+
+            List<Byte> byteList = getMagicListFromInventory();
+            byte[] magic = new byte[byteList.size()];
+
+            for (int i = 0; i < magic.length; i++) {
+                magic[i] = byteList.get(i);
+            }
+            EnchantmentUtils.setMagic(openItem, magic);
+
             ArrayList<EnchantmentLvPair> enchantmentList = getEnchantmentListFromInventory();
 
             if (openItem.isItemEnchanted()) {
-                openItem.getTagCompound().removeTag("ench");
+                nbt.removeTag("ench");
             }
 
             for (EnchantmentLvPair data :  enchantmentList) {
@@ -117,7 +140,7 @@ public class EcContainerMateriaWindow extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
         ItemStack retitem = null;
-        Slot slot = (Slot) this.inventorySlots.get(par2);
+        Slot slot = this.getSlot(par2);
 
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack = slot.getStack();
@@ -130,10 +153,10 @@ public class EcContainerMateriaWindow extends Container {
             } else {
                 if (itemstack.getItem() instanceof EcItemMateria) {
                     for (int i = 0; i < this.maxSlot; i++) {
-                        if (!((Slot) this.inventorySlots.get(i)).getHasStack() && this.checkEnchantmentValid(itemstack)) {
+                        if (!(this.getSlot(i)).getHasStack() && this.checkEnchantmentValid(itemstack)) {
                             ItemStack copyItem = itemstack.copy();
                             copyItem.stackSize = 1;
-                            ((Slot) this.inventorySlots.get(i)).putStack(copyItem);
+                            (this.getSlot(i)).putStack(copyItem);
                             itemstack.stackSize--;
                             break;
                         }
@@ -158,6 +181,9 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     private boolean checkEnchantmentValid(ItemStack itemStack) {
+        if (itemStack.getItemDamage() > 0 && openItem.getItem() instanceof EcItemSword) {
+            return true;
+        }
         Enchantment enchantment = EnchantmentUtils.enchKind(itemStack);
         return EnchantmentUtils.isEnchantmentValid(enchantment, openItem);
     }
@@ -182,6 +208,18 @@ public class EcContainerMateriaWindow extends Container {
             if (slotItem != null && slotItem.isItemEnchanted()) {
                 enchData = new EnchantmentLvPair(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
                 list.add(enchData);
+            }
+        }
+        return list;
+    }
+
+    private ArrayList<Byte> getMagicListFromInventory() {
+        ArrayList<Byte> list = new ArrayList<>();
+        ItemStack slotItem;
+        for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
+            slotItem = this.materiaInventory.getStackInSlot(i);
+            if (slotItem != null && slotItem.getItemDamage() > 0) {
+                list.add((byte)slotItem.getItemDamage());
             }
         }
         return list;

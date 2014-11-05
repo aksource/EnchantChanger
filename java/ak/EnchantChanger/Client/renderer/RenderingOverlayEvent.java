@@ -2,6 +2,7 @@ package ak.EnchantChanger.Client.renderer;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.EcItemCloudSword;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -64,7 +65,7 @@ public class RenderingOverlayEvent {
 
     private void renderLimitGauge(EntityPlayer player, int slot, int width, int height, float partialTicks) {
         int limitGaugeValue = ExtendedPlayerData.get(player).getLimitGaugeValue();
-        int limitGaugeMaxValue = ExtendedPlayerData.LIMIT_GAUGE_MAX;
+        int limitGaugeMaxValue = Constants.LIMIT_GAUGE_MAX;
         double ratio = (double)limitGaugeValue / (double)limitGaugeMaxValue;
         String valueString = String.valueOf(limitGaugeValue);
         int x = width / 2 - 90 + slot * 20 + 2;

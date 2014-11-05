@@ -29,7 +29,7 @@ public class EcItemUltimateWeapon extends EcItemSword
 			ultimateWeaponDamage = 10;
 		}
 		ObfuscationReflectionHelper.setPrivateValue(ItemSword.class, (ItemSword)itemstack.getItem(), ultimateWeaponDamage, 0);
-		return false;
+		return super.onLeftClickEntity(itemstack, player, entity);
 	}
 	public float WeaponDamagefromHP(EntityPlayer player)
 	{

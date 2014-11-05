@@ -1,8 +1,12 @@
 package ak.EnchantChanger.item;
 
+import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.api.ICustomReachItem;
+import ak.EnchantChanger.network.MessageKeyPressed;
+import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.EnchantChanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.Enchantment;
@@ -17,14 +21,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import org.lwjgl.input.Keyboard;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -40,6 +46,33 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 	}
 
     @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        ExtendedPlayerData data = ExtendedPlayerData.get(player);
+        if (data.isLimitBreaking() && data.getLimitBreakId() == Constants.LIMIT_BREAK_OMNISLASH_FIRST) {
+            entity.hurtResistantTime = 0;
+        }
+        return super.onLeftClickEntity(stack, player, entity);
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+        if (world.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+            PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
+        }
+        return super.onItemRightClick(itemStack, world, player);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advToolTip) {
+        if (EnchantmentUtils.hasMagic(itemStack)) {
+            for (byte b : EnchantmentUtils.getMagic(itemStack)) {
+                list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal(EcItemMateria.MAGIC_NAME[b - 1]));
+            }
+        }
+    }
+
+    @Override
     public Set<String> getToolClasses(ItemStack stack) {
         return ImmutableSet.of("pickaxe");
     }
@@ -51,28 +84,99 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 
     public static void doMagic(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
+        byte b = getMagicEnchantId(par1ItemStack);
 		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentMeteor, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentMeteor, par1ItemStack) > 0 || b == Constants.MAGIC_ID_METEOR) {
 			EcItemMateria.doMeteor(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentHoly, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentHoly, par1ItemStack) > 0 || b == Constants.MAGIC_ID_HOLY) {
 			EcItemMateria.doHoly(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentTelepo, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentTelepo, par1ItemStack) > 0 || b == Constants.MAGIC_ID_TELEPO) {
 			EcItemMateria.teleportPlayer(par2World, par3EntityPlayer);
 		}
 		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentThunder, par1ItemStack) > 0) {
+				ConfigurationUtils.idEnchantmentThunder, par1ItemStack) > 0 || b == Constants.MAGIC_ID_THUNDER) {
 			EcItemMateria.doThunder(par2World, par3EntityPlayer);
 		}
 	}
 
+    private static byte getMagicEnchantId(ItemStack itemStack) {
+        if (!itemStack.hasTagCompound()) return -1;
+        //Deprecated
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentMeteor, itemStack) > 0) {
+            return Constants.MAGIC_ID_METEOR;
+        }
+        //Deprecated
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentHoly, itemStack) > 0) {
+            return Constants.MAGIC_ID_HOLY;
+        }
+        //Deprecated
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentTelepo, itemStack) > 0) {
+            return Constants.MAGIC_ID_TELEPO;
+        }
+        //Deprecated
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentThunder, itemStack) > 0) {
+            return Constants.MAGIC_ID_THUNDER;
+        }
+
+        for (byte b : EnchantmentUtils.getMagic(itemStack)) {
+            if (!isPassiveMagic(b)) {
+                return b;
+            }
+        }
+        return -1;
+    }
+
+    public static boolean isPassiveMagic(byte b) {
+        return b == Constants.MAGIC_ID_FLOAT;
+    }
+
 	public static boolean hasFloat(ItemStack itemstack) {
 		return EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentFloat, itemstack) > 0;
+				ConfigurationUtils.idEnchantmentFloat, itemstack) > 0 || hasFloatNBT(itemstack);
 	}
+
+    private static boolean hasFloatNBT(ItemStack itemStack) {
+        for (byte b : EnchantmentUtils.getMagic(itemStack)) {
+            if (b == Constants.MAGIC_ID_FLOAT) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void doLimitBreak(ItemStack itemStack, EntityPlayer player) {
+        byte limitBreakId = ExtendedPlayerData.get(player).getLimitBreakId();
+        if (limitBreakId == Constants.LIMIT_BREAK_OMNISLASH_FIRST) {
+            doOmniSlashFirst(player);
+        }
+        if (limitBreakId == Constants.LIMIT_BREAK_POWER_UP) {
+            doPowerUp(player);
+        }
+        player.addChatMessage(new ChatComponentText("LIMIT BREAK!!"));
+    }
+
+    private void doOmniSlashFirst(EntityPlayer player) {
+        player.addPotionEffect(new PotionEffect(Potion.digSpeed.getId(), Constants.LIMIT_BREAK_TIME, 3));
+    }
+
+    private void doPowerUp(EntityPlayer player) {
+        player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.LIMIT_BREAK_TIME, 3));
+//        player.addPotionEffect(new PotionEffect(Potion.digSpeed.getId(), 1200, 3));
+        player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.LIMIT_BREAK_TIME, 3));
+        player.addPotionEffect(new PotionEffect(Potion.heal.getId(), Constants.LIMIT_BREAK_TIME, 3));
+        player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), Constants.LIMIT_BREAK_TIME, 3));
+        player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), Constants.LIMIT_BREAK_TIME, 3));
+        player.addPotionEffect(new PotionEffect(Potion.waterBreathing.getId(), Constants.LIMIT_BREAK_TIME, 3));
+        player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.LIMIT_BREAK_TIME, 3));
+    }
 
 	// 内蔵武器切り替え用攻撃メソッドの移植
 	public void attackTargetEntityWithTheItem(Entity par1Entity,
@@ -260,6 +364,14 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 
     //ServerOnly
     public void doCtrlKeyAction(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
-
+        ExtendedPlayerData data = ExtendedPlayerData.get(entityPlayer);
+        if (entityPlayer.isSneaking() && data.canLimitBreak()) {
+            data.setLimitGaugeValue(0);
+            data.setLimitBreakCount(Constants.LIMIT_BREAK_TIME);
+            doLimitBreak(itemStack, entityPlayer);
+        } else {
+            byte id = (byte)(data.getLimitBreakId() + 1);
+            data.setLimitBreakId(id);
+        }
     }
 }

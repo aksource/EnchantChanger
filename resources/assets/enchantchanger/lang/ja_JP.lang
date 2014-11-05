@@ -37,7 +37,7 @@ item.enchantchanger:bucket_lifestream.name=魔晄入りバケツ
 #Enchantment
 enchantment.Meteor=Meteor
 enchantment.Holy=Holy
-enchantment.Teleporting=Teleporting
+enchantment.Teleport=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
 #Potion
@@ -66,6 +66,7 @@ enchantmenttype.digger=ツール対象
 enchantmenttype.fishing_rod=釣り竿対象
 enchantmenttype.breakable=耐久値を持つアイテム対象
 enchantmenttype.bow=弓対象
+enchantmenttype.ecsword=エンチャント交換MOD追加武器対象
 #EnchantmentInfo
 info.enchantment.damage.all=全モブへの攻撃時のダメージ増加
 info.enchantment.damage.undead=不死者への攻撃時のダメージ増加
@@ -96,6 +97,9 @@ info.enchantment.Holy=不死者へ魔法の範囲攻撃 (エンチャント交�
 info.enchantment.Teleport=視線の先にワープする (エンチャント交換MODアイテム専用)
 info.enchantment.Floating=飛行できる (エンチャント交換MODアイテム専用)
 info.enchantment.Thunder=視線の先に”サンダー”を撃つ (エンチャント交換MODアイテム専用)
+info.enchantment.Despell=ポーション効果を解除する (エンチャント交換MODアイテム専用)
+info.enchantment.Haste=加速のポーション効果を付与する (エンチャント交換MODアイテム専用)
+info.enchantment.Absorption=周囲のモブからHPを奪い空腹度に加算する (エンチャント交換MODアイテム専用)
 #AdditionalEnchantment
 info.enchantment.vorpal=モブの頭のドロップ率が増加し、一撃死もたまに起こる
 info.enchantment.disjunction=エンダーマンへのダメージ増加

@@ -11,10 +11,10 @@ public class ConfigurationUtils {
     public static boolean debug = false;
     public static float powerMeteor;
     public static float sizeMeteor;
-    public static int[] extraSwordIDs = new int[]{267};
-    public static int[] extraToolIDs = new int[]{257};
-    public static int[] extraBowIDs = new int[]{261};
-    public static int[] extraArmorIDs = new int[]{298};
+    public static String[] extraSwordIDs = new String[]{};
+    public static String[] extraToolIDs = new String[]{"gregtech:gt.metatool.01"};
+    public static String[] extraBowIDs = new String[]{};
+    public static String[] extraArmorIDs = new String[]{};
     public static String[] enchantmentLevelLimits = new String[]{
             "0:10",
             "1:10",
@@ -71,15 +71,25 @@ public class ConfigurationUtils {
     public static boolean enableBackSword = true;
     public static int materiaGeneratingRatio = 256;
     public static int lifeStreamLakeRatio = 256;
+    @Deprecated
     public static int idEnchantmentMeteor = 240;
+    @Deprecated
     public static Enchantment enchantmentMeteor;
+    @Deprecated
     public static int idEnchantmentHoly = 241;
+    @Deprecated
     public static Enchantment enchantmentHoly;
+    @Deprecated
     public static int idEnchantmentTelepo = 242;
+    @Deprecated
     public static Enchantment enchantmentTelepo;
+    @Deprecated
     public static int idEnchantmentFloat = 243;
+    @Deprecated
     public static Enchantment enchantmentFloat;
+    @Deprecated
     public static int idEnchantmentThunder = 244;
+    @Deprecated
     public static Enchantment enchantmentThunder;
 
     public static void initConfig(Configuration config) {
@@ -101,16 +111,16 @@ public class ConfigurationUtils {
         idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", idMakoPoison, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra SwordIds", extraSwordIDs,
-                "Put Ids which you want to operate as  swords.").getIntList();
+                "Put Ids which you want to operate as  swords.").getStringList();
         extraToolIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra ToolIds", extraToolIDs,
-                "Put Ids which you want to operate as  tools.").getIntList();
+                "Put Ids which you want to operate as  tools.").getStringList();
         extraBowIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra BowIds", extraBowIDs,
-                "Put Ids which you want to operate as  bows.").getIntList();
+                "Put Ids which you want to operate as  bows.").getStringList();
         extraArmorIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra ArmorIds", extraArmorIDs,
-                "Put Ids which you want to operate as  armors.").getIntList();
+                "Put Ids which you want to operate as  armors.").getStringList();
 
         enableDecMateriaLv = config
                 .get(Configuration.CATEGORY_GENERAL, "enableDecMateriaLv", enableDecMateriaLv,

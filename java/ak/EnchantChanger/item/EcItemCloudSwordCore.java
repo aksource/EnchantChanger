@@ -47,28 +47,29 @@ public class EcItemCloudSwordCore extends EcItemSword
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-        boolean mode = isActive(par1ItemStack);
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advToolTip) {
+        boolean mode = isActive(itemStack);
         String s = mode ? "enchantchanger.cloudswordcore.mode.active":"enchantchanger.cloudswordcore.mode.inactive";
-        par3List.add(StatCollector.translateToLocal(s));
+        list.add(StatCollector.translateToLocal(s));
+        super.addInformation(itemStack, player, list, advToolTip);
     }
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer player)
 	{
-		if(par3EntityPlayer.isSneaking()){
-			if(!par2World.isRemote){
+		if(player.isSneaking()){
+			if(!world.isRemote){
 				invertActive(par1ItemStack);
 				ObfuscationReflectionHelper.setPrivateValue(ItemSword.class, (ItemSword)par1ItemStack.getItem(), (float)((isActive(par1ItemStack))?7:6), 0);
 			}
 			return par1ItemStack;
 		}else{
-			if(!isActive(par1ItemStack) && canUnion(par3EntityPlayer)){
+			if(!isActive(par1ItemStack) && canUnion(player)){
                 IInventory swordData = EcItemCloudSword.getInventoryFromItemStack(par1ItemStack);
-				unionSword(par3EntityPlayer, swordData);
+				unionSword(player, swordData);
 				return makeCloudSword(par1ItemStack);
 			}else{
-				par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+				player.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
 				return par1ItemStack;
 			}
 		}
@@ -106,9 +107,10 @@ public class EcItemCloudSwordCore extends EcItemSword
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		Attackentity = entity;
-		if(isActive(stack))
-			this.attackTargetEntityWithInventoryItem(entity, player);
-		return false;
+		if(isActive(stack)) {
+            this.attackTargetEntityWithInventoryItem(entity, player);
+        }
+		return super.onLeftClickEntity(stack, player, entity);
 	}
 	@Override
 	public Item setNoRepair()
@@ -126,22 +128,25 @@ public class EcItemCloudSwordCore extends EcItemSword
 	public boolean isActive(ItemStack itemStack)
 	{
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        return nbt.getBoolean("activemode");
+        return itemStack.getTagCompound().getBoolean("EnchantChanger|activemode");
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        return nbt.getBoolean("activemode");
 	}
 	private void invertActive(ItemStack itemStack)
 	{
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        nbt.setBoolean("activemode", !nbt.getBoolean("activemode"));
+        NBTTagCompound nbt = itemStack.getTagCompound();
+        nbt.setBoolean("EnchantChanger|activemode", !nbt.getBoolean("EnchantChanger|activemode"));
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        nbt.setBoolean("activemode", !nbt.getBoolean("activemode"));
 	}
 	public boolean canUnion(EntityPlayer player)
 	{
@@ -171,6 +176,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 				this.attackTargetEntityWithTheItem(par1Entity, player, sword, true);
 			}
 		}
+        par1Entity.hurtResistantTime = 20;
 	}
 	public void destroyTheItem(EntityPlayer player, ItemStack orig)
 	{

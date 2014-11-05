@@ -37,7 +37,7 @@ item.enchantchanger:bucket_lifestream.name=Bucket of Mako
 #Enchantment
 enchantment.Meteor=Meteor
 enchantment.Holy=Holy
-enchantment.Teleporting=Teleporting
+enchantment.Teleport=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
 #Potion
@@ -67,6 +67,7 @@ enchantmenttype.digger=Digging Tools
 enchantmenttype.fishing_rod=Fishing Rod
 enchantmenttype.breakable=Breakable Tools
 enchantmenttype.bow=Bows
+enchantmenttype.ecsword=Swords of EnchantChanger
 #EnchantmentInfo
 info.enchantment.damage.all=More Sword Damage for All Mob
 info.enchantment.damage.undead=More Sword Damage for Undead
@@ -97,6 +98,9 @@ info.enchantment.Holy=Magical Attack effective undead (EnchantChanger Item Only)
 info.enchantment.Teleport=Teleport to sight point (EnchantChanger Item Only)
 info.enchantment.Floating=Floating to the air (EnchantChanger Item Only)
 info.enchantment.Thunder=Shoot Thunderbolt to sight point (EnchantChanger Item Only)
+info.enchantment.Despell=Clear Potion Effect to sight point (EnchantChanger Item Only)
+info.enchantment.Haste=Up to Move Speed (EnchantChanger Item Only)
+info.enchantment.Absorption=Absorb Entity HP around of a player (EnchantChanger Item Only)
 #Additional Enchantments
 info.enchantment.vorpal=Add a chance to drop mob skull and to kill one attack
 info.enchantment.disjunction=More Sword Damage for Enderman

@@ -11,11 +11,13 @@ import ak.EnchantChanger.item.*;
 import ak.EnchantChanger.modcoop.CoopMCE;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.EnchantmentUtils;
+import com.google.common.base.Optional;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -25,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -146,20 +149,32 @@ public class EnchantChanger {
     }
 
     @Mod.EventHandler
+    public void imcEvent(FMLInterModComms.IMCEvent event) {
+        for (FMLInterModComms.IMCMessage message : event.getMessages()) {
+            if (message.key.equals("registerExtraMateria") && message.isNBTMessage()) {
+                proxy.registerExtraMateriaRendering(message.getNBTValue());
+            }
+        }
+    }
+
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         EnchantmentUtils.initMaps();
         MakoUtils.init();
     }
 
     public static String getUniqueStrings(Object obj) {
-        UniqueIdentifier uId;
+        UniqueIdentifier uId = null;
+        if (obj instanceof ItemStack) {
+            obj = ((ItemStack)obj).getItem();
+        }
         if (obj instanceof Block) {
             uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
-        } else {
+        }
+        if (obj instanceof Item){
             uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
         }
-        return uId.toString();
-
+        return Optional.fromNullable(uId).or(new UniqueIdentifier("none:dummy")).toString();
     }
 
 }

@@ -47,6 +47,10 @@ public class ItemStackWrapper {
         return containItemStack;
     }
 
+    public ItemStack getContainItemStackCopy() {
+        return containItemStack.copy();
+    }
+
     public static ItemStackWrapper getItemStackWrappaer(ItemStack itemStack) {
         return new ItemStackWrapper(itemStack);
     }

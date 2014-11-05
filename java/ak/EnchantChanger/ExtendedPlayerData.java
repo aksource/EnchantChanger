@@ -1,5 +1,6 @@
 package ak.EnchantChanger;
 
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
@@ -18,14 +19,14 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     public final static String EXT_PROP_NAME = "EC:ExtPlayerData";
 //    private final EntityPlayer player;
 
-    public static final int LIMIT_GAUGE_MAX = 100;
-    public static final int[] LIMIT_GAUGE_MAX_ARRAY = {100, 100, 150, 150, 200, 200, 250};
     private boolean isLevitating;
     private boolean soldierMode;
     private long apCoolingTime;
     private int limitValue;
     private long soldierWorkStartTime;
     private int mobKillCount;
+    private int limitBreakCount;
+    private byte limitBreakId;
 
 //    public ExtendedPlayerData(EntityPlayer player) {
 //        this.player = player;
@@ -55,6 +56,8 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         nbt.setInteger("limitValue", this.limitValue);
         nbt.setLong("soldierWorkStartTime", this.soldierWorkStartTime);
         nbt.setInteger("mobKillCount", this.mobKillCount);
+        nbt.setInteger("limitBreakCount", this.limitBreakCount);
+        nbt.setByte("limitBreakId", this.limitBreakId);
         compound.setTag(EXT_PROP_NAME, nbt);
     }
 
@@ -67,6 +70,8 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         this.limitValue = nbt.getInteger("limitValue");
         this.soldierWorkStartTime = nbt.getLong("soldierWorkStartTime");
         this.mobKillCount = nbt.getInteger("mobKillCount");
+        this.limitBreakCount = nbt.getInteger("limitBreakCount");
+        this.limitBreakId = nbt.getByte("limitBreakId");
     }
 
     @Override
@@ -98,15 +103,19 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     }
 
     public void addLimitGaugeValue(int value) {
-       limitValue = MathHelper.clamp_int(limitValue + value, 0, LIMIT_GAUGE_MAX);
+       limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public void setLimitGaugeValue(int value) {
-        limitValue = MathHelper.clamp_int(value, 0, LIMIT_GAUGE_MAX);
+        limitValue = MathHelper.clamp_int(value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public int getLimitGaugeValue() {
         return limitValue;
+    }
+
+    public boolean canLimitBreak() {
+        return this.limitValue == Constants.LIMIT_GAUGE_MAX;
     }
 
     public long getSoldierWorkStartTime() {
@@ -123,6 +132,30 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public void setMobKillCount(int mobKillCount) {
         this.mobKillCount = mobKillCount;
+    }
+
+    public int getLimitBreakCount() {
+        return limitBreakCount;
+    }
+
+    public void setLimitBreakCount(int limitBreakCount) {
+        this.limitBreakCount = limitBreakCount;
+    }
+
+    public void decreaseLimitBreakCount() {
+        this.limitBreakCount--;
+    }
+
+    public boolean isLimitBreaking() {
+        return this.limitBreakCount > 0;
+    }
+
+    public byte getLimitBreakId() {
+        return limitBreakId;
+    }
+
+    public void setLimitBreakId(byte limitBreakId) {
+        this.limitBreakId = limitBreakId;
     }
 
     public void saveProxyData(EntityPlayer player) {

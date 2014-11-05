@@ -1,9 +1,11 @@
 package ak.EnchantChanger.utils;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.MaterialResultPair;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.item.EcItemSword;
 import net.minecraft.enchantment.*;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -11,6 +13,8 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.WeightedRandom;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
 
@@ -19,11 +23,13 @@ import java.util.*;
  */
 public class EnchantmentUtils {
 
-    public static final HashMap<Integer, Integer> AP_LIMIT = new HashMap<>();
-    public static final HashSet<Integer> MAGIC_ENCHANTMENT = new HashSet<>();
-    public static final HashMap<Integer, Integer> LEVEL_LIMIT_MAP = new HashMap<>();
-    public static final HashMap<Integer, Integer> COEFFICIENT_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> AP_LIMIT = new HashMap<>();
+    public static final Set<Integer> MAGIC_ENCHANTMENT = new HashSet<>();
+    public static final Map<Integer, Integer> LEVEL_LIMIT_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> COEFFICIENT_MAP = new HashMap<>();
     public static final Set<EnchantmentData> ENCHANTMENT_DATA_SET = new HashSet<>();
+    //MasterMateria number, materials
+    private static final Map<Integer, Set<MaterialResultPair>> MATERIAL_MAP = new HashMap<>();
 
     public static boolean isApLimit(int Id, int Lv, int ap) {
         return getApLimit(Id, Lv) < ap;
@@ -78,6 +84,24 @@ public class EnchantmentUtils {
         return Lv;
     }
 
+    public static byte[] getMagic(ItemStack itemStack) {
+        if (!itemStack.hasTagCompound()) {
+            itemStack.setTagCompound(new NBTTagCompound());
+        }
+        return itemStack.getTagCompound().getByteArray("EnchantChanger|Magic");
+    }
+
+    public static void setMagic(ItemStack itemStack, byte[] magic) {
+        if (!itemStack.hasTagCompound()) {
+            itemStack.setTagCompound(new NBTTagCompound());
+        }
+        itemStack.getTagCompound().setByteArray("EnchantChanger|Magic", magic);
+    }
+
+    public static boolean hasMagic(ItemStack itemStack) {
+        return itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("EnchantChanger|Magic", Constants.NBT.TAG_BYTE_ARRAY);
+    }
+
     public static int getDecreasedLevel(ItemStack itemStack, int originalLevel) {
         if (ConfigurationUtils.enableDecMateriaLv) {
             float dmgratio = (itemStack.getMaxDamage() == 0) ? 1 : (itemStack.getMaxDamage() - itemStack.getItemDamage()) / itemStack.getMaxDamage();
@@ -125,21 +149,41 @@ public class EnchantmentUtils {
             return par1ItemStack.isItemStackDamageable() || ench.type.canEnchantItem(par1ItemStack.getItem());
         }
         if (ench instanceof EnchantmentDigging) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
+            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
         }
         if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
-            return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem());
+            return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraSwords(par1ItemStack);
         }
         if (ench instanceof EnchantmentThorns) {
-            return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem());
+            return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraArmors(par1ItemStack);
         }
         if (ench instanceof EnchantmentUntouching) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem());
+            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
         }
         if (ench instanceof EcEnchantmentMeteo || ench instanceof EcEnchantmentHoly || ench instanceof EcEnchantmentTeleport || ench instanceof EcEnchantmentFloat || ench instanceof EcEnchantmentThunder) {
             return par1ItemStack.getItem() instanceof EcItemSword;
         }
         return ench.type.canEnchantItem(par1ItemStack.getItem());
+    }
+
+    private static boolean isExtraTools(ItemStack itemStack) {
+        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        return Arrays.asList(ConfigurationUtils.extraToolIDs).contains(uName);
+    }
+
+    private static boolean isExtraSwords(ItemStack itemStack) {
+        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        return Arrays.asList(ConfigurationUtils.extraSwordIDs).contains(uName);
+    }
+
+    private static boolean isExtraArmors(ItemStack itemStack) {
+        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        return Arrays.asList(ConfigurationUtils.extraArmorIDs).contains(uName);
+    }
+
+    private static boolean isExtraBows(ItemStack itemStack) {
+        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        return Arrays.asList(ConfigurationUtils.extraBowIDs).contains(uName);
     }
 
     public static void initMaps() {
@@ -160,6 +204,85 @@ public class EnchantmentUtils {
                 }
             }
         }
+        initHugeMateriasMap();
+    }
+
+    private static void initHugeMateriasMap() {
+        ItemStack materiaStack = new ItemStack(EnchantChanger.itemMateria);
+        registerHugeMateria(0, new ItemStack(Blocks.dragon_egg), new ItemStack(EnchantChanger.itemMateria, 1, 1));
+        registerHugeMateria(0, new ItemStack(Items.golden_apple, 1, 1), new ItemStack(EnchantChanger.itemMateria, 1, 2));
+        registerHugeMateria(0, new ItemStack(Items.ender_pearl), new ItemStack(EnchantChanger.itemMateria, 1, 3));
+        registerHugeMateria(0, new ItemStack(Items.ender_eye), new ItemStack(EnchantChanger.itemMateria, 1, 4));
+        registerHugeMateria(0, new ItemStack(Blocks.gold_block), new ItemStack(EnchantChanger.itemMateria, 1, 5));
+        registerHugeMateria(0, new ItemStack(Items.milk_bucket), new ItemStack(EnchantChanger.itemMateria, 1, 6));
+        registerHugeMateria(0, new ItemStack(Items.golden_boots), new ItemStack(EnchantChanger.itemMateria, 1, 7));
+        registerHugeMateria(0, new ItemStack(Items.nether_wart), new ItemStack(EnchantChanger.itemMateria, 1, 8));
+        registerHugeMateria(1, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.protection, 1));
+        registerHugeMateria(1, new ItemStack(Items.blaze_powder), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireProtection, 1));
+        registerHugeMateria(1, new ItemStack(Items.feather), getEnchantedItemStack(materiaStack.copy(), Enchantment.featherFalling, 1));
+        registerHugeMateria(1, new ItemStack(Items.gunpowder), getEnchantedItemStack(materiaStack.copy(), Enchantment.blastProtection, 1));
+        registerHugeMateria(1, new ItemStack(Items.arrow), getEnchantedItemStack(materiaStack.copy(), Enchantment.projectileProtection, 1));
+        registerHugeMateria(1, new ItemStack(Blocks.cactus), getEnchantedItemStack(materiaStack.copy(), Enchantment.thorns, 1));
+        registerHugeMateria(2, new ItemStack(Items.reeds), getEnchantedItemStack(materiaStack.copy(), Enchantment.respiration, 1));
+        registerHugeMateria(2, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.aquaAffinity, 1));
+        registerHugeMateria(2, new ItemStack(Items.fishing_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_151370_z, 1));
+        registerHugeMateria(2, new ItemStack(Items.carrot_on_a_stick), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_151369_A, 1));
+        registerHugeMateria(3, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.sharpness, 1));
+        registerHugeMateria(3, new ItemStack(Items.flint_and_steel), getEnchantedItemStack(materiaStack.copy(), Enchantment.smite, 1));
+        registerHugeMateria(3, new ItemStack(Items.spider_eye), getEnchantedItemStack(materiaStack.copy(), Enchantment.baneOfArthropods, 1));
+        registerHugeMateria(3, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.knockback, 1));
+        registerHugeMateria(3, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireAspect, 1));
+        registerHugeMateria(3, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.looting, 1));
+        registerHugeMateria(4, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.efficiency, 1));
+        registerHugeMateria(4, new ItemStack(Items.string), getEnchantedItemStack(materiaStack.copy(), Enchantment.silkTouch, 1));
+        registerHugeMateria(4, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.unbreaking, 1));
+        registerHugeMateria(4, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.fortune, 1));
+        registerHugeMateria(5, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.power, 1));
+        registerHugeMateria(5, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.punch, 1));
+        registerHugeMateria(5, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.flame, 1));
+        registerHugeMateria(5, new ItemStack(Items.bow), getEnchantedItemStack(materiaStack.copy(), Enchantment.infinity, 1));
+    }
+
+    public static void registerHugeMateria(int master, ItemStack material, ItemStack result) {
+        Set<MaterialResultPair> set;
+        if (!MATERIAL_MAP.containsKey(master)) {
+            set = new HashSet<>();
+            set.add(MaterialResultPair.getMaterialResultPair(material, result));
+            MATERIAL_MAP.put(master, set);
+        }
+        set = MATERIAL_MAP.get(master);
+        for (MaterialResultPair mrp : set) {
+            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
+                return;
+            }
+        }
+        set.add(MaterialResultPair.getMaterialResultPair(material, result));
+    }
+
+    public static boolean isMaterialValid(int master, ItemStack material) {
+        if (!MATERIAL_MAP.containsKey(master)) return false;
+        Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
+        for (MaterialResultPair mrp : set) {
+            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ItemStack getResult(int master, ItemStack material) {
+        Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
+        for (MaterialResultPair mrp : set) {
+            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
+                return mrp.getResultCopy();
+            }
+        }
+        return new ItemStack(Blocks.air);
+    }
+
+    private static ItemStack getEnchantedItemStack(ItemStack base, Enchantment enchantment, int lv) {
+        addEnchantmentToItem(base, enchantment, lv);
+        return base;
     }
 
     public static EnchantmentData getEnchantmentData(Random rand) {

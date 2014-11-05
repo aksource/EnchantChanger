@@ -7,7 +7,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -16,8 +15,8 @@ import org.lwjgl.opengl.GL11;
 public class EcGuiMateriaWindow extends GuiContainer {
     private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMateriaWindow);
     private ItemStack itemStack;
-    public EcGuiMateriaWindow(World world, InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
-        super(new EcContainerMateriaWindow(world, inventoryPlayer, item, slotnum));
+    public EcGuiMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
+        super(new EcContainerMateriaWindow(inventoryPlayer, item, slotnum));
         itemStack = item;
     }
 

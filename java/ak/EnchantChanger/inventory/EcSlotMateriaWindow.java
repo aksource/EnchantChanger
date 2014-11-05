@@ -21,7 +21,7 @@ public class EcSlotMateriaWindow extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
-        return par1ItemStack.getItem() instanceof EcItemMateria && checkEnchantmentValid(par1ItemStack) && EnchantmentUtils.checkLvCap(par1ItemStack);
+        return par1ItemStack.getItem() instanceof EcItemMateria && (par1ItemStack.getItemDamage() > 0 || (checkEnchantmentValid(par1ItemStack) && EnchantmentUtils.checkLvCap(par1ItemStack)));
     }
 
     @Override

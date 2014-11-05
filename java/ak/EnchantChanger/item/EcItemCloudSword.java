@@ -1,10 +1,8 @@
 package ak.EnchantChanger.item;
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcInventoryCloudSword;
 import ak.EnchantChanger.network.MessageCloudSword;
-import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import org.lwjgl.input.Keyboard;
 
 public class EcItemCloudSword extends EcItemSword
 {
@@ -35,33 +32,23 @@ public class EcItemCloudSword extends EcItemSword
         int slot = getSlotNumFromItemStack(stack);
         IInventory swordData = getInventoryFromItemStack(stack);
 		if (slot == 5 || swordData == null)
-			return false;
+			return super.onLeftClickEntity(stack, player, entity);
 		if (swordData.getStackInSlot(slot) != null) {
 			this.attackTargetEntityWithTheItem(entity, player, swordData.getStackInSlot(slot), false);
             swordData.markDirty();
 			return true;
 		}
-        return false;
+        return super.onLeftClickEntity(stack, player, entity);
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer player)
 	{
-		if (par3EntityPlayer.isSneaking()) {
-			this.doCastOffSwords(par1ItemStack, par2World, par3EntityPlayer);
+		if (player.isSneaking()) {
+			this.doCastOffSwords(par1ItemStack, world, player);
 			return this.makeCloudSwordCore(par1ItemStack);
 		} else {
-            if (par2World.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
-            }
-//			par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-//			if (!par2World.isRemote) {
-//    			increaseSlotNum(par1ItemStack);
-//                int slot = getSlotNumFromItemStack(par1ItemStack);
-//                PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte)slot), (EntityPlayerMP) par3EntityPlayer);
-//			}
-//			return par1ItemStack;
-            return super.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
+            return super.onItemRightClick(par1ItemStack, world, player);
 		}
 	}
 
@@ -86,22 +73,24 @@ public class EcItemCloudSword extends EcItemSword
 
     public static int getSlotNumFromItemStack(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        return nbt.getInteger("slot");
+        return itemStack.getTagCompound().getInteger("EnchantChanger|slot");
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        return nbt.getInteger("slot");
     }
 
     public static void setSlotNumToItemStack(ItemStack itemStack, int slotNum) {
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-        }
-        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-        nbt.setInteger("slot", slotNum);
+        itemStack.getTagCompound().setInteger("EnchantChanger|slot", slotNum);
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        nbt.setInteger("slot", slotNum);
     }
 
     public static IInventory getInventoryFromItemStack(ItemStack itemStack) {
