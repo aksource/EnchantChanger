@@ -267,6 +267,8 @@ public class EcContainerMaterializer extends Container {
         }
     }
 
+    //魔法系はエンチャントで管理しなくなった
+    @Deprecated
     private int setMateriaDmgfromEnch(int enchID) {
         if (magicDmg.contains(enchID))
             return magicDmg.indexOf(enchID) + 1;
