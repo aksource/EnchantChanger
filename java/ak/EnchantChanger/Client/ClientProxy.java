@@ -41,6 +41,7 @@ import net.minecraft.util.Timer;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
@@ -106,6 +107,9 @@ public class ClientProxy extends CommonProxy {
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
         FMLCommonHandler.instance().bus().register(ecRenderPlayerBack);
+
+        //TextureStitchEvent
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
 	@Override
@@ -322,5 +326,10 @@ public class ClientProxy extends CommonProxy {
             }
         }
         return MOP;
+    }
+
+    @SubscribeEvent
+    public void textureStitch(TextureStitchEvent.Post event) {
+        EnchantChanger.fluidLifeStream.setIcons(EnchantChanger.blockLifeStream.getIcon(0,0));
     }
 }
