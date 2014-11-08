@@ -14,7 +14,9 @@ public class MessageExtendedReachAttackHandler implements IMessageHandler<Messag
     public IMessage onMessage(MessageExtendedReachAttack message, MessageContext ctx) {
         EntityPlayer player = ctx.getServerHandler().playerEntity;
         Entity targetEntity = message.getEntityFromId(player.worldObj);
-        player.attackTargetEntityWithCurrentItem(targetEntity);
+        if (targetEntity != null && !targetEntity.isDead) {
+            player.attackTargetEntityWithCurrentItem(targetEntity);
+        }
         return null;
     }
 }
