@@ -14,12 +14,12 @@ import shift.mceconomy2.api.MCEconomyAPI;
  */
 public class CoopMCE {
 
-    private static final long termMonth = 20 * 60 * 20 * 30;
-    private static final long termEvent = 1200L;
+    private static final long TERM_MONTH = 24000 * 30;
+    private static final long TERM_EVENT = 1200L;
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving instanceof EntityPlayer
-                && ((EntityPlayer) event.entityLiving).worldObj.getTotalWorldTime() % termEvent == 0L) {
+                && ((EntityPlayer) event.entityLiving).worldObj.getTotalWorldTime() % TERM_EVENT == 0L) {
             EntityPlayer player = (EntityPlayer)event.entityLiving;
             long startTime = ExtendedPlayerData.get(player).getSoldierWorkStartTime();
             long nowTime = player.worldObj.getWorldTime();
@@ -27,7 +27,7 @@ public class CoopMCE {
                 ExtendedPlayerData.get(player).setSoldierWorkStartTime(nowTime);
             }
 
-            if ((nowTime - startTime) / termMonth > 0) {
+            if ((nowTime - startTime) / TERM_MONTH > 0) {
                 addSalaryToPlayer(player);
             }
         }
