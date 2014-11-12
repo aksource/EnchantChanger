@@ -21,13 +21,15 @@ public class CoopMCE {
         if (event.entityLiving instanceof EntityPlayer
                 && ((EntityPlayer) event.entityLiving).worldObj.getTotalWorldTime() % TERM_EVENT == 0L) {
             EntityPlayer player = (EntityPlayer)event.entityLiving;
-            long startTime = ExtendedPlayerData.get(player).getSoldierWorkStartTime();
+            ExtendedPlayerData data = ExtendedPlayerData.get(player);
+            long startTime = data.getSoldierWorkStartTime();
             long nowTime = player.worldObj.getWorldTime();
             if (startTime == 0) {
-                ExtendedPlayerData.get(player).setSoldierWorkStartTime(nowTime);
+                data.setSoldierWorkStartTime(nowTime);
             }
 
             if ((nowTime - startTime) / TERM_MONTH > 0) {
+                data.setSoldierWorkStartTime(nowTime);
                 addSalaryToPlayer(player);
             }
         }
