@@ -66,7 +66,7 @@ public class EcBlockMaterializer extends BlockContainer
 
     private boolean checkCost(EntityPlayer player) {
         int expLv = player.experienceLevel;
-        if (expLv > ConfigurationUtils.enchantChangerCost) {
+        if (expLv >= ConfigurationUtils.enchantChangerCost) {
             player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }

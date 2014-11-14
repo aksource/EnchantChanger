@@ -64,7 +64,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private boolean checkCost(EntityPlayer player) {
         int expLv = player.experienceLevel;
-        if (expLv > ConfigurationUtils.enchantChangerCost) {
+        if (expLv >= ConfigurationUtils.enchantChangerCost) {
             player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }
