@@ -176,7 +176,7 @@ public class EcItemCloudSwordCore extends EcItemSword
 				this.attackTargetEntityWithTheItem(par1Entity, player, sword, true);
 			}
 		}
-        par1Entity.hurtResistantTime = 20;
+//        par1Entity.hurtResistantTime = 20;
 	}
 	public void destroyTheItem(EntityPlayer player, ItemStack orig)
 	{
