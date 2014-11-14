@@ -1,6 +1,6 @@
 ﻿#Block
 tile.EnchantChanger.name=エンチャントチェンジャー
-tile.HugeMateria.name=ヒュージマテリア
+tile.blockHugeMateria.name=ヒュージマテリア
 tile.lifestream.name=魔晄
 tile.makoreactor-machine.name=魔晄炉操作ブロック
 tile.makoreactor-case.name=魔晄炉ケースブロック
