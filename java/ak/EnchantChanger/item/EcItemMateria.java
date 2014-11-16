@@ -220,6 +220,7 @@ public class EcItemMateria extends EcItem
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+        if (!par1ItemStack.hasTagCompound() && par1ItemStack.getItemDamage() == 0) return;
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             String type, info;
             if (par1ItemStack.isItemEnchanted()) {
