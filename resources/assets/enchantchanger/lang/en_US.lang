@@ -147,7 +147,7 @@ info.enchantment.wandfortune=Get more drop items (Thaumcraft Only)
 info.enchantment.haste=Increasing moving speed
 info.enchantment.repair=Repairing duration of items using vis in Aura (Thaumcraft Only)
 #ThermalExpansion
-info.enchantment.cofh.holding=
+info.enchant.cofh.holding=
 #EnchantmentLevelAdditional
 enchantment.level.11=11
 enchantment.level.12=12
