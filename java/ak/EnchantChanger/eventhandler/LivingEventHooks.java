@@ -160,7 +160,7 @@ public class LivingEventHooks
 		if (player.capabilities.isCreativeMode) {
 			return;
 		}
-		if ((player.getFoodStats().getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA) || !EcItemMateria.GGEnable) {
+		if ((player.getFoodStats().getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA) || !ExtendedPlayerData.get(player).isGgMode()) {
 			player.capabilities.disableDamage = false;
 			return;
 		}

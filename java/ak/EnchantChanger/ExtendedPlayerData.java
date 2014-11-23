@@ -27,6 +27,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     private int mobKillCount;
     private int limitBreakCount;
     private byte limitBreakId;
+    private boolean ggMode;
 
 //    public ExtendedPlayerData(EntityPlayer player) {
 //        this.player = player;
@@ -58,6 +59,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         nbt.setInteger("mobKillCount", this.mobKillCount);
         nbt.setInteger("limitBreakCount", this.limitBreakCount);
         nbt.setByte("limitBreakId", this.limitBreakId);
+        nbt.setBoolean("ggMode", this.ggMode);
         compound.setTag(EXT_PROP_NAME, nbt);
     }
 
@@ -72,6 +74,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         this.mobKillCount = nbt.getInteger("mobKillCount");
         this.limitBreakCount = nbt.getInteger("limitBreakCount");
         this.limitBreakId = nbt.getByte("limitBreakId");
+        this.ggMode = nbt.getBoolean("ggMode");
     }
 
     @Override
@@ -156,6 +159,14 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public void setLimitBreakId(byte limitBreakId) {
         this.limitBreakId = limitBreakId;
+    }
+
+    public boolean isGgMode() {
+        return ggMode;
+    }
+
+    public void setGgMode(boolean ggMode) {
+        this.ggMode = ggMode;
     }
 
     public void saveProxyData(EntityPlayer player) {

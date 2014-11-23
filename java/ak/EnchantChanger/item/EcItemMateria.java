@@ -1,5 +1,6 @@
 package ak.EnchantChanger.item;
 
+import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.MateriaTeleporter;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.utils.ConfigurationUtils;
@@ -62,7 +63,7 @@ public class EcItemMateria extends EcItem
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-//        if (world.isRemote) return itemstack;
+        if (world.isRemote) return itemstack;
 		if (itemstack.stackSize > 1) {
 			return itemstack;
 		}
@@ -90,8 +91,9 @@ public class EcItemMateria extends EcItem
 				break;
 			case 2:
 				if (entityplayer.isSneaking()) {
-					GGEnable = !GGEnable;
-					entityplayer.addChatMessage(new ChatComponentText("Great Gospel Mode " + GGEnable));
+                    boolean ggmode = ExtendedPlayerData.get(entityplayer).isGgMode();
+                    ExtendedPlayerData.get(entityplayer).setGgMode(!ggmode);
+					entityplayer.addChatMessage(new ChatComponentText("Great Gospel Mode " + ExtendedPlayerData.get(entityplayer).isGgMode()));
 				} else {
 					doHoly(world, entityplayer);
 				}
