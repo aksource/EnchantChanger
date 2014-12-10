@@ -37,7 +37,7 @@ public class EcRenderPlayerBack {
     private ItemStack nowHeldItem = null;
 
     @SubscribeEvent
-    public void renderPlayerEvent(RenderPlayerEvent.Specials.Post event) {
+    public void renderPlayerEvent(RenderPlayerEvent.Specials.Pre event) {
         if (prevHeldItem == null) return;
         ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
         if (ConfigurationUtils.enableBackSword && !ItemStack.areItemStacksEqual(heldItem, this.prevHeldItem)
@@ -50,11 +50,12 @@ public class EcRenderPlayerBack {
     public void checkPreviousItem(TickEvent.PlayerTickEvent event) {
         if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
             ItemStack heldItem = event.player.getCurrentEquippedItem();
-            if (heldItem == null) return;
             if (!isSwordInQuickBar(event.player.inventory)) {
                 this.prevHeldItem = null;
                 return;
             }
+            if (heldItem == null) return;
+
             if (this.nowHeldItem == null) {
                 this.nowHeldItem = heldItem;
             }
@@ -107,7 +108,6 @@ public class EcRenderPlayerBack {
 
     private void renderPlayerBackItem(ItemStack backItem, RenderPlayer renderPlayer, EntityPlayer player) {
         GL11.glPushMatrix();
-
         IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(backItem, EQUIPPED);
         if (customRenderer != null) {
             GL11.glScalef(0.8F, 0.8F, 0.8F);
