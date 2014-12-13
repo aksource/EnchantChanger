@@ -4,6 +4,8 @@ tile.blockHugeMateria.name=HugeMateria
 tile.lifestream.name=Fluid Mako
 tile.makoreactor-machine.name=Mako Reactor Machine Block
 tile.makoreactor-case.name=Mako Reactor Casing Block
+#Fluid
+fluid.lifestream=Fluid Mako
 #Item
 ItemMateria.Base.name=Inactive Materia
 ItemMateria.name=Materia
