@@ -239,6 +239,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
                 return false;
             }
 			result = materia.copy();
+			result.stackSize = 1;
             result.getTagCompound().removeTag("ench");
 			EnchantmentUtils.addEnchantmentToItem(result, enchantment, lv + 1);
 			return true;
@@ -273,91 +274,4 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
     public static void addMateriaMaterial() {
 
     }
-//
-//	static{
-//		EnchArray = new int[EcItemMasterMateria.MasterMateriaNum - 1][10];
-//		MaterialArray = new ItemStack[Enchantment.enchantmentsList.length + 3];
-//		magicArray = new ArrayList<>(EcItemMateria.MagicMateriaNum);
-//		int i,j;
-//		for(i = 0;i<EnchArray.length;i++){
-//			for(j = 0;j<EnchArray[i].length;j++){
-//				EnchArray[i][j] = -1;
-//			}
-//		}
-//		for(i=0;i<256 + 3;i++){
-//			MaterialArray[i]=null;
-//		}
-//		EnchArray[0][0] = ConfigurationUtils.idEnchantmentMeteor;
-//		EnchArray[0][1] = ConfigurationUtils.idEnchantmentHoly;
-//		EnchArray[0][2] = ConfigurationUtils.idEnchantmentTelepo;
-//		EnchArray[0][3] = ConfigurationUtils.idEnchantmentFloat;
-//		EnchArray[0][4] = ConfigurationUtils.idEnchantmentThunder;
-//		EnchArray[0][5] = Enchantment.enchantmentsList.length;
-//		EnchArray[0][6] = Enchantment.enchantmentsList.length + 1;
-//		EnchArray[0][7] = Enchantment.enchantmentsList.length + 2;
-//		EnchArray[1][0] = Enchantment.protection.effectId;
-//		EnchArray[1][1] = Enchantment.fireProtection.effectId;
-//		EnchArray[1][2] = Enchantment.featherFalling.effectId;
-//		EnchArray[1][3] = Enchantment.blastProtection.effectId;
-//		EnchArray[1][4] = Enchantment.projectileProtection.effectId;
-//		EnchArray[1][5] = Enchantment.thorns.effectId;
-//		EnchArray[2][0] = Enchantment.respiration.effectId;
-//		EnchArray[2][1] = Enchantment.aquaAffinity.effectId;
-//		EnchArray[2][2] = Enchantment.field_151370_z.effectId;
-//		EnchArray[2][3] = Enchantment.field_151369_A.effectId;
-//		EnchArray[3][0] = Enchantment.sharpness.effectId;
-//		EnchArray[3][1] = Enchantment.smite.effectId;
-//		EnchArray[3][2] = Enchantment.baneOfArthropods.effectId;
-//		EnchArray[3][3] = Enchantment.knockback.effectId;
-//		EnchArray[3][4] = Enchantment.fireAspect.effectId;
-//		EnchArray[3][5] = Enchantment.looting.effectId;
-//		EnchArray[4][0] = Enchantment.efficiency.effectId;
-//		EnchArray[4][1] = Enchantment.silkTouch.effectId;
-//		EnchArray[4][2] = Enchantment.unbreaking.effectId;
-//		EnchArray[4][3] = Enchantment.fortune.effectId;
-//		EnchArray[5][0] = Enchantment.power.effectId;
-//		EnchArray[5][1] = Enchantment.punch.effectId;
-//		EnchArray[5][2] = Enchantment.flame.effectId;
-//		EnchArray[5][3] = Enchantment.infinity.effectId;
-//		MaterialArray[0] = new ItemStack(Items.iron_ingot);
-//		MaterialArray[1] = new ItemStack(Items.blaze_powder);
-//		MaterialArray[2] = new ItemStack(Items.feather);
-//		MaterialArray[3] = new ItemStack(Items.gunpowder);
-//		MaterialArray[4] = new ItemStack(Items.arrow);
-//		MaterialArray[5] = new ItemStack(Items.reeds);
-//		MaterialArray[6] = new ItemStack(Items.golden_pickaxe);
-//		MaterialArray[7] = new ItemStack(Blocks.cactus);
-//		MaterialArray[16] = new ItemStack(Items.fire_charge);
-//		MaterialArray[17] = new ItemStack(Items.flint_and_steel);
-//		MaterialArray[18] = new ItemStack(Items.spider_eye);
-//		MaterialArray[19] = new ItemStack(Items.slime_ball);
-//		MaterialArray[20] = new ItemStack(Items.blaze_rod);
-//		MaterialArray[21] = new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE);
-//		MaterialArray[32] = new ItemStack(Items.golden_pickaxe);
-//		MaterialArray[33] = new ItemStack(Items.string);
-//		MaterialArray[34] = new ItemStack(Items.iron_ingot);
-//		MaterialArray[35] = new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE);
-//		MaterialArray[48] = new ItemStack(Items.fire_charge);
-//		MaterialArray[49] = new ItemStack(Items.slime_ball);
-//		MaterialArray[50] = new ItemStack(Items.blaze_rod);
-//		MaterialArray[51] = new ItemStack(Items.bow);
-//		MaterialArray[61] = new ItemStack(Items.fishing_rod);
-//		MaterialArray[62] = new ItemStack(Items.carrot_on_a_stick);
-//		MaterialArray[ConfigurationUtils.idEnchantmentMeteor] = new ItemStack(Blocks.dragon_egg);
-//		MaterialArray[ConfigurationUtils.idEnchantmentHoly] = new ItemStack(Items.golden_apple, 1, 1);
-//		MaterialArray[ConfigurationUtils.idEnchantmentTelepo] = new ItemStack(Items.ender_pearl);
-//		MaterialArray[ConfigurationUtils.idEnchantmentFloat] = new ItemStack(Items.ender_eye);
-//		MaterialArray[ConfigurationUtils.idEnchantmentThunder] = new ItemStack(Blocks.gold_block);
-//		MaterialArray[Enchantment.enchantmentsList.length] = new ItemStack(Items.milk_bucket);
-//		MaterialArray[Enchantment.enchantmentsList.length + 1] = new ItemStack(Items.golden_boots);
-//		MaterialArray[Enchantment.enchantmentsList.length + 2] = new ItemStack(Items.nether_wart);
-//		magicArray.add(ConfigurationUtils.idEnchantmentMeteor);
-//		magicArray.add(ConfigurationUtils.idEnchantmentHoly);
-//		magicArray.add(ConfigurationUtils.idEnchantmentTelepo);
-//		magicArray.add(ConfigurationUtils.idEnchantmentFloat);
-//		magicArray.add(ConfigurationUtils.idEnchantmentThunder);
-//		magicArray.add(Enchantment.enchantmentsList.length);
-//		magicArray.add(Enchantment.enchantmentsList.length + 1);
-//		magicArray.add(Enchantment.enchantmentsList.length + 2);
-//	}
 }
