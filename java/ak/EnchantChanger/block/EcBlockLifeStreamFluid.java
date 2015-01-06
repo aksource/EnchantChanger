@@ -58,7 +58,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
         world.scheduleBlockUpdate(x, y, z, this, tickRate);
-        List list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getSelectedBoundingBoxFromPool(world, x, y, z));
+        List list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getCollisionBoundingBoxFromPool(world, x, y, z));
         for (Object object : list) {
             EntityLivingBase entity = (EntityLivingBase)object;
             if (entity instanceof EntityPlayer) {
