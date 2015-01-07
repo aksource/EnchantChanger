@@ -11,6 +11,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -58,7 +59,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
         world.scheduleBlockUpdate(x, y, z, this, tickRate);
-        List list = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getCollisionBoundingBoxFromPool(world, x, y, z));
+        List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x + this.minX, y + this.minY, z + this.minZ, x + this.maxX, y + this.maxY, z + this.maxZ));
         for (Object object : list) {
             EntityLivingBase entity = (EntityLivingBase)object;
             if (entity instanceof EntityPlayer) {

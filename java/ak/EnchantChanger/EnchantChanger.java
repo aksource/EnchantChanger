@@ -24,7 +24,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,6 +67,7 @@ public class EnchantChanger {
     public static Block blockMakoReactor;
     public static Potion potionMako;
     public static DamageSource damageSourceMako;
+    public static Material materialMako = new MaterialLiquid(MapColor.grassColor);
 
     public static boolean loadMTH = false;
     public static boolean loadBC = false;
@@ -104,7 +107,7 @@ public class EnchantChanger {
         itemHugeMateria = new EcItemHugeMateria("HugeMateria");
         fluidLifeStream = new Fluid("lifestream").setLuminosity(15);
         FluidRegistry.registerFluid(fluidLifeStream);
-        blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, Material.water).setBlockName("lifestream");
+        blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako).setBlockName("lifestream");
         itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         blockMakoReactor = new EcBlockMakoReactor().setBlockName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(Constants.TAB_ENCHANT_CHANGER).setBlockTextureName(Constants.EcTextureDomain + "makoreactor-side");
 
