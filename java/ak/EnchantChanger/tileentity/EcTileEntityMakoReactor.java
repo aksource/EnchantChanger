@@ -287,6 +287,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean extractRF() {
+        if (!EnchantChanger.loadTE) return false;
         boolean upToDate = false;
         int needToExtract;
         TileEntity neighborTile;
@@ -307,6 +308,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean extractGF() {
+        if (!EnchantChanger.loadSS) return false;
         boolean upToDate = false;
         int needToExtract;
         TileEntity neighborTile;
