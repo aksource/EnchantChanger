@@ -98,10 +98,11 @@ public class LivingEventHooks
 		if (event.entityLiving instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
 			spawnAPOrb((EntityLiving)event.entityLiving, (EntityPlayer)killer.getEntity());
 		else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+			EntityPlayer player = (EntityPlayer)event.entityLiving;
             NBTTagCompound playerData = new NBTTagCompound();
             (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).saveNBTData(playerData);
-            CommonProxy.storeEntityData(event.entity.getCommandSenderName(), playerData);
-            ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData((EntityPlayer) event.entity);
+            CommonProxy.storeEntityData(player.getGameProfile().getId().toString()/*.getCommandSenderName()*/, playerData);
+            ((ExtendedPlayerData)(player.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData(player);
         }
 	}
 
@@ -110,7 +111,8 @@ public class LivingEventHooks
     {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
         {
-            NBTTagCompound playerData = CommonProxy.getEntityData(event.entity.getCommandSenderName());
+			EntityPlayer player = (EntityPlayer)event.entity;
+            NBTTagCompound playerData = CommonProxy.getEntityData(player.getGameProfile().getId().toString());
             if (playerData != null) {
                 (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).loadNBTData(playerData);
             }

@@ -37,7 +37,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 //    }
 
     private static String getSaveKey(EntityPlayer player) {
-        return player.getCommandSenderName() + ":" + EXT_PROP_NAME;
+        return player.getGameProfile().getId().toString() + ":" + EXT_PROP_NAME;
     }
 
     public static void register(EntityPlayer player) {
