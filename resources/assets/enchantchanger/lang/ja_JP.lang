@@ -4,6 +4,8 @@ tile.blockHugeMateria.name=ヒュージマテリア
 tile.lifestream.name=魔晄
 tile.makoreactor-machine.name=魔晄炉操作ブロック
 tile.makoreactor-case.name=魔晄炉ケースブロック
+#Fluid
+fluid.lifestream=魔晄
 #Item
 ItemMateria.Base.name=不活性マテリア
 ItemMateria.name=マテリア

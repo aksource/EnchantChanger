@@ -2,8 +2,8 @@ package ak.EnchantChanger.Client.renderer;
 
 import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;

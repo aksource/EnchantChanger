@@ -2,8 +2,8 @@ package ak.EnchantChanger.Client.gui;
 
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMaterializer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;

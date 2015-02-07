@@ -2,7 +2,7 @@ package ak.EnchantChanger.eventhandler;
 
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.ChestGenHooks;

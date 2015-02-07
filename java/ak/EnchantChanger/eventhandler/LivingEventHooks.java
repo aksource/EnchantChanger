@@ -9,8 +9,8 @@ import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessagePlayerProperties;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -98,9 +98,10 @@ public class LivingEventHooks
 		if (event.entityLiving instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
 			spawnAPOrb((EntityLiving)event.entityLiving, (EntityPlayer)killer.getEntity());
 		else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+			EntityPlayer player = (EntityPlayer)event.entityLiving;
             NBTTagCompound playerData = new NBTTagCompound();
             (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).saveNBTData(playerData);
-            CommonProxy.storeEntityData(event.entity.getCommandSenderName(), playerData);
+            CommonProxy.storeEntityData(player.getGameProfile().getId().toString(), playerData);
             ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData((EntityPlayer) event.entity);
         }
 	}
@@ -110,7 +111,8 @@ public class LivingEventHooks
     {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
         {
-            NBTTagCompound playerData = CommonProxy.getEntityData(event.entity.getCommandSenderName());
+			EntityPlayer player = (EntityPlayer)event.entity;
+            NBTTagCompound playerData = CommonProxy.getEntityData(player.getGameProfile().getId().toString());
             if (playerData != null) {
                 (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).loadNBTData(playerData);
             }
@@ -182,7 +184,7 @@ public class LivingEventHooks
 			}
 			ItemStack playerItem = player.getCurrentEquippedItem();
 			if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
-				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
+				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(
 						ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
                 for (Object aEntityList : EntityList) {
                     Entity entity = (Entity) aEntityList;

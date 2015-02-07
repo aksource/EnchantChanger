@@ -4,10 +4,10 @@ import ak.EnchantChanger.item.EcItemSephirothSword;
 import ak.EnchantChanger.item.EcItemSephirothSwordImit;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -50,11 +50,12 @@ public class EcRenderPlayerBack {
     public void checkPreviousItem(TickEvent.PlayerTickEvent event) {
         if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
             ItemStack heldItem = event.player.getCurrentEquippedItem();
-            if (heldItem == null) return;
             if (!isSwordInQuickBar(event.player.inventory)) {
                 this.prevHeldItem = null;
                 return;
             }
+            if (heldItem == null) return;
+
             if (this.nowHeldItem == null) {
                 this.nowHeldItem = heldItem;
             }

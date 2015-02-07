@@ -1,6 +1,6 @@
 package ak.EnchantChanger.item;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragonPart;
@@ -29,6 +29,7 @@ public class EcItemUltimateWeapon extends EcItemSword
 			ultimateWeaponDamage = 10;
 		}
 		ObfuscationReflectionHelper.setPrivateValue(ItemSword.class, (ItemSword)itemstack.getItem(), ultimateWeaponDamage, 0);
+		player.getAttributeMap().applyAttributeModifiers(itemstack.getAttributeModifiers());
 		return super.onLeftClickEntity(itemstack, player, entity);
 	}
 	public float WeaponDamagefromHP(EntityPlayer player)

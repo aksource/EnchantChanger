@@ -4,7 +4,7 @@ import ak.EnchantChanger.block.EcBlockMakoReactor;
 import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
 import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

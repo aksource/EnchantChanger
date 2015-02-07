@@ -1,6 +1,6 @@
 package ak.EnchantChanger.entity;
 
-import cpw.mods.fml.common.registry.IThrowableEntity;
+import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityXPOrb;
