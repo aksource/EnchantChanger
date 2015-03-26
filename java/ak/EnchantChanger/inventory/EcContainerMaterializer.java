@@ -159,7 +159,7 @@ public class EcContainerMaterializer extends Container {
                         enchantmentList.getCompoundTagAt(i).setInteger("ap", 0);
                         var1 = enchantmentList.getCompoundTagAt(i).getShort("id");
                         var2 = enchantmentList.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair(Enchantment.enchantmentsList[var1], var2));
+                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair(var1 < Enchantment.enchantmentsList.length ? Enchantment.enchantmentsList[var1] : null, var2));
                         if (i >= 8) {
                            EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
@@ -218,7 +218,7 @@ public class EcContainerMaterializer extends Container {
                 }
                 this.itemEnchantmentLvPair.clear();
                 for (int i2 = 0; i2 < this.enchantmentList.size(); i2++) {
-                    EnchantmentUtils.addEnchantmentToItem(result, Enchantment.enchantmentsList[this.enchantmentList.get(i2)], this.enchantmentLevelList.get(i2));
+                    EnchantmentUtils.addEnchantmentToItem(result,  (this.enchantmentList.get(i2) < Enchantment.enchantmentsList.length)? Enchantment.enchantmentsList[this.enchantmentList.get(i2)] : null, this.enchantmentLevelList.get(i2));
                 }
 
                 this.materializeResult.setInventorySlotContents(0, result);
