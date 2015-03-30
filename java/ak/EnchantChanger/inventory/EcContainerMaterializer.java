@@ -159,7 +159,7 @@ public class EcContainerMaterializer extends Container {
                         enchantmentList.getCompoundTagAt(i).setInteger("ap", 0);
                         var1 = enchantmentList.getCompoundTagAt(i).getShort("id");
                         var2 = enchantmentList.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair(var1 < Enchantment.enchantmentsList.length ? Enchantment.enchantmentsList[var1] : null, var2));
+                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair((var1 >=0 && var1 < Enchantment.enchantmentsList.length) ? Enchantment.enchantmentsList[var1] : null, var2));
                         if (i >= 8) {
                            EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
@@ -231,6 +231,7 @@ public class EcContainerMaterializer extends Container {
                 List<EnchantmentLvPair> subList = itemEnchantmentLvPair.subList(0, endIndex);
                 int slotIndex = 0;
                 for (EnchantmentLvPair data : subList) {
+                    if (data.enchantment == null) break;
                     int decreasedLv = EnchantmentUtils.getDecreasedLevel(baseItem, data.lv);
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
                     if (decreasedLv > 0) {
