@@ -5,7 +5,7 @@ import ak.EnchantChanger.api.MakoUtils;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.modcoop.CoopSS;
-import ak.EnchantChanger.modcoop.CoopTE;
+import ak.EnchantChanger.modcoop.CoopRFAPI;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import cofh.api.energy.IEnergyConnection;
@@ -46,8 +46,8 @@ import java.util.List;
  * Created by A.K. on 14/03/11.
  */
 @Optional.InterfaceList(
-        {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore"),
-        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore"),
+        {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHAPI|energy"),
+        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|energy"),
         @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
 )
 public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler{
@@ -287,7 +287,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean extractRF() {
-        if (!EnchantChanger.loadTE) return false;
+        if (!EnchantChanger.loadRFAPI) return false;
         boolean upToDate = false;
         int needToExtract;
         TileEntity neighborTile;
@@ -296,8 +296,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             extractable = Math.min(getOutputMaxRFValue(), getStoredRFEnergy());
             if (extractable <= 0) break;
             neighborTile = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-            if (CoopTE.isIEnergyHandler(neighborTile)) {
-                needToExtract = CoopTE.getNeedRF(neighborTile, direction, extractable);
+            if (CoopRFAPI.isIEnergyHandler(neighborTile)) {
+                needToExtract = CoopRFAPI.getNeedRF(neighborTile, direction, extractable);
                 extractEnergy(direction, needToExtract, false);
                 if (needToExtract > 0) {
                     upToDate = true;
@@ -389,7 +389,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean isEnergyNetworkModLoaded() {
-        return EnchantChanger.loadTE || EnchantChanger.loadSS;
+        return EnchantChanger.loadRFAPI || EnchantChanger.loadSS;
     }
 
     public boolean isPowered() {

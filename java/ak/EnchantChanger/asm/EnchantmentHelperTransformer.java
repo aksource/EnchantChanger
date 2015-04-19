@@ -15,11 +15,9 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
     private static final String TARGET_CLASS_NAME = "net.minecraft.enchantment.EnchantmentHelper";
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
         try {
-            AKInternalCorePlugin.logger.info("Start transforming EnchantmentHelper Class");
             basicClass = changeConst(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming EnchantmentHelper Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : EnchantmentHelperTransformer loading", e);
@@ -39,7 +37,7 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming getEnchantmentModifierDamage Method");
+            AKInternalCorePlugin.logger.debug("Transforming getEnchantmentModifierDamage Method");
             AbstractInsnNode oldInsnNode1 = null;
             AbstractInsnNode oldInsnNode2 = null;
 

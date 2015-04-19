@@ -35,7 +35,7 @@ public class EcGuiMakoReactor extends GuiContainer {
 //    @Override
 //    public void initGui() {
 //        super.initGui();
-//        if (EnchantChanger.loadTE) {
+//        if (EnchantChanger.loadRFAPI) {
 //            this.prevButton = new EcGuiMakoReactorButton(1, this.guiLeft + 126, this.guiTop + 24, false);
 //            this.nextButton = new EcGuiMakoReactorButton(2, this.guiLeft + 144, this.guiTop + 24, true);
 //            this.buttonList.add(this.prevButton);
@@ -45,7 +45,7 @@ public class EcGuiMakoReactor extends GuiContainer {
 
 //    @Override
 //    protected void actionPerformed(GuiButton button) {
-//        if (EnchantChanger.loadTE) {
+//        if (EnchantChanger.loadRFAPI) {
 //            boolean pushed = false;
 //            int step;
 //            step = EcTileEntityMakoReactor.STEP_RF_VALUE;
@@ -77,7 +77,7 @@ public class EcGuiMakoReactor extends GuiContainer {
             list.add(String.format("Mako : %dmB", tileEntity.tank.getFluidAmount()));
             drawHoveringText(list, mouseX - x, mouseZ - y, fontRendererObj);
         }
-//        if (EnchantChanger.loadTE) {
+//        if (EnchantChanger.loadRFAPI) {
 //            fontRendererObj.drawString(StatCollector.translateToLocal(String.format("Max %d RF/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
 //        }
     }
@@ -112,7 +112,7 @@ public class EcGuiMakoReactor extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-//        if (EnchantChanger.loadTE) {
+//        if (EnchantChanger.loadRFAPI) {
 //            this.prevButton.enabled = tileEntity.getOutputMaxRFValue() - EcTileEntityMakoReactor.STEP_RF_VALUE >= 10;
 //            this.nextButton.enabled = tileEntity.getOutputMaxRFValue() + EcTileEntityMakoReactor.STEP_RF_VALUE <= EcTileEntityMakoReactor.MAX_OUTPUT_RF_VALUE;
 //        }

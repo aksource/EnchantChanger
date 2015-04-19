@@ -29,30 +29,28 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.List;
 
-public class LivingEventHooks
-{
-	public static final int mpTermFlight = 20 * 3;
-	private static final int mpTermGG = 20;
-	private static final int mpTermAbsorp = 20 * 3;
-	private int[] Count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+public class LivingEventHooks {
+    public static final int mpTermFlight = 20 * 3;
+    private static final int mpTermGG = 20;
+    private static final int mpTermAbsorp = 20 * 3;
+    private int[] Count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-	@SubscribeEvent
-	public void LivingUpdate(LivingUpdateEvent event)
-	{
-		if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.entityLiving;
-			this.doFlight(player);
-			this.doGreatGospel(player);
-			this.doAbsorption(player.worldObj, player);
+    @SubscribeEvent
+    public void LivingUpdate(LivingUpdateEvent event) {
+        if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            this.doFlight(player);
+            this.doGreatGospel(player);
+            this.doAbsorption(player.worldObj, player);
             //EXPOrb cooldown time set 0.
-            ((EntityPlayer)event.entityLiving).xpCooldown = 0;
-		}
-	}
+            ((EntityPlayer) event.entityLiving).xpCooldown = 0;
+        }
+    }
 
     @SubscribeEvent
     public void onPlayerFall(LivingFallEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)event.entityLiving;
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             if (checkFlightAvailable(player)) {
                 event.setCanceled(true);
             }
@@ -69,54 +67,51 @@ public class LivingEventHooks
     @SubscribeEvent
     public void onLivingAttackEvent(LivingAttackEvent event) {
         if (!event.entityLiving.worldObj.isRemote) {
-            EntityPlayer player;
+            EntityPlayerMP player;
             ItemStack itemStack;
-            if (event.source.getDamageType().equals("player") && event.source.getEntity() instanceof EntityPlayer) {
-                player = (EntityPlayer)event.source.getEntity();
+            if (event.source.getDamageType().equals("player") && event.source.getEntity() instanceof EntityPlayerMP) {
+                player = (EntityPlayerMP) event.source.getEntity();
                 itemStack = player.getCurrentEquippedItem();
                 if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
                     ExtendedPlayerData.get(player).addLimitGaugeValue(1);
-                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
+                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), player);
                 }
             }
 
-            if (event.entityLiving instanceof EntityPlayer) {
-                player = (EntityPlayer)event.entityLiving;
+            if (event.entityLiving instanceof EntityPlayerMP) {
+                player = (EntityPlayerMP) event.entityLiving;
                 itemStack = player.getCurrentEquippedItem();
                 if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
                     ExtendedPlayerData.get(player).addLimitGaugeValue(1);
-                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
+                    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), player);
                 }
             }
         }
     }
 
-	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event)
-	{
-		DamageSource killer = event.source;
-		if (event.entityLiving instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
-			spawnAPOrb((EntityLiving)event.entityLiving, (EntityPlayer)killer.getEntity());
-		else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
-			EntityPlayer player = (EntityPlayer)event.entityLiving;
+    @SubscribeEvent
+    public void onLivingDeathEvent(LivingDeathEvent event) {
+        DamageSource killer = event.source;
+        if (event.entityLiving instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
+            spawnAPOrb((EntityLiving) event.entityLiving, (EntityPlayer) killer.getEntity());
+        else if (event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             NBTTagCompound playerData = new NBTTagCompound();
             (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).saveNBTData(playerData);
             CommonProxy.storeEntityData(player.getGameProfile().getId().toString()/*.getCommandSenderName()*/, playerData);
-            ((ExtendedPlayerData)(player.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData(player);
+            ((ExtendedPlayerData) (player.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).saveProxyData(player);
         }
-	}
+    }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event)
-    {
-        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
-        {
-			EntityPlayer player = (EntityPlayer)event.entity;
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.entity;
             NBTTagCompound playerData = CommonProxy.getEntityData(player.getGameProfile().getId().toString());
             if (playerData != null) {
                 (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME)).loadNBTData(playerData);
             }
-            ((ExtendedPlayerData)(event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).loadProxyData((EntityPlayer)event.entity);
+            ((ExtendedPlayerData) (event.entity.getExtendedProperties(ExtendedPlayerData.EXT_PROP_NAME))).loadProxyData(player);
         }
     }
 
@@ -125,7 +120,7 @@ public class LivingEventHooks
             int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
             long lastTime = ExtendedPlayerData.get(killer).getApCoolingTime();
             if (lastTime != 0 && lastTime - dead.worldObj.getTotalWorldTime() < 20) exp = 2;
-            if (exp > 0 ) {
+            if (exp > 0) {
                 dead.worldObj.spawnEntityInWorld(new EcEntityApOrb(dead.worldObj, dead.posX, dead.posY,
                         dead.posZ, exp / 2));
                 ExtendedPlayerData.get(killer).setApCoolingTime(dead.worldObj.getTotalWorldTime());
@@ -136,56 +131,52 @@ public class LivingEventHooks
     @SubscribeEvent
     public void onEntityConstructing(EntityEvent.EntityConstructing event) {
         if (event.entity instanceof EntityPlayer) {
-            ExtendedPlayerData.register((EntityPlayer)event.entity);
+            ExtendedPlayerData.register((EntityPlayer) event.entity);
         }
     }
 
-	public void doFlight(EntityPlayer player)
-	{
+    public void doFlight(EntityPlayer player) {
         boolean allowLevitation = checkFlightAvailable(player);
-		if (!allowLevitation) {
-			setLevitationModeToNBT(player, false);
-			return;
-		}
+        if (!allowLevitation) {
+            setLevitationModeToNBT(player, false);
+            return;
+        }
 
-		if (player.worldObj.isRemote) {
+        if (player.worldObj.isRemote) {
             EnchantChanger.proxy.doFlightOnSide(player);
-		} else if (getLevitationModeToNBT(player) && MpCount(0, mpTermFlight)) {
+        } else if (getLevitationModeToNBT(player) && MpCount(0, mpTermFlight)) {
             player.getFoodStats().addStats(-1, 1.0F);
-		}
-	}
+        }
+    }
 
 
-
-	private void doGreatGospel(EntityPlayer player)
-	{
-		if (player.capabilities.isCreativeMode) {
-			return;
-		}
-		if ((player.getFoodStats().getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA) || !ExtendedPlayerData.get(player).isGgMode()) {
-			player.capabilities.disableDamage = false;
-			return;
-		}
-		ItemStack playerItem = player.getCurrentEquippedItem();
-		if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
-			player.capabilities.disableDamage = true;
-			if (MpCount(1, mpTermGG))
+    private void doGreatGospel(EntityPlayer player) {
+        if (player.capabilities.isCreativeMode) {
+            return;
+        }
+        if ((player.getFoodStats().getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA) || !ExtendedPlayerData.get(player).isGgMode()) {
+            player.capabilities.disableDamage = false;
+            return;
+        }
+        ItemStack playerItem = player.getCurrentEquippedItem();
+        if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
+            player.capabilities.disableDamage = true;
+            if (MpCount(1, mpTermGG))
                 player.getFoodStats().addStats(-1, 1.0F);
-		} else {
-			player.capabilities.disableDamage = false;
-		}
-	}
+        } else {
+            player.capabilities.disableDamage = false;
+        }
+    }
 
-	public void doAbsorption(World world, EntityPlayer player)
-	{
-		if (!world.isRemote && player.getFoodStats().getFoodLevel() < 20) {
-			if (!MpCount(3, mpTermAbsorp)) {
-				return;
-			}
-			ItemStack playerItem = player.getCurrentEquippedItem();
-			if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
-				List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
-						ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
+    public void doAbsorption(World world, EntityPlayer player) {
+        if (!world.isRemote && player.getFoodStats().getFoodLevel() < 20) {
+            if (!MpCount(3, mpTermAbsorp)) {
+                return;
+            }
+            ItemStack playerItem = player.getCurrentEquippedItem();
+            if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
+                List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(
+                        ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
                 for (Object aEntityList : EntityList) {
                     Entity entity = (Entity) aEntityList;
                     if (entity instanceof EntityLiving) {
@@ -193,20 +184,20 @@ public class LivingEventHooks
                         player.getFoodStats().addStats(1, 1.0f);
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	public boolean MpCount(int par1, int par2) {
+    public boolean MpCount(int par1, int par2) {
 
-		Count[par1]++;
-		if (Count[par1] > par2) {
-			Count[par1] = 0;
-			return true;
-		} else {
-			return false;
-		}
-	}
+        Count[par1]++;
+        if (Count[par1] > par2) {
+            Count[par1] = 0;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private boolean checkFlightAvailable(EntityPlayer player) {
         return checkFlightItemInInv(player)
@@ -214,20 +205,19 @@ public class LivingEventHooks
                 .getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA));
     }
 
-	public static boolean checkFlightItem(ItemStack itemstack)
-	{
-		if (itemstack == null) {
-			return false;
-		} else if (itemstack.getItem() instanceof EcItemMateria || itemstack.getItem() instanceof EcItemSword) {
-			if (itemstack.getItem() instanceof EcItemMateria) {
-				return ((EcItemMateria)itemstack.getItem()).isFloatingMateria(itemstack);
-			} else {
-				return EcItemSword.hasFloat(itemstack);
-			}
-		} else {
-			return false;
-		}
-	}
+    public static boolean checkFlightItem(ItemStack itemstack) {
+        if (itemstack == null) {
+            return false;
+        } else if (itemstack.getItem() instanceof EcItemMateria || itemstack.getItem() instanceof EcItemSword) {
+            if (itemstack.getItem() instanceof EcItemMateria) {
+                return ((EcItemMateria) itemstack.getItem()).isFloatingMateria(itemstack);
+            } else {
+                return EcItemSword.hasFloat(itemstack);
+            }
+        } else {
+            return false;
+        }
+    }
 
 //	public void checkMagic(World world, EntityPlayer player)
 //	{
@@ -237,24 +227,21 @@ public class LivingEventHooks
 //		}
 //	}
 
-	public static boolean checkFlightItemInInv(EntityPlayer entityplayer)
-	{
-		boolean ret = false;
-		for (int i = 0; i < 9; i++) {
-			ItemStack var1 = entityplayer.inventory.getStackInSlot(i);
-			if (checkFlightItem(var1))
-				ret = checkFlightItem(var1);
-		}
-		return ret;
-	}
+    public static boolean checkFlightItemInInv(EntityPlayer entityplayer) {
+        boolean ret = false;
+        for (int i = 0; i < 9; i++) {
+            ItemStack var1 = entityplayer.inventory.getStackInSlot(i);
+            if (checkFlightItem(var1))
+                ret = checkFlightItem(var1);
+        }
+        return ret;
+    }
 
-	public static void setLevitationModeToNBT(EntityPlayer player, boolean levi)
-	{
-		ExtendedPlayerData.get(player).setLevitating(levi);
-	}
+    public static void setLevitationModeToNBT(EntityPlayer player, boolean levi) {
+        ExtendedPlayerData.get(player).setLevitating(levi);
+    }
 
-	public static boolean getLevitationModeToNBT(EntityPlayer player)
-	{
+    public static boolean getLevitationModeToNBT(EntityPlayer player) {
         return ExtendedPlayerData.get(player).isLevitating();
-	}
+    }
 }

@@ -1,6 +1,6 @@
 package ak.EnchantChanger.Client.renderer;
 
-import ak.EnchantChanger.Client.ClientProxy;
+import ak.EnchantChanger.CommonProxy;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -136,7 +136,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
 
     @Override
     public int getRenderId() {
-        return ClientProxy.multiPassRenderType;
+        return CommonProxy.multiPassRenderType;
     }
 
     static {

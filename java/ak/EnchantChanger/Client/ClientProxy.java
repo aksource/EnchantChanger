@@ -54,7 +54,6 @@ public class ClientProxy extends CommonProxy {
 			Keyboard.KEY_V, "EnchantChanger");
     public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger");
     public static int customRenderPass;
-    public static int multiPassRenderType;
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
     public static Minecraft mc = Minecraft.getMinecraft();
     private static Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
@@ -73,7 +72,7 @@ public class ClientProxy extends CommonProxy {
 				new EcRenderItemThrowable(ConfigurationUtils.sizeMeteor));
 		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
 				new EcRenderApOrb());
-        multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
+
         RenderingRegistry.registerBlockHandler(ecRenderMultiPassBlock);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(EnchantChanger.blockMakoReactor), ecRenderMultiPassBlock);
 

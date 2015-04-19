@@ -5,6 +5,7 @@ import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.*;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,8 +18,10 @@ import java.util.Map;
 
 public class CommonProxy implements IGuiHandler {
     private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<>();
+    public static int multiPassRenderType;
 
     public void registerRenderInformation() {
+        multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
     }
 
     public void registerTileEntitySpecialRenderer() {
@@ -84,7 +87,7 @@ public class CommonProxy implements IGuiHandler {
         if (id == Constants.GUI_ID_MAKO_REACTOR) {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null) {
-                if (EnchantChanger.loadTE) {
+                if (EnchantChanger.loadRFAPI) {
                     return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor)t);
                 }
                 if (EnchantChanger.loadSS) {

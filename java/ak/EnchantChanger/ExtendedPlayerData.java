@@ -173,10 +173,10 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         //NO-OP yet
     }
 
-    public void loadProxyData(EntityPlayer player) {
+    public void loadProxyData(EntityPlayerMP player) {
         ExtendedPlayerData playerData = ExtendedPlayerData.get(player);
         NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
         if (savedData != null) { playerData.loadNBTData(savedData); }
-        PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
+        PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), player);
     }
 }

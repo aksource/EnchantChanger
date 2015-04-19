@@ -17,9 +17,7 @@ public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes{
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
         try {
-            AKInternalCorePlugin.logger.info("Start transforming GuiRepair Class");
             basicClass = changableAnvilMaxLevel(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming GuiRepair Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : AnvilLevelClientTransformer loading", e);
@@ -40,7 +38,7 @@ public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes{
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming drawGuiContainerForegroundLayer Method");
+            AKInternalCorePlugin.logger.debug("Transforming drawGuiContainerForegroundLayer Method");
             AbstractInsnNode oldInsnNode = null;
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
                 if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 40) {

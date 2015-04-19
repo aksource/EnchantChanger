@@ -12,10 +12,7 @@ import ak.EnchantChanger.modcoop.CoopMCE;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import com.google.common.base.Optional;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -72,7 +69,7 @@ public class EnchantChanger {
     public static boolean loadMTH = false;
     public static boolean loadBC = false;
     public static boolean loadIC = false;
-    public static boolean loadTE = false;
+    public static boolean loadRFAPI = false;
     public static boolean loadUE = false;
     public static boolean loadMCE = false;
     public static boolean loadSS = false;
@@ -143,9 +140,9 @@ public class EnchantChanger {
             GenerateHandler.DungeonLootItemResist();
         }
         loadMTH = Loader.isModLoaded("MultiToolHolders");
-        loadMCE = Loader.isModLoaded("mceconomy2");
+        loadMCE = ModAPIManager.INSTANCE.hasAPI("mceconomy2");
         loadSS = Loader.isModLoaded("SextiarySector");
-        loadTE = Loader.isModLoaded("CoFHCore");
+        loadRFAPI = ModAPIManager.INSTANCE.hasAPI("CoFHAPI|energy");
         if (loadMCE) {
             MinecraftForge.EVENT_BUS.register(new CoopMCE());
         }

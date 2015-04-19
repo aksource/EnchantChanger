@@ -14,11 +14,9 @@ public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.inventory.ContainerRepair";
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (/*!FMLLaunchHandler.side().isClient() || */!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
         try {
-            AKInternalCorePlugin.logger.info("Start transforming ContainerRepair Class");
             basicClass = changeableAnvilMaxLevel(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming ContainerRepair Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : AnvilLevelTransformer loading", e);
@@ -39,7 +37,7 @@ public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming updateRepairOutput Method");
+            AKInternalCorePlugin.logger.debug("Transforming updateRepairOutput Method");
             AbstractInsnNode oldInsnNode1 = null;
             AbstractInsnNode oldInsnNode2 = null;
             AbstractInsnNode oldInsnNode3 = null;

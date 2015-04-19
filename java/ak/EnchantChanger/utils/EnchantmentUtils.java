@@ -8,6 +8,7 @@ import net.minecraft.enchantment.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -149,7 +150,7 @@ public class EnchantmentUtils {
             return par1ItemStack.isItemStackDamageable() || ench.type.canEnchantItem(par1ItemStack.getItem());
         }
         if (ench instanceof EnchantmentDigging) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
+            return par1ItemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
         }
         if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
             return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraSwords(par1ItemStack);
@@ -158,7 +159,7 @@ public class EnchantmentUtils {
             return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraArmors(par1ItemStack);
         }
         if (ench instanceof EnchantmentUntouching) {
-            return par1ItemStack.getItem() == Items.shears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
+            return par1ItemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
         }
         if (ench instanceof EcEnchantmentMeteo || ench instanceof EcEnchantmentHoly || ench instanceof EcEnchantmentTeleport || ench instanceof EcEnchantmentFloat || ench instanceof EcEnchantmentThunder) {
             return par1ItemStack.getItem() instanceof EcItemSword;
@@ -263,7 +264,8 @@ public class EnchantmentUtils {
         if (!MATERIAL_MAP.containsKey(master)) return false;
         Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
         for (MaterialResultPair mrp : set) {
-            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
+            ItemStack containItemStack = mrp.getMaterial().getContainItemStack();
+            if (areItemsEqualsWildCard(containItemStack, material)) {
                 return true;
             }
         }
@@ -273,11 +275,17 @@ public class EnchantmentUtils {
     public static ItemStack getResult(int master, ItemStack material) {
         Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
         for (MaterialResultPair mrp : set) {
-            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
+            ItemStack containItemStack = mrp.getMaterial().getContainItemStack();
+            if (areItemsEqualsWildCard(containItemStack, material)) {
                 return mrp.getResultCopy();
             }
         }
         return new ItemStack(Blocks.air);
+    }
+
+    private static boolean areItemsEqualsWildCard(ItemStack master, ItemStack checkStack) {
+        return (master.getItemDamage() == OreDictionary.WILDCARD_VALUE && master.getItem() == checkStack.getItem())
+                || master.isItemEqual(checkStack);
     }
 
     private static ItemStack getEnchantedItemStack(ItemStack base, Enchantment enchantment, int lv) {

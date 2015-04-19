@@ -15,11 +15,9 @@ public class TileEntityBeaconTransformer implements IClassTransformer, Opcodes{
     private static final String TARGET_CLASS_NAME = "net.minecraft.tileentity.TileEntityBeacon";
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
         try {
-            AKInternalCorePlugin.logger.info("Start transforming TileEntityBeacon Class");
             basicClass = changableAnvilMaxLevel(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming TileEntityBeacon Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : TileEntityBeaconTransformer loading", e);
@@ -40,7 +38,7 @@ public class TileEntityBeaconTransformer implements IClassTransformer, Opcodes{
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming func_146000_x Method");
+            AKInternalCorePlugin.logger.debug("Transforming func_146000_x Method");
             AbstractInsnNode oldInsnNode1 = null;
             AbstractInsnNode oldInsnNode2 = null;
 

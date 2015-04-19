@@ -1,6 +1,7 @@
 package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.Client.ClientProxy;
+import ak.EnchantChanger.CommonProxy;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -45,7 +46,7 @@ public class EcBlockMultiPass extends BlockContainer {
 
     @Override
     public int getRenderType() {
-        return ClientProxy.multiPassRenderType;
+        return CommonProxy.multiPassRenderType;
     }
 
     @Override
