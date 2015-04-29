@@ -45,16 +45,16 @@ public class EnchantmentUtils {
         if (item == null || enchantment == null || Lv <= 0) {
             return;
         }
-        if (item.stackTagCompound == null) {
+        if (item.getTagCompound() == null) {
             item.setTagCompound(new NBTTagCompound());
         }
 
         String tagName = getTagName(item);
-        if (!item.stackTagCompound.hasKey(tagName, Constants.NBT.TAG_LIST)) {
-            item.stackTagCompound.setTag(tagName, new NBTTagList());
+        if (!item.getTagCompound().hasKey(tagName, Constants.NBT.TAG_LIST)) {
+            item.getTagCompound().setTag(tagName, new NBTTagList());
         }
 
-        NBTTagList var3 =item.stackTagCompound.getTagList(tagName, 10);
+        NBTTagList var3 =item.getTagCompound().getTagList(tagName, 10);
         NBTTagCompound var4 = new NBTTagCompound();
         var4.setShort("id", (short) enchantment.effectId);
         var4.setShort("lvl", (short) (Lv));
