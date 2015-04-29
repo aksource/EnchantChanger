@@ -17,13 +17,12 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
-public class EcRenderSwordModel implements IItemRenderer
-{
-	private static final EcModelUltimateWeapon UModel = new EcModelUltimateWeapon();
-	private static final EcModelCloudSwordCore2 CCModel = new EcModelCloudSwordCore2();
-	private static final EcModelCloudSword2 CModel = new EcModelCloudSword2();
-	private static final EcModelSephirothSword SModel = new EcModelSephirothSword();
-	private static final EcModelZackSword ZModel = new EcModelZackSword();
+public class EcRenderSwordModel implements IItemRenderer {
+    private static final EcModelUltimateWeapon UModel = new EcModelUltimateWeapon();
+    private static final EcModelCloudSwordCore2 CCModel = new EcModelCloudSwordCore2();
+    private static final EcModelCloudSword2 CModel = new EcModelCloudSword2();
+    private static final EcModelSephirothSword SModel = new EcModelSephirothSword();
+    private static final EcModelZackSword ZModel = new EcModelZackSword();
 
     private static final ResourceLocation zackSwordObj = new ResourceLocation(Constants.EcAssetsDomain, "models/bustersword.obj");
     private final IModelCustom zackSwordModel;
@@ -73,26 +72,26 @@ public class EcRenderSwordModel implements IItemRenderer
         unionSwordModel = AdvancedModelLoader.loadModel(unionSwordObj);
     }
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type == ItemRenderType.EQUIPPED
-				|| type == ItemRenderType.EQUIPPED_FIRST_PERSON;
-	}
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return type == ItemRenderType.EQUIPPED
+                || type == ItemRenderType.EQUIPPED_FIRST_PERSON;
+    }
 
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
-		return false;
-	}
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
+                                         ItemRendererHelper helper) {
+        return false;
+    }
 
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		if (item.getItem() instanceof EcItemSword) {
-            EntityLivingBase entityLivingBase = (EntityLivingBase)data[1];
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        if (item.getItem() instanceof EcItemSword) {
+            EntityLivingBase entityLivingBase = (EntityLivingBase) data[1];
             boolean isHanded = ItemStack.areItemStacksEqual(item, entityLivingBase.getHeldItem());
             renderSwordModel(item, entityLivingBase, type, isHanded);
         }
-	}
+    }
 
     //Obj仕様renderメソッド
     private void renderSwordModel(ItemStack item, EntityLivingBase entityLivingBase, ItemRenderType type, boolean isHanded) {
@@ -170,7 +169,7 @@ public class EcRenderSwordModel implements IItemRenderer
     }
 
     private void renderFirstSwordModel(ItemStack item, float size) {
-        EcItemCloudSwordCore cloudSwordCore = (EcItemCloudSwordCore)item.getItem();
+        EcItemCloudSwordCore cloudSwordCore = (EcItemCloudSwordCore) item.getItem();
         boolean isActive = cloudSwordCore.isActive(item);
         GL11.glScalef(size, size, size);
         renderUnionSwordCore(isActive);

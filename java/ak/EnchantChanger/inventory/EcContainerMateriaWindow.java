@@ -137,7 +137,7 @@ public class EcContainerMateriaWindow extends Container {
                 nbt.removeTag(tagName);
             }
 
-            for (EnchantmentLvPair data :  enchantmentList) {
+            for (EnchantmentLvPair data : enchantmentList) {
                 EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
             }
             ItemStack result = EnchantmentUtils.getBookResult(openItem, enchantmentList);
@@ -200,7 +200,8 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     @Override
-    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer){}
+    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer) {
+    }
 
     @Override
     public ItemStack slotClick(int slot, int mouse, int keyboard, EntityPlayer par4EntityPlayer) {
@@ -230,7 +231,7 @@ public class EcContainerMateriaWindow extends Container {
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
             if (slotItem != null && slotItem.getItemDamage() > 0) {
-                list.add((byte)slotItem.getItemDamage());
+                list.add((byte) slotItem.getItemDamage());
             }
         }
         return list;

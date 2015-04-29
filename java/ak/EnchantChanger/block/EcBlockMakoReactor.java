@@ -32,8 +32,8 @@ import java.util.List;
 /**
  * Created by A.K. on 14/03/08.
  */
-public class EcBlockMakoReactor extends EcBlockMultiPass{
-    private static int[] sides = new int[]{2,5,3,4};
+public class EcBlockMakoReactor extends EcBlockMultiPass {
+    private static int[] sides = new int[]{2, 5, 3, 4};
     public static List<String> baseBlocksOreName = new ArrayList<>();
     @SideOnly(Side.CLIENT)
     private IIcon iconFront;
@@ -43,7 +43,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
     }
 
     @Override
-    public IIcon getIcon(int side  , int meta) {
+    public IIcon getIcon(int side, int meta) {
         if (meta == 0) {
             return (side == 4) ? this.iconFront : this.blockIcon;
         }
@@ -74,13 +74,13 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         int l = MathHelper.floor_double((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
         if (tile instanceof EcTileEntityMakoReactor) {
-            ((EcTileEntityMakoReactor)tile).setFace( (byte) sides[l]);
+            ((EcTileEntityMakoReactor) tile).setFace((byte) sides[l]);
         }
     }
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor)world.getTileEntity(x, y, z);
+        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
         if (tile != null && tile.isActivated()) {
             player.openGui(EnchantChanger.instance, Constants.GUI_ID_MAKO_REACTOR, world, x, y, z);
         }
@@ -89,7 +89,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
 
     @Override
     public TileEntity createNewTileEntity(World var1, int meta) {
-        return (meta == 0) ? new EcTileEntityMakoReactor(): super.createNewTileEntity(var1, meta);
+        return (meta == 0) ? new EcTileEntityMakoReactor() : super.createNewTileEntity(var1, meta);
     }
 
     @Override
@@ -99,13 +99,13 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         ArrayList<ItemStack> ores;
         Block block;
         int blockMeta;
-        for (String baseOreName: baseBlocksOreName) {
+        for (String baseOreName : baseBlocksOreName) {
             ores = OreDictionary.getOres(baseOreName);
             for (ItemStack itemStack : ores) {
                 makoReactorController = new ItemStack(this, 1, 0);
                 makoReactorController.setTagCompound(new NBTTagCompound());
                 GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
-                blockMeta = ((ItemBlock)itemStack.getItem()).getMetadata(itemStack.getItemDamage());
+                blockMeta = ((ItemBlock) itemStack.getItem()).getMetadata(itemStack.getItemDamage());
                 makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
                 makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", blockMeta);
                 list.add(makoReactorController);
@@ -115,7 +115,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor)world.getTileEntity(x, y, z);
+        EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
         if (tile != null) {
             for (int i1 = 0; i1 < tile.getSizeInventory(); ++i1) {
                 ItemStack itemstack = tile.getStackInSlot(i1);
@@ -150,6 +150,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass{
         }
         super.breakBlock(world, x, y, z, block, meta);
     }
+
     static {
         baseBlocksOreName.add("blockIron");
         baseBlocksOreName.add("blockGold");

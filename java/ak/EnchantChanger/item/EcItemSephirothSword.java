@@ -8,16 +8,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EcItemSephirothSword extends EcItemSword
-{
-	public static final double BoxSize = 5D;
-	public boolean SephirothSprintAttack;
-	public Entity SephirothSprintAttackEntity = null;
+public class EcItemSephirothSword extends EcItemSword {
+    public static final double BoxSize = 5D;
+    public boolean SephirothSprintAttack;
+    public Entity SephirothSprintAttackEntity = null;
 
-	public EcItemSephirothSword(String name)
-	{
-		super(ToolMaterial.EMERALD, name);
-	}
+    public EcItemSephirothSword(String name) {
+        super(ToolMaterial.EMERALD, name);
+    }
 
 //	@Override
 //	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer player)
@@ -38,42 +36,39 @@ public class EcItemSephirothSword extends EcItemSword
 //		return par1ItemStack;
 //	}
 
-	@Override
-	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)
-	{
-		if (player.isSprinting() && !SephirothSprintAttack) {
-			SephirothSprintAttack = true;
-			SephirothSprintAttackEntity = entity;
-		}
-		return super.onLeftClickEntity(itemstack, player, entity);
-	}
+    @Override
+    public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
+        if (player.isSprinting() && !SephirothSprintAttack) {
+            SephirothSprintAttack = true;
+            SephirothSprintAttackEntity = entity;
+        }
+        return super.onLeftClickEntity(itemstack, player, entity);
+    }
 
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5)
-	{
-		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
-		if (SephirothSprintAttack && par3Entity instanceof EntityPlayer) {
-			this.SephirothSprintAttack(par2World, (EntityPlayer) par3Entity);
-			SephirothSprintAttack = false;
-		}
-	}
+    @Override
+    public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
+        super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+        if (SephirothSprintAttack && par3Entity instanceof EntityPlayer) {
+            this.SephirothSprintAttack(par2World, (EntityPlayer) par3Entity);
+            SephirothSprintAttack = false;
+        }
+    }
 
-	public void SephirothSprintAttack(World world, EntityPlayer player)
-	{
-		Entity entity = SephirothSprintAttackEntity;
+    public void SephirothSprintAttack(World world, EntityPlayer player) {
+        Entity entity = SephirothSprintAttackEntity;
 
-		if (entity instanceof EntityLiving) {
-			List EntityList = world.getEntitiesWithinAABB(EntityLiving.class,
-					entity.boundingBox.expand(BoxSize, BoxSize, BoxSize));
-			for (Object object : EntityList) {
-				Entity entity1 = (Entity) object;
-				if (entity1 != entity && entity1 != player) {
-					player.attackTargetEntityWithCurrentItem(entity1);
-				}
-			}
-		}
-		this.SephirothSprintAttack = false;
-	}
+        if (entity instanceof EntityLiving) {
+            List EntityList = world.getEntitiesWithinAABB(EntityLiving.class,
+                    entity.boundingBox.expand(BoxSize, BoxSize, BoxSize));
+            for (Object object : EntityList) {
+                Entity entity1 = (Entity) object;
+                if (entity1 != entity && entity1 != player) {
+                    player.attackTargetEntityWithCurrentItem(entity1);
+                }
+            }
+        }
+        this.SephirothSprintAttack = false;
+    }
 
     @Override
     public double getReach(ItemStack itemStack) {

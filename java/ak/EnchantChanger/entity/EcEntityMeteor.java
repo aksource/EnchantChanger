@@ -12,16 +12,15 @@ import net.minecraft.world.World;
 import java.util.List;
 
 
-public class EcEntityMeteor extends Entity
-{
-//    private int xTile = -1;
+public class EcEntityMeteor extends Entity {
+    //    private int xTile = -1;
 //    private int yTile = -1;
 //    private int zTile = -1;
 //    private Block inTile = Blocks.air;
 //    private boolean inGround = false;
     public EntityLivingBase shootingEntity;
     private int ticksAlive;
-//    private int ticksInAir = 0;
+    //    private int ticksInAir = 0;
     public double accelerationX;
     public double accelerationY;
     public double accelerationZ;
@@ -29,32 +28,30 @@ public class EcEntityMeteor extends Entity
     private String throwerName;
     private float Size = ConfigurationUtils.sizeMeteor;
 
-    public EcEntityMeteor(World par1World)
-    {
+    public EcEntityMeteor(World par1World) {
         super(par1World);
         this.setSize(Size, Size);
     }
 
-    protected void entityInit() {}
+    protected void entityInit() {
+    }
 
     /**
      * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
      * length * 64 * renderDistanceWeight Args: distance
      */
-    public boolean isInRangeToRenderDist(double par1)
-    {
+    public boolean isInRangeToRenderDist(double par1) {
         double var3 = this.boundingBox.getAverageEdgeLength() * 4.0D;
         var3 *= 64.0D;
         return par1 < var3 * var3;
     }
 
-    public EcEntityMeteor(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch)
-    {
+    public EcEntityMeteor(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch) {
         super(par1World);
         this.setSize(Size, Size);
         this.setLocationAndAngles(par2, par4, par6, Yaw, Pitch);
         this.setPosition(par2, par4, par6);
-        double var14 = (double)MathHelper.sqrt_double(par8 * par8 + par10 * par10 + par12 * par12);
+        double var14 = (double) MathHelper.sqrt_double(par8 * par8 + par10 * par10 + par12 * par12);
         this.accelerationX = par8 / var14 * 0.1D;
         this.accelerationY = par10 / var14 * 0.1D;
         this.accelerationZ = par12 / var14 * 0.1D;
@@ -81,14 +78,10 @@ public class EcEntityMeteor extends Entity
     /**
      * Called to update the entity's position/logic.
      */
-    public void onUpdate()
-    {
-        if (!this.worldObj.isRemote && (this.shootingEntity != null && this.shootingEntity.isDead || !this.worldObj.blockExists((int)this.posX, (int)this.posY, (int)this.posZ)))
-        {
+    public void onUpdate() {
+        if (!this.worldObj.isRemote && (this.shootingEntity != null && this.shootingEntity.isDead || !this.worldObj.blockExists((int) this.posX, (int) this.posY, (int) this.posZ))) {
             this.setDead();
-        }
-        else
-        {
+        } else {
             super.onUpdate();
             this.setFire(1);
 
@@ -124,8 +117,7 @@ public class EcEntityMeteor extends Entity
             var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
             var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
-            if (var3 != null)
-            {
+            if (var3 != null) {
                 var2 = Vec3.createVectorHelper(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
             }
 
@@ -135,21 +127,17 @@ public class EcEntityMeteor extends Entity
             double var6 = 0.0D;
             EntityLivingBase entitylivingbase = this.getThrower();
 
-            for (Entity var9 : var5)
-            {
+            for (Entity var9 : var5) {
 
-                if (var9.canBeCollidedWith() && (!var9.isEntityEqual(entitylivingbase)/* || this.ticksInAir >= 25*/))
-                {
+                if (var9.canBeCollidedWith() && (!var9.isEntityEqual(entitylivingbase)/* || this.ticksInAir >= 25*/)) {
                     float var10 = 0.3F;
-                    AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
+                    AxisAlignedBB var11 = var9.boundingBox.expand((double) var10, (double) var10, (double) var10);
                     MovingObjectPosition var12 = var11.calculateIntercept(var15, var2);
 
-                    if (var12 != null)
-                    {
+                    if (var12 != null) {
                         double var13 = var15.distanceTo(var12.hitVec);
 
-                        if (var13 < var6 || var6 == 0.0D)
-                        {
+                        if (var13 < var6 || var6 == 0.0D) {
                             var4 = var9;
                             var6 = var13;
                         }
@@ -157,13 +145,11 @@ public class EcEntityMeteor extends Entity
                 }
             }
 
-            if (var4 != null)
-            {
+            if (var4 != null) {
                 var3 = new MovingObjectPosition(var4);
             }
 
-            if (var3 != null)
-            {
+            if (var3 != null) {
                 this.onImpact(var3);
             }
 
@@ -171,25 +157,22 @@ public class EcEntityMeteor extends Entity
             this.posY += this.motionY;
             this.posZ += this.motionZ;
             float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
 //            for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
 //            {
 //                ;
 //            }
 
-            while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
-            {
+            while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
             }
 
-            while (this.rotationYaw - this.prevRotationYaw < -180.0F)
-            {
+            while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
                 this.prevRotationYaw -= 360.0F;
             }
 
-            while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
-            {
+            while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
                 this.prevRotationYaw += 360.0F;
             }
 
@@ -197,12 +180,10 @@ public class EcEntityMeteor extends Entity
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
             float var17 = 0.95F;
 
-            if (this.isInWater())
-            {
-                for (int var19 = 0; var19 < 4; ++var19)
-                {
+            if (this.isInWater()) {
+                for (int var19 = 0; var19 < 4; ++var19) {
                     float var18 = 0.25F;
-                    this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var18, this.posY - this.motionY * (double)var18, this.posZ - this.motionZ * (double)var18, this.motionX, this.motionY, this.motionZ);
+                    this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) var18, this.posY - this.motionY * (double) var18, this.posZ - this.motionZ * (double) var18, this.motionX, this.motionY, this.motionZ);
                 }
 
                 var17 = 0.8F;
@@ -211,9 +192,9 @@ public class EcEntityMeteor extends Entity
             this.motionX += this.accelerationX;
             this.motionY += this.accelerationY;
             this.motionZ += this.accelerationZ;
-            this.motionX *= (double)var17;
-            this.motionY *= (double)var17;
-            this.motionZ *= (double)var17;
+            this.motionX *= (double) var17;
+            this.motionY *= (double) var17;
+            this.motionZ *= (double) var17;
             this.worldObj.spawnParticle("smoke", this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
         }
@@ -222,16 +203,14 @@ public class EcEntityMeteor extends Entity
     /**
      * Called when this EntityFireball hits a block or entity.
      */
-    protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
-    {
-        if (!this.worldObj.isRemote)
-        {
+    protected void onImpact(MovingObjectPosition par1MovingObjectPosition) {
+        if (!this.worldObj.isRemote) {
             /**
-        	if (par1MovingObjectPosition.entityHit != null && par1MovingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 4))
-            {
-                ;
-            }
-			*/
+             if (par1MovingObjectPosition.entityHit != null && par1MovingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 4))
+             {
+             ;
+             }
+             */
             this.worldObj.newExplosion(null, this.posX, this.posY, this.posZ, Explimit, true, true);
             this.setDead();
         }
@@ -240,16 +219,14 @@ public class EcEntityMeteor extends Entity
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
-    {
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 //        par1NBTTagCompound.setShort("xTile", (short)this.xTile);
 //        par1NBTTagCompound.setShort("yTile", (short)this.yTile);
 //        par1NBTTagCompound.setShort("zTile", (short)this.zTile);
 //        par1NBTTagCompound.setByte("inTile", (byte)Block.getIdFromBlock(this.inTile));
 //        par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
 
-        if ((this.throwerName == null || this.throwerName.length() == 0) && this.shootingEntity != null && this.shootingEntity instanceof EntityPlayer)
-        {
+        if ((this.throwerName == null || this.throwerName.length() == 0) && this.shootingEntity != null && this.shootingEntity instanceof EntityPlayer) {
             this.throwerName = this.shootingEntity.getCommandSenderName();
         }
 
@@ -259,8 +236,7 @@ public class EcEntityMeteor extends Entity
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
-    {
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 //        this.xTile = par1NBTTagCompound.getShort("xTile");
 //        this.yTile = par1NBTTagCompound.getShort("yTile");
 //        this.zTile = par1NBTTagCompound.getShort("zTile");
@@ -268,8 +244,7 @@ public class EcEntityMeteor extends Entity
 //        this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
         this.throwerName = par1NBTTagCompound.getString("ownerName");
 
-        if (this.throwerName != null && this.throwerName.length() == 0)
-        {
+        if (this.throwerName != null && this.throwerName.length() == 0) {
             this.throwerName = null;
         }
     }
@@ -277,27 +252,22 @@ public class EcEntityMeteor extends Entity
     /**
      * Returns true if other Entities should be prevented from moving through this Entity.
      */
-    public boolean canBeCollidedWith()
-    {
+    public boolean canBeCollidedWith() {
         return true;
     }
 
-    public float getCollisionBorderSize()
-    {
+    public float getCollisionBorderSize() {
         return 1.0F;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
-    {
+    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
         this.setBeenAttacked();
 
-        if (par1DamageSource.getEntity() != null)
-        {
+        if (par1DamageSource.getEntity() != null) {
             Vec3 var3 = par1DamageSource.getEntity().getLookVec();
 
-            if (var3 != null)
-            {
+            if (var3 != null) {
                 this.motionX = var3.xCoord;
                 this.motionY = var3.yCoord;
                 this.motionZ = var3.zCoord;
@@ -306,41 +276,33 @@ public class EcEntityMeteor extends Entity
                 this.accelerationZ = this.motionZ * 0.1D;
             }
 
-            if (par1DamageSource.getEntity() instanceof EntityLiving)
-            {
-                this.shootingEntity = (EntityLiving)par1DamageSource.getEntity();
+            if (par1DamageSource.getEntity() instanceof EntityLiving) {
+                this.shootingEntity = (EntityLiving) par1DamageSource.getEntity();
             }
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public float getShadowSize()
-    {
+    public float getShadowSize() {
         return 0.0F;
     }
 
     /**
      * Gets how bright this entity is.
      */
-    public float getBrightness(float par1)
-    {
+    public float getBrightness(float par1) {
         return 1.0F;
     }
 
-    public int getBrightnessForRender(float par1)
-    {
+    public int getBrightnessForRender(float par1) {
         return 15728880;
     }
 
-    public EntityLivingBase getThrower()
-    {
-        if (this.shootingEntity == null && this.throwerName != null && this.throwerName.length() > 0)
-        {
+    public EntityLivingBase getThrower() {
+        if (this.shootingEntity == null && this.throwerName != null && this.throwerName.length() > 0) {
             this.shootingEntity = this.worldObj.getPlayerEntityByName(this.throwerName);
         }
 

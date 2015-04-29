@@ -27,11 +27,15 @@ public class CommonProxy implements IGuiHandler {
     public void registerTileEntitySpecialRenderer() {
     }
 
-    public void registerExtraMateriaRendering(NBTTagCompound nbt) {}
+    public void registerExtraMateriaRendering(NBTTagCompound nbt) {
+    }
 
-    public EntityPlayer getPlayer() {return null;}
+    public EntityPlayer getPlayer() {
+        return null;
+    }
 
-    public void doFlightOnSide(EntityPlayer player) {}
+    public void doFlightOnSide(EntityPlayer player) {
+    }
 
     //returns an instance of the Container you made earlier
     @Override
@@ -88,10 +92,10 @@ public class CommonProxy implements IGuiHandler {
             TileEntity t = world.getTileEntity(x, y, z);
             if (t != null) {
                 if (EnchantChanger.loadRFAPI) {
-                    return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor)t);
+                    return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor) t);
                 }
                 if (EnchantChanger.loadSS) {
-                    return new EcGuiMakoReactorGF(player.inventory, (EcTileEntityMakoReactor)t);
+                    return new EcGuiMakoReactorGF(player.inventory, (EcTileEntityMakoReactor) t);
                 }
                 return new EcGuiMakoReactor(player.inventory, (EcTileEntityMakoReactor) t);
             }
@@ -99,13 +103,11 @@ public class CommonProxy implements IGuiHandler {
         return null;
     }
 
-    public static void storeEntityData(String name, NBTTagCompound compound)
-    {
+    public static void storeEntityData(String name, NBTTagCompound compound) {
         extendedEntityData.put(name, compound);
     }
 
-    public static NBTTagCompound getEntityData(String name)
-    {
+    public static NBTTagCompound getEntityData(String name) {
         return extendedEntityData.remove(name);
     }
 

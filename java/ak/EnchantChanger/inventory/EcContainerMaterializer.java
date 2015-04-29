@@ -161,9 +161,9 @@ public class EcContainerMaterializer extends Container {
                         enchTagList.getCompoundTagAt(i).setInteger("ap", 0);
                         var1 = enchTagList.getCompoundTagAt(i).getShort("id");
                         var2 = enchTagList.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair((var1 >=0 && var1 < Enchantment.enchantmentsList.length) ? Enchantment.enchantmentsList[var1] : null, var2));
+                        this.itemEnchantmentLvPair.add(new EnchantmentLvPair((var1 >= 0 && var1 < Enchantment.enchantmentsList.length) ? Enchantment.enchantmentsList[var1] : null, var2));
                         if (i >= 8) {
-                           EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
+                            EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
                     }
             }
@@ -201,7 +201,7 @@ public class EcContainerMaterializer extends Container {
                             this.enchantmentLevelList.add(enchLv);
                         }
                     } else {
-                        if (!magicList.contains((byte)materiaitem.getItemDamage())) {
+                        if (!magicList.contains((byte) materiaitem.getItemDamage())) {
                             this.magicAddList.add((byte) materiaitem.getItemDamage());
                         }
                     }
@@ -219,7 +219,7 @@ public class EcContainerMaterializer extends Container {
                 }
                 this.itemEnchantmentLvPair.clear();
                 for (int i2 = 0; i2 < this.enchantmentList.size(); i2++) {
-                    EnchantmentUtils.addEnchantmentToItem(result,  (this.enchantmentList.get(i2) < Enchantment.enchantmentsList.length)? Enchantment.enchantmentsList[this.enchantmentList.get(i2)] : null, this.enchantmentLevelList.get(i2));
+                    EnchantmentUtils.addEnchantmentToItem(result, (this.enchantmentList.get(i2) < Enchantment.enchantmentsList.length) ? Enchantment.enchantmentsList[this.enchantmentList.get(i2)] : null, this.enchantmentLevelList.get(i2));
                 }
 
                 result = EnchantmentUtils.getBookResult(result, enchantmentList);

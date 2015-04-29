@@ -50,8 +50,8 @@ import java.util.List;
 import static ak.EnchantChanger.api.Constants.MagicKEY;
 
 public class ClientProxy extends CommonProxy {
-	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
-			Keyboard.KEY_V, "EnchantChanger");
+    public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
+            Keyboard.KEY_V, "EnchantChanger");
     public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger");
     public static int customRenderPass;
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
@@ -63,45 +63,45 @@ public class ClientProxy extends CommonProxy {
 
     public static final float moveFactor = 0.4F;
 
-	@Override
-	public void registerRenderInformation() {
+    @Override
+    public void registerRenderInformation() {
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
-		RenderingRegistry.registerEntityRenderingHandler(
-				EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
-				new EcRenderItemThrowable(ConfigurationUtils.sizeMeteor));
-		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
-				new EcRenderApOrb());
+        RenderingRegistry.registerEntityRenderingHandler(
+                EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
+                new EcRenderItemThrowable(ConfigurationUtils.sizeMeteor));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
+                new EcRenderApOrb());
 
         RenderingRegistry.registerBlockHandler(ecRenderMultiPassBlock);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(EnchantChanger.blockMakoReactor), ecRenderMultiPassBlock);
 
-		ClientRegistry.registerKeyBinding(MagicKey);
+        ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
-		IItemRenderer swordRenderer = new EcRenderSwordModel();
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemSephirothSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemZackSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemCloudSwordCore,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemCloudSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemUltimateWeapon,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemImitateSephirothSword,
-				swordRenderer);
-		IItemRenderer materiaRenderer = new EcRenderMateria();
-		MinecraftForgeClient.registerItemRenderer(EnchantChanger.itemMateria,
-				materiaRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemMasterMateria, materiaRenderer);
+        IItemRenderer swordRenderer = new EcRenderSwordModel();
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemSephirothSword,
+                swordRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemZackSword,
+                swordRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.ItemCloudSwordCore,
+                swordRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemCloudSword,
+                swordRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemUltimateWeapon,
+                swordRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemImitateSephirothSword,
+                swordRenderer);
+        IItemRenderer materiaRenderer = new EcRenderMateria();
+        MinecraftForgeClient.registerItemRenderer(EnchantChanger.itemMateria,
+                materiaRenderer);
+        MinecraftForgeClient.registerItemRenderer(
+                EnchantChanger.itemMasterMateria, materiaRenderer);
 
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
@@ -111,11 +111,11 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-	@Override
-	public void registerTileEntitySpecialRenderer() {
-		ClientRegistry.bindTileEntitySpecialRenderer(
-				EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
-	}
+    @Override
+    public void registerTileEntitySpecialRenderer() {
+        ClientRegistry.bindTileEntitySpecialRenderer(
+                EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
+    }
 
     @Override
     public void registerExtraMateriaRendering(NBTTagCompound nbt) {
@@ -150,7 +150,7 @@ public class ClientProxy extends CommonProxy {
         //Sprint判定。updatePlayerMoveStateしているので、再度判定する必要が有る。
         if (((EntityPlayerSP) player).onGround && !var3
                 && ((EntityPlayerSP) player).movementInput.moveForward >= var2
-                && ! player.isSprinting() && var4 && !player.isUsingItem()
+                && !player.isSprinting() && var4 && !player.isUsingItem()
                 && !player.isPotionActive(Potion.blindness)) {
             if (this.sprintToggleTimer == 0) {
                 this.sprintToggleTimer = 7;
@@ -183,7 +183,7 @@ public class ClientProxy extends CommonProxy {
 
 
     private static void movePlayerY(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP)player;
+        EntityPlayerSP playerSP = (EntityPlayerSP) player;
 
         player.motionY = 0.0D;
 
@@ -197,7 +197,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private static void movePlayerXZ(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP)player;
+        EntityPlayerSP playerSP = (EntityPlayerSP) player;
         float moveForward = playerSP.movementInput.moveForward;
         float moveStrafe = playerSP.movementInput.moveStrafe;
 
@@ -225,8 +225,10 @@ public class ClientProxy extends CommonProxy {
             byte keyIndex = getKeyIndex();
             if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
                 PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
-                switch(keyIndex) {
-                    case MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
+                switch (keyIndex) {
+                    case MagicKEY:
+                        doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer);
+                        break;
                 }
             }
         }
@@ -239,8 +241,7 @@ public class ClientProxy extends CommonProxy {
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
             if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)) != null
-                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
-            {
+                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword) {
                 EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
@@ -256,7 +257,7 @@ public class ClientProxy extends CommonProxy {
     private void changeObjectMouseOver(EntityPlayer player) {
         ItemStack heldItem = player.getCurrentEquippedItem();
         if (heldItem != null && heldItem.getItem() instanceof ICustomReachItem) {
-            double extendedReach = ((ICustomReachItem)heldItem.getItem()).getReach(heldItem);
+            double extendedReach = ((ICustomReachItem) heldItem.getItem()).getReach(heldItem);
             MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, timer.renderPartialTicks);
             if (MOP != null && MOP.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                 mc.objectMouseOver = MOP;
@@ -289,7 +290,7 @@ public class ClientProxy extends CommonProxy {
                 double d2 = d1;
                 Entity pointedEntity = null;
                 for (Entity entity : list) {
-                    if (entity.canBeCollidedWith())  {
+                    if (entity.canBeCollidedWith()) {
                         float collisionSize = entity.getCollisionBorderSize();
                         AxisAlignedBB axisalignedbb = entity.boundingBox.expand(collisionSize, collisionSize, collisionSize);
                         MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(viewPosition, reachVector);
@@ -300,7 +301,7 @@ public class ClientProxy extends CommonProxy {
                                 vec33 = movingobjectposition == null ? viewPosition : movingobjectposition.hitVec;
                                 d2 = 0.0D;
                             }
-                        } else if (movingobjectposition != null)  {
+                        } else if (movingobjectposition != null) {
                             double d3 = viewPosition.distanceTo(movingobjectposition.hitVec);
 
                             if (d3 < d2 || d2 == 0.0D) {
@@ -329,6 +330,6 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void textureStitch(TextureStitchEvent.Post event) {
-        EnchantChanger.fluidLifeStream.setIcons(EnchantChanger.blockLifeStream.getIcon(0,0));
+        EnchantChanger.fluidLifeStream.setIcons(EnchantChanger.blockLifeStream.getIcon(0, 0));
     }
 }

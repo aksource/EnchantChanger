@@ -15,7 +15,7 @@ public class CoopRFAPI {
 
     public static int getNeedRF(TileEntity tileEntity, ForgeDirection direction, int maxRF) {
         if (tileEntity instanceof IEnergyHandler) {
-            return ((IEnergyHandler)tileEntity).receiveEnergy(direction, maxRF, false);
+            return ((IEnergyHandler) tileEntity).receiveEnergy(direction, maxRF, false);
         }
         return 0;
     }

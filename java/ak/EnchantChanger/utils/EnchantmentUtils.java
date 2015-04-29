@@ -54,7 +54,7 @@ public class EnchantmentUtils {
             item.getTagCompound().setTag(tagName, new NBTTagList());
         }
 
-        NBTTagList var3 =item.getTagCompound().getTagList(tagName, 10);
+        NBTTagList var3 = item.getTagCompound().getTagList(tagName, 10);
         NBTTagCompound var4 = new NBTTagCompound();
         var4.setShort("id", (short) enchantment.effectId);
         var4.setShort("lvl", (short) (Lv));
@@ -189,7 +189,7 @@ public class EnchantmentUtils {
     }
 
     public static boolean isEnchanted(ItemStack itemStack) {
-        return (itemStack.getItem() instanceof ItemEnchantedBook) ? itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("StoredEnchantments", 9): itemStack.isItemEnchanted();
+        return (itemStack.getItem() instanceof ItemEnchantedBook) ? itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("StoredEnchantments", 9) : itemStack.isItemEnchanted();
     }
 
     public static String getTagName(ItemStack itemStack) {

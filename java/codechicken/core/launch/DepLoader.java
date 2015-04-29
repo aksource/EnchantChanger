@@ -220,8 +220,7 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
         }
     }
 
-    public static class VersionedFile
-    {
+    public static class VersionedFile {
         public final Pattern pattern;
         public final String filename;
         public final ComparableVersion version;
@@ -231,11 +230,10 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
             this.pattern = pattern;
             this.filename = filename;
             Matcher m = pattern.matcher(filename);
-            if(m.matches()) {
+            if (m.matches()) {
                 name = m.group(1);
                 version = new ComparableVersion(m.group(2));
-            }
-            else {
+            } else {
                 name = null;
                 version = null;
             }
@@ -246,8 +244,7 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
         }
     }
 
-    public static class Dependency
-    {
+    public static class Dependency {
         public String url;
         public VersionedFile file;
 
@@ -544,13 +541,13 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
 
             Pattern pattern = null;
             try {
-                if(node.has("pattern"))
+                if (node.has("pattern"))
                     pattern = Pattern.compile(node.get("pattern").getAsString());
             } catch (PatternSyntaxException e) {
-                System.err.println("Invalid filename pattern: "+node.get("pattern"));
+                System.err.println("Invalid filename pattern: " + node.get("pattern"));
                 e.printStackTrace();
             }
-            if(pattern == null)
+            if (pattern == null)
                 pattern = Pattern.compile("(\\w+).*?([\\d\\.]+)[-\\w]*\\.[^\\d]+");
 
             VersionedFile file = new VersionedFile(filename, pattern);

@@ -12,7 +12,8 @@ public class MessageExtendedReachAttack implements IMessage {
 
     private int entityId;
 
-    public MessageExtendedReachAttack(){}
+    public MessageExtendedReachAttack() {
+    }
 
     public MessageExtendedReachAttack(Entity entity) {
         this.entityId = entity.getEntityId();

@@ -1,11 +1,9 @@
 package ak.EnchantChanger.item;
 
-public class EcItemZackSword extends EcItemSword
-{
-	public EcItemZackSword(String name)
-	{
-		super(ToolMaterial.IRON, name);
-	}
+public class EcItemZackSword extends EcItemSword {
+    public EcItemZackSword(String name) {
+        super(ToolMaterial.IRON, name);
+    }
 //	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer player)
 //	{
 //		if(player.isSneaking() && CommonTickHandler.LimitBreakCoolDownCount[0] == 0&&(player.getHealth() < 3 || player.capabilities.isCreativeMode)){

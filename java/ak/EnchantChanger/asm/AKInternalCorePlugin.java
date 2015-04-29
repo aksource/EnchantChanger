@@ -18,6 +18,7 @@ public class AKInternalCorePlugin implements IFMLLoadingPlugin {
     public static int setAnvilLevelModifier;
     public static int beaconBaseRange;
     public static int beaconLevelRange;
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{"ak.EnchantChanger.asm.EnchantmentHelperTransformer",
@@ -39,8 +40,7 @@ public class AKInternalCorePlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        if (data.containsKey("mcLocation"))
-        {
+        if (data.containsKey("mcLocation")) {
             File mcLocation = (File) data.get("mcLocation");
             File configLocation = new File(mcLocation, "config");
             File configFile = new File(configLocation, "AKCore.cfg");

@@ -36,14 +36,14 @@ import java.util.Set;
 
 public class EcItemSword extends ItemSword implements ICustomReachItem {
 
-	public EcItemSword(ToolMaterial toolMaterial, String name) {
-		super(toolMaterial);
+    public EcItemSword(ToolMaterial toolMaterial, String name) {
+        super(toolMaterial);
         String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
         this.setTextureName(s);
         this.setNoRepair();
         this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
-	}
+    }
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
@@ -83,25 +83,25 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     }
 
     public static void doMagic(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
+                               EntityPlayer par3EntityPlayer) {
         byte b = getMagicEnchantId(par1ItemStack);
-		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentMeteor, par1ItemStack) > 0 || b == Constants.MAGIC_ID_METEOR) {
-			EcItemMateria.doMeteor(par2World, par3EntityPlayer);
-		}
-		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentHoly, par1ItemStack) > 0 || b == Constants.MAGIC_ID_HOLY) {
-			EcItemMateria.doHoly(par2World, par3EntityPlayer);
-		}
-		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentTelepo, par1ItemStack) > 0 || b == Constants.MAGIC_ID_TELEPO) {
-			EcItemMateria.teleportPlayer(par2World, par3EntityPlayer);
-		}
-		if (EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentThunder, par1ItemStack) > 0 || b == Constants.MAGIC_ID_THUNDER) {
-			EcItemMateria.doThunder(par2World, par3EntityPlayer);
-		}
-	}
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentMeteor, par1ItemStack) > 0 || b == Constants.MAGIC_ID_METEOR) {
+            EcItemMateria.doMeteor(par2World, par3EntityPlayer);
+        }
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentHoly, par1ItemStack) > 0 || b == Constants.MAGIC_ID_HOLY) {
+            EcItemMateria.doHoly(par2World, par3EntityPlayer);
+        }
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentTelepo, par1ItemStack) > 0 || b == Constants.MAGIC_ID_TELEPO) {
+            EcItemMateria.teleportPlayer(par2World, par3EntityPlayer);
+        }
+        if (EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentThunder, par1ItemStack) > 0 || b == Constants.MAGIC_ID_THUNDER) {
+            EcItemMateria.doThunder(par2World, par3EntityPlayer);
+        }
+    }
 
     private static byte getMagicEnchantId(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) return -1;
@@ -138,10 +138,10 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
         return b == Constants.MAGIC_ID_FLOAT;
     }
 
-	public static boolean hasFloat(ItemStack itemstack) {
-		return EnchantmentHelper.getEnchantmentLevel(
-				ConfigurationUtils.idEnchantmentFloat, itemstack) > 0 || hasFloatNBT(itemstack);
-	}
+    public static boolean hasFloat(ItemStack itemstack) {
+        return EnchantmentHelper.getEnchantmentLevel(
+                ConfigurationUtils.idEnchantmentFloat, itemstack) > 0 || hasFloatNBT(itemstack);
+    }
 
     private static boolean hasFloatNBT(ItemStack itemStack) {
         for (byte b : EnchantmentUtils.getMagic(itemStack)) {
@@ -178,143 +178,141 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
         player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.LIMIT_BREAK_TIME, 3));
     }
 
-	// 内蔵武器切り替え用攻撃メソッドの移植
-	public void attackTargetEntityWithTheItem(Entity par1Entity,
-			EntityPlayer player, ItemStack stack, boolean cancelHurt) {
-		if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player,
-				par1Entity))) {
-			return;
-		}
-		if (stack != null
-				&& stack.getItem().onLeftClickEntity(stack, player, par1Entity)) {
-			return;
-		}
-		if (par1Entity.canAttackWithItem()) {
-			if (!par1Entity.hitByEntity(player)) {
-				float var2 = (float) this.getItemStrength(stack);
-				if (player.isPotionActive(Potion.damageBoost)) {
-					var2 += 3 << player.getActivePotionEffect(
-							Potion.damageBoost).getAmplifier();
-				}
+    // 内蔵武器切り替え用攻撃メソッドの移植
+    public void attackTargetEntityWithTheItem(Entity par1Entity,
+                                              EntityPlayer player, ItemStack stack, boolean cancelHurt) {
+        if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player,
+                par1Entity))) {
+            return;
+        }
+        if (stack != null
+                && stack.getItem().onLeftClickEntity(stack, player, par1Entity)) {
+            return;
+        }
+        if (par1Entity.canAttackWithItem()) {
+            if (!par1Entity.hitByEntity(player)) {
+                float var2 = (float) this.getItemStrength(stack);
+                if (player.isPotionActive(Potion.damageBoost)) {
+                    var2 += 3 << player.getActivePotionEffect(
+                            Potion.damageBoost).getAmplifier();
+                }
 
-				if (player.isPotionActive(Potion.weakness)) {
-					var2 -= 2 << player.getActivePotionEffect(Potion.weakness)
-							.getAmplifier();
-				}
+                if (player.isPotionActive(Potion.weakness)) {
+                    var2 -= 2 << player.getActivePotionEffect(Potion.weakness)
+                            .getAmplifier();
+                }
 
-				int var3 = 0;
-				int var4 = 0;
+                int var3 = 0;
+                int var4 = 0;
 
-				if (par1Entity instanceof EntityLivingBase) {
-					var4 = this.getEnchantmentModifierLiving(stack, player,
-							(EntityLivingBase) par1Entity);
-					var3 += EnchantmentHelper.getEnchantmentLevel(
-							Enchantment.knockback.effectId, stack);
-				}
+                if (par1Entity instanceof EntityLivingBase) {
+                    var4 = this.getEnchantmentModifierLiving(stack, player,
+                            (EntityLivingBase) par1Entity);
+                    var3 += EnchantmentHelper.getEnchantmentLevel(
+                            Enchantment.knockback.effectId, stack);
+                }
 
-				if (player.isSprinting()) {
-					++var3;
-				}
+                if (player.isSprinting()) {
+                    ++var3;
+                }
 
-				if (var2 > 0 || var4 > 0) {
-					boolean var5 = player.fallDistance > 0.0F
-							&& !player.onGround && !player.isOnLadder()
-							&& !player.isInWater()
-							&& !player.isPotionActive(Potion.blindness)
-							&& player.ridingEntity == null
-							&& par1Entity instanceof EntityLivingBase;
+                if (var2 > 0 || var4 > 0) {
+                    boolean var5 = player.fallDistance > 0.0F
+                            && !player.onGround && !player.isOnLadder()
+                            && !player.isInWater()
+                            && !player.isPotionActive(Potion.blindness)
+                            && player.ridingEntity == null
+                            && par1Entity instanceof EntityLivingBase;
 
-					if (var5 && var2 > 0) {
-						var2 *= 1.5F;
-					}
+                    if (var5 && var2 > 0) {
+                        var2 *= 1.5F;
+                    }
 
-					var2 += var4;
-					boolean var6 = false;
-					int var7 = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
+                    var2 += var4;
+                    boolean var6 = false;
+                    int var7 = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
 
-					if (par1Entity instanceof EntityLivingBase && var7 > 0
-							&& !par1Entity.isBurning()) {
-						var6 = true;
-						par1Entity.setFire(1);
-					}
+                    if (par1Entity instanceof EntityLivingBase && var7 > 0
+                            && !par1Entity.isBurning()) {
+                        var6 = true;
+                        par1Entity.setFire(1);
+                    }
 
-					boolean var8 = par1Entity.attackEntityFrom(
-							DamageSource.causePlayerDamage(player), var2);
+                    boolean var8 = par1Entity.attackEntityFrom(
+                            DamageSource.causePlayerDamage(player), var2);
 
-					if (var8) {
-						if (var3 > 0) {
-							par1Entity.addVelocity(
-									(double) (-MathHelper
-											.sin(player.rotationYaw
-													* (float) Math.PI / 180.0F)
-											* (float) var3 * 0.5F),
-									0.1D,
-									(double) (MathHelper.cos(player.rotationYaw
-											* (float) Math.PI / 180.0F)
-											* (float) var3 * 0.5F));
-							player.motionX *= 0.6D;
-							player.motionZ *= 0.6D;
-							player.setSprinting(false);
-						}
+                    if (var8) {
+                        if (var3 > 0) {
+                            par1Entity.addVelocity(
+                                    (double) (-MathHelper
+                                            .sin(player.rotationYaw
+                                                    * (float) Math.PI / 180.0F)
+                                            * (float) var3 * 0.5F),
+                                    0.1D,
+                                    (double) (MathHelper.cos(player.rotationYaw
+                                            * (float) Math.PI / 180.0F)
+                                            * (float) var3 * 0.5F));
+                            player.motionX *= 0.6D;
+                            player.motionZ *= 0.6D;
+                            player.setSprinting(false);
+                        }
 
-						if (var5) {
-							player.onCriticalHit(par1Entity);
-						}
+                        if (var5) {
+                            player.onCriticalHit(par1Entity);
+                        }
 
-						if (var4 > 0) {
-							player.onEnchantmentCritical(par1Entity);
-						}
+                        if (var4 > 0) {
+                            player.onEnchantmentCritical(par1Entity);
+                        }
 
-						if (var2 >= 18) {
-							player.triggerAchievement(AchievementList.overkill);
-						}
+                        if (var2 >= 18) {
+                            player.triggerAchievement(AchievementList.overkill);
+                        }
 
-						player.setLastAttacker(par1Entity);
+                        player.setLastAttacker(par1Entity);
 
-						EnchantmentHelper.func_151385_b(player, par1Entity);
-						Object object = par1Entity;
+                        EnchantmentHelper.func_151385_b(player, par1Entity);
+                        Object object = par1Entity;
 
-						if (par1Entity instanceof EntityDragonPart)
-						{
-							IEntityMultiPart ientitymultipart = ((EntityDragonPart)par1Entity).entityDragonObj;
+                        if (par1Entity instanceof EntityDragonPart) {
+                            IEntityMultiPart ientitymultipart = ((EntityDragonPart) par1Entity).entityDragonObj;
 
-							if (ientitymultipart != null && ientitymultipart instanceof EntityLivingBase)
-							{
-								object = ientitymultipart;
-							}
-						}
+                            if (ientitymultipart != null && ientitymultipart instanceof EntityLivingBase) {
+                                object = ientitymultipart;
+                            }
+                        }
 
-						if (stack != null && object instanceof EntityLivingBase) {
+                        if (stack != null && object instanceof EntityLivingBase) {
                             stack.hitEntity((EntityLivingBase) object, player);
-							if (cancelHurt)
-								par1Entity.hurtResistantTime = 0;
-							if (stack.stackSize <= 0) {
-								this.destroyTheItem(player, stack);
-							}
-						}
-					}
+                            if (cancelHurt)
+                                par1Entity.hurtResistantTime = 0;
+                            if (stack.stackSize <= 0) {
+                                this.destroyTheItem(player, stack);
+                            }
+                        }
+                    }
 
-					if (par1Entity instanceof EntityLivingBase) {
-						player.addStat(StatList.damageDealtStat,
-								Math.round(var2 * 10.0F));
+                    if (par1Entity instanceof EntityLivingBase) {
+                        player.addStat(StatList.damageDealtStat,
+                                Math.round(var2 * 10.0F));
 
-						if (var7 > 0 && var8) {
-							par1Entity.setFire(var7 * 4);
-						} else if (var6) {
-							par1Entity.extinguish();
-						}
-					}
+                        if (var7 > 0 && var8) {
+                            par1Entity.setFire(var7 * 4);
+                        } else if (var6) {
+                            par1Entity.extinguish();
+                        }
+                    }
 
-					player.addExhaustion(0.3F);
-				}
-			}
-		}
-	}
+                    player.addExhaustion(0.3F);
+                }
+            }
+        }
+    }
 
-	public double getItemStrength(ItemStack item) {
-		Multimap multimap = item.getAttributeModifiers();
-		double d1 = 0;
-		if (!multimap.isEmpty()) {
+    public double getItemStrength(ItemStack item) {
+        Multimap multimap = item.getAttributeModifiers();
+        double d1 = 0;
+        if (!multimap.isEmpty()) {
 
             for (Object object : multimap.entries()) {
                 Entry entry = (Entry) object;
@@ -327,35 +325,35 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
                     d1 = attributemodifier.getAmount() * 100.0D;
                 }
             }
-		}
-		return d1;
-	}
+        }
+        return d1;
+    }
 
-	public int getEnchantmentModifierLiving(ItemStack stack,
-			EntityLivingBase attacker, EntityLivingBase enemy) {
-		int calc = 0;
-		if (stack != null) {
-			NBTTagList nbttaglist = stack.getEnchantmentTagList();
+    public int getEnchantmentModifierLiving(ItemStack stack,
+                                            EntityLivingBase attacker, EntityLivingBase enemy) {
+        int calc = 0;
+        if (stack != null) {
+            NBTTagList nbttaglist = stack.getEnchantmentTagList();
 
-			if (nbttaglist != null) {
-				for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-					short short1 =  nbttaglist.getCompoundTagAt(i)
-							.getShort("id");
-					short short2 = nbttaglist.getCompoundTagAt(i)
-							.getShort("lvl");
+            if (nbttaglist != null) {
+                for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+                    short short1 = nbttaglist.getCompoundTagAt(i)
+                            .getShort("id");
+                    short short2 = nbttaglist.getCompoundTagAt(i)
+                            .getShort("lvl");
 
-					if (Enchantment.enchantmentsList[short1] != null) {
-						calc += Enchantment.enchantmentsList[short1]
-								.func_152376_a(short2, enemy.getCreatureAttribute());
-					}
-				}
-			}
-		}
-		return calc > 0 ? 1 + attacker.worldObj.rand.nextInt(calc) : 0;
-	}
+                    if (Enchantment.enchantmentsList[short1] != null) {
+                        calc += Enchantment.enchantmentsList[short1]
+                                .func_152376_a(short2, enemy.getCreatureAttribute());
+                    }
+                }
+            }
+        }
+        return calc > 0 ? 1 + attacker.worldObj.rand.nextInt(calc) : 0;
+    }
 
-	public void destroyTheItem(EntityPlayer player, ItemStack orig) {
-	}
+    public void destroyTheItem(EntityPlayer player, ItemStack orig) {
+    }
 
     @Override
     public double getReach(ItemStack itemStack) {
@@ -370,7 +368,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
             data.setLimitBreakCount(Constants.LIMIT_BREAK_TIME);
             doLimitBreak(itemStack, entityPlayer);
         } else {
-            byte id = (byte)(data.getLimitBreakId() + 1);
+            byte id = (byte) (data.getLimitBreakId() + 1);
             data.setLimitBreakId(id);
         }
     }

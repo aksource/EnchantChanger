@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
  */
 public class EcItemBlockMakoReactor extends ItemBlock {
     private static String[] nameArray = {"tile.makoreactor-machine", "tile.makoreactor-case"};
+
     public EcItemBlockMakoReactor(Block block) {
         super(block);
     }

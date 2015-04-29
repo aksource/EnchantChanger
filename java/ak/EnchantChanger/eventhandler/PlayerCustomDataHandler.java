@@ -23,14 +23,14 @@ public class PlayerCustomDataHandler {
     @SubscribeEvent
     public void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.player.worldObj.isRemote) {
-            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP)event.player);
+            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP) event.player);
         }
     }
 
     @SubscribeEvent
     public void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.player.worldObj.isRemote) {
-            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP)event.player);
+            PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(event.player), (EntityPlayerMP) event.player);
         }
     }
 }

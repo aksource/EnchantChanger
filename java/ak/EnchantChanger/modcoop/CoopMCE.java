@@ -16,11 +16,12 @@ public class CoopMCE {
 
     private static final long TERM_MONTH = 24000 * 30;
     private static final long TERM_EVENT = 1200L;
+
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving instanceof EntityPlayer
                 && ((EntityPlayer) event.entityLiving).worldObj.getTotalWorldTime() % TERM_EVENT == 0L) {
-            EntityPlayer player = (EntityPlayer)event.entityLiving;
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             ExtendedPlayerData data = ExtendedPlayerData.get(player);
             long startTime = data.getSoldierWorkStartTime();
             long nowTime = player.worldObj.getWorldTime();

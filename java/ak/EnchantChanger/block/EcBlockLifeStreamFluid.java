@@ -25,30 +25,32 @@ import java.util.Random;
 /**
  * Created by A.K. on 14/03/06.
  */
-public class EcBlockLifeStreamFluid extends BlockFluidClassic{
+public class EcBlockLifeStreamFluid extends BlockFluidClassic {
     @SideOnly(Side.CLIENT)
     protected IIcon stillIcon;
     @SideOnly(Side.CLIENT)
     protected IIcon flowingIcon;
-//    private int waitTime = 0;
+
+    //    private int waitTime = 0;
     public EcBlockLifeStreamFluid(Fluid fluid, Material material) {
         super(fluid, material);
     }
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        return (side == 0 || side == 1)? stillIcon : flowingIcon;
+        return (side == 0 || side == 1) ? stillIcon : flowingIcon;
     }
 
     @Override
     public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-        return !world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z);
+        return !world.getBlock(x, y, z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z);
     }
 
     @Override
     public boolean displaceIfPossible(World world, int x, int y, int z) {
-        return !world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z);
+        return !world.getBlock(x, y, z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z);
     }
+
     @Override
     public void registerBlockIcons(IIconRegister register) {
         stillIcon = register.registerIcon(Constants.EcTextureDomain + "lifestream_still");
@@ -61,7 +63,7 @@ public class EcBlockLifeStreamFluid extends BlockFluidClassic{
         world.scheduleBlockUpdate(x, y, z, this, tickRate);
         List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x + this.minX, y + this.minY, z + this.minZ, x + this.maxX, y + this.maxY, z + this.maxZ));
         for (Object object : list) {
-            EntityLivingBase entity = (EntityLivingBase)object;
+            EntityLivingBase entity = (EntityLivingBase) object;
             if (entity instanceof EntityPlayer) {
                 entity.addPotionEffect(new PotionEffect(EnchantChanger.potionMako.getId(), 20 * 60, 0));
                 entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 20 * 5, 0));

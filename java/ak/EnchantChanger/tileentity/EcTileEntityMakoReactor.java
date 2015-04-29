@@ -47,10 +47,10 @@ import java.util.List;
  */
 @Optional.InterfaceList(
         {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHAPI|energy"),
-        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|energy"),
-        @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
+                @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|energy"),
+                @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
 )
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler{
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo, shift.sextiarysector.api.machine.energy.IEnergyHandler {
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
@@ -83,7 +83,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     private int outputMaxRFValue = 100;
     private int storedRFEnergy;
 
-//    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
+    //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
     public byte face;
 
     @Override
@@ -91,10 +91,10 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         super.markDirty();
         if (!this.worldObj.isRemote) {
             @SuppressWarnings("unchecked")
-            List<EntityPlayer> list= this.worldObj.playerEntities;
+            List<EntityPlayer> list = this.worldObj.playerEntities;
             for (EntityPlayer player : list) {
                 if (player instanceof EntityPlayerMP) {
-                    ((EntityPlayerMP)player).playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                    ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(this.getDescriptionPacket());
                 }
             }
         }
@@ -104,13 +104,13 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         nbt.setByte("face", face);
-        nbt.setShort("SmeltingTime", (short)smeltingTime);
+        nbt.setShort("SmeltingTime", (short) smeltingTime);
         nbt.setInteger("createHugeMateria", creatingHugeMateriaPoint);
         NBTTagList nbtTagList = new NBTTagList();
         for (int i = 0; i < items.length; i++) {
             if (items[i] != null) {
                 NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte)i);
+                nbtTagCompound.setByte("Slot", (byte) i);
                 items[i].writeToNBT(nbtTagCompound);
                 nbtTagList.appendTag(nbtTagCompound);
             }
@@ -121,7 +121,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         for (int i = 0; i < smeltingItems.length; i++) {
             if (smeltingItems[i] != null) {
                 NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte)i);
+                nbtTagCompound.setByte("Slot", (byte) i);
                 smeltingItems[i].writeToNBT(nbtTagCompound);
                 nbtTagList2.appendTag(nbtTagCompound);
             }
@@ -155,7 +155,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         }
 
         NBTTagList nbtTagList2 = nbt.getTagList("SmeltingItems", Constants.NBT.TAG_COMPOUND);
-        for (int j = 0; j < smeltingItems.length ; j++) {
+        for (int j = 0; j < smeltingItems.length; j++) {
             smeltingItems[j] = null;
         }
         for (int i = 0; i < nbtTagList2.tagCount(); i++) {
@@ -237,6 +237,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             this.markDirty();
         }
     }
+
     @Override
     public Packet getDescriptionPacket() {
         return super.getDescriptionPacket();
@@ -349,8 +350,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         int checkBlockMeta;
         int index;
         String blockName;
-        for (int y = -1 ; y <= 3; y++) {
-            for (int x = -1 ; x <= 1; x++) {
+        for (int y = -1; y <= 3; y++) {
+            for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     checkBlock = worldObj.getBlock(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
                     checkBlockMeta = worldObj.getBlockMetadata(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
@@ -397,14 +398,13 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
 
-
     public int getGeneratingRFMakoCost() {
         return getOutputMaxRFValue() / STEP_RF_VALUE;
     }
 
     public boolean canMakeHugeMateria() {
         if (HMCoord == null) return false;
-        for (int i = 0; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             if (!worldObj.getBlock(HMCoord.chunkPosX, HMCoord.chunkPosY + i, HMCoord.chunkPosZ).equals(Blocks.air)) {
                 return false;
             }
@@ -542,7 +542,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @SideOnly(Side.CLIENT)
     public int getFluidAmountScaled(int scale) {
-        return this.tank.getFluidAmount() * scale  / this.tank.getCapacity();
+        return this.tank.getFluidAmount() * scale / this.tank.getCapacity();
     }
 
     @SideOnly(Side.CLIENT)

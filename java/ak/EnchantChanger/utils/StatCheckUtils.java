@@ -13,7 +13,7 @@ public class StatCheckUtils {
 
     public static int getTotalMobKillCount(EntityPlayer entityPlayer) {
         if (entityPlayer instanceof EntityPlayerMP) {
-            return getStaticData((EntityPlayerMP)entityPlayer, StatList.mobKillsStat);
+            return getStaticData((EntityPlayerMP) entityPlayer, StatList.mobKillsStat);
         }
         return 0;
     }

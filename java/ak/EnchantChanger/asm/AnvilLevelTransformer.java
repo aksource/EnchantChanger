@@ -12,9 +12,12 @@ import org.objectweb.asm.tree.*;
  */
 public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.inventory.ContainerRepair";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {
+            return basicClass;
+        }
         try {
             basicClass = changeableAnvilMaxLevel(name, basicClass);
             return basicClass;
@@ -42,11 +45,11 @@ public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
             AbstractInsnNode oldInsnNode2 = null;
             AbstractInsnNode oldInsnNode3 = null;
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
-                if (abstractInsnNode instanceof  IntInsnNode) {
-                    if (((IntInsnNode)abstractInsnNode).operand == 40) {
+                if (abstractInsnNode instanceof IntInsnNode) {
+                    if (((IntInsnNode) abstractInsnNode).operand == 40) {
                         if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
                         else oldInsnNode3 = abstractInsnNode;
-                    } else if (((IntInsnNode)abstractInsnNode).operand == 39) {
+                    } else if (((IntInsnNode) abstractInsnNode).operand == 39) {
                         oldInsnNode2 = abstractInsnNode;
                     }
                 }

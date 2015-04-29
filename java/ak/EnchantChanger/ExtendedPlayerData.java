@@ -45,7 +45,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     }
 
     public static ExtendedPlayerData get(EntityPlayer player) {
-        return (ExtendedPlayerData)player.getExtendedProperties(EXT_PROP_NAME);
+        return (ExtendedPlayerData) player.getExtendedProperties(EXT_PROP_NAME);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        NBTTagCompound nbt = (NBTTagCompound)compound.getTag(EXT_PROP_NAME);
+        NBTTagCompound nbt = (NBTTagCompound) compound.getTag(EXT_PROP_NAME);
         this.isLevitating = nbt.getBoolean("isLevitating");
         this.soldierMode = nbt.getBoolean("soldierMode");
         this.apCoolingTime = nbt.getLong("apCoolingTime");
@@ -106,7 +106,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     }
 
     public void addLimitGaugeValue(int value) {
-       limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
+        limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public void setLimitGaugeValue(int value) {
@@ -176,7 +176,9 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     public void loadProxyData(EntityPlayerMP player) {
         ExtendedPlayerData playerData = ExtendedPlayerData.get(player);
         NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
-        if (savedData != null) { playerData.loadNBTData(savedData); }
+        if (savedData != null) {
+            playerData.loadNBTData(savedData);
+        }
         PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), player);
     }
 }

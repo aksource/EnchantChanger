@@ -122,8 +122,7 @@ public class EcGuiMakoReactor extends GuiContainer {
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }

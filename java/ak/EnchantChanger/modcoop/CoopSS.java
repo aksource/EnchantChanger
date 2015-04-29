@@ -16,7 +16,7 @@ public class CoopSS {
 
     public static int getNeedGF(TileEntity tileEntity, ForgeDirection direction, int maxSpeed) {
         if (tileEntity instanceof IEnergyHandler) {
-            return ((IEnergyHandler)tileEntity).addEnergy(direction, EcTileEntityMakoReactor.GF_POWER, maxSpeed, false);
+            return ((IEnergyHandler) tileEntity).addEnergy(direction, EcTileEntityMakoReactor.GF_POWER, maxSpeed, false);
         }
         return 0;
     }

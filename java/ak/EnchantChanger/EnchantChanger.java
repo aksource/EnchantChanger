@@ -166,12 +166,12 @@ public class EnchantChanger {
     public static String getUniqueStrings(Object obj) {
         UniqueIdentifier uId = null;
         if (obj instanceof ItemStack) {
-            obj = ((ItemStack)obj).getItem();
+            obj = ((ItemStack) obj).getItem();
         }
         if (obj instanceof Block) {
             uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
         }
-        if (obj instanceof Item){
+        if (obj instanceof Item) {
             uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
         }
         return Optional.fromNullable(uId).or(new UniqueIdentifier("none:dummy")).toString();

@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class EcGuiMateriaWindow extends GuiContainer {
     private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMateriaWindow);
+
     public EcGuiMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
         super(new EcContainerMateriaWindow(inventoryPlayer, item, slotnum));
     }
@@ -25,36 +26,31 @@ public class EcGuiMateriaWindow extends GuiContainer {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-        int itemRenderPosX = (int)((x + 11) / 4.0f);
-        int itemRenderPosY = (int)((y + 11) / 4.0f);
+        int itemRenderPosX = (int) ((x + 11) / 4.0f);
+        int itemRenderPosY = (int) ((y + 11) / 4.0f);
         GL11.glPushMatrix();
         itemRender.zLevel = 100.0F;
         GL11.glScalef(4.0f, 4.0f, 1);
-        ItemStack openItem = ((EcContainerMateriaWindow)this.inventorySlots).getOpenItem();
+        ItemStack openItem = ((EcContainerMateriaWindow) this.inventorySlots).getOpenItem();
         itemRender.renderItemAndEffectIntoGUI(fontRendererObj, Minecraft.getMinecraft().renderEngine, openItem, itemRenderPosX, itemRenderPosY);
         itemRender.zLevel = 0.0F;
         GL11.glPopMatrix();
     }
 
-    protected void keyTyped(char c, int keycode)
-    {
-        if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode() || keycode == Minecraft.getMinecraft().gameSettings.keyBindDrop.getKeyCode())
-        {
+    protected void keyTyped(char c, int keycode) {
+        if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode() || keycode == Minecraft.getMinecraft().gameSettings.keyBindDrop.getKeyCode()) {
             Minecraft.getMinecraft().thePlayer.closeScreen();
         } else super.keyTyped(c, keycode);
     }
 
-    public void updateScreen()
-    {
+    public void updateScreen() {
         super.updateScreen();
-        if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() ||Minecraft.getMinecraft().thePlayer.isDead)
-        {
+        if (!Minecraft.getMinecraft().thePlayer.isEntityAlive() || Minecraft.getMinecraft().thePlayer.isDead) {
             Minecraft.getMinecraft().thePlayer.closeScreen();
         }
     }
 
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }

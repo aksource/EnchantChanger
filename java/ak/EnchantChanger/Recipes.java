@@ -105,7 +105,7 @@ public class Recipes {
                         "ABA",
                         " A ",
                         'A', Blocks.diamond_block,
-                        'B', new ItemStack(itemMasterMateria, 1,  OreDictionary.WILDCARD_VALUE));
+                        'B', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
         GameRegistry.addShapelessRecipe(new ItemStack(
                 itemPortableEnchantChanger, 1), blockEnchantChanger);
         GameRegistry.addShapelessRecipe(new ItemStack(
@@ -135,7 +135,7 @@ public class Recipes {
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
 
-        for (String baseOreName: EcBlockMakoReactor.baseBlocksOreName) {
+        for (String baseOreName : EcBlockMakoReactor.baseBlocksOreName) {
             addOreDictRecipe(baseOreName);
         }
     }

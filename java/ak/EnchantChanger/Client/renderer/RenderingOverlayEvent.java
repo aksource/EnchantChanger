@@ -45,7 +45,7 @@ public class RenderingOverlayEvent {
             Class<?> scaledResolutionClass = ScaledResolution.class;
             try {
                 Constructor<?> scaledResolutionConstructor = scaledResolutionClass.getConstructor(GameSettings.class, int.class, int.class);
-                res = (ScaledResolution)scaledResolutionConstructor.newInstance(mc.gameSettings, width, height);
+                res = (ScaledResolution) scaledResolutionConstructor.newInstance(mc.gameSettings, width, height);
                 width = res.getScaledWidth();
                 height = res.getScaledHeight();
             } catch (Exception e) {
@@ -66,7 +66,7 @@ public class RenderingOverlayEvent {
     private void renderLimitGauge(EntityPlayer player, int slot, int width, int height, float partialTicks) {
         int limitGaugeValue = ExtendedPlayerData.get(player).getLimitGaugeValue();
         int limitGaugeMaxValue = Constants.LIMIT_GAUGE_MAX;
-        double ratio = (double)limitGaugeValue / (double)limitGaugeMaxValue;
+        double ratio = (double) limitGaugeValue / (double) limitGaugeMaxValue;
         String valueString = String.valueOf(limitGaugeValue);
         int x = width / 2 - 90 + slot * 20 + 2;
         int z = height - 16 - 7;
@@ -87,8 +87,8 @@ public class RenderingOverlayEvent {
     }
 
     private void renderCustomDurationLikeBar(double value, int x, int y) {
-        int j1 = (int)Math.round(/*13.0D - */value * 13.0D);
-        int k = (int)Math.round(/*255.0D - */value * 255.0D);
+        int j1 = (int) Math.round(/*13.0D - */value * 13.0D);
+        int k = (int) Math.round(/*255.0D - */value * 255.0D);
 
 //        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -116,15 +116,14 @@ public class RenderingOverlayEvent {
         ItemStack toRenderItem;
         for (int i = 0; i < 6; i++) {
             int xShift = (i == slot) ? 16 : 0;
-            toRenderItem = (i == 5)?core : swordData.getStackInSlot(i);
+            toRenderItem = (i == 5) ? core : swordData.getStackInSlot(i);
             renderInventorySlot(toRenderItem, ConfigurationUtils.cloudInvXCoord + xShift, ConfigurationUtils.cloudInvYCoord + i * 16);
         }
 
     }
 
-    private void renderInventorySlot(ItemStack itemstack, int par2, int par3)
-    {
-        if (itemstack != null){
+    private void renderInventorySlot(ItemStack itemstack, int par2, int par3) {
+        if (itemstack != null) {
             RenderHelper.enableGUIStandardItemLighting();
             itemRenderer.renderItemAndEffectIntoGUI(this.mc.fontRenderer, this.mc.getTextureManager(), itemstack, par2, par3);
             itemRenderer.renderItemOverlayIntoGUI(this.mc.fontRenderer, this.mc.getTextureManager(), itemstack, par2, par3);
@@ -138,8 +137,7 @@ public class RenderingOverlayEvent {
      * Adds a quad to the tesselator at the specified position with the set width and height and color.  Args:
      * tessellator, x, y, width, height, color
      */
-    private void renderQuad(Tessellator tessellator, int x, int y, int width, int height, int color)
-    {
+    private void renderQuad(Tessellator tessellator, int x, int y, int width, int height, int color) {
         tessellator.startDrawingQuads();
         tessellator.setColorOpaque_I(color);
         tessellator.addVertex((double) (x + 0), (double) (y + 0), 0.0D);

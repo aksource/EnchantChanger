@@ -14,7 +14,8 @@ public class MessagePlayerProperties implements IMessage {
 
     public NBTTagCompound data;
 
-    public MessagePlayerProperties(){}
+    public MessagePlayerProperties() {
+    }
 
     public MessagePlayerProperties(EntityPlayer entityPlayer) {
         this.data = new NBTTagCompound();

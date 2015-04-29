@@ -10,11 +10,13 @@ public class MessageKeyPressed implements IMessage {
 
     public byte keyIndex;
 
-    public MessageKeyPressed(){}
+    public MessageKeyPressed() {
+    }
 
     public MessageKeyPressed(byte key) {
         this.keyIndex = key;
     }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         this.keyIndex = buf.readByte();

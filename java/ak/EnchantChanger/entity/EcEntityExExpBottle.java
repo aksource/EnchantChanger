@@ -8,15 +8,12 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEntity
-{
-    public EcEntityExExpBottle(World par1World)
-    {
+public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEntity {
+    public EcEntityExExpBottle(World par1World) {
         super(par1World);
     }
 
-    public EcEntityExExpBottle(World par1World, EntityLivingBase par2EntityLiving)
-    {
+    public EcEntityExExpBottle(World par1World, EntityLivingBase par2EntityLiving) {
         super(par1World, par2EntityLiving);
     }
 
@@ -28,35 +25,29 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
     /**
      * Gets the amount of gravity to apply to the thrown entity with each tick.
      */
-    protected float getGravityVelocity()
-    {
+    protected float getGravityVelocity() {
         return 0.07F;
     }
 
     @Override
-    protected float func_70182_d()
-    {
+    protected float func_70182_d() {
         return 0.7F;
     }
 
     @Override
-    protected float func_70183_g()
-    {
+    protected float func_70183_g() {
         return -20.0F;
     }
 
     /**
      * Called when this EntityThrowable hits a block or entity.
      */
-    protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
-    {
-        if (!this.worldObj.isRemote)
-        {
-            this.worldObj.playAuxSFX(2002, (int)Math.round(this.posX), (int)Math.round(this.posY), (int)Math.round(this.posZ), 0);
+    protected void onImpact(MovingObjectPosition par1MovingObjectPosition) {
+        if (!this.worldObj.isRemote) {
+            this.worldObj.playAuxSFX(2002, (int) Math.round(this.posX), (int) Math.round(this.posY), (int) Math.round(this.posZ), 0);
             int var2 = 30 + this.worldObj.rand.nextInt(5) + this.worldObj.rand.nextInt(5);
 
-            while (var2 > 0)
-            {
+            while (var2 > 0) {
                 int var3 = EntityXPOrb.getXPSplit(var2);
                 var2 -= var3;
                 this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, var3));
@@ -66,9 +57,8 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
         }
     }
 
-	@Override
-	public void setThrower(Entity entity)
-	{
+    @Override
+    public void setThrower(Entity entity) {
 
-	}
+    }
 }

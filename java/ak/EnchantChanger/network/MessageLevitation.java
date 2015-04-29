@@ -10,7 +10,8 @@ public class MessageLevitation implements IMessage {
 
     public boolean isLevitation;
 
-    public MessageLevitation(){}
+    public MessageLevitation() {
+    }
 
     public MessageLevitation(boolean par1) {
         this.isLevitation = par1;

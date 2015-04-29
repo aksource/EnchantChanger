@@ -69,7 +69,7 @@ public class EcRenderPlayerBack {
     }
 
     private boolean isSwordInQuickBar(InventoryPlayer inventoryPlayer) {
-        for (int i= 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             ItemStack itemStack = inventoryPlayer.getStackInSlot(i);
             if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
                 return true;
@@ -128,7 +128,7 @@ public class EcRenderPlayerBack {
         GL11.glPopMatrix();
     }
 
-    private  void renderUsualItem(EntityPlayer entity, ItemStack stack) {
+    private void renderUsualItem(EntityPlayer entity, ItemStack stack) {
         Minecraft mc = Minecraft.getMinecraft();
         TextureManager texturemanager = mc.getTextureManager();
         IIcon icon = entity.getItemIcon(stack, 0);

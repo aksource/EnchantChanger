@@ -51,7 +51,7 @@ public class MakoUtils {
     public static boolean isChalcedony(ItemStack itemStack) {
         List<ItemStack> chalcedonyList = OreDictionary.getOres("blockChalcedony");
         for (ItemStack chalcedonyStack : chalcedonyList) {
-            if (chalcedonyStack.getItemDamage() == OreDictionary.WILDCARD_VALUE && itemStack.getItem().equals(chalcedonyStack.getItem()) ||itemStack.isItemEqual(chalcedonyStack)) {
+            if (chalcedonyStack.getItemDamage() == OreDictionary.WILDCARD_VALUE && itemStack.getItem().equals(chalcedonyStack.getItem()) || itemStack.isItemEqual(chalcedonyStack)) {
                 return true;
             }
         }

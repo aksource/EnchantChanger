@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IItemRenderer {
     private static final Map<ItemRenderType, ItemRendererHelper> renderMap = new HashMap<>();
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return type != ItemRenderType.FIRST_PERSON_MAP;
@@ -35,13 +36,13 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         if (item.getItem() instanceof ItemBlock && item.hasTagCompound() && item.getTagCompound().hasKey("EnchantChanger|baseBlock")) {
-            RenderBlocks renderBlocks = (RenderBlocks)data[0];
+            RenderBlocks renderBlocks = (RenderBlocks) data[0];
             GL11.glEnable(GL11.GL_ALPHA_TEST);
             if (type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.EQUIPPED) {
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             }
 
-            for (int pass = 0; pass < 2 ; pass++) {
+            for (int pass = 0; pass < 2; pass++) {
                 if (pass == 0) {
                     String[] strings = item.getTagCompound().getString("EnchantChanger|baseBlock").split(":");
                     Block base = GameRegistry.findBlock(strings[0], strings[1]);
@@ -82,12 +83,11 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
         float f2;
         float f3;
         int k;
-        if (renderer.useInventoryTint)
-        {
+        if (renderer.useInventoryTint) {
             k = block.getRenderColor(metadata);
-            f2 = (float)(k >> 16 & 255) / 255.0F;
-            f3 = (float)(k >> 8 & 255) / 255.0F;
-            float f4 = (float)(k & 255) / 255.0F;
+            f2 = (float) (k >> 16 & 255) / 255.0F;
+            f3 = (float) (k >> 8 & 255) / 255.0F;
+            float f4 = (float) (k & 255) / 255.0F;
             GL11.glColor4f(f2 * 1.0F, f3 * 1.0F, f4 * 1.0F, 1.0F);
         }
 
@@ -96,8 +96,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
         renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
         tessellator.draw();
 
-        if (renderer.useInventoryTint)
-        {
+        if (renderer.useInventoryTint) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
@@ -123,7 +122,7 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
         if (!(world.getTileEntity(x, y, z) instanceof EcTileMultiPass)) return false;
-        EcTileMultiPass ecTileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
+        EcTileMultiPass ecTileMultiPass = (EcTileMultiPass) world.getTileEntity(x, y, z);
         if (ecTileMultiPass.baseBlock.equals("")) return false;
         renderer.renderStandardBlock(block, x, y, z);
         return true;

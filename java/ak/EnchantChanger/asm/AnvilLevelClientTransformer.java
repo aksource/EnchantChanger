@@ -11,11 +11,14 @@ import org.objectweb.asm.tree.*;
 /**
  * Created by A.K. on 14/04/22.
  */
-public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes{
+public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.client.gui.GuiRepair";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {
+            return basicClass;
+        }
         try {
             basicClass = changableAnvilMaxLevel(name, basicClass);
             return basicClass;
@@ -41,7 +44,7 @@ public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes{
             AKInternalCorePlugin.logger.debug("Transforming drawGuiContainerForegroundLayer Method");
             AbstractInsnNode oldInsnNode = null;
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
-                if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 40) {
+                if (abstractInsnNode instanceof IntInsnNode && ((IntInsnNode) abstractInsnNode).operand == 40) {
                     oldInsnNode = abstractInsnNode;
                 }
             }

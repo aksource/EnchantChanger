@@ -7,7 +7,9 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+
 import static ak.EnchantChanger.EnchantChanger.*;
+
 /**
  * Created by A.K. on 14/10/12.
  */
@@ -44,7 +46,7 @@ public class GenerateHandler {
         if (event.rand.nextInt(ConfigurationUtils.lifeStreamLakeRatio) == 0) {
             int k = event.chunkX * 16;
             int l = event.chunkZ * 16;
-            int x,y,z;
+            int x, y, z;
             x = k + event.rand.nextInt(16) + 8;
             y = event.rand.nextInt(16);
             z = l + event.rand.nextInt(16) + 8;

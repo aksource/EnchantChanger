@@ -16,7 +16,7 @@ public class MessageRFSteppingHandler implements IMessageHandler<MessageRFSteppi
         World world = ctx.getServerHandler().playerEntity.worldObj;
         TileEntity tile = world.getTileEntity(message.xPos, message.yPos, message.zPos);
         if (tile != null && tile instanceof EcTileEntityMakoReactor) {
-            ((EcTileEntityMakoReactor)tile).setOutputMaxRFValue(message.outputRFValue);
+            ((EcTileEntityMakoReactor) tile).setOutputMaxRFValue(message.outputRFValue);
         }
         return null;
     }

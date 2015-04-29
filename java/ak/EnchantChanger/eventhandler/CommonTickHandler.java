@@ -8,10 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 public class CommonTickHandler {
     @SubscribeEvent
     public void playerTick(PlayerTickEvent event) {
-    	EntityPlayer player = event.player;
-    	if(player != null) {
-    		this.doLimitBreak(player);
-    	}
+        EntityPlayer player = event.player;
+        if (player != null) {
+            this.doLimitBreak(player);
+        }
     }
 
     private void doLimitBreak(EntityPlayer player) {

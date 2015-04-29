@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemStackWrapper {
     private ItemStack containItemStack;
+
     public ItemStackWrapper(ItemStack itemStack) {
         containItemStack = itemStack;
     }
@@ -34,7 +35,7 @@ public class ItemStackWrapper {
             return false;
         }
 
-        ItemStackWrapper otherItemStackWrapper = (ItemStackWrapper)obj;
+        ItemStackWrapper otherItemStackWrapper = (ItemStackWrapper) obj;
         return otherItemStackWrapper.getContainItemStack().isItemEqual(otherItemStackWrapper.getContainItemStack());
     }
 

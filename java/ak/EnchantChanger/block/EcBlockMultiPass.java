@@ -25,6 +25,7 @@ import java.util.Map;
  */
 public class EcBlockMultiPass extends BlockContainer {
     private static final Map<ChunkCoordinates, EcTileMultiPass> removingTileMap = new HashMap<>();
+
     public EcBlockMultiPass(Material material) {
         super(material);
     }
@@ -57,7 +58,7 @@ public class EcBlockMultiPass extends BlockContainer {
 
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        EcTileMultiPass tileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
+        EcTileMultiPass tileMultiPass = (EcTileMultiPass) world.getTileEntity(x, y, z);
         if (tileMultiPass != null && ClientProxy.customRenderPass == 0) {
             Block block = tileMultiPass.getBaseBlock();
             return block.getIcon(side, tileMultiPass.getBaseMeta());
@@ -77,7 +78,7 @@ public class EcBlockMultiPass extends BlockContainer {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        removingTileMap.put(new ChunkCoordinates(x, y, z), (EcTileMultiPass)world.getTileEntity(x, y, z));
+        removingTileMap.put(new ChunkCoordinates(x, y, z), (EcTileMultiPass) world.getTileEntity(x, y, z));
         super.breakBlock(world, x, y, z, block, meta);
     }
 
@@ -100,7 +101,7 @@ public class EcBlockMultiPass extends BlockContainer {
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         ItemStack pickItem = super.getPickBlock(target, world, x, y, z);
-        EcTileMultiPass tile = (EcTileMultiPass)world.getTileEntity(x, y, z);
+        EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(x, y, z);
         pickItem.setTagCompound(new NBTTagCompound());
         pickItem.getTagCompound().setString("EnchantChanger|baseBlock", tile.baseBlock);
         pickItem.getTagCompound().setInteger("EnchantChanger|baseMeta", tile.baseMeta);

@@ -11,11 +11,14 @@ import org.objectweb.asm.tree.*;
 /**
  * Created by A.K. on 14/03/26.
  */
-public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
+public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.enchantment.EnchantmentHelper";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {
+            return basicClass;
+        }
         try {
             basicClass = changeConst(name, basicClass);
             return basicClass;
@@ -42,7 +45,7 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
             AbstractInsnNode oldInsnNode2 = null;
 
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
-                if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 25) {
+                if (abstractInsnNode instanceof IntInsnNode && ((IntInsnNode) abstractInsnNode).operand == 25) {
                     if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
                     else oldInsnNode2 = abstractInsnNode;
                 }

@@ -13,7 +13,8 @@ public class MessageRFStepping implements IMessage {
     public int yPos;
     public int zPos;
 
-    public MessageRFStepping(){}
+    public MessageRFStepping() {
+    }
 
     public MessageRFStepping(int outputRFValue, int x, int y, int z) {
         this.outputRFValue = outputRFValue;

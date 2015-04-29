@@ -28,11 +28,13 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
     private EcGuiMakoReactorButton prevButton;
     private EcGuiMakoReactorButton nextButton;
     private TabEnergy tabEnergy;
+
     public EcGuiMakoReactorRF(InventoryPlayer invPlayer, EcTileEntityMakoReactor te) {
         super(new EcContainerMakoReactor(invPlayer, te), GUI);
         inventoryPlayer = invPlayer;
         tileEntity = te;
     }
+
     @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
@@ -41,7 +43,7 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
         this.nextButton = new EcGuiMakoReactorButton(2, this.guiLeft + 144, this.guiTop + 24, true);
         this.buttonList.add(this.prevButton);
         this.buttonList.add(this.nextButton);
-        tabEnergy = (TabEnergy)addTab(new TabEnergy(this, TabBase.LEFT, tileEntity, true));
+        tabEnergy = (TabEnergy) addTab(new TabEnergy(this, TabBase.LEFT, tileEntity, true));
     }
 
     @Override
@@ -120,8 +122,7 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }
