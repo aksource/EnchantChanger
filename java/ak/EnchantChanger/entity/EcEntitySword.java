@@ -12,36 +12,23 @@ import java.util.List;
 
 
 public class EcEntitySword extends Entity {
+    public EntityLiving enemyEntity;
+    public double accelerationX;
+    public double accelerationY;
+    public double accelerationZ;
     private int xTile = -1;
     private int yTile = -1;
     private int zTile = -1;
     private Block inTile = Blocks.air;
     private boolean inGround = false;
-    public EntityLiving enemyEntity;
     private int ticksAlive;
     private int ticksInAir = 0;
-    public double accelerationX;
-    public double accelerationY;
-    public double accelerationZ;
     private float Explimit = 1.0f;
     private float Size = 0.5f;
 
     public EcEntitySword(World par1World) {
         super(par1World);
         this.setSize(Size, Size);
-    }
-
-    protected void entityInit() {
-    }
-
-    /**
-     * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
-     * length * 64 * renderDistanceWeight Args: distance
-     */
-    public boolean isInRangeToRenderDist(double par1) {
-        double var3 = this.boundingBox.getAverageEdgeLength() * 4.0D;
-        var3 *= 64.0D;
-        return par1 < var3 * var3;
     }
 
     public EcEntitySword(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch) {
@@ -70,6 +57,19 @@ public class EcEntitySword extends Entity {
         this.accelerationX = par3 / var9 * 0.1D;
         this.accelerationY = par5 / var9 * 0.1D;
         this.accelerationZ = par7 / var9 * 0.1D;
+    }
+
+    protected void entityInit() {
+    }
+
+    /**
+     * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
+     * length * 64 * renderDistanceWeight Args: distance
+     */
+    public boolean isInRangeToRenderDist(double par1) {
+        double var3 = this.boundingBox.getAverageEdgeLength() * 4.0D;
+        var3 *= 64.0D;
+        return par1 < var3 * var3;
     }
 
     /**

@@ -21,23 +21,20 @@ public class EcContainerPortableEnchantment extends Container {
      * SlotEnchantmentTable object with ItemStack to be enchanted
      */
     public IInventory tableInventory = new EcSlotPortableEnchantmentTable(this, "Enchant", 1);
-
+    /**
+     * used as seed for EnchantmentNameParts (see GuiEnchantment)
+     */
+    public long nameSeed;
+    /**
+     * 3-member array storing the enchantment levels of each slot
+     */
+    public int[] enchantLevels = new int[3];
     /**
      * current world (for bookshelf counting)
      */
     private World worldPointer;
     private Random rand = new Random();
     private InventoryPlayer InvP;
-
-    /**
-     * used as seed for EnchantmentNameParts (see GuiEnchantment)
-     */
-    public long nameSeed;
-
-    /**
-     * 3-member array storing the enchantment levels of each slot
-     */
-    public int[] enchantLevels = new int[3];
 
     public EcContainerPortableEnchantment(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
         this.InvP = par1InventoryPlayer;

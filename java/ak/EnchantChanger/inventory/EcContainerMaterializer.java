@@ -25,20 +25,29 @@ import java.util.List;
 public class EcContainerMaterializer extends Container {
 
     public static int ResultSlotNum = 9;
-    public IInventory materializeResult = new EcSlotResult(this, "MaterializerResult", ResultSlotNum);
     public static int SourceSlotNum = 9;
+    private static ArrayList<Integer> magicDmg = new ArrayList<>();
+
+    static {
+        magicDmg.add(ConfigurationUtils.idEnchantmentMeteor);
+        magicDmg.add(ConfigurationUtils.idEnchantmentHoly);
+        magicDmg.add(ConfigurationUtils.idEnchantmentTelepo);
+        magicDmg.add(ConfigurationUtils.idEnchantmentFloat);
+        magicDmg.add(ConfigurationUtils.idEnchantmentThunder);
+    }
+
+    public IInventory materializeResult = new EcSlotResult(this, "MaterializerResult", ResultSlotNum);
     public IInventory materializeSource = new EcSlotMaterializer(this, "MaterializerSource", SourceSlotNum);
     protected EcTileEntityMaterializer tileEntity;
     protected InventoryPlayer InvPlayer;
     private ArrayList<EnchantmentLvPair> itemEnchantmentLvPair = new ArrayList<>();
     private ArrayList<EnchantmentLvPair> enchantmentRemoveData = new ArrayList<>();
-
     private ArrayList<Integer> enchantmentList = new ArrayList<>();
     private ArrayList<Integer> enchantmentLevelList = new ArrayList<>();
     private ArrayList<Byte> magicList = new ArrayList<>();
     private ArrayList<Byte> magicAddList = new ArrayList<>();
     private World worldPointer;
-    private static ArrayList<Integer> magicDmg = new ArrayList<>();
+
 
     public EcContainerMaterializer(World par1world, InventoryPlayer inventoryPlayer) {
         InvPlayer = inventoryPlayer;
@@ -60,7 +69,6 @@ public class EcContainerMaterializer extends Container {
         bindPlayerInventory(inventoryPlayer);
         this.onCraftMatrixChanged(this.materializeSource);
     }
-
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
@@ -313,13 +321,5 @@ public class EcContainerMaterializer extends Container {
                 ret = true;
         }
         return ret;
-    }
-
-    static {
-        magicDmg.add(ConfigurationUtils.idEnchantmentMeteor);
-        magicDmg.add(ConfigurationUtils.idEnchantmentHoly);
-        magicDmg.add(ConfigurationUtils.idEnchantmentTelepo);
-        magicDmg.add(ConfigurationUtils.idEnchantmentFloat);
-        magicDmg.add(ConfigurationUtils.idEnchantmentThunder);
     }
 }

@@ -109,12 +109,12 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
         limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
-    public void setLimitGaugeValue(int value) {
-        limitValue = MathHelper.clamp_int(value, 0, Constants.LIMIT_GAUGE_MAX);
-    }
-
     public int getLimitGaugeValue() {
         return limitValue;
+    }
+
+    public void setLimitGaugeValue(int value) {
+        limitValue = MathHelper.clamp_int(value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public boolean canLimitBreak() {

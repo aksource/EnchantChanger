@@ -15,8 +15,8 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class EcGuiHugeMateria extends GuiContainer {
 
-    private EcTileEntityHugeMateria tileEntity;
     private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiHuge);
+    private EcTileEntityHugeMateria tileEntity;
 
     public EcGuiHugeMateria(InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te) {
         //the container is instanciated and passed to the superclass for handling

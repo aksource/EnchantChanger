@@ -21,14 +21,18 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
+    public int MaterializingTime = 0;
+    public float angle = 0;
     //	private static int[][] EnchArray;
 //	private static ItemStack[] MaterialArray;
 //	private static ArrayList<Integer> magicArray;
     private ItemStack result = null;
     private int consumedExpBottle = 0;
     private ItemStack[] slotItems = new ItemStack[5];
-    public int MaterializingTime = 0;
-    public float angle = 0;
+
+    public static void addMateriaMaterial() {
+
+    }
 
     @Override
     public int getSizeInventory() {
@@ -63,7 +67,6 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
         }
         return stack;
     }
-
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
@@ -268,9 +271,5 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return false;
-    }
-
-    public static void addMateriaMaterial() {
-
     }
 }

@@ -34,6 +34,17 @@ public class EcItemCloudSwordCore extends EcItemSword {
         super(ToolMaterial.IRON, name);
     }
 
+    //	@SideOnly(Side.CLIENT)
+//	public Icon getIconIndex(ItemStack stack)
+//	{
+//		return (isActive(stack))? this.open: this.close;
+//	}
+    public static ItemStack makeCloudSword(ItemStack stack) {
+        ItemStack ChangeSword = new ItemStack(EnchantChanger.itemCloudSword, 1, stack.getItemDamage());
+        ChangeSword.setTagCompound(stack.getTagCompound());
+        return ChangeSword;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
@@ -89,17 +100,6 @@ public class EcItemCloudSwordCore extends EcItemSword {
                 this.itemIcon = this.close;
             }
         }
-    }
-
-    //	@SideOnly(Side.CLIENT)
-//	public Icon getIconIndex(ItemStack stack)
-//	{
-//		return (isActive(stack))? this.open: this.close;
-//	}
-    public static ItemStack makeCloudSword(ItemStack stack) {
-        ItemStack ChangeSword = new ItemStack(EnchantChanger.itemCloudSword, 1, stack.getItemDamage());
-        ChangeSword.setTagCompound(stack.getTagCompound());
-        return ChangeSword;
     }
 
     @Override
@@ -202,7 +202,7 @@ public class EcItemCloudSwordCore extends EcItemSword {
 		data.swords = items;
 	}*/
 /*	public EcCloudSwordData getSwordData(ItemStack var1, World var2)
-	{
+    {
 		int uId = (var1.hasTagCompound())?var1.getTagCompound().getInteger("CloudSwordStorage"):0;
 		String var3 = String.format("swords_%s", uId);
 		EcCloudSwordData var4 = (EcCloudSwordData)var2.loadItemData(EcCloudSwordData.class, var3);

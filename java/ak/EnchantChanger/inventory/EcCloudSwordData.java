@@ -9,8 +9,8 @@ import net.minecraft.world.WorldSavedData;
 
 public class EcCloudSwordData extends WorldSavedData {
     public ItemStack[] swords = new ItemStack[5];
-    private boolean init = false;
     public boolean upDate;
+    private boolean init = false;
 
     public EcCloudSwordData(String par1Str) {
         super(par1Str);

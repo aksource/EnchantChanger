@@ -18,10 +18,6 @@ import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public class EcRenderMateria implements IItemRenderer {
-    private static double vert[];
-    private static int face[];
-    public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<>();
-    public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<>();
     private static final ResourceLocation materia0 = new ResourceLocation(Constants.EcAssetsDomain,
             "textures/gui/materia0.png");
     private static final ResourceLocation materia1 = new ResourceLocation(Constants.EcAssetsDomain,
@@ -56,120 +52,10 @@ public class EcRenderMateria implements IItemRenderer {
             materia4, materia5, materia6, materia7, materia8, materia9, materia10, materia11, materia12, materia13,
             materia14, materia15};
     private static final ResourceLocation materiaObj = new ResourceLocation(Constants.EcAssetsDomain, "models/spherelight.obj");
-    private final IModelCustom sphereModel;
-
-    public EcRenderMateria() {
-        sphereModel = AdvancedModelLoader.loadModel(materiaObj);
-    }
-
-    @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON
-                || type == ItemRenderType.INVENTORY || type == ItemRenderType.ENTITY;
-    }
-
-    @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        float f0 = 0.2F;
-        float f1 = 8F;
-        if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-            this.renderMateriaModel(item, 0.5f, 0, 0, f0, type);
-        } else if (type == ItemRenderType.INVENTORY) {
-            this.renderMateriaModel(item, 8f, 8f, 0f, f1, type);
-        } else if (type == ItemRenderType.ENTITY) {
-            this.renderMateriaModel(item, 0, 0, 0, f0, type);
-        }
-    }
-
-    //Obj仕様renderメソッド
-    private void renderMateriaModel(ItemStack item, float x, float y, float z, float size, ItemRenderType type) {
-        Minecraft mc = Minecraft.getMinecraft();
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, z);
-        if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslatef(0.3f, 0.2f, 0);
-        mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
-        GL11.glScalef(size, size, size);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        sphereModel.renderAll();
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_LIGHTING);
-//        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glPopMatrix();
-    }
-
-    @Deprecated
-    public void renderMateria(ItemStack item, float x, float y, float z, float size, ItemRenderType type) {
-        Minecraft mc = Minecraft.getMinecraft();
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, z);
-        if (type == ItemRenderType.EQUIPPED_FIRST_PERSON)
-            GL11.glTranslatef(0.3f, 0.2f, 0);
-        mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
-        //		GL11.glEnable(GL_BLEND);
-        //		GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        Tessellator tessellator = Tessellator.instance;
-        GL11.glScalef(size, size, size);
-        tessellator.startDrawing(4);
-
-        for (int v : face) {
-            double d = Math.atan2(vert[v * 3], vert[v * 3 + 2]) / Math.PI;
-            if (d > 0) {
-                tessellator.addVertexWithUV(
-                        0 + (vert[v * 3] + 1) / 2,
-                        0 + (vert[v * 3 + 1] + 1) / 2,
-                        0 + (vert[v * 3 + 2] + 1) / 2,
-                        d / 16D,
-                        (vert[v * 3 + 1] + 1) / 32D);
-            } else {
-                tessellator.addVertexWithUV(
-                        0 + (vert[v * 3] + 1) / 2,
-                        0 + (vert[v * 3 + 1] + 1) / 2,
-                        0 + (vert[v * 3 + 2] + 1) / 2,
-                        -d / 16D,
-                        (vert[v * 3 + 1] + 1) / 32D);
-            }
-
-        }
-
-        tessellator.draw();
-        GL11.glTranslatef(-x, -y, -z);
-        GL11.glPopMatrix();
-    }
-
-    private ResourceLocation getTextureFromItemStack(ItemStack item) {
-        if (item.getItem() instanceof EcItemMateria)
-            return getTextuerfromEnch(item);
-        else
-            return materia10;
-    }
-
-    public ResourceLocation getTextuerfromEnch(ItemStack item) {
-        if (item.getItemDamage() > 0) {
-            if (masterMateriaMap.containsKey(item.getItemDamage() - 1)) {
-                return masterMateriaMap.get(item.getItemDamage() - 1);
-            } else {
-                return materia10;
-            }
-        } else if (!item.isItemEnchanted())
-            return materia0;
-        else if (materiaMap.containsKey(EnchantmentUtils.getMateriaEnchKind(item))) {
-            return materiaMap.get(EnchantmentUtils.getMateriaEnchKind(item));
-        } else
-            return materia10;
-    }
-
-    public static void registerExtraMateria(int enchantmentId, int texId) {
-        if (texId > 0 && texId < 16 && texId != 2)
-            materiaMap.put(enchantmentId, materiaRes[texId]);
-    }
+    public static HashMap<Integer, ResourceLocation> masterMateriaMap = new HashMap<>();
+    public static HashMap<Integer, ResourceLocation> materiaMap = new HashMap<>();
+    private static double vert[];
+    private static int face[];
 
     static {
         masterMateriaMap.put(0, materia0);
@@ -690,5 +576,120 @@ public class EcRenderMateria implements IItemRenderer {
                 31, 159, 161,
                 161, 159, 160
         };
+    }
+
+    private final IModelCustom sphereModel;
+
+    public EcRenderMateria() {
+        sphereModel = AdvancedModelLoader.loadModel(materiaObj);
+    }
+
+    public static void registerExtraMateria(int enchantmentId, int texId) {
+        if (texId > 0 && texId < 16 && texId != 2)
+            materiaMap.put(enchantmentId, materiaRes[texId]);
+    }
+
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON
+                || type == ItemRenderType.INVENTORY || type == ItemRenderType.ENTITY;
+    }
+
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        float f0 = 0.2F;
+        float f1 = 8F;
+        if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+            this.renderMateriaModel(item, 0.5f, 0, 0, f0, type);
+        } else if (type == ItemRenderType.INVENTORY) {
+            this.renderMateriaModel(item, 8f, 8f, 0f, f1, type);
+        } else if (type == ItemRenderType.ENTITY) {
+            this.renderMateriaModel(item, 0, 0, 0, f0, type);
+        }
+    }
+
+    //Obj仕様renderメソッド
+    private void renderMateriaModel(ItemStack item, float x, float y, float z, float size, ItemRenderType type) {
+        Minecraft mc = Minecraft.getMinecraft();
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, z);
+        if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslatef(0.3f, 0.2f, 0);
+        mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
+        GL11.glScalef(size, size, size);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        sphereModel.renderAll();
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
+    }
+
+    @Deprecated
+    public void renderMateria(ItemStack item, float x, float y, float z, float size, ItemRenderType type) {
+        Minecraft mc = Minecraft.getMinecraft();
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, z);
+        if (type == ItemRenderType.EQUIPPED_FIRST_PERSON)
+            GL11.glTranslatef(0.3f, 0.2f, 0);
+        mc.renderEngine.bindTexture(this.getTextureFromItemStack(item));
+        //		GL11.glEnable(GL_BLEND);
+        //		GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Tessellator tessellator = Tessellator.instance;
+        GL11.glScalef(size, size, size);
+        tessellator.startDrawing(4);
+
+        for (int v : face) {
+            double d = Math.atan2(vert[v * 3], vert[v * 3 + 2]) / Math.PI;
+            if (d > 0) {
+                tessellator.addVertexWithUV(
+                        0 + (vert[v * 3] + 1) / 2,
+                        0 + (vert[v * 3 + 1] + 1) / 2,
+                        0 + (vert[v * 3 + 2] + 1) / 2,
+                        d / 16D,
+                        (vert[v * 3 + 1] + 1) / 32D);
+            } else {
+                tessellator.addVertexWithUV(
+                        0 + (vert[v * 3] + 1) / 2,
+                        0 + (vert[v * 3 + 1] + 1) / 2,
+                        0 + (vert[v * 3 + 2] + 1) / 2,
+                        -d / 16D,
+                        (vert[v * 3 + 1] + 1) / 32D);
+            }
+
+        }
+
+        tessellator.draw();
+        GL11.glTranslatef(-x, -y, -z);
+        GL11.glPopMatrix();
+    }
+
+    private ResourceLocation getTextureFromItemStack(ItemStack item) {
+        if (item.getItem() instanceof EcItemMateria)
+            return getTextuerfromEnch(item);
+        else
+            return materia10;
+    }
+
+    public ResourceLocation getTextuerfromEnch(ItemStack item) {
+        if (item.getItemDamage() > 0) {
+            if (masterMateriaMap.containsKey(item.getItemDamage() - 1)) {
+                return masterMateriaMap.get(item.getItemDamage() - 1);
+            } else {
+                return materia10;
+            }
+        } else if (!item.isItemEnchanted())
+            return materia0;
+        else if (materiaMap.containsKey(EnchantmentUtils.getMateriaEnchKind(item))) {
+            return materiaMap.get(EnchantmentUtils.getMateriaEnchKind(item));
+        } else
+            return materia10;
     }
 }

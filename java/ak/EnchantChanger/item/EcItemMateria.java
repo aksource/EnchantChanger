@@ -48,6 +48,178 @@ public class EcItemMateria extends EcItem {
         super(name);
     }
 
+    public static void teleportPlayer(World world, EntityPlayer entityplayer) {
+        if (!canMagic(entityplayer)/* || world.isRemote*/) {
+            return;
+        }
+        Vec3 point;
+        if (entityplayer.isSneaking()) {
+            ChunkCoordinates spawnPoint;
+            int dimID = world.provider.dimensionId;
+            boolean shouldTravel;
+            if (entityplayer.getBedLocation(dimID) != null) {
+                spawnPoint = entityplayer.getBedLocation(dimID);
+                shouldTravel = false;
+            } else {
+                spawnPoint = world.getSpawnPoint();
+                shouldTravel = true;
+            }
+            point = Vec3.createVectorHelper(spawnPoint.posX + 0.5D, spawnPoint.posY, spawnPoint.posZ + 0.5D);
+            teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), shouldTravel, dimID);
+        } else {
+            point = setTeleportPoint(world, entityplayer);
+            if (point != null) {
+                teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), false,
+                        world.provider.dimensionId);
+            }
+        }
+    }
+
+    private static void teleportToChunkCoord(World world, EntityPlayer entityplayer, Vec3 vector,
+                                             boolean isSneaking, boolean telepoDim, int dimID) {
+        if (!world.isRemote) {
+//            if (vector == null) {
+//                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
+//                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
+//            } else {
+//                entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+//            }
+            entityplayer.fallDistance = 0.0F;
+            if (telepoDim) {
+                travelDimension(entityplayer, dimID);
+            }
+            decreasePlayerFood(entityplayer, isSneaking ? 20 : 2);
+        } else {
+            for (int var2 = 0; var2 < 32; ++var2) {
+                world.spawnParticle("portal", entityplayer.posX, entityplayer.posY + world.rand.nextDouble() * 2.0D,
+                        entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
+            }
+        }
+        entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+    }
+
+//	public void addMateriaLv(ItemStack item, int addLv)
+//	{
+//		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
+//		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
+//		NBTTagCompound nbt = item.getTagCompound();
+//		nbt.removeTag("ench");
+//		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
+//	}
+
+    private static void travelDimension(EntityPlayer player, int nowDim) {
+        if (nowDim != 0 && player instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) player;
+            transferPlayerToDimension(playerMP.mcServer.getConfigurationManager(), playerMP, 0, new MateriaTeleporter(
+                    playerMP.mcServer.worldServerForDimension(0)));
+        }
+    }
+
+    public static void transferPlayerToDimension(ServerConfigurationManager serverConf,
+                                                 EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter) {
+        int j = par1EntityPlayerMP.dimension;
+        WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
+        par1EntityPlayerMP.dimension = par2;
+        WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
+        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension,
+                par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(),
+                par1EntityPlayerMP.theItemInWorldManager.getGameType()));
+        worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
+        par1EntityPlayerMP.isDead = false;
+        serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
+        serverConf.func_72375_a(par1EntityPlayerMP, worldserver);
+        par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY,
+                par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
+        par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
+        serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
+        serverConf.syncPlayerInventory(par1EntityPlayerMP);
+
+        for (Object object : par1EntityPlayerMP.getActivePotionEffects()) {
+            PotionEffect potioneffect = (PotionEffect) object;
+            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP
+                    .getEntityId(), potioneffect));
+        }
+
+        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
+    }
+
+    public static Vec3 setTeleportPoint(World world, EntityPlayer entityplayer) {
+        double var1 = 1.0D;
+        double distLimit = 150.0D;
+        double viewX = entityplayer.getLookVec().xCoord;
+        double viewY = entityplayer.getLookVec().yCoord;
+        double viewZ = entityplayer.getLookVec().zCoord;
+/*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
+        double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
+        double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
+        double playerPosX = entityplayer.posX;
+        double playerPosY = entityplayer.posY + 1.62D/*1.62D - entityplayer.getYOffset()*/;
+        double playerPosZ = entityplayer.posZ;
+        Vec3 playerPosition = Vec3.createVectorHelper(playerPosX,
+                playerPosY, playerPosZ);
+        Vec3 playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
+        MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, false);
+        if (MOP != null && MOP.typeOfHit == MovingObjectType.BLOCK) {
+            int blockSide = MOP.sideHit;
+            ForgeDirection direction = ForgeDirection.getOrientation(blockSide);
+            double blockPosX = MOP.blockX + 0.5D + direction.offsetX;
+            double blockPosY = MOP.blockY + direction.offsetY;
+            double blockPosZ = MOP.blockZ + 0.5D + direction.offsetZ;
+            if (blockSide == 0) blockPosY--;
+            return Vec3.createVectorHelper(blockPosX, blockPosY, blockPosZ);
+        } else {
+            return null;
+        }
+    }
+
+    public static void doHoly(World world, EntityPlayer entityplayer) {
+        if (!canMagic(entityplayer)) {
+            return;
+        }
+        decreasePlayerFood(entityplayer, 6);
+        @SuppressWarnings("unchecked")
+        List<EntityLivingBase> EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
+                entityplayer.boundingBox.expand(5D, 5D, 5D));
+        for (EntityLivingBase entityLivingBase : EntityList) {
+            if (entityLivingBase.isEntityUndead()) {
+                int var1 = MathHelper.floor_float(entityLivingBase.getMaxHealth() / 2);
+                entityLivingBase.attackEntityFrom(DamageSource.magic, var1);
+            }
+        }
+    }
+
+    public static void doMeteor(World world, EntityPlayer entityplayer) {
+        if (!canMagic(entityplayer)) {
+            return;
+        }
+        decreasePlayerFood(entityplayer, 6);
+        Vec3 EndPoint = setTeleportPoint(world, entityplayer);
+        if (EndPoint != null && !world.isRemote)
+            world.spawnEntityInWorld(new EcEntityMeteor(world, EndPoint.xCoord, (double) 200, EndPoint.zCoord, 0.0D,
+                    -1D, 0D, 0.0F, 0.0F));
+    }
+
+    public static void doThunder(World world, EntityPlayer entityplayer) {
+        if (!canMagic(entityplayer)) {
+            return;
+        }
+        decreasePlayerFood(entityplayer, 6);
+        Vec3 EndPoint = setTeleportPoint(world, entityplayer);
+        if (EndPoint != null)
+            world.spawnEntityInWorld(new EntityLightningBolt(world, EndPoint.xCoord, EndPoint.yCoord, EndPoint.zCoord));
+    }
+
+    private static void decreasePlayerFood(EntityPlayer player, int dec) {
+        if (!player.capabilities.isCreativeMode) {
+            player.getFoodStats().addStats(-dec, 1.0F);
+        }
+    }
+
+    private static boolean canMagic(EntityPlayer player) {
+        return player.getFoodStats().getFoodLevel() > 0 || ConfigurationUtils.flagYOUARETERRA
+                || player.capabilities.isCreativeMode;
+    }
+
     @Override
     public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
         if (entity instanceof EntityLiving) {
@@ -110,15 +282,6 @@ public class EcItemMateria extends EcItem {
         }
         return itemstack;
     }
-
-//	public void addMateriaLv(ItemStack item, int addLv)
-//	{
-//		int EnchantmentKind = EnchantmentUtils.getMateriaEnchKind(item);
-//		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
-//		NBTTagCompound nbt = item.getTagCompound();
-//		nbt.removeTag("ench");
-//		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.enchantmentsList[EnchantmentKind], Lv + addLv);
-//	}
 
     public void MateriaPotionEffect(ItemStack item, EntityLiving entity, EntityPlayer player) {
         if (item.getItemDamage() > 0) {
@@ -287,158 +450,6 @@ public class EcItemMateria extends EcItem {
         return new WeightedRandomChestContent(var6, par2, par3, par4);
     }
 
-    public static void teleportPlayer(World world, EntityPlayer entityplayer) {
-        if (!canMagic(entityplayer)/* || world.isRemote*/) {
-            return;
-        }
-        Vec3 point;
-        if (entityplayer.isSneaking()) {
-            ChunkCoordinates spawnPoint;
-            int dimID = world.provider.dimensionId;
-            boolean shouldTravel;
-            if (entityplayer.getBedLocation(dimID) != null) {
-                spawnPoint = entityplayer.getBedLocation(dimID);
-                shouldTravel = false;
-            } else {
-                spawnPoint = world.getSpawnPoint();
-                shouldTravel = true;
-            }
-            point = Vec3.createVectorHelper(spawnPoint.posX + 0.5D, spawnPoint.posY, spawnPoint.posZ + 0.5D);
-            teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), shouldTravel, dimID);
-        } else {
-            point = setTeleportPoint(world, entityplayer);
-            if (point != null) {
-                teleportToChunkCoord(world, entityplayer, point, entityplayer.isSneaking(), false,
-                        world.provider.dimensionId);
-            }
-        }
-    }
-
-    private static void teleportToChunkCoord(World world, EntityPlayer entityplayer, Vec3 vector,
-                                             boolean isSneaking, boolean telepoDim, int dimID) {
-        if (!world.isRemote) {
-//            if (vector == null) {
-//                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
-//                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
-//            } else {
-//                entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
-//            }
-            entityplayer.fallDistance = 0.0F;
-            if (telepoDim) {
-                travelDimension(entityplayer, dimID);
-            }
-            decreasePlayerFood(entityplayer, isSneaking ? 20 : 2);
-        } else {
-            for (int var2 = 0; var2 < 32; ++var2) {
-                world.spawnParticle("portal", entityplayer.posX, entityplayer.posY + world.rand.nextDouble() * 2.0D,
-                        entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
-            }
-        }
-        entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
-    }
-
-    private static void travelDimension(EntityPlayer player, int nowDim) {
-        if (nowDim != 0 && player instanceof EntityPlayerMP) {
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            transferPlayerToDimension(playerMP.mcServer.getConfigurationManager(), playerMP, 0, new MateriaTeleporter(
-                    playerMP.mcServer.worldServerForDimension(0)));
-        }
-    }
-
-    public static void transferPlayerToDimension(ServerConfigurationManager serverConf,
-                                                 EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter) {
-        int j = par1EntityPlayerMP.dimension;
-        WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-        par1EntityPlayerMP.dimension = par2;
-        WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension,
-                par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(),
-                par1EntityPlayerMP.theItemInWorldManager.getGameType()));
-        worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
-        par1EntityPlayerMP.isDead = false;
-        serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
-        serverConf.func_72375_a(par1EntityPlayerMP, worldserver);
-        par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY,
-                par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
-        par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
-        serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
-        serverConf.syncPlayerInventory(par1EntityPlayerMP);
-
-        for (Object object : par1EntityPlayerMP.getActivePotionEffects()) {
-            PotionEffect potioneffect = (PotionEffect) object;
-            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP
-                    .getEntityId(), potioneffect));
-        }
-
-        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
-    }
-
-    public static Vec3 setTeleportPoint(World world, EntityPlayer entityplayer) {
-        double var1 = 1.0D;
-        double distLimit = 150.0D;
-        double viewX = entityplayer.getLookVec().xCoord;
-        double viewY = entityplayer.getLookVec().yCoord;
-        double viewZ = entityplayer.getLookVec().zCoord;
-/*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
-        double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
-        double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
-        double playerPosX = entityplayer.posX;
-        double playerPosY = entityplayer.posY + 1.62D/*1.62D - entityplayer.getYOffset()*/;
-        double playerPosZ = entityplayer.posZ;
-        Vec3 playerPosition = Vec3.createVectorHelper(playerPosX,
-                playerPosY, playerPosZ);
-        Vec3 playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
-        MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, false);
-        if (MOP != null && MOP.typeOfHit == MovingObjectType.BLOCK) {
-            int blockSide = MOP.sideHit;
-            ForgeDirection direction = ForgeDirection.getOrientation(blockSide);
-            double blockPosX = MOP.blockX + 0.5D + direction.offsetX;
-            double blockPosY = MOP.blockY + direction.offsetY;
-            double blockPosZ = MOP.blockZ + 0.5D + direction.offsetZ;
-            if (blockSide == 0) blockPosY--;
-            return Vec3.createVectorHelper(blockPosX, blockPosY, blockPosZ);
-        } else {
-            return null;
-        }
-    }
-
-    public static void doHoly(World world, EntityPlayer entityplayer) {
-        if (!canMagic(entityplayer)) {
-            return;
-        }
-        decreasePlayerFood(entityplayer, 6);
-        @SuppressWarnings("unchecked")
-        List<EntityLivingBase> EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
-                entityplayer.boundingBox.expand(5D, 5D, 5D));
-        for (EntityLivingBase entityLivingBase : EntityList) {
-            if (entityLivingBase.isEntityUndead()) {
-                int var1 = MathHelper.floor_float(entityLivingBase.getMaxHealth() / 2);
-                entityLivingBase.attackEntityFrom(DamageSource.magic, var1);
-            }
-        }
-    }
-
-    public static void doMeteor(World world, EntityPlayer entityplayer) {
-        if (!canMagic(entityplayer)) {
-            return;
-        }
-        decreasePlayerFood(entityplayer, 6);
-        Vec3 EndPoint = setTeleportPoint(world, entityplayer);
-        if (EndPoint != null && !world.isRemote)
-            world.spawnEntityInWorld(new EcEntityMeteor(world, EndPoint.xCoord, (double) 200, EndPoint.zCoord, 0.0D,
-                    -1D, 0D, 0.0F, 0.0F));
-    }
-
-    public static void doThunder(World world, EntityPlayer entityplayer) {
-        if (!canMagic(entityplayer)) {
-            return;
-        }
-        decreasePlayerFood(entityplayer, 6);
-        Vec3 EndPoint = setTeleportPoint(world, entityplayer);
-        if (EndPoint != null)
-            world.spawnEntityInWorld(new EntityLightningBolt(world, EndPoint.xCoord, EndPoint.yCoord, EndPoint.zCoord));
-    }
-
     public void doDespell(EntityPlayer player, Entity entity) {
         if (entity instanceof EntityLiving) {
             ((EntityLiving) entity).clearActivePotions();
@@ -452,16 +463,5 @@ public class EcItemMateria extends EcItem {
     public void doHaste(EntityPlayer player, EntityLivingBase entityliving) {
         entityliving.addPotionEffect(new PotionEffect(1, 20 * 60 * 5, 1));
         decreasePlayerFood(player, 2);
-    }
-
-    private static void decreasePlayerFood(EntityPlayer player, int dec) {
-        if (!player.capabilities.isCreativeMode) {
-            player.getFoodStats().addStats(-dec, 1.0F);
-        }
-    }
-
-    private static boolean canMagic(EntityPlayer player) {
-        return player.getFoodStats().getFoodLevel() > 0 || ConfigurationUtils.flagYOUARETERRA
-                || player.capabilities.isCreativeMode;
     }
 }

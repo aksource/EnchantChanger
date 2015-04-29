@@ -33,8 +33,35 @@ import java.util.List;
  * Created by A.K. on 14/03/08.
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass {
-    private static int[] sides = new int[]{2, 5, 3, 4};
     public static List<String> baseBlocksOreName = new ArrayList<>();
+    private static int[] sides = new int[]{2, 5, 3, 4};
+
+    static {
+        baseBlocksOreName.add("blockIron");
+        baseBlocksOreName.add("blockGold");
+        baseBlocksOreName.add("blockCopper");
+        baseBlocksOreName.add("blockTin");
+        baseBlocksOreName.add("blockBronze");
+        baseBlocksOreName.add("blockBrass");
+        baseBlocksOreName.add("blockSteel");
+        baseBlocksOreName.add("blockUranium");
+        baseBlocksOreName.add("blockOsmium");
+        baseBlocksOreName.add("blockIridium");
+        baseBlocksOreName.add("blockSilver");
+        baseBlocksOreName.add("blockZinc");
+        baseBlocksOreName.add("blockTungsten");
+        baseBlocksOreName.add("blockLead");
+        baseBlocksOreName.add("blockAluminium");
+        baseBlocksOreName.add("blockNickel");
+        baseBlocksOreName.add("blockPlatinum");
+        baseBlocksOreName.add("blockMithril");
+        baseBlocksOreName.add("blockLumium");
+        baseBlocksOreName.add("blockInvar");
+        baseBlocksOreName.add("blockElectrum");
+        baseBlocksOreName.add("blockEnderium");
+        baseBlocksOreName.add("blockNickel");
+    }
+
     @SideOnly(Side.CLIENT)
     private IIcon iconFront;
 
@@ -149,31 +176,5 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
             }
         }
         super.breakBlock(world, x, y, z, block, meta);
-    }
-
-    static {
-        baseBlocksOreName.add("blockIron");
-        baseBlocksOreName.add("blockGold");
-        baseBlocksOreName.add("blockCopper");
-        baseBlocksOreName.add("blockTin");
-        baseBlocksOreName.add("blockBronze");
-        baseBlocksOreName.add("blockBrass");
-        baseBlocksOreName.add("blockSteel");
-        baseBlocksOreName.add("blockUranium");
-        baseBlocksOreName.add("blockOsmium");
-        baseBlocksOreName.add("blockIridium");
-        baseBlocksOreName.add("blockSilver");
-        baseBlocksOreName.add("blockZinc");
-        baseBlocksOreName.add("blockTungsten");
-        baseBlocksOreName.add("blockLead");
-        baseBlocksOreName.add("blockAluminium");
-        baseBlocksOreName.add("blockNickel");
-        baseBlocksOreName.add("blockPlatinum");
-        baseBlocksOreName.add("blockMithril");
-        baseBlocksOreName.add("blockLumium");
-        baseBlocksOreName.add("blockInvar");
-        baseBlocksOreName.add("blockElectrum");
-        baseBlocksOreName.add("blockEnderium");
-        baseBlocksOreName.add("blockNickel");
     }
 }

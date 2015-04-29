@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class EcRenderItemThrowable extends Render {
-    private float RenderSize;
     private static final ResourceLocation TEXTUREMETEO = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcMeteorPNG);
     private static final ResourceLocation TEXTUREEXEXPBOTTLE = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcExpBottlePNG);
+    private float RenderSize;
 
     public EcRenderItemThrowable(float par2) {
         this.RenderSize = par2;

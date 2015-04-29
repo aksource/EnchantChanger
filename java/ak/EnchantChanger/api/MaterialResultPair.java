@@ -14,15 +14,15 @@ public class MaterialResultPair {
         this.result = res;
     }
 
+    public static MaterialResultPair getMaterialResultPair(ItemStack mat, ItemStack res) {
+        return new MaterialResultPair(mat, res);
+    }
+
     public ItemStackWrapper getMaterial() {
         return material;
     }
 
     public ItemStack getResultCopy() {
         return result.copy();
-    }
-
-    public static MaterialResultPair getMaterialResultPair(ItemStack mat, ItemStack res) {
-        return new MaterialResultPair(mat, res);
     }
 }

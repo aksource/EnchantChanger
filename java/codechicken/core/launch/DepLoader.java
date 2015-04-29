@@ -41,9 +41,47 @@ import java.util.zip.ZipFile;
  * This is really unoriginal, mostly ripped off FML, credits to cpw.
  */
 public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
-    private static ByteBuffer downloadBuffer = ByteBuffer.allocateDirect(1 << 23);
     private static final String owner = "CB's DepLoader";
+    private static ByteBuffer downloadBuffer = ByteBuffer.allocateDirect(1 << 23);
     private static DepLoadInst inst;
+
+    public static void load() {
+        if (inst == null) {
+            inst = new DepLoadInst();
+            inst.load();
+        }
+    }
+
+    @Override
+    public String[] getASMTransformerClass() {
+        return null;
+    }
+
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
+
+    @Override
+    public String getSetupClass() {
+        return getClass().getName();
+    }
+
+    @Override
+    public void injectData(Map<String, Object> data) {
+    }
+
+    @Override
+    public Void call() {
+        load();
+
+        return null;
+    }
+
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
+    }
 
     public interface IDownloadDisplay {
         void resetProgress(int sizeGuess);
@@ -63,11 +101,11 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
 
     @SuppressWarnings("serial")
     public static class Downloader extends JOptionPane implements IDownloadDisplay {
+        boolean stopIt;
+        Thread pokeThread;
         private JDialog container;
         private JLabel currentActivity;
         private JProgressBar progress;
-        boolean stopIt;
-        Thread pokeThread;
 
         private Box makeProgressPanel() {
             Box box = Box.createVerticalBox();
@@ -573,43 +611,5 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
 
             return newest == newDep;
         }
-    }
-
-    public static void load() {
-        if (inst == null) {
-            inst = new DepLoadInst();
-            inst.load();
-        }
-    }
-
-    @Override
-    public String[] getASMTransformerClass() {
-        return null;
-    }
-
-    @Override
-    public String getModContainerClass() {
-        return null;
-    }
-
-    @Override
-    public String getSetupClass() {
-        return getClass().getName();
-    }
-
-    @Override
-    public void injectData(Map<String, Object> data) {
-    }
-
-    @Override
-    public Void call() {
-        load();
-
-        return null;
-    }
-
-    @Override
-    public String getAccessTransformerClass() {
-        return null;
     }
 }

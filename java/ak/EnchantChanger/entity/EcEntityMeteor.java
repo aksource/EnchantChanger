@@ -19,11 +19,11 @@ public class EcEntityMeteor extends Entity {
 //    private Block inTile = Blocks.air;
 //    private boolean inGround = false;
     public EntityLivingBase shootingEntity;
-    private int ticksAlive;
     //    private int ticksInAir = 0;
     public double accelerationX;
     public double accelerationY;
     public double accelerationZ;
+    private int ticksAlive;
     private float Explimit = ConfigurationUtils.powerMeteor;
     private String throwerName;
     private float Size = ConfigurationUtils.sizeMeteor;
@@ -31,6 +31,17 @@ public class EcEntityMeteor extends Entity {
     public EcEntityMeteor(World par1World) {
         super(par1World);
         this.setSize(Size, Size);
+    }
+
+    public EcEntityMeteor(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch) {
+        super(par1World);
+        this.setSize(Size, Size);
+        this.setLocationAndAngles(par2, par4, par6, Yaw, Pitch);
+        this.setPosition(par2, par4, par6);
+        double var14 = (double) MathHelper.sqrt_double(par8 * par8 + par10 * par10 + par12 * par12);
+        this.accelerationX = par8 / var14 * 0.1D;
+        this.accelerationY = par10 / var14 * 0.1D;
+        this.accelerationZ = par12 / var14 * 0.1D;
     }
 
     protected void entityInit() {
@@ -44,17 +55,6 @@ public class EcEntityMeteor extends Entity {
         double var3 = this.boundingBox.getAverageEdgeLength() * 4.0D;
         var3 *= 64.0D;
         return par1 < var3 * var3;
-    }
-
-    public EcEntityMeteor(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, float Yaw, float Pitch) {
-        super(par1World);
-        this.setSize(Size, Size);
-        this.setLocationAndAngles(par2, par4, par6, Yaw, Pitch);
-        this.setPosition(par2, par4, par6);
-        double var14 = (double) MathHelper.sqrt_double(par8 * par8 + par10 * par10 + par12 * par12);
-        this.accelerationX = par8 / var14 * 0.1D;
-        this.accelerationY = par10 / var14 * 0.1D;
-        this.accelerationZ = par12 / var14 * 0.1D;
     }
 
 //    public EcEntityMeteo(World par1World, EntityLiving par2EntityLiving, double par3, double par5, double par7)

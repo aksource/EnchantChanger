@@ -24,6 +24,46 @@ public class EcItemCloudSword extends EcItemSword {
         super(ToolMaterial.EMERALD, name);
     }
 
+    public static int getSlotNumFromItemStack(ItemStack itemStack) {
+        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
+        return itemStack.getTagCompound().getInteger("EnchantChanger|slot");
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        return nbt.getInteger("slot");
+    }
+
+    public static void setSlotNumToItemStack(ItemStack itemStack, int slotNum) {
+        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.getTagCompound().setInteger("EnchantChanger|slot", slotNum);
+//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
+//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
+//        }
+//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
+//        nbt.setInteger("slot", slotNum);
+    }
+
+    public static IInventory getInventoryFromItemStack(ItemStack itemStack) {
+//        int uid = getCloudSwordStorageUID(itemStack);
+//        return swordInventoryMap.get(uid);
+        return new EcInventoryCloudSword(itemStack);
+    }
+
+//    @Override
+//	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
+//		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+//		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
+//            EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
+//            if(swordData == null)
+//                addInventoryFromItemStack(par1ItemStack, par2World);
+//                swordData = getInventoryFromItemStack(par1ItemStack);
+//            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
+//		}
+//	}
+
     @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
         int slot = getSlotNumFromItemStack(stack);
@@ -53,46 +93,6 @@ public class EcItemCloudSword extends EcItemSword {
         increaseSlotNum(itemStack);
         int slot = getSlotNumFromItemStack(itemStack);
         PacketHandler.INSTANCE.sendTo(new MessageCloudSword((byte) slot), (EntityPlayerMP) entityPlayer);
-    }
-
-//    @Override
-//	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-//		super.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
-//		if (!par2World.isRemote && par3Entity instanceof EntityPlayer) {
-//            EcInventoryCloudSword swordData = getInventoryFromItemStack(par1ItemStack);
-//            if(swordData == null)
-//                addInventoryFromItemStack(par1ItemStack, par2World);
-//                swordData = getInventoryFromItemStack(par1ItemStack);
-//            swordData.data.onUpdate(par2World, (EntityPlayer) par3Entity);
-//		}
-//	}
-
-    public static int getSlotNumFromItemStack(ItemStack itemStack) {
-        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        return itemStack.getTagCompound().getInteger("EnchantChanger|slot");
-//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-//        }
-//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-//        return nbt.getInteger("slot");
-    }
-
-    public static void setSlotNumToItemStack(ItemStack itemStack, int slotNum) {
-        if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
-        itemStack.getTagCompound().setInteger("EnchantChanger|slot", slotNum);
-//        if (!itemStack.getTagCompound().hasKey("EnchantChanger")) {
-//            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-//            itemStack.getTagCompound().setTag("EnchantChanger", nbtTagCompound);
-//        }
-//        NBTTagCompound nbt = (NBTTagCompound)itemStack.getTagCompound().getTag("EnchantChanger");
-//        nbt.setInteger("slot", slotNum);
-    }
-
-    public static IInventory getInventoryFromItemStack(ItemStack itemStack) {
-//        int uid = getCloudSwordStorageUID(itemStack);
-//        return swordInventoryMap.get(uid);
-        return new EcInventoryCloudSword(itemStack);
     }
 
 //    public static void addInventoryFromItemStack(ItemStack itemStack, World world) {

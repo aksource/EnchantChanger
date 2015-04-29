@@ -50,6 +50,7 @@ import java.util.List;
 import static ak.EnchantChanger.api.Constants.MagicKEY;
 
 public class ClientProxy extends CommonProxy {
+    public static final float moveFactor = 0.4F;
     public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
             Keyboard.KEY_V, "EnchantChanger");
     public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger");
@@ -57,11 +58,33 @@ public class ClientProxy extends CommonProxy {
     public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
     public static Minecraft mc = Minecraft.getMinecraft();
     private static Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
-
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
-    public static final float moveFactor = 0.4F;
+    private static void movePlayerY(EntityPlayer player) {
+        EntityPlayerSP playerSP = (EntityPlayerSP) player;
+
+        player.motionY = 0.0D;
+
+        if (playerSP.movementInput.sneak) {
+            player.motionY -= moveFactor;
+        }
+
+        if (playerSP.movementInput.jump) {
+            player.motionY += moveFactor;
+        }
+    }
+
+    private static void movePlayerXZ(EntityPlayer player) {
+        EntityPlayerSP playerSP = (EntityPlayerSP) player;
+        float moveForward = playerSP.movementInput.moveForward;
+        float moveStrafe = playerSP.movementInput.moveStrafe;
+
+        if (moveForward != 0 || moveStrafe != 0) {
+            player.motionX = player.motionZ = 0;
+        }
+        player.moveFlying(moveStrafe, moveForward, moveFactor * 1.2F);
+    }
 
     @Override
     public void registerRenderInformation() {
@@ -179,32 +202,6 @@ public class ClientProxy extends CommonProxy {
         }
 
         PacketHandler.INSTANCE.sendToServer(new MessageLevitation(LivingEventHooks.getLevitationModeToNBT(player)));
-    }
-
-
-    private static void movePlayerY(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP) player;
-
-        player.motionY = 0.0D;
-
-        if (playerSP.movementInput.sneak) {
-            player.motionY -= moveFactor;
-        }
-
-        if (playerSP.movementInput.jump) {
-            player.motionY += moveFactor;
-        }
-    }
-
-    private static void movePlayerXZ(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP) player;
-        float moveForward = playerSP.movementInput.moveForward;
-        float moveStrafe = playerSP.movementInput.moveStrafe;
-
-        if (moveForward != 0 || moveStrafe != 0) {
-            player.motionX = player.motionZ = 0;
-        }
-        player.moveFlying(moveStrafe, moveForward, moveFactor * 1.2F);
     }
 
     private byte getKeyIndex() {

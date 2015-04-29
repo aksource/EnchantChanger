@@ -17,6 +17,20 @@ public class CoopMCE {
     private static final long TERM_MONTH = 24000 * 30;
     private static final long TERM_EVENT = 1200L;
 
+    public static void addSalaryToPlayer(EntityPlayer entityPlayer) {
+        int prevKill = ExtendedPlayerData.get(entityPlayer).getMobKillCount();
+        int nowKill = StatCheckUtils.getTotalMobKillCount(entityPlayer);
+        int tempKill = nowKill - prevKill;
+        if (tempKill > 0) {
+            MCEconomyAPI.addPlayerMP(entityPlayer, tempKill * ConfigurationUtils.soldierSalary, false);
+            int playerX = MathHelper.ceiling_double_int(entityPlayer.posX);
+            int playerY = MathHelper.ceiling_double_int(entityPlayer.posY);
+            int playerZ = MathHelper.ceiling_double_int(entityPlayer.posZ);
+            MCEconomyAPI.playCoinSoundEffect(entityPlayer.worldObj, playerX, playerY, playerZ);
+        }
+        ExtendedPlayerData.get(entityPlayer).setMobKillCount(nowKill);
+    }
+
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving instanceof EntityPlayer
@@ -34,19 +48,5 @@ public class CoopMCE {
                 addSalaryToPlayer(player);
             }
         }
-    }
-
-    public static void addSalaryToPlayer(EntityPlayer entityPlayer) {
-        int prevKill = ExtendedPlayerData.get(entityPlayer).getMobKillCount();
-        int nowKill = StatCheckUtils.getTotalMobKillCount(entityPlayer);
-        int tempKill = nowKill - prevKill;
-        if (tempKill > 0) {
-            MCEconomyAPI.addPlayerMP(entityPlayer, tempKill * ConfigurationUtils.soldierSalary, false);
-            int playerX = MathHelper.ceiling_double_int(entityPlayer.posX);
-            int playerY = MathHelper.ceiling_double_int(entityPlayer.posY);
-            int playerZ = MathHelper.ceiling_double_int(entityPlayer.posZ);
-            MCEconomyAPI.playCoinSoundEffect(entityPlayer.worldObj, playerX, playerY, playerZ);
-        }
-        ExtendedPlayerData.get(entityPlayer).setMobKillCount(nowKill);
     }
 }

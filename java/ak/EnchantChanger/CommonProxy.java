@@ -20,22 +20,27 @@ public class CommonProxy implements IGuiHandler {
     private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<>();
     public static int multiPassRenderType;
 
+    public static void storeEntityData(String name, NBTTagCompound compound) {
+        extendedEntityData.put(name, compound);
+    }
+
+    public static NBTTagCompound getEntityData(String name) {
+        return extendedEntityData.remove(name);
+    }
+
     public void registerRenderInformation() {
         multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
     }
 
-    public void registerTileEntitySpecialRenderer() {
-    }
+    public void registerTileEntitySpecialRenderer() {}
 
-    public void registerExtraMateriaRendering(NBTTagCompound nbt) {
-    }
+    public void registerExtraMateriaRendering(NBTTagCompound nbt) {}
 
     public EntityPlayer getPlayer() {
         return null;
     }
 
-    public void doFlightOnSide(EntityPlayer player) {
-    }
+    public void doFlightOnSide(EntityPlayer player) {}
 
     //returns an instance of the Container you made earlier
     @Override
@@ -101,14 +106,6 @@ public class CommonProxy implements IGuiHandler {
             }
         }
         return null;
-    }
-
-    public static void storeEntityData(String name, NBTTagCompound compound) {
-        extendedEntityData.put(name, compound);
-    }
-
-    public static NBTTagCompound getEntityData(String name) {
-        return extendedEntityData.remove(name);
     }
 
 }

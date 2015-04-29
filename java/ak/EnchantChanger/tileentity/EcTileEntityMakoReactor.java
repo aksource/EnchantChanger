@@ -4,8 +4,8 @@ import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.MakoUtils;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
-import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.modcoop.CoopRFAPI;
+import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import cofh.api.energy.IEnergyConnection;
@@ -61,6 +61,10 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public static final int SUM_OF_ALLSLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
     public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
     public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
+    public static final int STEP_RF_VALUE = 10;
+    public static final int MAX_OUTPUT_RF_VALUE = 100000;
+    public static final int MAX_RF_CAPACITY = 100000000;
+    public static final int GF_POWER = 3;
     private static final int MAX_HM_CREATING_COST = 1000 * 1024;
     private static final int[][] CONSTRUCTING_BLOCKS_INFO = new int[][]{
             {1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -69,22 +73,18 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             {0, 1, 0, 1, 2, 1, 0, 1, 0},
             {0, 0, 0, 0, 1, 0, 0, 0, 0}
     };
-    public static final int STEP_RF_VALUE = 10;
-    public static final int MAX_OUTPUT_RF_VALUE = 100000;
-    public static final int MAX_RF_CAPACITY = 100000000;
-    public static final int GF_POWER = 3;
-    private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
-    private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
     public int smeltingTime;
     public int generatingRFTime = MAX_GENERATING_RF_TIME;
-    private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
+    //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
+    public byte face;
+    private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
+    private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
+    private int creatingHugeMateriaPoint;
     private ChunkPosition HMCoord = null;
     private int outputMaxRFValue = 100;
     private int storedRFEnergy;
-
-    //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
-    public byte face;
+    private int nowRF;
 
     @Override
     public void markDirty() {
@@ -397,7 +397,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         return this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
     }
 
-
     public int getGeneratingRFMakoCost() {
         return getOutputMaxRFValue() / STEP_RF_VALUE;
     }
@@ -615,8 +614,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
         return 0;//発電のみ
     }
-
-    private int nowRF;
 
     @Optional.Method(modid = "CoFHCore")
     @Override

@@ -44,6 +44,9 @@ import static ak.EnchantChanger.utils.RegistrationUtils.*;
 @Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
 public class EnchantChanger {
 
+    public static final LivingEventHooks livingeventhooks = new LivingEventHooks();
+    //Logger
+    public static final Logger logger = Logger.getLogger("EnchantChanger");
     public static Item itemExExpBottle;
     public static Item itemMateria;
     public static Item itemZackSword;
@@ -65,7 +68,6 @@ public class EnchantChanger {
     public static Potion potionMako;
     public static DamageSource damageSourceMako;
     public static Material materialMako = new MaterialLiquid(MapColor.grassColor);
-
     public static boolean loadMTH = false;
     public static boolean loadBC = false;
     public static boolean loadIC = false;
@@ -77,10 +79,20 @@ public class EnchantChanger {
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
     public static CommonProxy proxy;
-    public static final LivingEventHooks livingeventhooks = new LivingEventHooks();
 
-    //Logger
-    public static final Logger logger = Logger.getLogger("EnchantChanger");
+    public static String getUniqueStrings(Object obj) {
+        UniqueIdentifier uId = null;
+        if (obj instanceof ItemStack) {
+            obj = ((ItemStack) obj).getItem();
+        }
+        if (obj instanceof Block) {
+            uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
+        }
+        if (obj instanceof Item) {
+            uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
+        }
+        return Optional.fromNullable(uId).or(new UniqueIdentifier("none:dummy")).toString();
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -114,7 +126,6 @@ public class EnchantChanger {
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
     }
-
 
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
@@ -161,20 +172,6 @@ public class EnchantChanger {
     public void postInit(FMLPostInitializationEvent event) {
         EnchantmentUtils.initMaps();
         MakoUtils.init();
-    }
-
-    public static String getUniqueStrings(Object obj) {
-        UniqueIdentifier uId = null;
-        if (obj instanceof ItemStack) {
-            obj = ((ItemStack) obj).getItem();
-        }
-        if (obj instanceof Block) {
-            uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
-        }
-        if (obj instanceof Item) {
-            uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
-        }
-        return Optional.fromNullable(uId).or(new UniqueIdentifier("none:dummy")).toString();
     }
 
 }

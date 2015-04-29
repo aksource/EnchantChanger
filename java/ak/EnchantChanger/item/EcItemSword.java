@@ -45,43 +45,6 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
         this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }
 
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-        ExtendedPlayerData data = ExtendedPlayerData.get(player);
-        if (data.isLimitBreaking() && data.getLimitBreakId() == Constants.LIMIT_BREAK_OMNISLASH_FIRST) {
-            entity.hurtResistantTime = 0;
-        }
-        return super.onLeftClickEntity(stack, player, entity);
-    }
-
-    @Override
-    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if (world.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-            PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
-        }
-        return super.onItemRightClick(itemStack, world, player);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advToolTip) {
-        if (EnchantmentUtils.hasMagic(itemStack)) {
-            for (byte b : EnchantmentUtils.getMagic(itemStack)) {
-                list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal(EcItemMateria.MAGIC_NAME[b - 1]));
-            }
-        }
-    }
-
-    @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return ImmutableSet.of("pickaxe");
-    }
-
-    @Override
-    public int getHarvestLevel(ItemStack stack, String toolClass) {
-        return toolClass.equals("pickaxe") ? 2 : 0;
-    }
-
     public static void doMagic(ItemStack par1ItemStack, World par2World,
                                EntityPlayer par3EntityPlayer) {
         byte b = getMagicEnchantId(par1ItemStack);
@@ -150,6 +113,43 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        ExtendedPlayerData data = ExtendedPlayerData.get(player);
+        if (data.isLimitBreaking() && data.getLimitBreakId() == Constants.LIMIT_BREAK_OMNISLASH_FIRST) {
+            entity.hurtResistantTime = 0;
+        }
+        return super.onLeftClickEntity(stack, player, entity);
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+        if (world.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+            PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
+        }
+        return super.onItemRightClick(itemStack, world, player);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advToolTip) {
+        if (EnchantmentUtils.hasMagic(itemStack)) {
+            for (byte b : EnchantmentUtils.getMagic(itemStack)) {
+                list.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal(EcItemMateria.MAGIC_NAME[b - 1]));
+            }
+        }
+    }
+
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
+        return ImmutableSet.of("pickaxe");
+    }
+
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass) {
+        return toolClass.equals("pickaxe") ? 2 : 0;
     }
 
     public void doLimitBreak(ItemStack itemStack, EntityPlayer player) {

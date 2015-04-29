@@ -35,6 +35,38 @@ public class LivingEventHooks {
     private static final int mpTermAbsorp = 20 * 3;
     private int[] Count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+    public static boolean checkFlightItem(ItemStack itemstack) {
+        if (itemstack == null) {
+            return false;
+        } else if (itemstack.getItem() instanceof EcItemMateria || itemstack.getItem() instanceof EcItemSword) {
+            if (itemstack.getItem() instanceof EcItemMateria) {
+                return ((EcItemMateria) itemstack.getItem()).isFloatingMateria(itemstack);
+            } else {
+                return EcItemSword.hasFloat(itemstack);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean checkFlightItemInInv(EntityPlayer entityplayer) {
+        boolean ret = false;
+        for (int i = 0; i < 9; i++) {
+            ItemStack var1 = entityplayer.inventory.getStackInSlot(i);
+            if (checkFlightItem(var1))
+                ret = checkFlightItem(var1);
+        }
+        return ret;
+    }
+
+    public static void setLevitationModeToNBT(EntityPlayer player, boolean levi) {
+        ExtendedPlayerData.get(player).setLevitating(levi);
+    }
+
+    public static boolean getLevitationModeToNBT(EntityPlayer player) {
+        return ExtendedPlayerData.get(player).isLevitating();
+    }
+
     @SubscribeEvent
     public void LivingUpdate(LivingUpdateEvent event) {
         if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
@@ -149,7 +181,6 @@ public class LivingEventHooks {
         }
     }
 
-
     private void doGreatGospel(EntityPlayer player) {
         if (player.capabilities.isCreativeMode) {
             return;
@@ -167,6 +198,14 @@ public class LivingEventHooks {
             player.capabilities.disableDamage = false;
         }
     }
+
+//	public void checkMagic(World world, EntityPlayer player)
+//	{
+//		ItemStack itemstack = player.getHeldItem();
+//		if (itemstack != null && itemstack.getItem() instanceof EcItemSword) {
+//			EcItemSword.doMagic(itemstack, world, player);
+//		}
+//	}
 
     public void doAbsorption(World world, EntityPlayer player) {
         if (!world.isRemote && player.getFoodStats().getFoodLevel() < 20) {
@@ -203,45 +242,5 @@ public class LivingEventHooks {
         return checkFlightItemInInv(player)
                 && !(player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.isRiding() || (player.getFoodStats()
                 .getFoodLevel() < 0 && !ConfigurationUtils.flagYOUARETERRA));
-    }
-
-    public static boolean checkFlightItem(ItemStack itemstack) {
-        if (itemstack == null) {
-            return false;
-        } else if (itemstack.getItem() instanceof EcItemMateria || itemstack.getItem() instanceof EcItemSword) {
-            if (itemstack.getItem() instanceof EcItemMateria) {
-                return ((EcItemMateria) itemstack.getItem()).isFloatingMateria(itemstack);
-            } else {
-                return EcItemSword.hasFloat(itemstack);
-            }
-        } else {
-            return false;
-        }
-    }
-
-//	public void checkMagic(World world, EntityPlayer player)
-//	{
-//		ItemStack itemstack = player.getHeldItem();
-//		if (itemstack != null && itemstack.getItem() instanceof EcItemSword) {
-//			EcItemSword.doMagic(itemstack, world, player);
-//		}
-//	}
-
-    public static boolean checkFlightItemInInv(EntityPlayer entityplayer) {
-        boolean ret = false;
-        for (int i = 0; i < 9; i++) {
-            ItemStack var1 = entityplayer.inventory.getStackInSlot(i);
-            if (checkFlightItem(var1))
-                ret = checkFlightItem(var1);
-        }
-        return ret;
-    }
-
-    public static void setLevitationModeToNBT(EntityPlayer player, boolean levi) {
-        ExtendedPlayerData.get(player).setLevitating(levi);
-    }
-
-    public static boolean getLevitationModeToNBT(EntityPlayer player) {
-        return ExtendedPlayerData.get(player).isLevitating();
     }
 }

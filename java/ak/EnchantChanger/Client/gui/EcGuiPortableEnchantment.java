@@ -23,18 +23,12 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class EcGuiPortableEnchantment extends GuiContainer {
+    private static final ResourceLocation enchantingTableGuiTextures = new ResourceLocation("textures/gui/container/enchanting_table.png");
+    private static final ResourceLocation enchantingTableBookTextures = new ResourceLocation("textures/entity/enchanting_table_book.png");
     /**
      * The book model used on the GUI.
      */
     private static ModelBook bookModel = new ModelBook();
-    private Random rand = new Random();
-    private static final ResourceLocation enchantingTableGuiTextures = new ResourceLocation("textures/gui/container/enchanting_table.png");
-    private static final ResourceLocation enchantingTableBookTextures = new ResourceLocation("textures/entity/enchanting_table_book.png");
-
-    /**
-     * ContainerEnchantment object associated with this gui
-     */
-    private EcContainerPortableEnchantment containerEnchantment;
     public int field_74214_o;
     public float field_74213_p;
     public float field_74212_q;
@@ -43,6 +37,11 @@ public class EcGuiPortableEnchantment extends GuiContainer {
     public float field_74209_t;
     public float field_74208_u;
     ItemStack theItemStack;
+    private Random rand = new Random();
+    /**
+     * ContainerEnchantment object associated with this gui
+     */
+    private EcContainerPortableEnchantment containerEnchantment;
 
     public EcGuiPortableEnchantment(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
         super(new EcContainerPortableEnchantment(par1InventoryPlayer, par2World, par3, par4, par5));

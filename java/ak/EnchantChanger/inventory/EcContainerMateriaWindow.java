@@ -11,12 +11,9 @@ import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemBoat;
-import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,11 +26,11 @@ import java.util.List;
  * Created by A.K..
  */
 public class EcContainerMateriaWindow extends Container {
+    public int maxSlot = 16;
+    public IInventory materiaInventory = new EcSlotMateriaInventory(this, "MateriaWindow", maxSlot);
     private InventoryPlayer invPlayer;
     private int openSlotNum;
     private ItemStack openItem;
-    public int maxSlot = 16;
-    public IInventory materiaInventory = new EcSlotMateriaInventory(this, "MateriaWindow", maxSlot);
     private boolean initializing = false;
 
     public EcContainerMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slot) {

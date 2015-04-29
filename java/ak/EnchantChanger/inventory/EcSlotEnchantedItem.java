@@ -7,8 +7,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class EcSlotEnchantedItem extends Slot {
-    private final IInventory materializeSource;
     final EcContainerMaterializer container;
+    private final IInventory materializeSource;
     private final IInventory materializeResult;
 
     public EcSlotEnchantedItem(EcContainerMaterializer par1ContainerMaterializer, IInventory par2IInventory, IInventory par3IInventory, int par4, int par5, int par6) {

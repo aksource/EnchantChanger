@@ -12,6 +12,10 @@ public class ItemStackWrapper {
         containItemStack = itemStack;
     }
 
+    public static ItemStackWrapper getItemStackWrappaer(ItemStack itemStack) {
+        return new ItemStackWrapper(itemStack);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 71;
@@ -50,9 +54,5 @@ public class ItemStackWrapper {
 
     public ItemStack getContainItemStackCopy() {
         return containItemStack.copy();
-    }
-
-    public static ItemStackWrapper getItemStackWrappaer(ItemStack itemStack) {
-        return new ItemStackWrapper(itemStack);
     }
 }

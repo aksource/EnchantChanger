@@ -23,6 +23,13 @@ import java.util.Map;
 public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IItemRenderer {
     private static final Map<ItemRenderType, ItemRendererHelper> renderMap = new HashMap<>();
 
+    static {
+        renderMap.put(ItemRenderType.ENTITY, ItemRendererHelper.ENTITY_ROTATION);
+        renderMap.put(ItemRenderType.EQUIPPED, ItemRendererHelper.EQUIPPED_BLOCK);
+        renderMap.put(ItemRenderType.EQUIPPED_FIRST_PERSON, ItemRendererHelper.EQUIPPED_BLOCK);
+        renderMap.put(ItemRenderType.INVENTORY, ItemRendererHelper.INVENTORY_BLOCK);
+    }
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return type != ItemRenderType.FIRST_PERSON_MAP;
@@ -136,12 +143,5 @@ public class EcRenderMultiPassBlock implements ISimpleBlockRenderingHandler, IIt
     @Override
     public int getRenderId() {
         return CommonProxy.multiPassRenderType;
-    }
-
-    static {
-        renderMap.put(ItemRenderType.ENTITY, ItemRendererHelper.ENTITY_ROTATION);
-        renderMap.put(ItemRenderType.EQUIPPED, ItemRendererHelper.EQUIPPED_BLOCK);
-        renderMap.put(ItemRenderType.EQUIPPED_FIRST_PERSON, ItemRendererHelper.EQUIPPED_BLOCK);
-        renderMap.put(ItemRenderType.INVENTORY, ItemRendererHelper.INVENTORY_BLOCK);
     }
 }

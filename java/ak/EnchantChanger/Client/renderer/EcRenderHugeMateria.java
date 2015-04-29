@@ -15,12 +15,11 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class EcRenderHugeMateria extends TileEntitySpecialRenderer {
-    private EcModelHMateria Hmateria = new EcModelHMateria();
-
     private static final ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcHugetex);
     private static final ResourceLocation texture16 = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/hugemateria16.png");
     private static final ResourceLocation objHugeMateria = new ResourceLocation(Constants.EcAssetsDomain, "models/hugemateria.obj");
     private final IModelCustom modelHugeMateria;
+    private EcModelHMateria Hmateria = new EcModelHMateria();
 
     public EcRenderHugeMateria() {
         modelHugeMateria = AdvancedModelLoader.loadModel(objHugeMateria);
