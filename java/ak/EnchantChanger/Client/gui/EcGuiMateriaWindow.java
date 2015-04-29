@@ -14,10 +14,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class EcGuiMateriaWindow extends GuiContainer {
     private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMateriaWindow);
-    private ItemStack itemStack;
     public EcGuiMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slotnum) {
         super(new EcContainerMateriaWindow(inventoryPlayer, item, slotnum));
-        itemStack = item;
     }
 
     @Override
@@ -32,7 +30,8 @@ public class EcGuiMateriaWindow extends GuiContainer {
         GL11.glPushMatrix();
         itemRender.zLevel = 100.0F;
         GL11.glScalef(4.0f, 4.0f, 1);
-        itemRender.renderItemAndEffectIntoGUI(fontRendererObj, Minecraft.getMinecraft().renderEngine, itemStack, itemRenderPosX, itemRenderPosY);
+        ItemStack openItem = ((EcContainerMateriaWindow)this.inventorySlots).getOpenItem();
+        itemRender.renderItemAndEffectIntoGUI(fontRendererObj, Minecraft.getMinecraft().renderEngine, openItem, itemRenderPosX, itemRenderPosY);
         itemRender.zLevel = 0.0F;
         GL11.glPopMatrix();
     }

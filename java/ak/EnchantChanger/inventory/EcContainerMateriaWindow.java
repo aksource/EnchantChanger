@@ -11,12 +11,16 @@ import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemBoat;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +76,9 @@ public class EcContainerMateriaWindow extends Container {
             }
         }
 
-        if (item.isItemEnchanted()) {
-            NBTTagList enchantments = item.getEnchantmentTagList();
+        if (EnchantmentUtils.isEnchanted(item)) {
+            String tagName = EnchantmentUtils.getTagName(item);
+            NBTTagList enchantments = item.getTagCompound().getTagList(tagName, Constants.NBT.TAG_COMPOUND);
             int id, lv, dmg;
             for (int i = 0; i < enchantments.tagCount(); i++) {
                 lv = enchantments.getCompoundTagAt(i).getShort("lvl");
@@ -127,12 +132,18 @@ public class EcContainerMateriaWindow extends Container {
 
             ArrayList<EnchantmentLvPair> enchantmentList = getEnchantmentListFromInventory();
 
-            if (openItem.isItemEnchanted()) {
-                nbt.removeTag("ench");
+            if (EnchantmentUtils.isEnchanted(openItem)) {
+                String tagName = EnchantmentUtils.getTagName(openItem);
+                nbt.removeTag(tagName);
             }
 
             for (EnchantmentLvPair data :  enchantmentList) {
                 EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
+            }
+            ItemStack result = EnchantmentUtils.getBookResult(openItem, enchantmentList);
+            if (!result.isItemEqual(openItem)) {
+                openItem = result;
+                this.getSlotFromInventory(invPlayer, openSlotNum).putStack(result);
             }
         }
     }
@@ -205,7 +216,7 @@ public class EcContainerMateriaWindow extends Container {
         EnchantmentLvPair enchData;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
-            if (slotItem != null && slotItem.isItemEnchanted()) {
+            if (slotItem != null && EnchantmentUtils.isEnchanted(slotItem)) {
                 enchData = new EnchantmentLvPair(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
                 list.add(enchData);
             }
@@ -223,5 +234,9 @@ public class EcContainerMateriaWindow extends Container {
             }
         }
         return list;
+    }
+
+    public ItemStack getOpenItem() {
+        return openItem;
     }
 }

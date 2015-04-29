@@ -7,10 +7,7 @@ import ak.EnchantChanger.item.EcItemSword;
 import net.minecraft.enchantment.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemShears;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.WeightedRandom;
@@ -52,11 +49,12 @@ public class EnchantmentUtils {
             item.setTagCompound(new NBTTagCompound());
         }
 
-        if (!item.stackTagCompound.hasKey("ench", 9)) {
-            item.stackTagCompound.setTag("ench", new NBTTagList());
+        String tagName = getTagName(item);
+        if (!item.stackTagCompound.hasKey(tagName, Constants.NBT.TAG_LIST)) {
+            item.stackTagCompound.setTag(tagName, new NBTTagList());
         }
 
-        NBTTagList var3 =item.stackTagCompound.getTagList("ench", 10);
+        NBTTagList var3 =item.stackTagCompound.getTagList(tagName, 10);
         NBTTagCompound var4 = new NBTTagCompound();
         var4.setShort("id", (short) enchantment.effectId);
         var4.setShort("lvl", (short) (Lv));
@@ -142,29 +140,32 @@ public class EnchantmentUtils {
         return true;
     }
 
-    public static boolean isEnchantmentValid(Enchantment ench, ItemStack par1ItemStack) {
+    public static boolean isEnchantmentValid(Enchantment ench, ItemStack itemStack) {
         if (ench == null) {
             return false;
         }
+        if (itemStack.getItem() instanceof ItemBook) {
+            return true;
+        }
         if (ench instanceof EnchantmentDurability) {
-            return par1ItemStack.isItemStackDamageable() || ench.type.canEnchantItem(par1ItemStack.getItem());
+            return itemStack.isItemStackDamageable() || ench.type.canEnchantItem(itemStack.getItem());
         }
         if (ench instanceof EnchantmentDigging) {
-            return par1ItemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
+            return itemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(itemStack.getItem()) || isExtraTools(itemStack);
         }
         if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
-            return par1ItemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraSwords(par1ItemStack);
+            return itemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(itemStack.getItem()) || isExtraSwords(itemStack);
         }
         if (ench instanceof EnchantmentThorns) {
-            return par1ItemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraArmors(par1ItemStack);
+            return itemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(itemStack.getItem()) || isExtraArmors(itemStack);
         }
         if (ench instanceof EnchantmentUntouching) {
-            return par1ItemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(par1ItemStack.getItem()) || isExtraTools(par1ItemStack);
+            return itemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(itemStack.getItem()) || isExtraTools(itemStack);
         }
         if (ench instanceof EcEnchantmentMeteo || ench instanceof EcEnchantmentHoly || ench instanceof EcEnchantmentTeleport || ench instanceof EcEnchantmentFloat || ench instanceof EcEnchantmentThunder) {
-            return par1ItemStack.getItem() instanceof EcItemSword;
+            return itemStack.getItem() instanceof EcItemSword;
         }
-        return ench.type.canEnchantItem(par1ItemStack.getItem());
+        return ench.type.canEnchantItem(itemStack.getItem());
     }
 
     private static boolean isExtraTools(ItemStack itemStack) {
@@ -185,6 +186,14 @@ public class EnchantmentUtils {
     private static boolean isExtraBows(ItemStack itemStack) {
         String uName = EnchantChanger.getUniqueStrings(itemStack);
         return Arrays.asList(ConfigurationUtils.extraBowIDs).contains(uName);
+    }
+
+    public static boolean isEnchanted(ItemStack itemStack) {
+        return (itemStack.getItem() instanceof ItemEnchantedBook) ? itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("StoredEnchantments", 9): itemStack.isItemEnchanted();
+    }
+
+    public static String getTagName(ItemStack itemStack) {
+        return (itemStack.getItem() instanceof ItemEnchantedBook || itemStack.getItem() instanceof ItemBook) ? "StoredEnchantments" : "ench";
     }
 
     public static void initMaps() {
@@ -291,6 +300,21 @@ public class EnchantmentUtils {
     private static ItemStack getEnchantedItemStack(ItemStack base, Enchantment enchantment, int lv) {
         addEnchantmentToItem(base, enchantment, lv);
         return base;
+    }
+
+    public static ItemStack getBookResult(ItemStack baseItem, Collection enchantmentCollection) {
+        if (baseItem.getItem() instanceof ItemEnchantedBook && enchantmentCollection.isEmpty()) {
+            ItemStack book = new ItemStack(Items.book);
+            book.setTagCompound(baseItem.getTagCompound());
+            return book;
+        }
+
+        if (baseItem.getItem() instanceof ItemBook && !enchantmentCollection.isEmpty()) {
+            ItemStack book = new ItemStack(Items.enchanted_book);
+            book.setTagCompound(baseItem.getTagCompound());
+            return book;
+        }
+        return baseItem;
     }
 
     public static EnchantmentData getEnchantmentData(Random rand) {

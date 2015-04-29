@@ -51,7 +51,7 @@ public class CommonProxy implements IGuiHandler {
         if (id == Constants.GUI_ID_MATERIA_WINDOW) {
             ItemStack heldItem = player.getCurrentEquippedItem();
             int slot = player.inventory.currentItem;
-            if (heldItem != null) {
+            if (heldItem != null && heldItem.stackSize == 1) {
                 return new EcContainerMateriaWindow(player.inventory, heldItem, slot);
             }
         }
