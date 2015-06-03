@@ -8,8 +8,9 @@ import net.minecraft.inventory.InventoryBasic;
  */
 public class EcSlotMateriaInventory extends InventoryBasic {
     private Container ownerContainer;
+
     public EcSlotMateriaInventory(EcContainerMateriaWindow container, String invName, int invSlotNum) {
-        super(invName, true,invSlotNum);
+        super(invName, true, invSlotNum);
         this.ownerContainer = container;
     }
 

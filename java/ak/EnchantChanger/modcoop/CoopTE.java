@@ -1,8 +1,7 @@
 package ak.EnchantChanger.modcoop;
 
-import cofh.api.energy.IEnergyHandler;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Created by A.K. on 14/10/02.
@@ -10,12 +9,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class CoopTE {
 
     public static boolean isIEnergyHandler(TileEntity tileEntity) {
-        return tileEntity instanceof IEnergyHandler;
+        return false/*tileEntity instanceof IEnergyHandler*/;
     }
 
-    public static int getNeedRF(TileEntity tileEntity, ForgeDirection direction, int maxRF) {
-        if (tileEntity instanceof IEnergyHandler) {
-            return ((IEnergyHandler)tileEntity).receiveEnergy(direction, maxRF, false);
+    public static int getNeedRF(TileEntity tileEntity, EnumFacing direction, int maxRF) {
+        if (false/*tileEntity instanceof IEnergyHandler*/) {
+            return 0/*((IEnergyHandler)tileEntity).receiveEnergy(direction, maxRF, false)*/;
         }
         return 0;
     }

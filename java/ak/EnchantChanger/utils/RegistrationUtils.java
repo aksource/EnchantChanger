@@ -10,13 +10,13 @@ import ak.EnchantChanger.potion.EcPotionMako;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static ak.EnchantChanger.utils.ConfigurationUtils.*;
 
@@ -38,6 +38,8 @@ public class RegistrationUtils {
         GameRegistry.registerBlock(EnchantChanger.blockHugeMateria, "blockhugemateria");
         GameRegistry.registerBlock(EnchantChanger.blockMakoReactor, EcItemBlockMakoReactor.class, "blockmakoreactor");
         GameRegistry.registerBlock(EnchantChanger.blockLifeStream, "life_stream");
+
+        FluidRegistry.registerFluid(EnchantChanger.fluidLifeStream);
         FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(EnchantChanger.itemBucketLifeStream), new ItemStack(Items.bucket));
 
         GameRegistry.registerItem(EnchantChanger.itemMateria, "materia");

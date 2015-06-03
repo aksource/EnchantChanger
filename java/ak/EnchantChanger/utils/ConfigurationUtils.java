@@ -164,7 +164,7 @@ public class ConfigurationUtils {
         cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", cloudInvYCoord).getInt();
         enableBackSword = config.get(Configuration.CATEGORY_GENERAL, "EnableBackSword", enableBackSword, "TRUE:Render Sword on player's back. ").getBoolean();
         enchantChangerCost = config.get(Configuration.CATEGORY_GENERAL, "EnchantChangerOpenCost", enchantChangerCost, "Cost to open EnchantChanger or Materia Window when mods difficulty is hard").getInt();
-        soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary" , soldierSalary, "Monthly Salary of soldier.").getInt();
+        soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary", soldierSalary, "Monthly Salary of soldier.").getInt();
         materiaGeneratingRatio = config.get(Configuration.CATEGORY_GENERAL, "MateriaGeneratingRatio", materiaGeneratingRatio, "Materia generating ratio in Mako reactor").getInt();
         config.save();
     }

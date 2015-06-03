@@ -13,13 +13,13 @@ public class StatCheckUtils {
 
     public static int getTotalMobKillCount(EntityPlayer entityPlayer) {
         if (entityPlayer instanceof EntityPlayerMP) {
-            return getStaticData((EntityPlayerMP)entityPlayer, StatList.mobKillsStat);
+            return getStaticData((EntityPlayerMP) entityPlayer, StatList.mobKillsStat);
         }
         return 0;
     }
 
     public static int getStaticData(EntityPlayerMP entityPlayerMP, StatBase statBase) {
-        StatisticsFile statisticsFile = entityPlayerMP.func_147099_x();
+        StatisticsFile statisticsFile = entityPlayerMP.getStatFile();
         return statisticsFile.writeStat(statBase);
     }
 }

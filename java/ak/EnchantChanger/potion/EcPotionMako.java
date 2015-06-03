@@ -13,9 +13,10 @@ import net.minecraft.util.ResourceLocation;
  */
 public class EcPotionMako extends Potion {
     private static final ResourceLocation newEffect = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcPotionEffect);
+
     public EcPotionMako(int id) {
-        super(id, true, 0x12f9c7);
-        this.setIconIndex(0,0);
+        super(id, new ResourceLocation(Constants.EcAssetsDomain, "mako"), true, 0x12f9c7);
+        this.setIconIndex(0, 0);
     }
 
     @Override

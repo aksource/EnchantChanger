@@ -3,13 +3,13 @@ package ak.EnchantChanger.Client.gui;
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.inventory.EcContainerMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +68,8 @@ public class EcGuiMakoReactor extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getInventoryName()), 25, 3, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getInventoryName()), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {
@@ -122,8 +122,7 @@ public class EcGuiMakoReactor extends GuiContainer {
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }

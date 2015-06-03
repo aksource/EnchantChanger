@@ -11,7 +11,7 @@ public class EcItem extends Item {
         super();
         String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
-        this.setTextureName(s);
+//        this.setTextureName(s);
         this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }
 }

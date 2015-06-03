@@ -1,8 +1,7 @@
 package ak.EnchantChanger.asm;
 
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -11,15 +10,16 @@ import org.objectweb.asm.tree.*;
 /**
  * Created by A.K. on 14/03/26.
  */
-public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
+public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.enchantment.EnchantmentHelper";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (!FMLLaunchHandler.side().isClient() || !transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {
+            return basicClass;
+        }
         try {
-            AKInternalCorePlugin.logger.info("Start transforming EnchantmentHelper Class");
             basicClass = changeConst(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming EnchantmentHelper Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : EnchantmentHelperTransformer loading", e);
@@ -39,12 +39,12 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes{
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming getEnchantmentModifierDamage Method");
+            AKInternalCorePlugin.logger.debug("Transforming getEnchantmentModifierDamage Method");
             AbstractInsnNode oldInsnNode1 = null;
             AbstractInsnNode oldInsnNode2 = null;
 
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
-                if (abstractInsnNode instanceof  IntInsnNode && ((IntInsnNode)abstractInsnNode).operand == 25) {
+                if (abstractInsnNode instanceof IntInsnNode && ((IntInsnNode) abstractInsnNode).operand == 25) {
                     if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
                     else oldInsnNode2 = abstractInsnNode;
                 }

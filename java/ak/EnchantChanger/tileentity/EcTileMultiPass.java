@@ -1,6 +1,5 @@
 package ak.EnchantChanger.tileentity;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +7,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Created by A.K. on 14/03/08.
@@ -34,12 +34,12 @@ public class EcTileMultiPass extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
         this.writeToNBT(nbtTagCompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTagCompound);
+        return new S35PacketUpdateTileEntity(this.getPos(), 1, nbtTagCompound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        this.readFromNBT(pkt.func_148857_g());
+        this.readFromNBT(pkt.getNbtCompound());
     }
 
     public Block getBaseBlock() {
@@ -51,7 +51,7 @@ public class EcTileMultiPass extends TileEntity {
             block = GameRegistry.findBlock("minecraft", strings[0]);
         }
         if (block == null) {
-            throw new IllegalArgumentException(String.format("[EnchantChanger]EcTileMultiPass does not proper baseblock coordinates x:%d, y:%d, z:%d", this.xCoord, this.yCoord, this.zCoord));
+            throw new IllegalArgumentException(String.format("[EnchantChanger]EcTileMultiPass does not proper baseblock coordinates x:%d, y:%d, z:%d", this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()));
         }
         return block;
     }

@@ -8,8 +8,7 @@ import net.minecraft.util.WeightedRandom;
 
 import java.util.*;
 
-public class EcPortableEnchantmentHelper
-{
+public class EcPortableEnchantmentHelper {
     /**
      * Returns the level of enchantment on the ItemStack passed.
      */
@@ -70,19 +69,14 @@ public class EcPortableEnchantmentHelper
      * Returns the enchantability of itemstack, it's uses a singular formula for each index (2nd parameter: 0, 1 and 2),
      * cutting to the max enchantability power of the table (3rd parameter)
      */
-    public static int calcItemStackEnchantability(Random par0Random, int par1, int par2, ItemStack par3ItemStack)
-    {
+    public static int calcItemStackEnchantability(Random par0Random, int par1, int par2, ItemStack par3ItemStack) {
         Item var4 = par3ItemStack.getItem();
         int var5 = var4.getItemEnchantability();
 
-        if (var5 <= 0)
-        {
+        if (var5 <= 0) {
             return 0;
-        }
-        else
-        {
-            if (par2 > 15)
-            {
+        } else {
+            if (par2 > 15) {
                 par2 = 15;
             }
 
@@ -114,66 +108,53 @@ public class EcPortableEnchantmentHelper
      * Create a list of random EnchantmentData (enchantments) that can be added together to the ItemStack, the 3rd
      * parameter is the total enchantability level.
      */
-    public static List buildEnchantmentList(Random par0Random, ItemStack par1ItemStack, int par2)
-    {
+    public static List buildEnchantmentList(Random par0Random, ItemStack par1ItemStack, int par2) {
         Item var3 = par1ItemStack.getItem();
         int var4 = var3.getItemEnchantability();
 
-        if (var4 <= 0)
-        {
+        if (var4 <= 0) {
             return null;
-        }
-        else
-        {
+        } else {
             var4 /= 2;
             var4 = 1 + par0Random.nextInt((var4 >> 1) + 1) + par0Random.nextInt((var4 >> 1) + 1);
             int var5 = var4 + par2;
             float var6 = (par0Random.nextFloat() + par0Random.nextFloat() - 1.0F) * 0.15F;
-            int var7 = (int)((float)var5 * (1.0F + var6) + 0.5F);
+            int var7 = (int) ((float) var5 * (1.0F + var6) + 0.5F);
 
-            if (var7 < 1)
-            {
+            if (var7 < 1) {
                 var7 = 1;
             }
 
             ArrayList<EnchantmentData> var8 = null;
             Map var9 = mapEnchantmentData(var7, par1ItemStack);
 
-            if (var9 != null && !var9.isEmpty())
-            {
-                EnchantmentData var10 = (EnchantmentData)WeightedRandom.getRandomItem(par0Random, var9.values());
+            if (var9 != null && !var9.isEmpty()) {
+                EnchantmentData var10 = (EnchantmentData) WeightedRandom.getRandomItem(par0Random, var9.values());
 
-                if (var10 != null)
-                {
+                if (var10 != null) {
                     var8 = new ArrayList<>();
                     var8.add(var10);
 
-                    for (int var11 = var7; par0Random.nextInt(50) <= var11; var11 >>= 1)
-                    {
+                    for (int var11 = var7; par0Random.nextInt(50) <= var11; var11 >>= 1) {
                         Iterator var12 = var9.keySet().iterator();
 
-                        while (var12.hasNext())
-                        {
-                            Integer var13 = (Integer)var12.next();
+                        while (var12.hasNext()) {
+                            Integer var13 = (Integer) var12.next();
                             boolean var14 = true;
                             Iterator var15 = var8.iterator();
 
-                            while (true)
-                            {
-                                if (var15.hasNext())
-                                {
-                                    EnchantmentData var16 = (EnchantmentData)var15.next();
+                            while (true) {
+                                if (var15.hasNext()) {
+                                    EnchantmentData var16 = (EnchantmentData) var15.next();
 
-                                    if (var16.enchantmentobj.canApplyTogether(Enchantment.enchantmentsList[var13]))
-                                    {
+                                    if (var16.enchantmentobj.canApplyTogether(Enchantment.enchantmentsList[var13])) {
                                         continue;
                                     }
 
                                     var14 = false;
                                 }
 
-                                if (!var14)
-                                {
+                                if (!var14) {
                                     var12.remove();
                                 }
 
@@ -181,9 +162,8 @@ public class EcPortableEnchantmentHelper
                             }
                         }
 
-                        if (!var9.isEmpty())
-                        {
-                            EnchantmentData var17 = (EnchantmentData)WeightedRandom.getRandomItem(par0Random, var9.values());
+                        if (!var9.isEmpty()) {
+                            EnchantmentData var17 = (EnchantmentData) WeightedRandom.getRandomItem(par0Random, var9.values());
                             var8.add(var17);
                         }
                     }
@@ -198,19 +178,14 @@ public class EcPortableEnchantmentHelper
      * Creates a 'Map' of EnchantmentData (enchantments) possible to add on the ItemStack and the enchantability level
      * passed.
      */
-    public static Map mapEnchantmentData(int par0, ItemStack par1ItemStack)
-    {
+    public static Map mapEnchantmentData(int par0, ItemStack par1ItemStack) {
         HashMap<Integer, EnchantmentData> var3 = new HashMap<>();
         Enchantment[] var4 = Enchantment.enchantmentsList;
 
-        for (Enchantment enchantment : var4)
-        {
-            if (enchantment != null && enchantment.canApplyAtEnchantingTable(par1ItemStack))
-            {
-                for (int var8 = enchantment.getMinLevel(); var8 <= enchantment.getMaxLevel(); ++var8)
-                {
-                    if (par0 >= enchantment.getMinEnchantability(var8) && par0 <= enchantment.getMaxEnchantability(var8))
-                    {
+        for (Enchantment enchantment : var4) {
+            if (enchantment != null && enchantment.canApplyAtEnchantingTable(par1ItemStack)) {
+                for (int var8 = enchantment.getMinLevel(); var8 <= enchantment.getMaxLevel(); ++var8) {
+                    if (par0 >= enchantment.getMinEnchantability(var8) && par0 <= enchantment.getMaxEnchantability(var8)) {
                         var3.put(enchantment.effectId, new EnchantmentData(enchantment, var8));
                     }
                 }

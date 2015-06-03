@@ -13,21 +13,17 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class CommonProxy implements IGuiHandler {
-    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<>();
 
-    public void registerRenderInformation() {
-    }
+    public void registerRenderInformation() {}
 
-    public void registerTileEntitySpecialRenderer() {
-    }
+    public void registerTileEntitySpecialRenderer() {}
 
     public void registerExtraMateriaRendering(NBTTagCompound nbt) {}
 
-    public EntityPlayer getPlayer() {return null;}
+    public EntityPlayer getPlayer() {
+        return null;
+    }
 
     public void doFlightOnSide(EntityPlayer player) {}
 
@@ -86,26 +82,15 @@ public class CommonProxy implements IGuiHandler {
         if (id == Constants.GUI_ID_MAKO_REACTOR) {
             TileEntity t = world.getTileEntity(blockPos);
             if (t != null) {
-                if (EnchantChanger.loadTE) {
-                    return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor)t);
-                }
-                if (EnchantChanger.loadSS) {
-                    return new EcGuiMakoReactorGF(player.inventory, (EcTileEntityMakoReactor)t);
-                }
+//                if (EnchantChanger.loadTE) {
+//                    return new EcGuiMakoReactorRF(player.inventory, (EcTileEntityMakoReactor)t);
+//                }
+//                if (EnchantChanger.loadSS) {
+//                    return new EcGuiMakoReactorGF(player.inventory, (EcTileEntityMakoReactor)t);
+//                }
                 return new EcGuiMakoReactor(player.inventory, (EcTileEntityMakoReactor) t);
             }
         }
         return null;
     }
-
-    public static void storeEntityData(String name, NBTTagCompound compound)
-    {
-        extendedEntityData.put(name, compound);
-    }
-
-    public static NBTTagCompound getEntityData(String name)
-    {
-        return extendedEntityData.remove(name);
-    }
-
 }

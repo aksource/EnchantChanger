@@ -1,11 +1,8 @@
 package ak.EnchantChanger;
 
 import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.network.MessagePlayerProperties;
-import ak.EnchantChanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -17,7 +14,6 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public final static String EXT_PROP_NAME = "EC:ExtPlayerData";
-//    private final EntityPlayer player;
 
     private boolean isLevitating;
     private boolean soldierMode;
@@ -29,23 +25,12 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     private byte limitBreakId;
     private boolean ggMode;
 
-//    public ExtendedPlayerData(EntityPlayer player) {
-//        this.player = player;
-//        this.isLevitating = false;
-//        this.soldierMode = false;
-//        this.apCoolingTime = 0;
-//    }
-
-    private static String getSaveKey(EntityPlayer player) {
-        return player.getGameProfile().getId().toString() + ":" + EXT_PROP_NAME;
-    }
-
     public static void register(EntityPlayer player) {
         player.registerExtendedProperties(EXT_PROP_NAME, new ExtendedPlayerData());
     }
 
     public static ExtendedPlayerData get(EntityPlayer player) {
-        return (ExtendedPlayerData)player.getExtendedProperties(EXT_PROP_NAME);
+        return (ExtendedPlayerData) player.getExtendedProperties(EXT_PROP_NAME);
     }
 
     @Override
@@ -65,7 +50,7 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        NBTTagCompound nbt = (NBTTagCompound)compound.getTag(EXT_PROP_NAME);
+        NBTTagCompound nbt = (NBTTagCompound) compound.getTag(EXT_PROP_NAME);
         this.isLevitating = nbt.getBoolean("isLevitating");
         this.soldierMode = nbt.getBoolean("soldierMode");
         this.apCoolingTime = nbt.getLong("apCoolingTime");
@@ -106,15 +91,15 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
     }
 
     public void addLimitGaugeValue(int value) {
-       limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
-    }
-
-    public void setLimitGaugeValue(int value) {
-        limitValue = MathHelper.clamp_int(value, 0, Constants.LIMIT_GAUGE_MAX);
+        limitValue = MathHelper.clamp_int(limitValue + value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public int getLimitGaugeValue() {
         return limitValue;
+    }
+
+    public void setLimitGaugeValue(int value) {
+        limitValue = MathHelper.clamp_int(value, 0, Constants.LIMIT_GAUGE_MAX);
     }
 
     public boolean canLimitBreak() {
@@ -171,12 +156,5 @@ public class ExtendedPlayerData implements IExtendedEntityProperties {
 
     public void saveProxyData(EntityPlayer player) {
         //NO-OP yet
-    }
-
-    public void loadProxyData(EntityPlayer player) {
-        ExtendedPlayerData playerData = ExtendedPlayerData.get(player);
-        NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
-        if (savedData != null) { playerData.loadNBTData(savedData); }
-        PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP)player);
     }
 }

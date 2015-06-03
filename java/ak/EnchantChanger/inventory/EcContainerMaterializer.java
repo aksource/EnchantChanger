@@ -17,6 +17,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,29 @@ import java.util.List;
 public class EcContainerMaterializer extends Container {
 
     public static int ResultSlotNum = 9;
-    public IInventory materializeResult = new EcSlotResult(this, "MaterializerResult", ResultSlotNum);
     public static int SourceSlotNum = 9;
+    private static ArrayList<Integer> magicDmg = new ArrayList<>();
+
+    static {
+        magicDmg.add(ConfigurationUtils.idEnchantmentMeteor);
+        magicDmg.add(ConfigurationUtils.idEnchantmentHoly);
+        magicDmg.add(ConfigurationUtils.idEnchantmentTelepo);
+        magicDmg.add(ConfigurationUtils.idEnchantmentFloat);
+        magicDmg.add(ConfigurationUtils.idEnchantmentThunder);
+    }
+
+    public IInventory materializeResult = new EcSlotResult(this, "MaterializerResult", ResultSlotNum);
     public IInventory materializeSource = new EcSlotMaterializer(this, "MaterializerSource", SourceSlotNum);
     protected EcTileEntityMaterializer tileEntity;
     protected InventoryPlayer InvPlayer;
     private ArrayList<EnchantmentLvPair> itemEnchantmentLvPair = new ArrayList<>();
     private ArrayList<EnchantmentLvPair> enchantmentRemoveData = new ArrayList<>();
-
     private ArrayList<Integer> enchantmentList = new ArrayList<>();
     private ArrayList<Integer> enchantmentLevelList = new ArrayList<>();
     private ArrayList<Byte> magicList = new ArrayList<>();
     private ArrayList<Byte> magicAddList = new ArrayList<>();
     private World worldPointer;
-    private static ArrayList<Integer> magicDmg = new ArrayList<>();
+
 
     public EcContainerMaterializer(World par1world, InventoryPlayer inventoryPlayer) {
         InvPlayer = inventoryPlayer;
@@ -59,7 +69,6 @@ public class EcContainerMaterializer extends Container {
         bindPlayerInventory(inventoryPlayer);
         this.onCraftMatrixChanged(this.materializeSource);
     }
-
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
@@ -139,7 +148,8 @@ public class EcContainerMaterializer extends Container {
             if (EnchantChanger.loadMTH && baseItem.getItem() instanceof ItemMultiToolHolder) {
                 return;
             }
-            NBTTagList enchantmentList = baseItem.getEnchantmentTagList();
+            String tagName = EnchantmentUtils.getTagName(baseItem);
+            NBTTagList enchTagList = (baseItem.hasTagCompound()) ? baseItem.getTagCompound().getTagList(tagName, Constants.NBT.TAG_COMPOUND) : null;
 
             if (EnchantmentUtils.hasMagic(baseItem)) {
                 for (byte b : EnchantmentUtils.getMagic(baseItem)) {
@@ -149,19 +159,19 @@ public class EcContainerMaterializer extends Container {
 
             ItemStack result = baseItem.copy();
             if (result.hasTagCompound()) {
-                result.getTagCompound().removeTag("ench");
+                result.getTagCompound().removeTag(tagName);
                 result.getTagCompound().removeTag("ApList");
             }
-            if (enchantmentList != null && enchantmentList.tagCount() > 0) {
+            if (enchTagList != null && enchTagList.tagCount() > 0) {
                 int var1, var2;
-                for (int i = 0; i < enchantmentList.tagCount(); ++i)
-                    if (enchantmentList.getCompoundTagAt(i).getShort("lvl") > 0) {
-                        enchantmentList.getCompoundTagAt(i).setInteger("ap", 0);
-                        var1 = enchantmentList.getCompoundTagAt(i).getShort("id");
-                        var2 = enchantmentList.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentLvPair.add( new EnchantmentLvPair(Enchantment.enchantmentsList[var1], var2));
+                for (int i = 0; i < enchTagList.tagCount(); ++i)
+                    if (enchTagList.getCompoundTagAt(i).getShort("lvl") > 0) {
+                        enchTagList.getCompoundTagAt(i).setInteger("ap", 0);
+                        var1 = enchTagList.getCompoundTagAt(i).getShort("id");
+                        var2 = enchTagList.getCompoundTagAt(i).getShort("lvl");
+                        this.itemEnchantmentLvPair.add(new EnchantmentLvPair(Enchantment.func_180306_c(var1), var2));
                         if (i >= 8) {
-                           EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
+                            EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
                     }
             }
@@ -173,8 +183,8 @@ public class EcContainerMaterializer extends Container {
                     }
 
                     if (materiaitem.getItemDamage() == 0 && materiaitem.isItemEnchanted()) {
-                        int enchLv = EnchantmentUtils.enchLv(materiaitem);
-                        Enchantment enchKind = EnchantmentUtils.enchKind(materiaitem);
+                        int enchLv = EnchantmentUtils.getEnchantmentLv(materiaitem);
+                        Enchantment enchKind = EnchantmentUtils.getEnchantmentFromItemStack(materiaitem);
 
                         if (!EnchantmentUtils.isEnchantmentValid(enchKind, baseItem) || !EnchantmentUtils.checkLvCap(materiaitem)) {
                             for (int i1 = 0; i1 < ResultSlotNum; i1++) {
@@ -200,7 +210,7 @@ public class EcContainerMaterializer extends Container {
                             this.enchantmentLevelList.add(enchLv);
                         }
                     } else {
-                        if (!magicList.contains((byte)materiaitem.getItemDamage())) {
+                        if (!magicList.contains((byte) materiaitem.getItemDamage())) {
                             this.magicAddList.add((byte) materiaitem.getItemDamage());
                         }
                     }
@@ -218,19 +228,21 @@ public class EcContainerMaterializer extends Container {
                 }
                 this.itemEnchantmentLvPair.clear();
                 for (int i2 = 0; i2 < this.enchantmentList.size(); i2++) {
-                    EnchantmentUtils.addEnchantmentToItem(result, Enchantment.enchantmentsList[this.enchantmentList.get(i2)], this.enchantmentLevelList.get(i2));
+                    EnchantmentUtils.addEnchantmentToItem(result, Enchantment.func_180306_c(this.enchantmentList.get(i2)), this.enchantmentLevelList.get(i2));
                 }
 
+                result = EnchantmentUtils.getBookResult(result, enchantmentList);
                 this.materializeResult.setInventorySlotContents(0, result);
 
                 for (int i = 1; i < ResultSlotNum; i++) {
                     this.materializeResult.setInventorySlotContents(i, null);
                 }
-            } else if (enchantmentList != null && enchantmentList.tagCount() > 0) {//extract enchantment from Item
+            } else if (enchTagList != null && enchTagList.tagCount() > 0) {//extract enchantment from Item
                 int endIndex = itemEnchantmentLvPair.size() > 8 ? 8 : itemEnchantmentLvPair.size();
                 List<EnchantmentLvPair> subList = itemEnchantmentLvPair.subList(0, endIndex);
                 int slotIndex = 0;
                 for (EnchantmentLvPair data : subList) {
+                    if (data.enchantment == null) break;
                     int decreasedLv = EnchantmentUtils.getDecreasedLevel(baseItem, data.lv);
                     int damage = this.setMateriaDmgfromEnch(data.enchantment.effectId);
                     if (decreasedLv > 0) {
@@ -242,7 +254,7 @@ public class EcContainerMaterializer extends Container {
                     }
                     slotIndex++;
                 }
-
+                result = EnchantmentUtils.getBookResult(result, itemEnchantmentLvPair.subList(endIndex, itemEnchantmentLvPair.size()));
                 this.materializeResult.setInventorySlotContents(0, result);
             } else if (!magicList.isEmpty()) {
                 result.getTagCompound().removeTag("EnchantChanger|Magic");
@@ -310,13 +322,5 @@ public class EcContainerMaterializer extends Container {
                 ret = true;
         }
         return ret;
-    }
-
-    static {
-        magicDmg.add(ConfigurationUtils.idEnchantmentMeteor);
-        magicDmg.add(ConfigurationUtils.idEnchantmentHoly);
-        magicDmg.add(ConfigurationUtils.idEnchantmentTelepo);
-        magicDmg.add(ConfigurationUtils.idEnchantmentFloat);
-        magicDmg.add(ConfigurationUtils.idEnchantmentThunder);
     }
 }

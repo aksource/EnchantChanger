@@ -1,12 +1,13 @@
 package ak.EnchantChanger.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
-public class EcInventoryCloudSword extends InventoryBasic{
+public class EcInventoryCloudSword extends InventoryBasic {
     public ItemStack sword;
 
     public EcInventoryCloudSword(ItemStack stack) {
@@ -30,8 +31,8 @@ public class EcInventoryCloudSword extends InventoryBasic{
     }
 
     @Override
-    public void openInventory() {
-        super.openInventory();
+    public void openInventory(EntityPlayer player) {
+        super.openInventory(player);
         if (!sword.hasTagCompound()) {
             sword.setTagCompound(new NBTTagCompound());
         }
@@ -39,8 +40,8 @@ public class EcInventoryCloudSword extends InventoryBasic{
     }
 
     @Override
-    public void closeInventory() {
-        super.closeInventory();
+    public void closeInventory(EntityPlayer player) {
+        super.closeInventory(player);
         writeToNBT(sword.getTagCompound());
     }
 
@@ -63,7 +64,7 @@ public class EcInventoryCloudSword extends InventoryBasic{
         for (int var3 = 0; var3 < this.getSizeInventory(); ++var3) {
             if (this.getStackInSlot(var3) != null) {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
+                var4.setByte("Slot", (byte) var3);
                 this.getStackInSlot(var3).writeToNBT(var4);
                 tagList.appendTag(var4);
             }

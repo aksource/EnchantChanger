@@ -1,7 +1,6 @@
 package ak.EnchantChanger.Client;
 
-public class ClientTickHandler
-{
+public class ClientTickHandler {
     //下のメソッドの処理はClientProxyで行われている。
 //	@SubscribeEvent
 //    public void onPlayerTick(PlayerTickEvent event)

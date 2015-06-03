@@ -8,6 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class Constants {
     public static final String MOD_ID = "EnchantChanger";
+    public static final String MOD_NAME = "EnchantChanger";
     public static final String EcMeteorPNG = "textures/items/Meteo.png";
     public static final String EcExpBottlePNG = "textures/items/ExExpBottle.png";
     public static final String EcZackSwordPNG = "textures/item/ZackSword.png";

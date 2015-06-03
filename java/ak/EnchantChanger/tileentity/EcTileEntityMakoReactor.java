@@ -2,20 +2,16 @@ package ak.EnchantChanger.tileentity;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.MakoUtils;
+import ak.EnchantChanger.block.EcBlockHugeMateria;
 import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
 import ak.EnchantChanger.fluid.EcMakoReactorTank;
 import ak.EnchantChanger.modcoop.CoopSS;
 import ak.EnchantChanger.modcoop.CoopTE;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.EnchantChanger.utils.EnchantmentUtils;
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.tileentity.IEnergyInfo;
 import com.google.common.collect.Range;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,28 +25,34 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.List;
+
+//import cofh.api.energy.IEnergyConnection;
 
 /**
  * Created by A.K. on 14/03/11.
  */
 @Optional.InterfaceList(
         {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore"),
-        @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore"),
-        @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
+                @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore"),
+                @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
 )
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler{
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdatePlayerListBox, ISidedInventory, IFluidHandler/*, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler*/ {
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
@@ -61,6 +63,10 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public static final int SUM_OF_ALLSLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
     public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
     public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
+    public static final int STEP_RF_VALUE = 10;
+    public static final int MAX_OUTPUT_RF_VALUE = 100000;
+    public static final int MAX_RF_CAPACITY = 100000000;
+    public static final int GF_POWER = 3;
     private static final int MAX_HM_CREATING_COST = 1000 * 1024;
     private static final int[][] CONSTRUCTING_BLOCKS_INFO = new int[][]{
             {1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -69,32 +75,28 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             {0, 1, 0, 1, 2, 1, 0, 1, 0},
             {0, 0, 0, 0, 1, 0, 0, 0, 0}
     };
-    public static final int STEP_RF_VALUE = 10;
-    public static final int MAX_OUTPUT_RF_VALUE = 100000;
-    public static final int MAX_RF_CAPACITY = 100000000;
-    public static final int GF_POWER = 3;
-    private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
-    private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
     public int smeltingTime;
     public int generatingRFTime = MAX_GENERATING_RF_TIME;
-    private int creatingHugeMateriaPoint;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
-    private ChunkPosition HMCoord = null;
+    //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
+    public byte face;
+    private ItemStack[] items = new ItemStack[SUM_OF_ALLSLOTS];
+    private ItemStack[] smeltingItems = new ItemStack[SLOTS_MATERIAL.length];
+    private int creatingHugeMateriaPoint;
+    private BlockPos HMCoord = null;
     private int outputMaxRFValue = 100;
     private int storedRFEnergy;
-
-//    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
-    public byte face;
+    private int nowRF;
 
     @Override
     public void markDirty() {
         super.markDirty();
         if (!this.worldObj.isRemote) {
             @SuppressWarnings("unchecked")
-            List<EntityPlayer> list= this.worldObj.playerEntities;
+            List<EntityPlayer> list = this.worldObj.playerEntities;
             for (EntityPlayer player : list) {
                 if (player instanceof EntityPlayerMP) {
-                    ((EntityPlayerMP)player).playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                    ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(this.getDescriptionPacket());
                 }
             }
         }
@@ -104,13 +106,13 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         nbt.setByte("face", face);
-        nbt.setShort("SmeltingTime", (short)smeltingTime);
+        nbt.setShort("SmeltingTime", (short) smeltingTime);
         nbt.setInteger("createHugeMateria", creatingHugeMateriaPoint);
         NBTTagList nbtTagList = new NBTTagList();
         for (int i = 0; i < items.length; i++) {
             if (items[i] != null) {
                 NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte)i);
+                nbtTagCompound.setByte("Slot", (byte) i);
                 items[i].writeToNBT(nbtTagCompound);
                 nbtTagList.appendTag(nbtTagCompound);
             }
@@ -121,7 +123,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         for (int i = 0; i < smeltingItems.length; i++) {
             if (smeltingItems[i] != null) {
                 NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte)i);
+                nbtTagCompound.setByte("Slot", (byte) i);
                 smeltingItems[i].writeToNBT(nbtTagCompound);
                 nbtTagList2.appendTag(nbtTagCompound);
             }
@@ -129,9 +131,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         nbt.setTag("SmeltingItems", nbtTagList2);
 
         nbt.setTag("makoTank", tank.writeToNBT(new NBTTagCompound()));
-        nbt.setInteger("hmcoordx", HMCoord.chunkPosX);
-        nbt.setInteger("hmcoordy", HMCoord.chunkPosY);
-        nbt.setInteger("hmcoordz", HMCoord.chunkPosZ);
+        nbt.setInteger("hmcoordx", HMCoord.getX());
+        nbt.setInteger("hmcoordy", HMCoord.getY());
+        nbt.setInteger("hmcoordz", HMCoord.getZ());
 
         nbt.setInteger("outputMaxRFValue", outputMaxRFValue);
         nbt.setInteger("storedRFEnergy", storedRFEnergy);
@@ -155,7 +157,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         }
 
         NBTTagList nbtTagList2 = nbt.getTagList("SmeltingItems", Constants.NBT.TAG_COMPOUND);
-        for (int j = 0; j < smeltingItems.length ; j++) {
+        for (int j = 0; j < smeltingItems.length; j++) {
             smeltingItems[j] = null;
         }
         for (int i = 0; i < nbtTagList2.tagCount(); i++) {
@@ -170,7 +172,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         int hmcoordx = nbt.getInteger("hmcoordx");
         int hmcoordy = nbt.getInteger("hmcoordy");
         int hmcoordz = nbt.getInteger("hmcoordz");
-        HMCoord = new ChunkPosition(hmcoordx, hmcoordy, hmcoordz);
+        HMCoord = new BlockPos(hmcoordx, hmcoordy, hmcoordz);
 
         outputMaxRFValue = nbt.getInteger("outputMaxRFValue");
         storedRFEnergy = nbt.getInteger("storedRFEnergy");
@@ -179,7 +181,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         boolean upToDate = false;
         if (!this.worldObj.isRemote && isActivated()) {
 
@@ -197,7 +199,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             //HugeMateria生成処理
             if (canMakeHugeMateria()) {
                 creatingHugeMateriaPoint -= MAX_HM_CREATING_COST;
-                setHugeMateria(HMCoord.chunkPosX, HMCoord.chunkPosY, HMCoord.chunkPosZ);
+                setHugeMateria(HMCoord);
             }
 
             //魔晄バケツ・マテリアからの搬入処理
@@ -237,6 +239,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
             this.markDirty();
         }
     }
+
     @Override
     public Packet getDescriptionPacket() {
         return super.getDescriptionPacket();
@@ -291,10 +294,10 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         int needToExtract;
         TileEntity neighborTile;
         int extractable;
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing direction : EnumFacing.values()) {
             extractable = Math.min(getOutputMaxRFValue(), getStoredRFEnergy());
             if (extractable <= 0) break;
-            neighborTile = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            neighborTile = this.worldObj.getTileEntity(this.getPos().offset(direction));
             if (CoopTE.isIEnergyHandler(neighborTile)) {
                 needToExtract = CoopTE.getNeedRF(neighborTile, direction, extractable);
                 extractEnergy(direction, needToExtract, false);
@@ -311,10 +314,10 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         int needToExtract;
         TileEntity neighborTile;
         int extractable;
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing direction : EnumFacing.values()) {
             extractable = Math.min(getOutputMaxRFValue(), getStoredRFEnergy());
             if (extractable <= 0) break;
-            neighborTile = this.worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            neighborTile = this.worldObj.getTileEntity(this.getPos().offset(direction));
             if (CoopSS.isGFEnergyHandler(neighborTile)) {
                 needToExtract = CoopSS.getNeedGF(neighborTile, direction, extractable);
                 drawEnergy(direction, GF_POWER, needToExtract, false);
@@ -343,21 +346,21 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         if (HMCoord == null) {
             return false;
         }
-        Block checkBlock;
+        IBlockState checkBlockState;
         int checkBlockMeta;
         int index;
         String blockName;
-        for (int y = -1 ; y <= 3; y++) {
-            for (int x = -1 ; x <= 1; x++) {
+        for (int y = -1; y <= 3; y++) {
+            for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
-                    checkBlock = worldObj.getBlock(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
-                    checkBlockMeta = worldObj.getBlockMetadata(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
+                    checkBlockState = worldObj.getBlockState(HMCoord.add(x, y, z));
+//                    checkBlockMeta = worldObj.getBlockMetadata(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
                     index = (x + 1) + (z + 1) * 3;
-                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 1 && !isBaseBlock(checkBlock, checkBlockMeta)) {
+                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 1 && !isBaseBlock(checkBlockState)) {
                         return false;
                     }
 
-                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 2 && !checkBlock.equals(Blocks.air)) {
+                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 2 && !checkBlockState.equals(Blocks.air)) {
                         return false;
                     }
                 }
@@ -366,12 +369,14 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         return true;
     }
 
-    public boolean isBaseBlock(Block checkBlock, int checkMeta) {
+    public boolean isBaseBlock(IBlockState state) {
+        Block checkBlock = state.getBlock();
+        int checkMeta = checkBlock.getMetaFromState(state);
         int[] oreIDs = OreDictionary.getOreIDs(getBaseBlockItemStack());
         ItemStack checkStack = new ItemStack(checkBlock, 1, checkMeta);
         if (oreIDs.length > 0) {
             for (int oreid : oreIDs) {
-                ArrayList<ItemStack> oreList = OreDictionary.getOres(OreDictionary.getOreName(oreid));
+                List<ItemStack> oreList = OreDictionary.getOres(OreDictionary.getOreName(oreid));
                 for (ItemStack itemStack : oreList) {
                     if (itemStack.isItemEqual(checkStack)) {
                         return true;
@@ -391,10 +396,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public boolean isPowered() {
-        return this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+        return this.worldObj.isBlockPowered(this.getPos());
     }
-
-
 
     public int getGeneratingRFMakoCost() {
         return getOutputMaxRFValue() / STEP_RF_VALUE;
@@ -402,8 +405,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     public boolean canMakeHugeMateria() {
         if (HMCoord == null) return false;
-        for (int i = 0; i < 3 ; i++) {
-            if (!worldObj.getBlock(HMCoord.chunkPosX, HMCoord.chunkPosY + i, HMCoord.chunkPosZ).equals(Blocks.air)) {
+        for (int i = 0; i < 3; i++) {
+            if (!worldObj.isAirBlock(HMCoord.offsetUp(i))) {
                 return false;
             }
         }
@@ -415,32 +418,29 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     public ItemStack getSmeltedItem(ItemStack itemStack) {
-        return FurnaceRecipes.smelting().getSmeltingResult(itemStack);
+        return FurnaceRecipes.instance().getSmeltingResult(itemStack);
     }
 
     public void setFace(byte var1) {
         this.face = var1;
-        ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[face]];
-        HMCoord = new ChunkPosition(xCoord + direction.offsetX * 2, yCoord, zCoord + direction.offsetZ * 2);
+        EnumFacing direction = EnumFacing.getFront(var1);
+        HMCoord = new BlockPos(this.getPos().getX() + direction.getFrontOffsetX() * 2, this.getPos().getY(), this.getPos().getZ() + direction.getFrontOffsetZ() * 2);
     }
 
-    public void setHugeMateria(int x, int y, int z) {
+    public void setHugeMateria(BlockPos blockPos) {
         Block hugeMateria = EnchantChanger.blockHugeMateria;
-        worldObj.setBlock(x, y, z, hugeMateria, 0, 1);
-        worldObj.setBlock(x, y + 1, z, hugeMateria, 1, 1);
-        worldObj.setBlock(x, y + 2, z, hugeMateria, 2, 1);
-        worldObj.notifyBlocksOfNeighborChange(x, y, z, hugeMateria);
-        worldObj.notifyBlocksOfNeighborChange(x, y + 1, z, hugeMateria);
-        worldObj.notifyBlocksOfNeighborChange(x, y + 2, z, hugeMateria);
+        worldObj.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 0));
+        worldObj.setBlockState(blockPos.offsetUp(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 1));
+        worldObj.setBlockState(blockPos.offsetUp(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 2));
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (side == 0) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        if (side == EnumFacing.DOWN) {
             return SLOTS_RESULT;
         }
 
-        if (side == 1) {
+        if (side == EnumFacing.UP) {
             return SLOTS_MATERIAL;
         }
 
@@ -448,13 +448,13 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack item, int side) {
+    public boolean canInsertItem(int slot, ItemStack item, EnumFacing side) {
         return this.isItemValidForSlot(slot, item);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return side != 1 || RANGE_FUEL_SLOTS.contains(slot) || item.getItem() instanceof ItemBucket;
+    public boolean canExtractItem(int slot, ItemStack item, EnumFacing side) {
+        return side != EnumFacing.UP || RANGE_FUEL_SLOTS.contains(slot) || item.getItem() instanceof ItemBucket;
     }
 
     @Override
@@ -509,12 +509,12 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "container.makoreactor";
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -525,22 +525,22 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64;
+        return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5D, 0.5D, 0.5D)) <= 64;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
     @SideOnly(Side.CLIENT)
     public int getFluidAmountScaled(int scale) {
-        return this.tank.getFluidAmount() * scale  / this.tank.getCapacity();
+        return this.tank.getFluidAmount() * scale / this.tank.getCapacity();
     }
 
     @SideOnly(Side.CLIENT)
@@ -563,7 +563,32 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public void clear() {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return null;
+    }
+
+    @Override
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (resource == null || resource.getFluid() == null) {
             return 0;
         }
@@ -578,7 +603,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null) {
             return null;
         }
@@ -589,36 +614,34 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return tank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return fluid.getBlock() instanceof EcBlockLifeStreamFluid && !tank.isFull();
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return fluid.getBlock() instanceof EcBlockLifeStreamFluid && !tank.isEmpty();
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         return new FluidTankInfo[]{tank.getInfo()};
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
-    public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+//    @Override
+    public int receiveEnergy(EnumFacing facing, int i, boolean b) {
         return 0;//発電のみ
     }
 
-    private int nowRF;
-
     @Optional.Method(modid = "CoFHCore")
-    @Override
-    public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+//    @Override
+    public int extractEnergy(EnumFacing facing, int i, boolean b) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), i));
         if (!b) {
             addRFEnergy(-extract);
@@ -628,23 +651,23 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
-    public int getEnergyStored(ForgeDirection forgeDirection) {
+//    @Override
+    public int getEnergyStored(EnumFacing facing) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
-    public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+//    @Override
+    public int getMaxEnergyStored(EnumFacing facing) {
         return MAX_RF_CAPACITY;
     }
 
-    @Optional.Method(modid = "CoFHCore")
-    @Override
-    public boolean canConnectEnergy(ForgeDirection forgeDirection) {
-        TileEntity tile = this.worldObj.getTileEntity(xCoord + forgeDirection.offsetX, yCoord + forgeDirection.offsetY, zCoord + forgeDirection.offsetZ);
-        return tile instanceof IEnergyConnection;
-    }
+//    @Optional.Method(modid = "CoFHCore")
+//    @Override
+//    public boolean canConnectEnergy(EnumFacing facing) {
+//        TileEntity tile = this.worldObj.getTileEntity(this.getPos().offset(facing));
+//        return tile instanceof IEnergyConnection;
+//    }
 
     public int getOutputMaxRFValue() {
         return outputMaxRFValue;
@@ -673,38 +696,38 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
+//    @Override
     public int getInfoEnergyPerTick() {
         return nowRF;
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
+//    @Override
     public int getInfoMaxEnergyPerTick() {
         return getOutputMaxRFValue();
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
+//    @Override
     public int getInfoEnergyStored() {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-    @Override
+//    @Override
     public int getInfoMaxEnergyStored() {
         return MAX_RF_CAPACITY;
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public int addEnergy(ForgeDirection from, int power, int speed, boolean simulate) {
+//    @Override
+    public int addEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         return 0;
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public int drawEnergy(ForgeDirection from, int power, int speed, boolean simulate) {
+//    @Override
+    public int drawEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), speed));
         if (!simulate) {
             addRFEnergy(-extract);
@@ -714,32 +737,32 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public boolean canInterface(ForgeDirection from) {
+//    @Override
+    public boolean canInterface(EnumFacing from) {
         return true;
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public int getPowerStored(ForgeDirection from) {
+//    @Override
+    public int getPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public long getSpeedStored(ForgeDirection from) {
+//    @Override
+    public long getSpeedStored(EnumFacing from) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public int getMaxPowerStored(ForgeDirection from) {
+//    @Override
+    public int getMaxPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-    @Override
-    public long getMaxSpeedStored(ForgeDirection from) {
+//    @Override
+    public long getMaxSpeedStored(EnumFacing from) {
         return MAX_RF_CAPACITY;
     }
 }

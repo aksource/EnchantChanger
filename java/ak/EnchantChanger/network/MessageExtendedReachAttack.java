@@ -1,9 +1,9 @@
 package ak.EnchantChanger.network;
 
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 /**
  * Created by A.K. on 14/08/20.
@@ -12,7 +12,8 @@ public class MessageExtendedReachAttack implements IMessage {
 
     private int entityId;
 
-    public MessageExtendedReachAttack(){}
+    public MessageExtendedReachAttack() {
+    }
 
     public MessageExtendedReachAttack(Entity entity) {
         this.entityId = entity.getEntityId();

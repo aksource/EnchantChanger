@@ -3,11 +3,11 @@ package ak.EnchantChanger.network;
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.item.EcItemCloudSword;
 import ak.MultiToolHolders.ItemMultiToolHolder;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 /**
  * Created by A.K. on 14/07/31.

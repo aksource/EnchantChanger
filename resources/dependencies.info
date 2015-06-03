@@ -1,6 +1,6 @@
 {
-"repo": "https://dl.dropboxusercontent.com/s/uzka4pg5ryx2qqx/",
-"file": "PotionExtension-1.0.1.jar",
-"dev": "PotionExtension-1.0.1-dev.jar",
+"repo": "https://dl.dropboxusercontent.com/s/pbnpd7ti9kcqwnj/",
+"file": "PotionExtension-1.8-1.0.4.jar",
+"dev": "PotionExtension-1.8-1.0.4-dev.jar",
 "class": "ak.potionextension.PotionExtensionCorePlugin"
 }
