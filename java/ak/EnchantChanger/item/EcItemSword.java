@@ -1,14 +1,18 @@
 package ak.EnchantChanger.item;
 
+import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.api.ICustomReachItem;
+import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.EnchantChanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -358,6 +362,21 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     @Override
     public double getReach(ItemStack itemStack) {
         return 4.0D;
+    }
+
+    @Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+        if (entityLiving.worldObj.isRemote) {
+            Minecraft mc = Minecraft.getMinecraft();
+            Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
+            MovingObjectPosition mop = ClientProxy.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
+            if (mop !=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && mop.entityHit != null) {
+                mc.objectMouseOver = mop;
+                mc.pointedEntity = mop.entityHit;
+                PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(mop.entityHit));
+            }
+        }
+        return super.onEntitySwing(entityLiving, stack);
     }
 
     //ServerOnly

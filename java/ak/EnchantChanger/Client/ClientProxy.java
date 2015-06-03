@@ -244,7 +244,8 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    @SubscribeEvent
+    //onEntitySwingで代用できる。
+//    @SubscribeEvent
     public void mouseHandlingEvent(InputEvent.MouseInputEvent event) {
         if (mc.gameSettings.keyBindAttack.getIsKeyPressed() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
             changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
@@ -260,13 +261,14 @@ public class ClientProxy extends CommonProxy {
                 mc.objectMouseOver = MOP;
                 Entity pointedEntity = MOP.entityHit;
                 if (pointedEntity instanceof EntityLivingBase || pointedEntity instanceof EntityItemFrame) {
+                    mc.pointedEntity = pointedEntity;
                     PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(pointedEntity));
                 }
             }
         }
     }
 
-    private MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
+    public static  MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
         MovingObjectPosition MOP = null;
         if (viewingEntity != null) {
             if (viewingEntity.worldObj != null) {
