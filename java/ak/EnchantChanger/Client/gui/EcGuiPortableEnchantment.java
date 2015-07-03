@@ -145,10 +145,10 @@ public class EcGuiPortableEnchantment extends GuiContainer {
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        EnchantmentNameParts.func_178176_a().reseedRandomGenerator(this.containerEnchantment.nameSeed);
+        EnchantmentNameParts.getInstance().reseedRandomGenerator(this.containerEnchantment.nameSeed);
 
         for (int i1 = 0; i1 < 3; ++i1) {
-            String s = EnchantmentNameParts.func_178176_a().generateNewRandomName();
+            String s = EnchantmentNameParts.getInstance().generateNewRandomName();
             this.zLevel = 0.0F;
             mc.getTextureManager().bindTexture(enchantingTableGuiTextures);
             int j1 = this.containerEnchantment.enchantLevels[i1];

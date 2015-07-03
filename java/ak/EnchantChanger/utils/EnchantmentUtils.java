@@ -68,7 +68,7 @@ public class EnchantmentUtils {
 
     public static int getEnchantmentId(ItemStack item) {
         int EnchantmentKind = 256;
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (EnchantmentHelper.getEnchantmentLevel(enchantment.effectId, item) > 0) {
                 EnchantmentKind = enchantment.effectId;
                 break;
@@ -104,18 +104,17 @@ public class EnchantmentUtils {
     }
 
     public static Enchantment getEnchantmentFromItemStack(ItemStack item) {
-        int EnchantmentKind = -1;
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (EnchantmentHelper.getEnchantmentLevel(enchantment.effectId, item) > 0) {
                 return enchantment;
             }
         }
-        return Enchantment.enchantmentsList[0];
+        return Enchantment.getEnchantmentById(0);
     }
 
     public static int getEnchantmentLv(ItemStack item) {
         int Lv = 0;
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (EnchantmentHelper.getEnchantmentLevel(enchantment.effectId, item) > 0) {
                 Lv = EnchantmentHelper.getEnchantmentLevel(enchantment.effectId, item);
                 break;
@@ -200,7 +199,7 @@ public class EnchantmentUtils {
         MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentTelepo);
         MAGIC_ENCHANTMENT.add(ConfigurationUtils.idEnchantmentThunder);
         makeMapFromArray(LEVEL_LIMIT_MAP, ConfigurationUtils.enchantmentLevelLimits);
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (enchantment != null) {
                 for (int lv = enchantment.getMinLevel(); lv <= enchantment.getMaxLevel(); lv++) {
                     ENCHANTMENT_DATA_SET.add(new EnchantmentData(enchantment, lv));
@@ -220,20 +219,20 @@ public class EnchantmentUtils {
         registerHugeMateria(0, new ItemStack(Items.milk_bucket), new ItemStack(EnchantChanger.itemMateria, 1, 6));
         registerHugeMateria(0, new ItemStack(Items.golden_boots), new ItemStack(EnchantChanger.itemMateria, 1, 7));
         registerHugeMateria(0, new ItemStack(Items.nether_wart), new ItemStack(EnchantChanger.itemMateria, 1, 8));
-        registerHugeMateria(1, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180310_c/*protection*/, 1));
+        registerHugeMateria(1, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.protection, 1));
         registerHugeMateria(1, new ItemStack(Items.blaze_powder), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireProtection, 1));
-        registerHugeMateria(1, new ItemStack(Items.feather), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180309_e/*featherFalling*/, 1));
+        registerHugeMateria(1, new ItemStack(Items.feather), getEnchantedItemStack(materiaStack.copy(), Enchantment.featherFalling, 1));
         registerHugeMateria(1, new ItemStack(Items.gunpowder), getEnchantedItemStack(materiaStack.copy(), Enchantment.blastProtection, 1));
-        registerHugeMateria(1, new ItemStack(Items.arrow), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180308_g/*projectileProtection*/, 1));
+        registerHugeMateria(1, new ItemStack(Items.arrow), getEnchantedItemStack(materiaStack.copy(), Enchantment.projectileProtection, 1));
         registerHugeMateria(1, new ItemStack(Blocks.cactus), getEnchantedItemStack(materiaStack.copy(), Enchantment.thorns, 1));
-        registerHugeMateria(2, new ItemStack(Items.reeds), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180317_h/*respiration*/, 1));
+        registerHugeMateria(2, new ItemStack(Items.reeds), getEnchantedItemStack(materiaStack.copy(), Enchantment.respiration, 1));
         registerHugeMateria(2, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.aquaAffinity, 1));
         registerHugeMateria(2, new ItemStack(Items.fishing_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.luckOfTheSea, 1));
         registerHugeMateria(2, new ItemStack(Items.carrot_on_a_stick), getEnchantedItemStack(materiaStack.copy(), Enchantment.lure, 1));
-        registerHugeMateria(3, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180314_l/*sharpness*/, 1));
-        registerHugeMateria(3, new ItemStack(Items.flint_and_steel), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180315_m/*smite*/, 1));
-        registerHugeMateria(3, new ItemStack(Items.spider_eye), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180312_n/*baneOfArthropods*/, 1));
-        registerHugeMateria(3, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.field_180313_o/*knockback*/, 1));
+        registerHugeMateria(3, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.sharpness, 1));
+        registerHugeMateria(3, new ItemStack(Items.flint_and_steel), getEnchantedItemStack(materiaStack.copy(), Enchantment.smite, 1));
+        registerHugeMateria(3, new ItemStack(Items.spider_eye), getEnchantedItemStack(materiaStack.copy(), Enchantment.baneOfArthropods, 1));
+        registerHugeMateria(3, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.knockback, 1));
         registerHugeMateria(3, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireAspect, 1));
         registerHugeMateria(3, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.looting, 1));
         registerHugeMateria(4, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.efficiency, 1));

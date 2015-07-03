@@ -81,7 +81,7 @@ public class EcContainerMateriaWindow extends Container {
                     id = enchantments.getCompoundTagAt(i).getShort("id");
                     dmg = this.setMateriaDmgfromEnch(id);
                     materia = new ItemStack(EnchantChanger.itemMateria, 1, dmg);
-                    EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.func_180306_c(id), lv);
+                    EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.getEnchantmentById(id), lv);
                     this.materiaInventory.setInventorySlotContents(slotnum, materia);
                     slotnum++;
                 }

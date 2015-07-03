@@ -157,14 +157,14 @@ public class EcItemMateria extends EcItem {
         Vec3 playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
         MovingObjectPosition MOP = world.rayTraceBlocks(playerPosition, playerLookVec, false);
         if (MOP != null && MOP.typeOfHit == MovingObjectType.BLOCK) {
-            EnumFacing blockSide = MOP.field_178784_b;
+            EnumFacing blockSide = MOP.sideHit;
 //            ForgeDirection direction = ForgeDirection.getOrientation(blockSide);
 //			double blockPosX = MOP.blockX + 0.5D + direction.offsetX;
 //			double blockPosY = MOP.blockY + direction.offsetY;
 //			double blockPosZ = MOP.blockZ + 0.5D + direction.offsetZ;
-            BlockPos blockPos = MOP.func_178782_a();
+            BlockPos blockPos = MOP.getBlockPos();
             if (blockSide == EnumFacing.DOWN) {
-                blockPos = blockPos.offsetDown(2);
+                blockPos = blockPos.down(2);
             } else {
                 blockPos = blockPos.offset(blockSide);
             }
@@ -354,7 +354,7 @@ public class EcItemMateria extends EcItem {
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List itemList) {
         itemList.add(new ItemStack(this, 1, 0));
         ItemStack stack1, stack2, /*stack3, */stack4;
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (enchantment != null && !this.isMagicEnch(enchantment)) {
                 stack1 = new ItemStack(this, 1, 0);
                 stack1.addEnchantment(enchantment, 1);
@@ -446,9 +446,9 @@ public class EcItemMateria extends EcItem {
         if (EnchantmentKind == 256)
             return 0;
         if (Lv < 5 || ConfigurationUtils.difficulty == 0) {
-            return Enchantment.func_180306_c(EnchantmentKind).getMinEnchantability(Lv + nextLv);
+            return Enchantment.getEnchantmentById(EnchantmentKind).getMinEnchantability(Lv + nextLv);
         } else {
-            return Enchantment.func_180306_c(EnchantmentKind).getMaxEnchantability(Lv + nextLv);
+            return Enchantment.getEnchantmentById(EnchantmentKind).getMaxEnchantability(Lv + nextLv);
         }
     }
 

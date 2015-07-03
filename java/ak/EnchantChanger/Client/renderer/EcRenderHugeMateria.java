@@ -3,6 +3,7 @@ package ak.EnchantChanger.Client.renderer;
 import ak.EnchantChanger.Client.models.EcModelHMateria;
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -38,7 +39,7 @@ public class EcRenderHugeMateria extends TileEntitySpecialRenderer {
         float angle = par1TileEntity.angle;
         float height = MathHelper.sin(angle);
         bindTexture(tex);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 //		GL11.glEnable(GL11.GL_BLEND);
 //		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 //		GL11.glTranslated(par2 + 0.45, par4-0.1, par6 + 0.45);

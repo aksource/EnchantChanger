@@ -125,8 +125,8 @@ public class RenderingOverlayEvent {
     private void renderInventorySlot(ItemStack itemstack, int par2, int par3) {
         if (itemstack != null) {
             RenderHelper.enableGUIStandardItemLighting();
-            itemRenderer.func_180450_b(itemstack, par2, par3);//Itemの描画
-            itemRenderer.func_175030_a(this.mc.fontRendererObj, itemstack, par2, par3);//耐久値の描画           RenderHelper.disableStandardItemLighting();
+            itemRenderer.renderItemAndEffectIntoGUI(itemstack, par2, par3);//Itemの描画
+            itemRenderer.renderItemOverlays(this.mc.fontRendererObj, itemstack, par2, par3);//耐久値の描画           RenderHelper.disableStandardItemLighting();
             String s = itemstack.getDisplayName();
             this.mc.fontRendererObj.drawString(s, par2 + 16, par3 + 4, 0xFFFFFF);
         }

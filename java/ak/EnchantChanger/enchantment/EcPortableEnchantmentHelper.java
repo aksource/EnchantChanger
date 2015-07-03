@@ -147,7 +147,7 @@ public class EcPortableEnchantmentHelper {
                                 if (var15.hasNext()) {
                                     EnchantmentData var16 = (EnchantmentData) var15.next();
 
-                                    if (var16.enchantmentobj.canApplyTogether(Enchantment.enchantmentsList[var13])) {
+                                    if (var16.enchantmentobj.canApplyTogether(Enchantment.getEnchantmentById(var13))) {
                                         continue;
                                     }
 
@@ -180,7 +180,7 @@ public class EcPortableEnchantmentHelper {
      */
     public static Map mapEnchantmentData(int par0, ItemStack par1ItemStack) {
         HashMap<Integer, EnchantmentData> var3 = new HashMap<>();
-        Enchantment[] var4 = Enchantment.enchantmentsList;
+        Enchantment[] var4 = Enchantment.enchantmentsBookList;
 
         for (Enchantment enchantment : var4) {
             if (enchantment != null && enchantment.canApplyAtEnchantingTable(par1ItemStack)) {

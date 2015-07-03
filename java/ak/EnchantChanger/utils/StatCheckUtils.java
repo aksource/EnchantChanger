@@ -20,6 +20,6 @@ public class StatCheckUtils {
 
     public static int getStaticData(EntityPlayerMP entityPlayerMP, StatBase statBase) {
         StatisticsFile statisticsFile = entityPlayerMP.getStatFile();
-        return statisticsFile.writeStat(statBase);
+        return statisticsFile.readStat(statBase);
     }
 }

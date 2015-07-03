@@ -209,7 +209,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
                     var4 = this.getEnchantmentModifierLiving(stack, player,
                             (EntityLivingBase) par1Entity);
                     var3 += EnchantmentHelper.getEnchantmentLevel(
-                            Enchantment.field_180313_o/*knockback*/.effectId, stack);
+                            Enchantment.knockback.effectId, stack);
                 }
 
                 if (player.isSprinting()) {
@@ -342,9 +342,9 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
                     short short2 = nbttaglist.getCompoundTagAt(i)
                             .getShort("lvl");
 
-                    if (Enchantment.func_180306_c(short1) != null) {
-                        calc += Enchantment.func_180306_c(short1)
-                                .func_152376_a(short2, enemy.getCreatureAttribute());
+                    if (Enchantment.getEnchantmentById(short1) != null) {
+                        calc += Enchantment.getEnchantmentById(short1)
+                                .calcDamageByCreature(short2, enemy.getCreatureAttribute());
                     }
                 }
             }

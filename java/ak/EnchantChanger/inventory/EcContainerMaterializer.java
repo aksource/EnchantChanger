@@ -169,7 +169,7 @@ public class EcContainerMaterializer extends Container {
                         enchTagList.getCompoundTagAt(i).setInteger("ap", 0);
                         var1 = enchTagList.getCompoundTagAt(i).getShort("id");
                         var2 = enchTagList.getCompoundTagAt(i).getShort("lvl");
-                        this.itemEnchantmentLvPair.add(new EnchantmentLvPair(Enchantment.func_180306_c(var1), var2));
+                        this.itemEnchantmentLvPair.add(new EnchantmentLvPair(Enchantment.getEnchantmentById(var1), var2));
                         if (i >= 8) {
                             EnchantmentUtils.addEnchantmentToItem(result, itemEnchantmentLvPair.get(i).enchantment, itemEnchantmentLvPair.get(i).lv);
                         }
@@ -228,7 +228,7 @@ public class EcContainerMaterializer extends Container {
                 }
                 this.itemEnchantmentLvPair.clear();
                 for (int i2 = 0; i2 < this.enchantmentList.size(); i2++) {
-                    EnchantmentUtils.addEnchantmentToItem(result, Enchantment.func_180306_c(this.enchantmentList.get(i2)), this.enchantmentLevelList.get(i2));
+                    EnchantmentUtils.addEnchantmentToItem(result, Enchantment.getEnchantmentById(this.enchantmentList.get(i2)), this.enchantmentLevelList.get(i2));
                 }
 
                 result = EnchantmentUtils.getBookResult(result, enchantmentList);

@@ -53,8 +53,8 @@ public class EcRenderApOrb extends Render {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.startDrawingQuads();
-        worldrenderer.func_178974_a/*setColorRGBA_I*/(k1, 128);
-        worldrenderer.func_178980_d/*setNormal*/(0.0F, 1.0F, 0.0F);
+        worldrenderer.setColorRGBA_I(k1, 128);
+        worldrenderer.setNormal(0.0F, 1.0F, 0.0F);
         worldrenderer.addVertexWithUV((double) (0.0F - f7), (double) (0.0F - f8), 0.0D, (double) f2, (double) f5);
         worldrenderer.addVertexWithUV((double) (f6 - f7), (double) (0.0F - f8), 0.0D, (double) f3, (double) f5);
         worldrenderer.addVertexWithUV((double) (f6 - f7), (double) (1.0F - f8), 0.0D, (double) f3, (double) f4);
