@@ -6,6 +6,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.ResourceLocation;
 
+@Deprecated
 public class EcEnchantmentHoly extends Enchantment {
     public EcEnchantmentHoly(int var1, int var2) {
         super(var1, new ResourceLocation(Constants.EcTextureDomain + "holy"), var2, EnumEnchantmentType.WEAPON);

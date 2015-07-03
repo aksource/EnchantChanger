@@ -6,6 +6,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.ResourceLocation;
 
+@Deprecated
 public class EcEnchantmentMeteo extends Enchantment {
     public EcEnchantmentMeteo(int var1, int var2) {
         super(var1, new ResourceLocation(Constants.EcTextureDomain + "meteor"), var2, EnumEnchantmentType.WEAPON);
