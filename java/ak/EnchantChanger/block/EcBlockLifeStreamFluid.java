@@ -12,6 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 
@@ -22,7 +23,7 @@ import java.util.Random;
 /**
  * Created by A.K. on 14/03/06.
  */
-public class EcBlockLifeStreamFluid extends BlockFluidFinite {
+public class EcBlockLifeStreamFluid extends BlockFluidClassic {
 
     public EcBlockLifeStreamFluid(Fluid fluid, Material material) {
         super(fluid, material);
