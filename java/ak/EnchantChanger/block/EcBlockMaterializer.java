@@ -38,6 +38,11 @@ public class EcBlockMaterializer extends BlockContainer {
     }
 
     @Override
+    public int getRenderType() {
+        return 3;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, BlockPos blockPos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (ConfigurationUtils.difficulty < 2 || checkCost(player)) {
             player.openGui(EnchantChanger.instance, 0, world, blockPos.getX(), blockPos.getY(), blockPos.getZ());
