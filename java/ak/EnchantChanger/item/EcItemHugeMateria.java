@@ -4,6 +4,7 @@ import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.block.EcBlockHugeMateria;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -25,36 +26,42 @@ public class EcItemHugeMateria extends EcItem {
         }
         BlockPos settingPos2 = settingPos.up();
         BlockPos settingPos3 = settingPos.up(2);
-//		switch(par7)
-//		{
-//		case 0:par5-=3;break;
-//		case 1:par5++;break;
-//		case 2:par6--;break;
-//		case 3:par6++;break;
-//		case 4:par4--;break;
-//		case 5:par4++;break;
-//		}
+
         Block hugeMateria = EnchantChanger.blockHugeMateria;
         if (par2EntityPlayer.canPlayerEdit(settingPos, par7, par1ItemStack)
                 && par2EntityPlayer.canPlayerEdit(settingPos2, par7, par1ItemStack)
-                && par2EntityPlayer.canPlayerEdit(settingPos3, par7, par1ItemStack)) {
+                && par2EntityPlayer.canPlayerEdit(settingPos3, par7, par1ItemStack)
+                && par3World.canBlockBePlaced(hugeMateria, settingPos, false, par7, (Entity)null, par1ItemStack)
+                && par3World.canBlockBePlaced(hugeMateria, settingPos2, false, par7, (Entity)null, par1ItemStack)
+                && par3World.canBlockBePlaced(hugeMateria, settingPos3, false, par7, (Entity)null, par1ItemStack)) {
             if (!hugeMateria.canPlaceBlockAt(par3World, settingPos)
                     || !hugeMateria.canPlaceBlockAt(par3World, settingPos2)
                     || !hugeMateria.canPlaceBlockAt(par3World, settingPos3)) {
                 return false;
             }
-            IBlockState blockState = hugeMateria.onBlockPlaced(par3World, blockPos, par7, par8, par9, par10, 0, par2EntityPlayer);
-            par3World.setBlockState(settingPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 0));
-            par3World.setBlockState(settingPos2, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 1));
-            par3World.setBlockState(settingPos3, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 2));
-//				par3World.setBlock(par4, par5, par6, hugeMateria, 0, 1);
-//				par3World.setBlock(par4, par5 + 1, par6, hugeMateria, 1, 1);
-//				par3World.setBlock(par4, par5 + 2, par6, hugeMateria, 2, 1);
-//				par3World.notifyBlocksOfNeighborChange(par4, par5, par6, hugeMateria);
-//				par3World.notifyBlocksOfNeighborChange(par4, par5 + 1, par6, hugeMateria);
-//				par3World.notifyBlocksOfNeighborChange(par4, par5 + 2, par6, hugeMateria);
-            --par1ItemStack.stackSize;
-                return true;
+            IBlockState blockState0 = hugeMateria.onBlockPlaced(par3World, settingPos, par7, par8, par9, par10, 0, par2EntityPlayer);
+            IBlockState blockState1 = hugeMateria.onBlockPlaced(par3World, settingPos2, par7, par8, par9, par10, 1, par2EntityPlayer);
+            IBlockState blockState2 = hugeMateria.onBlockPlaced(par3World, settingPos3, par7, par8, par9, par10, 2, par2EntityPlayer);
+            boolean flag0 = par3World.setBlockState(settingPos, blockState0, 1);
+            boolean flag1 = par3World.setBlockState(settingPos2, blockState1, 1);
+            boolean flag2 = par3World.setBlockState(settingPos3, blockState2, 1);
+
+            if (flag0 && flag1 && flag2) {
+                par3World.playSoundEffect(
+                        (double)((float)blockPos.getX() + 0.5F),
+                        (double)((float)blockPos.getY() + 0.5F),
+                        (double)((float)blockPos.getZ() + 0.5F),
+                        hugeMateria.stepSound.getPlaceSound(),
+                        (hugeMateria.stepSound.getVolume() + 1.0F) / 2.0F,
+                        hugeMateria.stepSound.getFrequency() * 0.8F);
+
+                par3World.notifyBlockOfStateChange(settingPos, hugeMateria);
+                par3World.notifyBlockOfStateChange(settingPos2, hugeMateria);
+                par3World.notifyBlockOfStateChange(settingPos3, hugeMateria);
+                --par1ItemStack.stackSize;
+            }
+
+            return true;
         } else {
             return false;
         }

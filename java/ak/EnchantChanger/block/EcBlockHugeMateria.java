@@ -8,6 +8,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,11 +27,12 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class EcBlockHugeMateria extends BlockContainer {
     public static final IProperty propertyParts = PropertyInteger.create("part", 0, 2);
-    private ExtendedBlockState state = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
+    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
     public EcBlockHugeMateria() {
         super(Material.rock);
@@ -53,17 +55,22 @@ public class EcBlockHugeMateria extends BlockContainer {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
-        B3DLoader.B3DState defaultState = ((B3DLoader.Wrapper) model).getDefaultState();
-        return ((IExtendedBlockState) this.state.getBaseState()).withProperty(B3DLoader.B3DFrameProperty.instance, defaultState);
+        try {
+            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
+            B3DLoader.B3DState defaultState = ((B3DLoader.Wrapper) model).getDefaultState();
+            return ((IExtendedBlockState) this.extendedState.getBaseState()).withProperty(B3DLoader.B3DFrameProperty.instance, defaultState);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return this.extendedState.getBaseState();
+        }
     }
 
     @Override
     public boolean onBlockActivated(World par1World, BlockPos blockPos, IBlockState state1, EntityPlayer par5EntityPlayer, EnumFacing par6, float par7, float par8, float par9) {
         if (par1World.isRemote) {
             return true;
-        } else if (par1World.getBlockState(blockPos.offsetDown()).getBlock() == this && (Integer) state1.getValue(propertyParts) != 0) {
-            return this.onBlockActivated(par1World, blockPos.offsetDown(), par1World.getBlockState(blockPos.offsetDown()), par5EntityPlayer, par6, par7, par8, par9);
+        } else if (par1World.getBlockState(blockPos.down()).getBlock() == this && (Integer) state1.getValue(propertyParts) != 0) {
+            return this.onBlockActivated(par1World, blockPos.down(), par1World.getBlockState(blockPos.down()), par5EntityPlayer, par6, par7, par8, par9);
         } else {
             if (par1World.getTileEntity(blockPos) != null)
                 par5EntityPlayer.openGui(EnchantChanger.instance, Constants.GUI_ID_HUGE_MATERIA, par1World, blockPos.getX(), blockPos.getY(), blockPos.getZ());
@@ -78,22 +85,22 @@ public class EcBlockHugeMateria extends BlockContainer {
 
         if (var6 != 0) {
             if (var6 == 1) {
-                if (par1World.getBlockState(blockPos.offsetDown()) != this || par1World.getBlockState(blockPos.offsetUp()) != this) {
+                if (par1World.getBlockState(blockPos.down()).getBlock() != this || par1World.getBlockState(blockPos.up()).getBlock() != this) {
                     par1World.setBlockToAir(blockPos);
                 }
                 if (par5 != this) {
-                    this.onNeighborBlockChange(par1World, blockPos.offsetDown(), par1World.getBlockState(blockPos.offsetDown()), par5);
-                    this.onNeighborBlockChange(par1World, blockPos.offsetUp(), par1World.getBlockState(blockPos.offsetUp()), par5);
+                    this.onNeighborBlockChange(par1World, blockPos.down(), par1World.getBlockState(blockPos.down()), par5);
+                    this.onNeighborBlockChange(par1World, blockPos.up(), par1World.getBlockState(blockPos.up()), par5);
                 }
             } else {//var6 ==2
-                if (par1World.getBlockState(blockPos.offsetDown()).getBlock() != this) {
+                if (par1World.getBlockState(blockPos.down()).getBlock() != this) {
                     par1World.setBlockToAir(blockPos);
                 }
             }
         } else {
             boolean var7 = false;
 
-            if (par1World.getBlockState(blockPos.offsetUp()).getBlock() != this) {
+            if (par1World.getBlockState(blockPos.up()).getBlock() != this) {
                 par1World.setBlockToAir(blockPos);
                 var7 = true;
             }
@@ -145,5 +152,21 @@ public class EcBlockHugeMateria extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
         return var2 == 0 ? new EcTileEntityHugeMateria() : null;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        IBlockState blockState = super.getStateFromMeta(meta);
+        return blockState.withProperty(propertyParts, meta);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return (Integer)state.getValue(propertyParts);
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, propertyParts);
     }
 }
