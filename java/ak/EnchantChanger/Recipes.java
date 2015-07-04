@@ -24,7 +24,7 @@ public class Recipes {
 
     public static void init() {
         ItemStack[] materiaArray = new ItemStack[256];
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (enchantment != null) {
                 materiaArray[enchantment.effectId] = new ItemStack(EnchantChanger.itemMateria);
                 materiaArray[enchantment.effectId].addEnchantment(enchantment, enchantment.getMaxLevel());
