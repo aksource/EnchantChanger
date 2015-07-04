@@ -31,12 +31,12 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
     }
 
     @Override
-    protected float func_70182_d() {
+    protected float getVelocity() {
         return 0.7F;
     }
 
     @Override
-    protected float func_70183_g() {
+    protected float getInaccuracy() {
         return -20.0F;
     }
 
