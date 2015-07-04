@@ -230,7 +230,7 @@ public class EcEntityApOrb extends Entity {
             prevAp = enchantList.getCompoundTagAt(j).getInteger("ap");
             enchantmentId = enchantList.getCompoundTagAt(j).getShort("id");
             enchantmentLv = enchantList.getCompoundTagAt(j).getShort("lvl");
-            if (checkLevelLimit(Enchantment.func_180306_c(enchantmentId), enchantmentLv) || EnchantmentUtils.MAGIC_ENCHANTMENT.contains(Integer.valueOf((int) enchantmentId))) {
+            if (checkLevelLimit(Enchantment.getEnchantmentById(enchantmentId), enchantmentLv) || EnchantmentUtils.MAGIC_ENCHANTMENT.contains(Integer.valueOf((int) enchantmentId))) {
                 continue;
             }
             nowAp = prevAp + this.apValue;
