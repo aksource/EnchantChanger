@@ -14,12 +14,12 @@ public class MateriaTeleporter extends Teleporter {
 
     //placeInPortal
     @Override
-    public void func_180266_a(Entity par1Entity, float par8) {
+    public void placeInPortal(Entity par1Entity, float par8) {
         par1Entity.motionX = par1Entity.motionY = par1Entity.motionZ = 0.0D;
 
         int x = (int) par1Entity.posX;
         int z = (int) par1Entity.posZ;
-        BlockPos blockPos = par1Entity.worldObj.func_175672_r(new BlockPos(par1Entity.posX, par1Entity.posY, par1Entity.posZ));
+        BlockPos blockPos = par1Entity.worldObj.getTopSolidOrLiquidBlock(new BlockPos(par1Entity.posX, par1Entity.posY, par1Entity.posZ));
         par1Entity.moveToBlockPosAndAngles(blockPos, 0, 0);
         par1Entity.fallDistance = 0;
     }
