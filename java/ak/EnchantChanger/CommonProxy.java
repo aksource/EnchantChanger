@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler {
 
+    public void registerPreRenderInformation() {}
+
     public void registerRenderInformation() {}
 
     public void registerTileEntitySpecialRenderer() {}

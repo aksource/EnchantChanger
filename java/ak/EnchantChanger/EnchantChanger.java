@@ -24,6 +24,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -42,6 +43,7 @@ import static ak.EnchantChanger.Recipes.registerRecipes;
 import static ak.EnchantChanger.utils.ConfigurationUtils.enableDungeonLoot;
 import static ak.EnchantChanger.utils.ConfigurationUtils.initConfig;
 import static ak.EnchantChanger.utils.RegistrationUtils.*;
+import static ak.EnchantChanger.api.Constants.*;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
 public class EnchantChanger {
@@ -116,13 +118,15 @@ public class EnchantChanger {
         blockEnchantChanger = (new EcBlockMaterializer()).setUnlocalizedName("EnchantChanger").setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "EnchantChanger-top")*/.setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
         blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0).setUnlocalizedName("blockHugeMateria")/*.setBlockTextureName("glass")*/;
         itemHugeMateria = new EcItemHugeMateria("HugeMateria");
-        fluidLifeStream = new Fluid("lifestream").setLuminosity(15);
+        fluidLifeStream = new Fluid("lifestream", LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
+        FluidRegistry.registerFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako).setUnlocalizedName("lifestream");
-        itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         blockMakoReactor = new EcBlockMakoReactor().setUnlocalizedName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "makoreactor-side")*/;
+        itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
 
         registerBlockAndItem();
         registerEnchantments();
+        proxy.registerPreRenderInformation();
         PacketHandler.init();
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
@@ -145,11 +149,11 @@ public class EnchantChanger {
         registerEntities(this);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-        proxy.registerRenderInformation();
         proxy.registerTileEntitySpecialRenderer();
 
         registerRecipes();
 
+        proxy.registerRenderInformation();
         if (enableDungeonLoot) {
             GenerateHandler.DungeonLootItemResist();
         }

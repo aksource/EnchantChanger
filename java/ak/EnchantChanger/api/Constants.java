@@ -2,6 +2,7 @@ package ak.EnchantChanger.api;
 
 import ak.EnchantChanger.CreativeTabEC;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Created by A.K. on 14/10/12.
@@ -22,8 +23,16 @@ public class Constants {
     public static final String EcGuiMateriaWindow = "textures/gui/MaterializingContainer.png";
     public static final String EcPotionEffect = "textures/gui/potioneffect.png";
     public static final String EcHugetex = "textures/item/hugemateriatex.png";
+    public static final String FLUID_LIFESTREAM_STILL = "blocks/lifestream_still";
+    public static final ResourceLocation LIFESTREAM_STILL_RL = new ResourceLocation(MOD_ID, FLUID_LIFESTREAM_STILL);
+    public static final String FLUID_LIFESTREAM_FLOW = "blocks/lifestream_flow";
+    public static final ResourceLocation LIFESTREAM_FLOW_RL = new ResourceLocation(MOD_ID, FLUID_LIFESTREAM_FLOW);
     public static final String EcTextureDomain = "enchantchanger:";
     public static final String EcAssetsDomain = "enchantchanger";
+    public static final String MODEL_TYPE_INVENTORY = "inventory";
+    public static final String MODEL_TYPE_FLUID = "fluid";
+    public static final String MODEL_TYPE_GAS = "gas";
+
     public static final byte MagicKEY = 0;
     public static final byte MateriaKEY = 1;
     public static final byte CtrlKEY = 2;

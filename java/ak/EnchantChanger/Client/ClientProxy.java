@@ -101,6 +101,22 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public void registerPreRenderInformation() {
+        //1.8からのモデル登録。
+        B3DLoader.instance.addDomain(Constants.MOD_ID);
+//        registerCustomItemModel(EnchantChanger.itemZackSword, 0, "zacksword"/*"bustersword.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.ItemCloudSwordCore, 0, "cloudswordcore"/*"firstsword.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemCloudSword, 0, "cloudsword"/*"unionsword.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemMateria, 0, "materia"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemMasterMateria, 0, "mastermateria"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemSephirothSword, 0, "masamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemImitateSephirothSword, 0, "imitationmasamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
+//        registerCustomItemModel(EnchantChanger.itemUltimateWeapon, 0, "ultimateweapon"/*"ultimateweapon.b3d"*/, MODEL_TYPE_INVENTORY);
+        registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
+        registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
+    }
+
+    @Override
     public void registerRenderInformation() {
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
         RenderingRegistry.registerEntityRenderingHandler(
@@ -116,17 +132,6 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
 
-        //1.8からのモデル登録。
-        B3DLoader.instance.addDomain(Constants.MOD_ID);
-//        registerCustomItemModel(EnchantChanger.itemZackSword, 0, "zacksword"/*"bustersword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.ItemCloudSwordCore, 0, "cloudswordcore"/*"firstsword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemCloudSword, 0, "cloudsword"/*"unionsword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemMateria, 0, "materia"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemMasterMateria, 0, "mastermateria"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemSephirothSword, 0, "masamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemImitateSephirothSword, 0, "imitationmasamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemUltimateWeapon, 0, "ultimateweapon"/*"ultimateweapon.b3d"*/, MODEL_TYPE_INVENTORY);
-
         registerItemModel(itemZackSword, 0);
         registerItemModel(ItemCloudSwordCore, 0);
         registerItemModel(itemCloudSword, 0);
@@ -141,9 +146,7 @@ public class ClientProxy extends CommonProxy {
         registerItemModel(itemBucketLifeStream, 0);
         registerItemModel(itemPortableEnchantChanger, 0);
         registerItemModel(itemPortableEnchantmentTable, 0);
-//        registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY);
-        registerBlockModel(blockHugeMateria, 0);
-        registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID);
+//        registerBlockModel(blockHugeMateria, 0);
         registerBlockModel(blockEnchantChanger, 0);
         registerBlockModel(blockMakoReactor, 0);
 
@@ -347,12 +350,6 @@ public class ClientProxy extends CommonProxy {
     }
 
 //    @SubscribeEvent
-    public void textureStitch(TextureStitchEvent.Post event) {
-        IBakedModel lifeStreamModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(EnchantChanger.blockLifeStream));
-        EnchantChanger.fluidLifeStream.setIcons(lifeStreamModel.getTexture());
-    }
-
-//    @SubscribeEvent
 //    public void bakedModelRegister(ModelBakeEvent event) {
 //
 //    }
@@ -361,20 +358,24 @@ public class ClientProxy extends CommonProxy {
         modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(Item.getItemFromBlock(block).getUnlocalizedName()), new ModelFluid(fluid));
     }
 
-    private void registerCustomBlockModel(Block block, int meta, String modelLocation, String type) {
-        registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type);
+    private void registerCustomBlockModel(Block block, int meta, String modelLocation, String type, boolean noModelLoc) {
+        registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type, noModelLoc);
         if (type.equals(MODEL_TYPE_FLUID)) {
             ModelResourceLocation modelResourceLocation = MODEL_RESOURCE_LOCATION_MAP.get(block.getUnlocalizedName());
             ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocation));
         }
     }
 
-    private void registerCustomItemModel(Item item, int meta, String modelLocation, String type) {
-        ModelBakery.addVariantName(item, modelLocation);
+    private void registerCustomItemModel(Item item, int meta, String modelLocation, String type, boolean noModelLoc) {
+        if (noModelLoc) {
+            ModelBakery.addVariantName(item);
+        } else {
+            ModelBakery.addVariantName(item, modelLocation);
+        }
         String itemName = item.getUnlocalizedName();
         ModelResourceLocation modelResourceLocation = setModelRsrcToMap(itemName, modelLocation, type);
-        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
-//        ModelLoader.setCustomMeshDefinition(item, new CustomItemMeshDefinition(modelResourceLocation));
+//        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
+        ModelLoader.setCustomMeshDefinition(item, new CustomItemMeshDefinition(modelResourceLocation));
         //EnchantChanger.logger.info("added ModelLocation of " + Constants.EcAssetsDomain + ":" + modelLocation);
     }
 
@@ -383,7 +384,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemModel(Item item, int meta) {
-        mc.getRenderItem().getItemModelMesher().register(item, meta, new ModelResourceLocation(GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY));
+        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY);
+        mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
     }
 
     private ModelResourceLocation setModelRsrcToMap(String objName, String modelLocation, String type) {
