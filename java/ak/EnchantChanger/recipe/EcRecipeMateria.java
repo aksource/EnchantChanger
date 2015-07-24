@@ -85,7 +85,7 @@ public class EcRecipeMateria implements IRecipe {
     }
 
     @Override
-    public ItemStack[] func_179532_b(InventoryCrafting inventoryCrafting) {
+    public ItemStack[] getRemainingItems(InventoryCrafting inventoryCrafting) {
         ItemStack[] aitemstack = new ItemStack[inventoryCrafting.getSizeInventory()];
 
         for (int i = 0; i < aitemstack.length; ++i) {

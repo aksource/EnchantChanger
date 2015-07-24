@@ -38,11 +38,11 @@ public class FillBucketHook {
 
     private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
 
-        Block block = world.getBlockState(pos.func_178782_a()/*getBlockPoa*/).getBlock();
+        Block block = world.getBlockState(pos.getBlockPos()).getBlock();
 
         Item bucket = buckets.get(block);
-        if (bucket != null && (Integer) world.getBlockState(pos.func_178782_a()).getValue(BlockFluidBase.LEVEL) == 0) {
-            world.setBlockToAir(pos.func_178782_a());
+        if (bucket != null && (Integer) world.getBlockState(pos.getBlockPos()).getValue(BlockFluidBase.LEVEL) == 0) {
+            world.setBlockToAir(pos.getBlockPos());
             return new ItemStack(bucket);
         } else
             return null;

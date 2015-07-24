@@ -406,7 +406,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
     public boolean canMakeHugeMateria() {
         if (HMCoord == null) return false;
         for (int i = 0; i < 3; i++) {
-            if (!worldObj.isAirBlock(HMCoord.offsetUp(i))) {
+            if (!worldObj.isAirBlock(HMCoord.up(i))) {
                 return false;
             }
         }
@@ -430,8 +430,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
     public void setHugeMateria(BlockPos blockPos) {
         Block hugeMateria = EnchantChanger.blockHugeMateria;
         worldObj.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 0));
-        worldObj.setBlockState(blockPos.offsetUp(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 1));
-        worldObj.setBlockState(blockPos.offsetUp(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 2));
+        worldObj.setBlockState(blockPos.up(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 1));
+        worldObj.setBlockState(blockPos.up(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 2));
     }
 
     @Override
