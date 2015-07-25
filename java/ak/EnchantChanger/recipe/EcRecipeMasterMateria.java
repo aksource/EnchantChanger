@@ -79,7 +79,7 @@ public class EcRecipeMasterMateria implements IRecipe {
     public boolean checkEnch(ItemStack materia, int num) {
         boolean ret = false;
         for (int i : enchantmentRecipeList[num]) {
-            if (EnchantmentHelper.getEnchantmentLevel(i, materia) >= Enchantment.func_180306_c(i).getMaxLevel()) {
+            if (EnchantmentHelper.getEnchantmentLevel(i, materia) >= Enchantment.getEnchantmentById(i).getMaxLevel()) {
                 ret = true;
                 break;
             }
@@ -88,7 +88,7 @@ public class EcRecipeMasterMateria implements IRecipe {
     }
 
     @Override
-    public ItemStack[] func_179532_b(InventoryCrafting inventoryCrafting) {
+    public ItemStack[] getRemainingItems(InventoryCrafting inventoryCrafting) {
         ItemStack[] aitemstack = new ItemStack[inventoryCrafting.getSizeInventory()];
 
         for (int i = 0; i < aitemstack.length; ++i) {
