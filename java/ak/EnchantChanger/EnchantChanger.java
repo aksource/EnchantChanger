@@ -137,6 +137,7 @@ public class EnchantChanger {
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
         FillBucketHook.buckets.put(blockLifeStream, itemBucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(itemPortableEnchantmentTable);
         FMLCommonHandler.instance().bus().register(proxy);
         PlayerCustomDataHandler playerCustomDataHandler = new PlayerCustomDataHandler();
         MinecraftForge.EVENT_BUS.register(playerCustomDataHandler);
