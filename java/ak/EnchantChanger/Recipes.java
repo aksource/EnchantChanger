@@ -49,7 +49,7 @@ public class Recipes {
                 'Y', Items.iron_ingot);
         if (ConfigurationUtils.difficulty < 2) {
             GameRegistry.addRecipe(
-                    new ItemStack(ItemCloudSwordCore, 1),
+                    new ItemStack(itemCloudSwordCore, 1),
                     " X ",
                     "XYX",
                     " Z ",
@@ -58,7 +58,7 @@ public class Recipes {
                     'Z', Items.iron_ingot);
         } else {
             GameRegistry.addRecipe(
-                    new ItemStack(ItemCloudSwordCore, 1),
+                    new ItemStack(itemCloudSwordCore, 1),
                     " X ",
                     "DYD",
                     " Z ",

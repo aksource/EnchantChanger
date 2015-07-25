@@ -1,6 +1,5 @@
 package ak.EnchantChanger.utils;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
@@ -45,7 +44,7 @@ public class RegistrationUtils {
         GameRegistry.registerItem(itemHugeMateria, "itemhugemateria");
         GameRegistry.registerItem(itemExExpBottle, "exexpbottle");
         GameRegistry.registerItem(itemZackSword, "zacksword");
-        GameRegistry.registerItem(ItemCloudSwordCore, "cloudswordcore");
+        GameRegistry.registerItem(itemCloudSwordCore, "cloudswordcore");
         GameRegistry.registerItem(itemCloudSword, "cloudsword");
         GameRegistry.registerItem(itemSephirothSword, "masamuneblade");
         GameRegistry.registerItem(itemUltimateWeapon, "ultimateweapon");

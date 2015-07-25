@@ -112,7 +112,7 @@ public class RenderingOverlayEvent {
     private void renderCloudSwordInventory(ItemStack holdItem, float partialTicks) {
         IInventory swordData = EcItemCloudSword.getInventoryFromItemStack(holdItem);
         int slot = EcItemCloudSword.getSlotNumFromItemStack(holdItem);
-        ItemStack core = new ItemStack(EnchantChanger.ItemCloudSwordCore, 1, holdItem.getItemDamage());
+        ItemStack core = new ItemStack(EnchantChanger.itemCloudSwordCore, 1, holdItem.getItemDamage());
         ItemStack toRenderItem;
         for (int i = 0; i < 6; i++) {
             int xShift = (i == slot) ? 16 : 0;

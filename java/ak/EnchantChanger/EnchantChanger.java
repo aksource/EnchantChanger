@@ -55,7 +55,7 @@ public class EnchantChanger {
     public static Item itemMateria;
     public static Item itemZackSword;
     public static Item itemCloudSword;
-    public static Item ItemCloudSwordCore;
+    public static Item itemCloudSwordCore;
     public static Item itemSephirothSword;
     public static Item itemUltimateWeapon;
     public static Item itemPortableEnchantChanger;
@@ -107,7 +107,7 @@ public class EnchantChanger {
         itemMateria = (new EcItemMateria("Materia")).setHasSubtypes(true).setMaxDamage(0)/*.setTextureName("ender_pearl")*/;
         itemExExpBottle = new EcItemExExpBottle("ExExpBottle");
         itemZackSword = (new EcItemZackSword("ZackSword")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
-        ItemCloudSwordCore = (new EcItemCloudSwordCore("CloudSwordCore")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
+        itemCloudSwordCore = (new EcItemCloudSwordCore("CloudSwordCore")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
         itemCloudSword = (new EcItemCloudSword("CloudSword")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14).setCreativeTab(null);
         itemSephirothSword = (new EcItemSephirothSword("MasamuneBlade")).setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 2);
         itemUltimateWeapon = (new EcItemUltimateWeapon("UltimateWeapon")).setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 14);
