@@ -2,6 +2,7 @@ package ak.EnchantChanger.inventory;
 
 import net.minecraft.inventory.InventoryBasic;
 
+@Deprecated
 public class EcSlotPortableEnchantmentTable extends InventoryBasic {
     /**
      * The brewing stand this slot belongs to.

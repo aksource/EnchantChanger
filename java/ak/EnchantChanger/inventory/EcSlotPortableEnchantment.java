@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class EcSlotPortableEnchantment extends Slot {
     /**
      * The brewing stand this slot belongs to.

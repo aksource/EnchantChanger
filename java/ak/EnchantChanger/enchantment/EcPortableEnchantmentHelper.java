@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 
 import java.util.*;
-
+@Deprecated
 public class EcPortableEnchantmentHelper {
     /**
      * Returns the level of enchantment on the ItemStack passed.

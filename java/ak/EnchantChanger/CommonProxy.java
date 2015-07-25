@@ -36,9 +36,9 @@ public class CommonProxy implements IGuiHandler {
         if (id == Constants.GUI_ID_MATERIALIZER) {
             return new EcContainerMaterializer(world, player.inventory);
         }
-        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
-            return new EcContainerPortableEnchantment(player.inventory, world, x, y, z);
-        }
+//        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
+//            return new EcContainerPortableEnchantment(player.inventory, world, x, y, z);
+//        }
         if (id == Constants.GUI_ID_HUGE_MATERIA) {
             TileEntity t = world.getTileEntity(blockPos);
             if (t != null)
@@ -66,9 +66,9 @@ public class CommonProxy implements IGuiHandler {
         if (id == Constants.GUI_ID_MATERIALIZER) {
             return new EcGuiMaterializer(world, player.inventory);
         }
-        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
-            return new EcGuiPortableEnchantment(player.inventory, world, x, y, z);
-        }
+//        if (id == Constants.GUI_ID_PORTABLE_ENCHANTMENT_TABLE) {
+//            return new EcGuiPortableEnchantment(player.inventory, world, x, y, z);
+//        }
         if (id == Constants.GUI_ID_HUGE_MATERIA) {
             TileEntity t = world.getTileEntity(blockPos);
             if (t != null)

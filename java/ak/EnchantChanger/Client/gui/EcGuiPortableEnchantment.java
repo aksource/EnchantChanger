@@ -21,7 +21,7 @@ import org.lwjgl.util.glu.Project;
 
 import java.io.IOException;
 import java.util.Random;
-
+@Deprecated
 @SideOnly(Side.CLIENT)
 public class EcGuiPortableEnchantment extends GuiContainer {
     private static final ResourceLocation enchantingTableGuiTextures = new ResourceLocation("textures/gui/container/enchanting_table.png");

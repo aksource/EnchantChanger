@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
+@Deprecated
 public class EcContainerPortableEnchantment extends Container {
     /**
      * SlotEnchantmentTable object with ItemStack to be enchanted
