@@ -26,8 +26,11 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
@@ -371,5 +374,17 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
             byte id = (byte) (data.getLimitBreakId() + 1);
             data.setLimitBreakId(id);
         }
+    }
+
+    /**
+     * アイテムの状態別にモデルを返すメソッド。
+     * 必要に応じてオーバーライドする。
+     * @param itemStack モデルを取得したいアイテム
+     * @param modelList アイテムに登録されたモデルのリスト
+     * @return 描画させたいモデル
+     */
+    @SideOnly(Side.CLIENT)
+    public IPerspectiveAwareModel getPresentModel(ItemStack itemStack, List<IPerspectiveAwareModel> modelList) {
+        return modelList.get(0);
     }
 }

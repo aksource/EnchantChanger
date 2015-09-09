@@ -18,24 +18,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.b3d.B3DLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
 import java.util.Random;
 
 public class EcBlockHugeMateria extends BlockContainer {
     public static final IProperty propertyParts = PropertyInteger.create("part", 0, 2);
-    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
+    //不要？
+//    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
     public EcBlockHugeMateria() {
         super(Material.rock);
@@ -61,7 +54,8 @@ public class EcBlockHugeMateria extends BlockContainer {
         return EnumWorldBlockLayer.TRANSLUCENT;
     }
 
-    @Override
+    //なくても描画される？
+/*    @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         try {
             IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
@@ -71,7 +65,7 @@ public class EcBlockHugeMateria extends BlockContainer {
             e.printStackTrace();
             return this.extendedState.getBaseState();
         }
-    }
+    }*/
 
     @Override
     public boolean onBlockActivated(World par1World, BlockPos blockPos, IBlockState state1, EntityPlayer par5EntityPlayer, EnumFacing par6, float par7, float par8, float par9) {

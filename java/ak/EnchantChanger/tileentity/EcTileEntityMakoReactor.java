@@ -347,20 +347,17 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
             return false;
         }
         IBlockState checkBlockState;
-        int checkBlockMeta;
         int index;
-        String blockName;
         for (int y = -1; y <= 3; y++) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     checkBlockState = worldObj.getBlockState(HMCoord.add(x, y, z));
-//                    checkBlockMeta = worldObj.getBlockMetadata(HMCoord.chunkPosX + x, HMCoord.chunkPosY + y, HMCoord.chunkPosZ + z);
                     index = (x + 1) + (z + 1) * 3;
                     if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 1 && !isBaseBlock(checkBlockState)) {
                         return false;
                     }
 
-                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 2 && !checkBlockState.equals(Blocks.air)) {
+                    if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 2 && !checkBlockState.getBlock().equals(Blocks.air)) {
                         return false;
                     }
                 }
@@ -423,7 +420,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
 
     public void setFace(byte var1) {
         this.face = var1;
-        EnumFacing direction = EnumFacing.getFront(var1);
+        EnumFacing direction = EnumFacing.getFront(var1).getOpposite();
         HMCoord = new BlockPos(this.getPos().getX() + direction.getFrontOffsetX() * 2, this.getPos().getY(), this.getPos().getZ() + direction.getFrontOffsetZ() * 2);
     }
 

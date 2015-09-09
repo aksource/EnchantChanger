@@ -1,7 +1,7 @@
 package ak.EnchantChanger.utils;
 
 import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.MaterialResultPair;
+import ak.EnchantChanger.api.MasterMateriaUtils;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.item.EcItemSword;
 import com.google.common.collect.ImmutableSet;
@@ -20,6 +20,7 @@ import java.util.*;
 import static ak.EnchantChanger.utils.ConfigurationUtils.*;
 
 /**
+ * Enchantment関係のユーティリティクラス
  * Created by A.K. on 14/10/12.
  */
 public class EnchantmentUtils {
@@ -29,8 +30,6 @@ public class EnchantmentUtils {
     public static final Map<Integer, Integer> LEVEL_LIMIT_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COEFFICIENT_MAP = new HashMap<>();
     public static final Set<EnchantmentData> ENCHANTMENT_DATA_SET = new HashSet<>();
-    //MasterMateria number, materials
-    private static final Map<Integer, Set<MaterialResultPair>> MATERIAL_MAP = new HashMap<>();
     @Deprecated
     public static Set<Enchantment> magicEnchantmentSet = ImmutableSet.of(enchantmentMeteor, enchantmentHoly, enchantmentFloat, enchantmentTelepo, enchantmentThunder);
 
@@ -211,82 +210,39 @@ public class EnchantmentUtils {
 
     private static void initHugeMateriasMap() {
         ItemStack materiaStack = new ItemStack(EnchantChanger.itemMateria);
-        registerHugeMateria(0, new ItemStack(Blocks.dragon_egg), new ItemStack(EnchantChanger.itemMateria, 1, 1));
-        registerHugeMateria(0, new ItemStack(Items.golden_apple, 1, 1), new ItemStack(EnchantChanger.itemMateria, 1, 2));
-        registerHugeMateria(0, new ItemStack(Items.ender_pearl), new ItemStack(EnchantChanger.itemMateria, 1, 3));
-        registerHugeMateria(0, new ItemStack(Items.ender_eye), new ItemStack(EnchantChanger.itemMateria, 1, 4));
-        registerHugeMateria(0, new ItemStack(Blocks.gold_block), new ItemStack(EnchantChanger.itemMateria, 1, 5));
-        registerHugeMateria(0, new ItemStack(Items.milk_bucket), new ItemStack(EnchantChanger.itemMateria, 1, 6));
-        registerHugeMateria(0, new ItemStack(Items.golden_boots), new ItemStack(EnchantChanger.itemMateria, 1, 7));
-        registerHugeMateria(0, new ItemStack(Items.nether_wart), new ItemStack(EnchantChanger.itemMateria, 1, 8));
-        registerHugeMateria(1, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.protection, 1));
-        registerHugeMateria(1, new ItemStack(Items.blaze_powder), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireProtection, 1));
-        registerHugeMateria(1, new ItemStack(Items.feather), getEnchantedItemStack(materiaStack.copy(), Enchantment.featherFalling, 1));
-        registerHugeMateria(1, new ItemStack(Items.gunpowder), getEnchantedItemStack(materiaStack.copy(), Enchantment.blastProtection, 1));
-        registerHugeMateria(1, new ItemStack(Items.arrow), getEnchantedItemStack(materiaStack.copy(), Enchantment.projectileProtection, 1));
-        registerHugeMateria(1, new ItemStack(Blocks.cactus), getEnchantedItemStack(materiaStack.copy(), Enchantment.thorns, 1));
-        registerHugeMateria(2, new ItemStack(Items.reeds), getEnchantedItemStack(materiaStack.copy(), Enchantment.respiration, 1));
-        registerHugeMateria(2, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.aquaAffinity, 1));
-        registerHugeMateria(2, new ItemStack(Items.fishing_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.luckOfTheSea, 1));
-        registerHugeMateria(2, new ItemStack(Items.carrot_on_a_stick), getEnchantedItemStack(materiaStack.copy(), Enchantment.lure, 1));
-        registerHugeMateria(3, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.sharpness, 1));
-        registerHugeMateria(3, new ItemStack(Items.flint_and_steel), getEnchantedItemStack(materiaStack.copy(), Enchantment.smite, 1));
-        registerHugeMateria(3, new ItemStack(Items.spider_eye), getEnchantedItemStack(materiaStack.copy(), Enchantment.baneOfArthropods, 1));
-        registerHugeMateria(3, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.knockback, 1));
-        registerHugeMateria(3, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireAspect, 1));
-        registerHugeMateria(3, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.looting, 1));
-        registerHugeMateria(4, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.efficiency, 1));
-        registerHugeMateria(4, new ItemStack(Items.string), getEnchantedItemStack(materiaStack.copy(), Enchantment.silkTouch, 1));
-        registerHugeMateria(4, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.unbreaking, 1));
-        registerHugeMateria(4, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.fortune, 1));
-        registerHugeMateria(5, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.power, 1));
-        registerHugeMateria(5, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.punch, 1));
-        registerHugeMateria(5, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.flame, 1));
-        registerHugeMateria(5, new ItemStack(Items.bow), getEnchantedItemStack(materiaStack.copy(), Enchantment.infinity, 1));
-    }
-
-    public static void registerHugeMateria(int master, ItemStack material, ItemStack result) {
-        Set<MaterialResultPair> set;
-        if (!MATERIAL_MAP.containsKey(master)) {
-            set = new HashSet<>();
-            set.add(MaterialResultPair.getMaterialResultPair(material, result));
-            MATERIAL_MAP.put(master, set);
-        }
-        set = MATERIAL_MAP.get(master);
-        for (MaterialResultPair mrp : set) {
-            if (mrp.getMaterial().getContainItemStack().isItemEqual(material)) {
-                return;
-            }
-        }
-        set.add(MaterialResultPair.getMaterialResultPair(material, result));
-    }
-
-    public static boolean isMaterialValid(int master, ItemStack material) {
-        if (!MATERIAL_MAP.containsKey(master)) return false;
-        Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
-        for (MaterialResultPair mrp : set) {
-            ItemStack containItemStack = mrp.getMaterial().getContainItemStack();
-            if (areItemsEqualsWildCard(containItemStack, material)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static ItemStack getResult(int master, ItemStack material) {
-        Set<MaterialResultPair> set = MATERIAL_MAP.get(master);
-        for (MaterialResultPair mrp : set) {
-            ItemStack containItemStack = mrp.getMaterial().getContainItemStack();
-            if (areItemsEqualsWildCard(containItemStack, material)) {
-                return mrp.getResultCopy();
-            }
-        }
-        return new ItemStack(Blocks.air);
-    }
-
-    private static boolean areItemsEqualsWildCard(ItemStack master, ItemStack checkStack) {
-        return (master.getItemDamage() == OreDictionary.WILDCARD_VALUE && master.getItem() == checkStack.getItem())
-                || master.isItemEqual(checkStack);
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Blocks.dragon_egg), new ItemStack(EnchantChanger.itemMateria, 1, 1));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.golden_apple, 1, 1), new ItemStack(EnchantChanger.itemMateria, 1, 2));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.ender_pearl), new ItemStack(EnchantChanger.itemMateria, 1, 3));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.ender_eye), new ItemStack(EnchantChanger.itemMateria, 1, 4));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Blocks.gold_block), new ItemStack(EnchantChanger.itemMateria, 1, 5));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.milk_bucket), new ItemStack(EnchantChanger.itemMateria, 1, 6));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.golden_boots), new ItemStack(EnchantChanger.itemMateria, 1, 7));
+        MasterMateriaUtils.registerHugeMateria(0, new ItemStack(Items.nether_wart), new ItemStack(EnchantChanger.itemMateria, 1, 8));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.protection, 1));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Items.blaze_powder), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireProtection, 1));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Items.feather), getEnchantedItemStack(materiaStack.copy(), Enchantment.featherFalling, 1));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Items.gunpowder), getEnchantedItemStack(materiaStack.copy(), Enchantment.blastProtection, 1));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Items.arrow), getEnchantedItemStack(materiaStack.copy(), Enchantment.projectileProtection, 1));
+        MasterMateriaUtils.registerHugeMateria(1, new ItemStack(Blocks.cactus), getEnchantedItemStack(materiaStack.copy(), Enchantment.thorns, 1));
+        MasterMateriaUtils.registerHugeMateria(2, new ItemStack(Items.reeds), getEnchantedItemStack(materiaStack.copy(), Enchantment.respiration, 1));
+        MasterMateriaUtils.registerHugeMateria(2, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.aquaAffinity, 1));
+        MasterMateriaUtils.registerHugeMateria(2, new ItemStack(Items.fishing_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.luckOfTheSea, 1));
+        MasterMateriaUtils.registerHugeMateria(2, new ItemStack(Items.carrot_on_a_stick), getEnchantedItemStack(materiaStack.copy(), Enchantment.lure, 1));
+        MasterMateriaUtils.registerHugeMateria(2, new ItemStack(Items.rabbit_foot), getEnchantedItemStack(materiaStack.copy(), Enchantment.depthStrider, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.sharpness, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.flint_and_steel), getEnchantedItemStack(materiaStack.copy(), Enchantment.smite, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.spider_eye), getEnchantedItemStack(materiaStack.copy(), Enchantment.baneOfArthropods, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.knockback, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.fireAspect, 1));
+        MasterMateriaUtils.registerHugeMateria(3, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.looting, 1));
+        MasterMateriaUtils.registerHugeMateria(4, new ItemStack(Items.golden_pickaxe), getEnchantedItemStack(materiaStack.copy(), Enchantment.efficiency, 1));
+        MasterMateriaUtils.registerHugeMateria(4, new ItemStack(Items.string), getEnchantedItemStack(materiaStack.copy(), Enchantment.silkTouch, 1));
+        MasterMateriaUtils.registerHugeMateria(4, new ItemStack(Items.iron_ingot), getEnchantedItemStack(materiaStack.copy(), Enchantment.unbreaking, 1));
+        MasterMateriaUtils.registerHugeMateria(4, new ItemStack(Items.golden_apple, 1, OreDictionary.WILDCARD_VALUE), getEnchantedItemStack(materiaStack.copy(), Enchantment.fortune, 1));
+        MasterMateriaUtils.registerHugeMateria(5, new ItemStack(Items.fire_charge), getEnchantedItemStack(materiaStack.copy(), Enchantment.power, 1));
+        MasterMateriaUtils.registerHugeMateria(5, new ItemStack(Items.slime_ball), getEnchantedItemStack(materiaStack.copy(), Enchantment.punch, 1));
+        MasterMateriaUtils.registerHugeMateria(5, new ItemStack(Items.blaze_rod), getEnchantedItemStack(materiaStack.copy(), Enchantment.flame, 1));
+        MasterMateriaUtils.registerHugeMateria(5, new ItemStack(Items.bow), getEnchantedItemStack(materiaStack.copy(), Enchantment.infinity, 1));
     }
 
     private static ItemStack getEnchantedItemStack(ItemStack base, Enchantment enchantment, int lv) {

@@ -2,10 +2,13 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.Constants;
+import ak.EnchantChanger.block.property.UnlistedPropertyInteger;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +23,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -27,11 +33,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 魔晄炉のブロッククラス
  * Created by A.K. on 14/03/08.
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass {
-    public static List<String> baseBlocksOreName = new ArrayList<>();
+    public static final IUnlistedProperty PROPERTY_POS_X = new UnlistedPropertyInteger("posX");
+    public static final IUnlistedProperty PROPERTY_POS_Y = new UnlistedPropertyInteger("posY");
+    public static final IUnlistedProperty PROPERTY_POS_Z = new UnlistedPropertyInteger("posZ");
     private static int[] sides = new int[]{2, 5, 3, 4};
+    public static List<String> baseBlocksOreName = new ArrayList<>();
 //    @SideOnly(Side.CLIENT)
 //    private IIcon iconFront;
 
@@ -61,32 +71,6 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
         baseBlocksOreName.add("blockNickel");
     }
 
-//    @Override
-//    public IIcon getIcon(int side  , int meta) {
-//        if (meta == 0) {
-//            return (side == 4) ? this.iconFront : this.blockIcon;
-//        }
-//        return this.blockIcon;
-//    }
-
-//    @Override
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//        if (ClientProxy.customRenderPass == 1 && world.getBlockMetadata(x, y, z) == 0) {
-//            EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) world.getTileEntity(x, y, z);
-//            if (side == tile.face) {
-//                return this.iconFront;
-//            }
-//            return this.blockIcon;
-//        }
-//        return super.getIcon(world, x, y, z, side);
-//    }
-
-//    @Override
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        super.registerBlockIcons(iconRegister);
-//        this.iconFront = iconRegister.registerIcon(Constants.EcTextureDomain + "makoreactor-front");
-//    }
-
     public EcBlockMakoReactor() {
         super(Material.iron);
     }
@@ -103,7 +87,8 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return super.getExtendedState(state, world, pos);
+        IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+        return extendedBlockState.withProperty(PROPERTY_POS_X, pos.getX()).withProperty(PROPERTY_POS_Y, pos.getY()).withProperty(PROPERTY_POS_Z, pos.getZ());
     }
 
     @Override
@@ -187,5 +172,10 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
             }
         }
         super.breakBlock(world, blockPos, state);
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{PROPERTY_POS_X, PROPERTY_POS_Y, PROPERTY_POS_Z});
     }
 }

@@ -1,10 +1,14 @@
 package ak.EnchantChanger.item;
 
+import ak.EnchantChanger.EnchantChanger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -73,5 +77,16 @@ public class EcItemSephirothSword extends EcItemSword {
     @Override
     public double getReach(ItemStack itemStack) {
         return 5.0D;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IPerspectiveAwareModel getPresentModel(ItemStack itemStack, List<IPerspectiveAwareModel> modelList) {
+        EntityPlayer player = EnchantChanger.proxy.getPlayer();
+        if (player != null) {
+            ItemStack handHeldItem = player.getHeldItem();
+            return (itemStack.isItemEqual(handHeldItem)) ? modelList.get(0): modelList.get(1);
+        }
+        return super.getPresentModel(itemStack, modelList);
     }
 }

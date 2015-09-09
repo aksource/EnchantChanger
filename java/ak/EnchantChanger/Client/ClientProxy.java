@@ -1,5 +1,8 @@
 package ak.EnchantChanger.Client;
 
+import ak.EnchantChanger.Client.models.BakedModelMateria;
+import ak.EnchantChanger.Client.models.EcSwordModel;
+import ak.EnchantChanger.Client.models.MakoReactorModelLoader;
 import ak.EnchantChanger.Client.renderer.*;
 import ak.EnchantChanger.CommonProxy;
 import ak.EnchantChanger.EnchantChanger;
@@ -9,6 +12,8 @@ import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
+import ak.EnchantChanger.item.EcItemMasterMateria;
+import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
@@ -16,9 +21,9 @@ import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.MultiToolHolders.Client.HolderRenderer;
+import ak.EnchantChanger.utils.StringUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
-import ak.MultiToolHolders.MultiToolHolders;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -26,6 +31,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -41,11 +48,11 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelFluid;
+import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -56,11 +63,14 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.lwjgl.input.Keyboard;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static ak.EnchantChanger.api.Constants.*;
 import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.EnchantChanger.api.Constants.*;
 
 public class ClientProxy extends CommonProxy {
     public static final float moveFactor = 0.4F;
@@ -74,6 +84,41 @@ public class ClientProxy extends CommonProxy {
     public static final Map<String, ModelResourceLocation> MODEL_RESOURCE_LOCATION_MAP = Maps.newHashMap();
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
+
+    public static TextureAtlasSprite[] textureAtlasSpritesMateriaArray = new TextureAtlasSprite[16];
+    public static ResourceLocation[] resourceLocationsMateria = new ResourceLocation[16];
+    private static ImmutableMap<String, String> textureMapUltimate = new ImmutableMap.Builder<String, String>()
+            .put(TEXTURE_NAME_ULTIMATE_EMBLEM, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_EMBLEM))
+            .put(TEXTURE_NAME_ULTIMATE_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_GRIP))
+            .put(TEXTURE_NAME_ULTIMATE_HAND, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_HAND))
+            .put(TEXTURE_NAME_ULTIMATE_PIPE_01, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_PIPE_01))
+            .put(TEXTURE_NAME_ULTIMATE_PIPE_02, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_PIPE_02))
+            .put(TEXTURE_NAME_ULTIMATE_SWORD, StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_SWORD)).build();
+    private static ImmutableMap<String, String> textureMapBuster = new ImmutableMap.Builder<String, String>()
+            .put(TEXTURE_NAME_BUSTER_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_BUSTER_EDGE))
+            .put(TEXTURE_NAME_BUSTER_CYLINDER, StringUtils.makeObjTexturePath(TEXTURE_NAME_BUSTER_CYLINDER))
+            .put(TEXTURE_NAME_BUSTER_BOX, StringUtils.makeObjTexturePath(TEXTURE_NAME_BUSTER_BOX)).build();
+    private static ImmutableMap<String, String> textureMapMasamune = new ImmutableMap.Builder<String, String>()
+            .put(TEXTURE_NAME_MASAMUNE_SWORD, StringUtils.makeObjTexturePath(TEXTURE_NAME_MASAMUNE_SWORD))
+            .put(TEXTURE_NAME_MASAMUNE_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_MASAMUNE_GRIP))
+            .put(TEXTURE_NAME_MASAMUNE_SCABBARD, StringUtils.makeObjTexturePath(TEXTURE_NAME_MASAMUNE_SCABBARD)).build();
+    private static ImmutableMap<String, String> textureMapFirst = new ImmutableMap.Builder<String, String>()
+            .put(TEXTURE_NAME_FIRST_CASE, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_CASE))
+            .put(TEXTURE_NAME_FIRST_CENTER, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_CENTER))
+            .put(TEXTURE_NAME_FIRST_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_EDGE))
+            .put(TEXTURE_NAME_FIRST_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_GRIP)).build();
+    private static ImmutableMap<String, String> textureMapUnion = new ImmutableMap.Builder<String, String>()
+            .put(TEXTURE_NAME_FIRST_CASE, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_CASE))
+            .put(TEXTURE_NAME_FIRST_CENTER, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_CENTER))
+            .put(TEXTURE_NAME_FIRST_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_EDGE))
+            .put(TEXTURE_NAME_FIRST_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_FIRST_GRIP))
+            .put(TEXTURE_NAME_BUTTERFLY_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_BUTTERFLY_EDGE))
+            .put(TEXTURE_NAME_BUTTERFLY_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_BUTTERFLY_GRIP))
+            .put(TEXTURE_NAME_ORGANIX_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_ORGANIX_EDGE))
+            .put(TEXTURE_NAME_ORGANIX_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_ORGANIX_GRIP))
+            .put(TEXTURE_NAME_RUNE_EDGE, StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_EDGE))
+            .put(TEXTURE_NAME_RUNE_GRIP, StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_GRIP))
+            .put(TEXTURE_NAME_RUNE_HAND, StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_HAND)).build();
 
     private static void movePlayerY(EntityPlayer player) {
         EntityPlayerSP playerSP = (EntityPlayerSP) player;
@@ -104,16 +149,11 @@ public class ClientProxy extends CommonProxy {
     public void registerPreRenderInformation() {
         //1.8からのモデル登録。
         B3DLoader.instance.addDomain(Constants.MOD_ID);
-//        registerCustomItemModel(EnchantChanger.itemZackSword, 0, "zacksword"/*"bustersword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.ItemCloudSwordCore, 0, "cloudswordcore"/*"firstsword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemCloudSword, 0, "cloudsword"/*"unionsword.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemMateria, 0, "materia"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemMasterMateria, 0, "mastermateria"/*"spherelight.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemSephirothSword, 0, "masamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemImitateSephirothSword, 0, "imitationmasamuneblade"/*"masamune.b3d"*/, MODEL_TYPE_INVENTORY);
-//        registerCustomItemModel(EnchantChanger.itemUltimateWeapon, 0, "ultimateweapon"/*"ultimateweapon.b3d"*/, MODEL_TYPE_INVENTORY);
+        /* 魔晄炉用モデルローダー登録 */
+        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
         registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
         registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
+        registerCustomBlockModel(blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
     }
 
     @Override
@@ -125,18 +165,21 @@ public class ClientProxy extends CommonProxy {
                 new EcRenderItemThrowable(mc.getRenderManager(), ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
                 new EcRenderApOrb(mc.getRenderManager()));
-//        multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
-//        RenderingRegistry.registerBlockHandler(ecRenderMultiPassBlock);
 
         //キー登録
         ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
 
         registerItemModel(itemZackSword, 0);
-        registerItemModel(ItemCloudSwordCore, 0);
+        registerItemModel(itemCloudSwordCore, 0);
         registerItemModel(itemCloudSword, 0);
-        registerItemModel(itemMateria, 0);
-        registerItemModel(itemMasterMateria, 0);
+        for (int i = 0 ; i <= EcItemMateria.MagicMateriaNum; i++) {
+            registerItemModel(itemMateria, i);
+        }
+
+        for (int i = 0; i < EcItemMasterMateria.MasterMateriaNum; i++) {
+            registerItemModel(itemMasterMateria, i);
+        }
         registerItemModel(itemSephirothSword, 0);
         registerItemModel(itemImitateSephirothSword, 0);
         registerItemModel(itemUltimateWeapon, 0);
@@ -146,9 +189,7 @@ public class ClientProxy extends CommonProxy {
         registerItemModel(itemBucketLifeStream, 0);
         registerItemModel(itemPortableEnchantChanger, 0);
         registerItemModel(itemPortableEnchantmentTable, 0);
-//        registerBlockModel(blockHugeMateria, 0);
         registerBlockModel(blockEnchantChanger, 0);
-        registerBlockModel(blockMakoReactor, 0);
 
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
@@ -169,7 +210,7 @@ public class ClientProxy extends CommonProxy {
         if (nbt.hasKey("enchantId") && nbt.hasKey("materiaTexId")) {
             int enchantId = nbt.getInteger("enchantId");
             int texId = nbt.getInteger("materiaTexId");
-            EcRenderMateria.registerExtraMateria(enchantId, texId);
+            BakedModelMateria.registerExtraMateria(enchantId, texId);
         }
     }
 
@@ -349,13 +390,74 @@ public class ClientProxy extends CommonProxy {
         return MOP;
     }
 
-//    @SubscribeEvent
-//    public void bakedModelRegister(ModelBakeEvent event) {
-//
-//    }
+    @SubscribeEvent
+    public void textureStitch(TextureStitchEvent.Pre event) {
+        TextureMap textureMap = event.map;
+        for (int i = 0 ; i < 16; i++) {
+            textureAtlasSpritesMateriaArray[i] = textureMap.registerSprite(resourceLocationsMateria[i]);
+        }
+        for (String key : textureMapUltimate.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(textureMapUltimate.get(key)));
+        }
+        for (String key : textureMapBuster.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(textureMapBuster.get(key)));
+        }
+        for (String key : textureMapMasamune.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(textureMapMasamune.get(key)));
+        }
+        for (String key : textureMapFirst.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(textureMapFirst.get(key)));
+        }
+        for (String key : textureMapUnion.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(textureMapUnion.get(key)));
+        }
+    }
 
-    private void changeFluidModel(IRegistry modelRegistry, Block block, Fluid fluid) {
-        modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(Item.getItemFromBlock(block).getUnlocalizedName()), new ModelFluid(fluid));
+    @SubscribeEvent
+    public void bakedModelRegister(ModelBakeEvent event) {
+        changeSwordModel(event.modelRegistry, itemZackSword,
+                Arrays.asList(ITEM_BUSTER_SWORD_MODEL_RL), 0.3F, 0.1F, textureMapBuster);
+        changeSwordModel(event.modelRegistry, itemCloudSword,
+                Arrays.asList(ITEM_UNION_SWORD_MODEL_RL), 0.3F, 0.1F, textureMapUnion);
+        changeSwordModel(event.modelRegistry, itemCloudSwordCore,
+                Arrays.asList(ITEM_FIRST_SWORD_CLOSED_MODEL_RL, ITEM_FIRST_SWORD_OPEN_MODEL_RL), 0.3F, 0.1F, textureMapFirst);
+        changeSwordModel(event.modelRegistry, itemUltimateWeapon,
+                Arrays.asList(ITEM_ULTIMATE_WEAPON_MODEL_RL), 0.3F, 0.1F, textureMapUltimate);
+        changeSwordModel(event.modelRegistry, itemSephirothSword,
+                Arrays.asList(ITEM_MASAMUNE_BLADE_MODEL_RL, ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL), 0.3F, 0.1F, textureMapMasamune);
+        changeSwordModel(event.modelRegistry, itemImitateSephirothSword,
+                Arrays.asList(ITEM_MASAMUNE_BLADE_MODEL_RL, ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL), 0.3F, 0.1F, textureMapMasamune);
+        changeMateriaModel(event.modelRegistry, event.modelLoader,
+                GameRegistry.findUniqueIdentifierFor(itemMateria).name, ITEM_MATERIA_MODEL_RL);
+        changeMateriaModel(event.modelRegistry, event.modelLoader,
+                GameRegistry.findUniqueIdentifierFor(itemMasterMateria).name, ITEM_MATERIA_MODEL_RL);
+    }
+
+    private void changeSwordModel(IRegistry modelRegistry, Item ecSword, List<ResourceLocation> rlList,
+                                  float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
+        String name = GameRegistry.findUniqueIdentifierFor(ecSword).name;
+        List<IRetexturableModel> modelList = new ArrayList<>();
+        IBakedModel iconModel = (IBakedModel)modelRegistry.getObject(MODEL_RESOURCE_LOCATION_MAP.get(name));
+        IRetexturableModel model = null;
+        try {
+            for (ResourceLocation rl : rlList) {
+                model = (IRetexturableModel) B3DLoader.instance.loadModel(rl);
+                modelList.add(model);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new EcSwordModel(iconModel, modelList, sizeFPV, sizeTPV, textureMap));
+    }
+
+    private void changeMateriaModel(IRegistry modelRegistry, ModelLoader modelLoader, String name, ResourceLocation rl) {
+        IRetexturableModel model = null;
+        try {
+            model = (IRetexturableModel) modelLoader.getModel(rl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new BakedModelMateria(model));
     }
 
     private void registerCustomBlockModel(Block block, int meta, String modelLocation, String type, boolean noModelLoc) {
@@ -369,13 +471,13 @@ public class ClientProxy extends CommonProxy {
     private void registerCustomItemModel(Item item, int meta, String modelLocation, String type, boolean noModelLoc) {
         if (noModelLoc) {
             ModelBakery.addVariantName(item);
-        } else {
-            ModelBakery.addVariantName(item, modelLocation);
+//        } else {
+//            ModelBakery.addVariantName(item, modelLocation);
         }
         String itemName = item.getUnlocalizedName();
-        ModelResourceLocation modelResourceLocation = setModelRsrcToMap(itemName, modelLocation, type);
-//        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
-        ModelLoader.setCustomMeshDefinition(item, new CustomItemMeshDefinition(modelResourceLocation));
+        ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(itemName, modelLocation, type);
+        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
+//        ModelLoader.setCustomMeshDefinition(item, new CustomItemMeshDefinition(modelResourceLocation));
         //EnchantChanger.logger.info("added ModelLocation of " + Constants.EcAssetsDomain + ":" + modelLocation);
     }
 
@@ -384,12 +486,17 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemModel(Item item, int meta) {
-        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY);
+//        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY);
+        ModelResourceLocation modelResourceLocation  = setModelRsrcToMap(GameRegistry.findUniqueIdentifierFor(item).name, GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY);
         mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
     }
 
+    private ModelResourceLocation setCustomModelRsrcToMap(String objName, String modelLocation, String type) {
+        return setModelRsrcToMap(objName, EcAssetsDomain + ":" + modelLocation, type);
+    }
+
     private ModelResourceLocation setModelRsrcToMap(String objName, String modelLocation, String type) {
-        MODEL_RESOURCE_LOCATION_MAP.put(objName, new ModelResourceLocation(EcAssetsDomain + ":" + modelLocation, type));
+        MODEL_RESOURCE_LOCATION_MAP.put(objName, new ModelResourceLocation(modelLocation, type));
         return MODEL_RESOURCE_LOCATION_MAP.get(objName);
     }
 
@@ -413,6 +520,12 @@ public class ClientProxy extends CommonProxy {
         @Override
         protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
             return this.modelResourceLocation;
+        }
+    }
+    static {
+        for (int i = 0; i < 16; i++) {
+            resourceLocationsMateria[i] = new ResourceLocation(MOD_ID,
+                    String.format("gui/materia%d", i));
         }
     }
 }

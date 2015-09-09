@@ -1,6 +1,5 @@
 package ak.EnchantChanger.block;
 
-import ak.EnchantChanger.Client.ClientProxy;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -10,9 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,22 +32,28 @@ public class EcBlockMultiPass extends BlockContainer {
 
     @Override
     public boolean isNormalCube() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isOpaqueCube() {
-        return true;
+        return false;
     }
 
-//    @Override
-//    public int getRenderBlockPass() {
-//        return 1;
-//    }
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
 
     @Override
     public int getRenderType() {
-        return ClientProxy.multiPassRenderType;
+        return 3;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public EnumWorldBlockLayer getBlockLayer()
+    {
+        return EnumWorldBlockLayer.CUTOUT;
     }
 
 //    @Override

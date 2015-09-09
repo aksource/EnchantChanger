@@ -1,11 +1,14 @@
 package ak.EnchantChanger.item;
 
+import ak.EnchantChanger.utils.StringUtils;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
+ * 魔晄炉のItemBlockクラス
  * Created by A.K. on 14/09/10.
  */
 public class EcItemBlockMakoReactor extends ItemBlock {
@@ -19,11 +22,6 @@ public class EcItemBlockMakoReactor extends ItemBlock {
     public int getMetadata(int itemDamage) {
         return itemDamage % 16;
     }
-
-//    @Override
-//    public boolean requiresMultipleRenderPasses() {
-//        return true;
-//    }
 
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
@@ -48,5 +46,17 @@ public class EcItemBlockMakoReactor extends ItemBlock {
             return nameArray[meta];
         }
         return "";
+    }
+
+    /**
+     * ItemStackのNBTから基底ブロックのItemStackを取得するメソッド
+     * @param itemStack 魔晄炉ブロックのItemStack
+     * @return 基底ブロックのItemStack
+     */
+    public ItemStack getBaseBlockItemStack(ItemStack itemStack) {
+        String baseBlockStr = itemStack.getTagCompound().getString("EnchantChanger|baseBlock");
+        int baseBlockMetaInt = itemStack.getTagCompound().getInteger("EnchantChanger|baseMeta");
+        Block block = StringUtils.getBlockFromString(baseBlockStr);
+        return new ItemStack((Blocks.air != block) ? block : Blocks.iron_block, 1, baseBlockMetaInt);
     }
 }
