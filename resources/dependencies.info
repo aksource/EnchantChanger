@@ -1,6 +1,5 @@
 {
-"repo": "http://aksource.github.io/maven/",
-"file": "PotionExtension-1.7.10-1.1.0",
-"dev": "PotionExtension-1.7.10-1.1.0-dev.jar",
+"repo": "http://aksource.github.io/maven/com/ak/PotionExtension/1.7.10-1.1.1/",
+"file": "PotionExtension-1.7.10-1.1.1",
 "class": "ak.potionextension.PotionExtensionCorePlugin"
 }
