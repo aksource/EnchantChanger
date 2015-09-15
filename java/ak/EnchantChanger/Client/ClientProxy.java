@@ -41,6 +41,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -309,7 +310,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    @SubscribeEvent
+//    @SubscribeEvent
     public void mouseHandlingEvent(InputEvent.MouseInputEvent event) {
         if (mc.gameSettings.keyBindAttack.isKeyDown() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
             changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
@@ -331,16 +332,20 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    private MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
+    public static MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
         MovingObjectPosition MOP = null;
         if (viewingEntity != null) {
             if (viewingEntity.worldObj != null) {
                 MOP = viewingEntity.rayTrace(reach, partialTicks);
-                Vec3 viewPosition = viewingEntity.getPositionVector();
+                Vec3 viewPosition = viewingEntity.getPositionEyes(partialTicks);
                 double d1 = 0;
 
                 if (MOP != null) {
                     d1 = MOP.hitVec.distanceTo(viewPosition);
+                    Block block = viewingEntity.worldObj.getBlockState(MOP.getBlockPos()).getBlock();
+                    if (Blocks.air == block) {
+                        d1++;
+                    }
                 }
 
                 Vec3 lookVector = viewingEntity.getLook(partialTicks);
