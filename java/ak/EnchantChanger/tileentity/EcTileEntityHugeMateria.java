@@ -1,6 +1,7 @@
 package ak.EnchantChanger.tileentity;
 
 import ak.EnchantChanger.EnchantChanger;
+import ak.EnchantChanger.api.MasterMateriaUtils;
 import ak.EnchantChanger.item.EcItemMasterMateria;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.EnchantmentUtils;
@@ -204,8 +205,8 @@ public class EcTileEntityHugeMateria extends TileEntity implements IInventory {
     }
 
     private boolean makeResult(ItemStack material, int dmg) {
-        if (EnchantmentUtils.isMaterialValid(dmg, material)) {
-            this.result = EnchantmentUtils.getResult(dmg, material);
+        if (MasterMateriaUtils.isMaterialValid(dmg, material)) {
+            this.result = MasterMateriaUtils.getResult(dmg, material);
             return true;
         }
         return false;

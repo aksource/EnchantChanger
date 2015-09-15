@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import shift.sextiarysector.api.gearforce.tileentity.IGearForceHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +49,9 @@ import java.util.List;
 @Optional.InterfaceList(
         {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHAPI|energy"),
                 @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|energy"),
-                @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
+                @Optional.Interface(iface = "shift.sextiarysector.api.gearforce.tileentity.IGearForceHandler", modid = "SextiarySector")}
 )
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo, shift.sextiarysector.api.machine.energy.IEnergyHandler {
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo, IGearForceHandler {
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
@@ -726,7 +727,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @Optional.Method(modid = "SextiarySector")
     @Override
-    public long getSpeedStored(ForgeDirection from) {
+    public int getSpeedStored(ForgeDirection from) {
         return getStoredRFEnergy();
     }
 
@@ -738,7 +739,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
 
     @Optional.Method(modid = "SextiarySector")
     @Override
-    public long getMaxSpeedStored(ForgeDirection from) {
+    public int getMaxSpeedStored(ForgeDirection from) {
         return MAX_RF_CAPACITY;
     }
 }

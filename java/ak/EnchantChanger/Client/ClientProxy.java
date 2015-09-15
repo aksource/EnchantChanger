@@ -24,6 +24,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
@@ -31,6 +32,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -278,6 +280,10 @@ public class ClientProxy extends CommonProxy {
 
                 if (MOP != null) {
                     d1 = MOP.hitVec.distanceTo(viewPosition);
+                    Block block = viewingEntity.worldObj.getBlock(MOP.blockX, MOP.blockY, MOP.blockZ);
+                    if (Blocks.air == block) {
+                        d1++;
+                    }
                 }
 
                 Vec3 lookVector = viewingEntity.getLook(partialTicks);

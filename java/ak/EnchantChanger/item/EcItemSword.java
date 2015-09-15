@@ -156,6 +156,21 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
         return toolClass.equals("pickaxe") ? 2 : 0;
     }
 
+    @Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+        if (entityLiving.worldObj.isRemote) {
+            Minecraft mc = Minecraft.getMinecraft();
+            Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
+            MovingObjectPosition mop = ClientProxy.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
+            if (mop !=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && mop.entityHit != null) {
+                mc.objectMouseOver = mop;
+                mc.pointedEntity = mop.entityHit;
+                PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(mop.entityHit));
+            }
+        }
+        return super.onEntitySwing(entityLiving, stack);
+    }
+
     public void doLimitBreak(ItemStack itemStack, EntityPlayer player) {
         byte limitBreakId = ExtendedPlayerData.get(player).getLimitBreakId();
         if (limitBreakId == Constants.LIMIT_BREAK_OMNISLASH_FIRST) {
@@ -362,21 +377,6 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     @Override
     public double getReach(ItemStack itemStack) {
         return 4.0D;
-    }
-
-    @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if (entityLiving.worldObj.isRemote) {
-            Minecraft mc = Minecraft.getMinecraft();
-            Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
-            MovingObjectPosition mop = ClientProxy.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
-            if (mop !=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && mop.entityHit != null) {
-                mc.objectMouseOver = mop;
-                mc.pointedEntity = mop.entityHit;
-                PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(mop.entityHit));
-            }
-        }
-        return super.onEntitySwing(entityLiving, stack);
     }
 
     //ServerOnly
