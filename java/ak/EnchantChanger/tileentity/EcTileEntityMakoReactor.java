@@ -44,11 +44,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 魔晄炉のTileEntityクラス
+ * CofhCoreのRF、SS2のGFに対応
  * Created by A.K. on 14/03/11.
  */
 @Optional.InterfaceList(
         {@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHAPI|energy"),
-                @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|energy"),
+                @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHAPI|tileentity"),
                 @Optional.Interface(iface = "shift.sextiarysector.api.gearforce.tileentity.IGearForceHandler", modid = "SextiarySector")}
 )
 public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedInventory, IFluidHandler, IEnergyHandler, IEnergyInfo, IGearForceHandler {
@@ -350,7 +352,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ISidedIn
         Block checkBlock;
         int checkBlockMeta;
         int index;
-        String blockName;
+//        String blockName;
         for (int y = -1; y <= 3; y++) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
