@@ -227,7 +227,7 @@ public class EcEntityMeteor extends Entity {
 //        par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
 
         if ((this.throwerName == null || this.throwerName.length() == 0) && this.shootingEntity != null && this.shootingEntity instanceof EntityPlayer) {
-            this.throwerName = this.shootingEntity.getName();
+            this.throwerName = this.shootingEntity.getCommandSenderName();
         }
 
         par1NBTTagCompound.setString("ownerName", this.throwerName == null ? "" : this.throwerName);

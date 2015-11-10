@@ -67,8 +67,8 @@ public class EcContainerMakoReactor extends Container {
         return this.tileEntityMakoReactor.isUseableByPlayer(entityPlayer);
     }
 
-    public void addCraftingToCrafters(ICrafting par1ICrafting) {
-        super.addCraftingToCrafters(par1ICrafting);
+    public void onCraftGuiOpened(ICrafting par1ICrafting) {
+        super.onCraftGuiOpened(par1ICrafting);
         par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
     }
 

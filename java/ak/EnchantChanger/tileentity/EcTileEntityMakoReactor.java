@@ -506,7 +506,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "container.makoreactor";
     }
 

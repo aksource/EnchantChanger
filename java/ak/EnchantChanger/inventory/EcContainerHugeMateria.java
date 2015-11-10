@@ -37,8 +37,9 @@ public class EcContainerHugeMateria extends Container {
         return this.tileEntity.isUseableByPlayer(player);
     }
 
-    public void addCraftingToCrafters(ICrafting par1ICrafting) {
-        super.addCraftingToCrafters(par1ICrafting);
+    @Override
+    public void onCraftGuiOpened(ICrafting par1ICrafting) {
+        super.onCraftGuiOpened(par1ICrafting);
         par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.MaterializingTime);
     }
 

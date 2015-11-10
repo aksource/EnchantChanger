@@ -1,7 +1,5 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -100,7 +98,7 @@ public class EcItemEnchantmentTable extends EcItem {
         }
 
         @Override
-        public String getName() {
+        public String getCommandSenderName() {
             return "container.enchantment";
         }
 
@@ -111,7 +109,7 @@ public class EcItemEnchantmentTable extends EcItem {
 
         @Override
         public IChatComponent getDisplayName() {
-            return new ChatComponentTranslation(this.getName());
+            return new ChatComponentTranslation(this.getCommandSenderName());
         }
     }
 }

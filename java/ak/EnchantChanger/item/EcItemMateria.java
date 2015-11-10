@@ -125,7 +125,7 @@ public class EcItemMateria extends EcItem {
         worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
         par1EntityPlayerMP.isDead = false;
         serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
-        serverConf.func_72375_a(par1EntityPlayerMP, worldserver);
+        serverConf.preparePlayer(par1EntityPlayerMP, worldserver);
         par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY,
                 par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
         par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);

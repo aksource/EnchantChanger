@@ -68,8 +68,8 @@ public class EcGuiMakoReactor extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getCommandSenderName()), 25, 3, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getCommandSenderName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {

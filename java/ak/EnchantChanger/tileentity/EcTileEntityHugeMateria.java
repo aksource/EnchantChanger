@@ -185,7 +185,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayer
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "container.hugeMateria";
     }
 
@@ -298,7 +298,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayer
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getName());
+        return new ChatComponentText(getCommandSenderName());
     }
 //
 //	static{

@@ -259,7 +259,7 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
      * }
      */
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "container.materializer";
     }
 
@@ -295,6 +295,6 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getName());
+        return new ChatComponentText(getCommandSenderName());
     }
 }
