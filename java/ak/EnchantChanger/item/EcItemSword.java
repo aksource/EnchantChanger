@@ -21,8 +21,10 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -34,6 +36,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -289,7 +292,9 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
                         }
 
                         player.setLastAttacker(par1Entity);
-
+                        if (par1Entity instanceof EntityLivingBase) {
+                            EnchantmentHelper.func_151384_a((EntityLivingBase) par1Entity, player);
+                        }
                         EnchantmentHelper.func_151385_b(player, par1Entity);
                         Object object = par1Entity;
 
@@ -372,6 +377,48 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     }
 
     public void destroyTheItem(EntityPlayer player, ItemStack orig) {
+    }
+
+    /**
+     * 武器の属性変更メソッド
+     * @param itemStack 変更したい武器のItemStack
+     * @param player 所有プレイヤー
+     * @param attributeKey 属性のMultiMap上でのKey文字列
+     * @param attributeName 属性のAttributeModifierName
+     * @param amount 属性の値
+     * @param op 属性のOp
+     */
+    protected void setAttribute(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull String attributeKey,
+                                @Nonnull String attributeName, @Nonnull double amount, @Nonnull int op) {
+        NBTTagList nbtTagList;
+        NBTTagCompound nbtTagCompound;
+        if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey(Constants.NBT_ATTRIBUTE_MODIFIERS_KEY, 9)) {
+            nbtTagList = itemStack.getTagCompound().getTagList(Constants.NBT_ATTRIBUTE_MODIFIERS_KEY, 10);
+            for (int tagIndex = 0; tagIndex < nbtTagList.tagCount(); tagIndex++) {
+                nbtTagCompound = nbtTagList.getCompoundTagAt(tagIndex);
+                if (attributeKey.equals(nbtTagCompound.getString(Constants.NBT_ATTRIBUTE_MODIFIERS_NAME_KEY))
+                        && attributeName.equals(nbtTagCompound.getString(Constants.NBT_ATTRIBUTE_MODIFIERS_NAME))) {
+                    nbtTagCompound.setDouble(Constants.NBT_ATTRIBUTE_MODIFIERS_AMOUNT, amount);
+                    break;
+                }
+            }
+        } else {
+            nbtTagList = new NBTTagList();
+            nbtTagCompound = new NBTTagCompound();
+            nbtTagCompound.setLong(Constants.NBT_ATTRIBUTE_MODIFIERS_UUID_MOST, Item.field_111210_e.getMostSignificantBits());
+            nbtTagCompound.setLong(Constants.NBT_ATTRIBUTE_MODIFIERS_UUID_LEAST, Item.field_111210_e.getLeastSignificantBits());
+            nbtTagCompound.setString(Constants.NBT_ATTRIBUTE_MODIFIERS_NAME_KEY, attributeKey);
+            nbtTagCompound.setString(Constants.NBT_ATTRIBUTE_MODIFIERS_NAME, attributeName);
+            nbtTagCompound.setDouble(Constants.NBT_ATTRIBUTE_MODIFIERS_AMOUNT, amount);
+            nbtTagCompound.setInteger(Constants.NBT_ATTRIBUTE_MODIFIERS_OPERATION, op);
+            nbtTagList.appendTag(nbtTagCompound);
+            if (!itemStack.hasTagCompound()) {
+                itemStack.setTagCompound(new NBTTagCompound());
+            }
+            itemStack.getTagCompound().setTag(Constants.NBT_ATTRIBUTE_MODIFIERS_KEY, nbtTagList);
+        }
+
+        player.getAttributeMap().applyAttributeModifiers(itemStack.getAttributeModifiers());
     }
 
     @Override

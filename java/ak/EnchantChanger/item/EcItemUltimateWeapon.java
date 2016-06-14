@@ -1,12 +1,12 @@
 package ak.EnchantChanger.item;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import ak.EnchantChanger.api.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.MathHelper;
 
 public class EcItemUltimateWeapon extends EcItemSword {
@@ -27,8 +27,9 @@ public class EcItemUltimateWeapon extends EcItemSword {
         } else {
             ultimateWeaponDamage = 10;
         }
-        ObfuscationReflectionHelper.setPrivateValue(ItemSword.class, (ItemSword) itemstack.getItem(), ultimateWeaponDamage, 0);
-        player.getAttributeMap().applyAttributeModifiers(itemstack.getAttributeModifiers());
+//        ObfuscationReflectionHelper.setPrivateValue(ItemSword.class, (ItemSword) itemstack.getItem(), ultimateWeaponDamage, 0);
+        this.setAttribute(itemstack, player, SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
+                Constants.NBT_ATTRIBUTE_MODIFIERS_NAME_WEAPON, ultimateWeaponDamage, 0);
         return super.onLeftClickEntity(itemstack, player, entity);
     }
 

@@ -89,10 +89,14 @@ public class EnchantmentUtils {
     }
 
     public static void setMagic(ItemStack itemStack, byte[] magic) {
-        if (!itemStack.hasTagCompound()) {
-            itemStack.setTagCompound(new NBTTagCompound());
+        if (magic.length > 0) {
+            if (!itemStack.hasTagCompound()) {
+                itemStack.setTagCompound(new NBTTagCompound());
+            }
+            itemStack.getTagCompound().setByteArray("EnchantChanger|Magic", magic);
+        } else if (itemStack.hasTagCompound()) {
+            itemStack.getTagCompound().removeTag("EnchantChanger|Magic");
         }
-        itemStack.getTagCompound().setByteArray("EnchantChanger|Magic", magic);
     }
 
     public static boolean hasMagic(ItemStack itemStack) {

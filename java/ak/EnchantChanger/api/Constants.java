@@ -48,4 +48,13 @@ public class Constants {
     public static final byte MAGIC_ID_DESPELL = 6;
     public static final byte MAGIC_ID_HASTE = 7;
     public static final byte MAGIC_ID_ABSORPTION = 8;
+
+    public static final String NBT_ATTRIBUTE_MODIFIERS_KEY = "AttributeModifiers";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_NAME = "Name";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_NAME_KEY = "AttributeName";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_AMOUNT = "Amount";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_OPERATION = "Operation";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_NAME_WEAPON = "Weapon modifier";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_UUID_MOST = "UUIDMost";
+    public static final String NBT_ATTRIBUTE_MODIFIERS_UUID_LEAST = "UUIDLeast";
 }

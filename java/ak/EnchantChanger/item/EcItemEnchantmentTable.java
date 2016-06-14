@@ -1,8 +1,6 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.Constants;
-import cofh.lib.util.helpers.MathHelper;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +9,7 @@ import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 
@@ -37,7 +36,7 @@ public class EcItemEnchantmentTable extends EcItem {
             NBTTagCompound nbt = par1ItemStack.getTagCompound();
             par3EntityPlayer.displayGUIEnchantment(nbt.getInteger(REGISTERED_POS_X), nbt.getInteger(REGISTERED_POS_Y), nbt.getInteger(REGISTERED_POS_Z), "container.enchantment");
         } else {
-            par3EntityPlayer.displayGUIEnchantment(MathHelper.floor(par3EntityPlayer.posX), MathHelper.floor(par3EntityPlayer.posY), MathHelper.floor(par3EntityPlayer.posZ), "container.enchantment");
+            par3EntityPlayer.displayGUIEnchantment(MathHelper.floor_double(par3EntityPlayer.posX), MathHelper.floor_double(par3EntityPlayer.posY), MathHelper.floor_double(par3EntityPlayer.posZ), "container.enchantment");
         }
         return par1ItemStack;
     }
