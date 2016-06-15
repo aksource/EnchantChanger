@@ -20,7 +20,7 @@ import java.util.*;
 import static ak.EnchantChanger.utils.ConfigurationUtils.*;
 
 /**
- * Enchantment�֌W�̃��[�e�B���e�B�N���X
+ * Enchantment関係のユーティリティクラス
  * Created by A.K. on 14/10/12.
  */
 public class EnchantmentUtils {
@@ -84,10 +84,12 @@ public class EnchantmentUtils {
     }
 
     public static void setMagic(ItemStack itemStack, byte[] magic) {
-        if (!itemStack.hasTagCompound()) {
-            itemStack.setTagCompound(new NBTTagCompound());
+        if (magic.length > 0) {
+            if (!itemStack.hasTagCompound()) {
+                itemStack.setTagCompound(new NBTTagCompound());
+            }
+            itemStack.getTagCompound().setByteArray("EnchantChanger|Magic", magic);
         }
-        itemStack.getTagCompound().setByteArray("EnchantChanger|Magic", magic);
     }
 
     public static boolean hasMagic(ItemStack itemStack) {
@@ -160,22 +162,22 @@ public class EnchantmentUtils {
     }
 
     private static boolean isExtraTools(ItemStack itemStack) {
-        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        String uName = StringUtils.getUniqueStrings(itemStack);
         return Arrays.asList(ConfigurationUtils.extraToolIDs).contains(uName);
     }
 
     private static boolean isExtraSwords(ItemStack itemStack) {
-        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        String uName = StringUtils.getUniqueStrings(itemStack);
         return Arrays.asList(ConfigurationUtils.extraSwordIDs).contains(uName);
     }
 
     private static boolean isExtraArmors(ItemStack itemStack) {
-        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        String uName = StringUtils.getUniqueStrings(itemStack);
         return Arrays.asList(ConfigurationUtils.extraArmorIDs).contains(uName);
     }
 
     private static boolean isExtraBows(ItemStack itemStack) {
-        String uName = EnchantChanger.getUniqueStrings(itemStack);
+        String uName = StringUtils.getUniqueStrings(itemStack);
         return Arrays.asList(ConfigurationUtils.extraBowIDs).contains(uName);
     }
 

@@ -11,14 +11,12 @@ import ak.EnchantChanger.item.*;
 import ak.EnchantChanger.modcoop.CoopMCE;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.utils.EnchantmentUtils;
-import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,23 +32,28 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 import java.util.logging.Logger;
 
 import static ak.EnchantChanger.Recipes.registerRecipes;
+import static ak.EnchantChanger.api.Constants.LIFESTREAM_FLOW_RL;
+import static ak.EnchantChanger.api.Constants.LIFESTREAM_STILL_RL;
 import static ak.EnchantChanger.utils.ConfigurationUtils.enableDungeonLoot;
 import static ak.EnchantChanger.utils.ConfigurationUtils.initConfig;
 import static ak.EnchantChanger.utils.RegistrationUtils.*;
-import static ak.EnchantChanger.api.Constants.*;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
+@Mod(modid = Constants.MOD_ID,
+        name = Constants.MOD_NAME,
+        version = Constants.MOD_VERSION,
+        updateJSON = "",
+        dependencies = "required-after:PotionExtensionCore",
+        useMetadata = true,
+        acceptedMinecraftVersions = Constants.MOD_MC_VERSION)
 public class EnchantChanger {
 
     public static final LivingEventHooks livingeventhooks = new LivingEventHooks();
     //Logger
-    public static final Logger logger = Logger.getLogger("EnchantChanger");
+    public static final Logger logger = Logger.getLogger(EnchantChanger.class.getSimpleName());
     public static Item itemExExpBottle;
     public static Item itemMateria;
     public static Item itemZackSword;
@@ -83,20 +86,6 @@ public class EnchantChanger {
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
     public static CommonProxy proxy;
-
-    public static String getUniqueStrings(Object obj) {
-        UniqueIdentifier uId = null;
-        if (obj instanceof ItemStack) {
-            obj = ((ItemStack) obj).getItem();
-        }
-        if (obj instanceof Block) {
-            uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
-        }
-        if (obj instanceof Item) {
-            uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
-        }
-        return Optional.fromNullable(uId).or(new UniqueIdentifier("none:dummy")).toString();
-    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

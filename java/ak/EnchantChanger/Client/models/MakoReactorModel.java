@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * –‚æ˜FƒuƒƒbƒN—pIModelƒNƒ‰ƒX
+ * é­”æ™„ç‚‰ãƒ–ãƒ­ãƒƒã‚¯ç”¨IModelã‚¯ãƒ©ã‚¹
  * Created by A.K. on 2015/09/04.
  */
 public class MakoReactorModel implements IModel {
 
     /**
-     * ŠÖ˜Aƒ‚ƒfƒ‹‚ğ•Ô‚·Bnull
-     * @return ŠÖ˜Aƒ‚ƒfƒ‹‚ÌResourceLocationƒRƒŒƒNƒVƒ‡ƒ“
+     * é–¢é€£ãƒ¢ãƒ‡ãƒ«ã‚’è¿”ã™ã€‚null
+     * @return é–¢é€£ãƒ¢ãƒ‡ãƒ«ã®ResourceLocationã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
      */
     @Override
     public Collection<ResourceLocation> getDependencies() {
@@ -30,8 +30,8 @@ public class MakoReactorModel implements IModel {
     }
 
     /**
-     * V‹KƒeƒNƒXƒ`ƒƒ‚ÌResourceLocationƒRƒŒƒNƒVƒ‡ƒ“‚ğ•Ô‚·
-     * @return V‹KƒeƒNƒXƒ`ƒƒ‚ÌResourceLocationƒRƒŒƒNƒVƒ‡ƒ“
+     * æ–°è¦ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ResourceLocationã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‚’è¿”ã™
+     * @return æ–°è¦ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ResourceLocationã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
      */
     @Override
     public Collection<ResourceLocation> getTextures() {
@@ -39,11 +39,11 @@ public class MakoReactorModel implements IModel {
     }
 
     /**
-     * IFlexibleBakedModel‚ğ•Ô‚·ƒƒ\ƒbƒhB
-     * @param state ƒ‚ƒfƒ‹‚Ìó‘Ô
-     * @param format ’¸“_
-     * @param bakedTextureGetter ResourceLocation‚©‚çTextureAtlasSprite‚ğo—Í‚·‚éFunctionƒNƒ‰ƒX
-     * @return ¶¬‚³‚ê‚½IFlexibleBakedModel
+     * IFlexibleBakedModelã‚’è¿”ã™ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
+     * @param state ãƒ¢ãƒ‡ãƒ«ã®çŠ¶æ…‹
+     * @param format é ‚ç‚¹
+     * @param bakedTextureGetter ResourceLocationã‹ã‚‰TextureAtlasSpriteã‚’å‡ºåŠ›ã™ã‚‹Functionã‚¯ãƒ©ã‚¹
+     * @return ç”Ÿæˆã•ã‚ŒãŸIFlexibleBakedModel
      */
     @Override
     public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
@@ -51,8 +51,8 @@ public class MakoReactorModel implements IModel {
     }
 
     /**
-     * •W€‚Ìƒ‚ƒfƒ‹ƒXƒe[ƒg‚ğ•Ô‚·
-     * @return •W€‚Ìƒ‚ƒfƒ‹ƒXƒe[ƒg
+     * æ¨™æº–ã®ãƒ¢ãƒ‡ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¿”ã™
+     * @return æ¨™æº–ã®ãƒ¢ãƒ‡ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆ
      */
     @Override
     public IModelState getDefaultState() {

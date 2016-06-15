@@ -9,7 +9,7 @@ import net.minecraftforge.client.model.IModel;
 import java.io.IOException;
 
 /**
- * 魔晄炉ブロック用カスタムモデルローダークラス
+ * 鬲疲刋轤峨ヶ繝ｭ繝�繧ｯ逕ｨ繧ｫ繧ｹ繧ｿ繝繝｢繝�繝ｫ繝ｭ繝ｼ繝繝ｼ繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 2015/08/22.
  */
 public class MakoReactorModelLoader implements ICustomModelLoader {

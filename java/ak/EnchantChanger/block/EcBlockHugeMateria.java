@@ -27,7 +27,7 @@ import java.util.Random;
 
 public class EcBlockHugeMateria extends BlockContainer {
     public static final IProperty propertyParts = PropertyInteger.create("part", 0, 2);
-    //•s—vH
+    //ä¸è¦ï¼Ÿ
 //    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
     public EcBlockHugeMateria() {
@@ -54,7 +54,7 @@ public class EcBlockHugeMateria extends BlockContainer {
         return EnumWorldBlockLayer.TRANSLUCENT;
     }
 
-    //‚È‚­‚Ä‚à•`‰æ‚³‚ê‚éH
+    //ãªãã¦ã‚‚æç”»ã•ã‚Œã‚‹ï¼Ÿ
 /*    @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         try {

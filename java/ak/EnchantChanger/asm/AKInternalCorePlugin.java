@@ -35,7 +35,7 @@ public class AKInternalCorePlugin implements IFMLLoadingPlugin {
 
     @Override
     public String getSetupClass() {
-        return "codechicken.core.launch.DepLoader";
+        return null/*"codechicken.core.launch.DepLoader"*/;
     }
 
     @Override

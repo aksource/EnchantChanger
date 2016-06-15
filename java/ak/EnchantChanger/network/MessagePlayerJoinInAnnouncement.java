@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 /**
- * プレイヤーの同期処理Messageクラス
+ * 繝励Ξ繧､繝､繝ｼ縺ｮ蜷梧悄蜃ｦ逅�Message繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 15/03/12.
  */
 public class MessagePlayerJoinInAnnouncement implements IMessage {

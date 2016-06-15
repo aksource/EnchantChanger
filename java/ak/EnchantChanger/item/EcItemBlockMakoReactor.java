@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- * –‚æ˜F‚ÌItemBlockƒNƒ‰ƒX
+ * é­”æ™„ç‚‰ã®ItemBlockã‚¯ãƒ©ã‚¹
  * Created by A.K. on 14/09/10.
  */
 public class EcItemBlockMakoReactor extends ItemBlock {
@@ -49,9 +49,9 @@ public class EcItemBlockMakoReactor extends ItemBlock {
     }
 
     /**
-     * ItemStack‚ÌNBT‚©‚çŠî’êƒuƒƒbƒN‚ÌItemStack‚ðŽæ“¾‚·‚éƒƒ\ƒbƒh
-     * @param itemStack –‚æ˜FƒuƒƒbƒN‚ÌItemStack
-     * @return Šî’êƒuƒƒbƒN‚ÌItemStack
+     * ItemStackã®NBTã‹ã‚‰åŸºåº•ãƒ–ãƒ­ãƒƒã‚¯ã®ItemStackã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param itemStack é­”æ™„ç‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®ItemStack
+     * @return åŸºåº•ãƒ–ãƒ­ãƒƒã‚¯ã®ItemStack
      */
     public ItemStack getBaseBlockItemStack(ItemStack itemStack) {
         String baseBlockStr = itemStack.getTagCompound().getString("EnchantChanger|baseBlock");

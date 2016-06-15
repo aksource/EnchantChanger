@@ -47,7 +47,6 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
         super(toolMaterial);
         String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
-//        this.setTextureName(s);
         this.setNoRepair();
         this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }
@@ -293,7 +292,10 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
 
                         player.setLastAttacker(par1Entity);
 
-                        EnchantmentHelper.func_151385_b(player, par1Entity);
+                        if (par1Entity instanceof EntityLivingBase) {
+                            EnchantmentHelper.applyThornEnchantments((EntityLivingBase) par1Entity, player);
+                        }
+                        EnchantmentHelper.applyArthropodEnchantments(player, par1Entity);
                         Object object = par1Entity;
 
                         if (par1Entity instanceof EntityDragonPart) {

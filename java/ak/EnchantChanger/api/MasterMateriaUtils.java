@@ -10,21 +10,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ƒ}ƒXƒ^[ƒ}ƒeƒŠƒAŠÖ˜A‚Ìƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX
+ * ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢é–¢é€£ã®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹
  * Created by A.K. on 2015/07/25.
  */
 public class MasterMateriaUtils {
     /**
-     * ƒqƒ…[ƒWƒ}ƒeƒŠƒA—p‘fŞƒ}ƒbƒv
-     * Key:ƒ}ƒXƒ^[ƒ}ƒeƒŠƒA‚Ìdamage’lBValue:¶¬•¨‚Æ‘fŞ‚ÌƒyƒAƒNƒ‰ƒX‚ÌƒZƒbƒgB
+     * ãƒ’ãƒ¥ãƒ¼ã‚¸ãƒãƒ†ãƒªã‚¢ç”¨ç´ æãƒãƒƒãƒ—
+     * Key:ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢ã®damageå€¤ã€‚Value:ç”Ÿæˆç‰©ã¨ç´ æã®ãƒšã‚¢ã‚¯ãƒ©ã‚¹ã®ã‚»ãƒƒãƒˆã€‚
      */
     private static final Map<Integer, Set<MaterialResultPair>> MATERIAL_MAP = new HashMap<>();
 
     /**
-     * ƒqƒ…[ƒWƒ}ƒeƒŠƒA‚Ö‚Ì“o˜^ƒƒ\ƒbƒh
-     * @param master ƒ}ƒXƒ^[ƒ}ƒeƒŠƒA‚Ìdamage’lB0:‹†‹ÉA1:–hŒäA2:…A3:UŒ‚A4:ÌŒ@A5:‹|A6:’Ç‰Á
-     * @param material ‘fŞ
-     * @param result ¶¬•¨Bƒ}ƒeƒŠƒA‚¶‚á‚È‚­‚Ä‚à—Ç‚¢B
+     * ãƒ’ãƒ¥ãƒ¼ã‚¸ãƒãƒ†ãƒªã‚¢ã¸ã®ç™»éŒ²ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param master ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢ã®damageå€¤ã€‚0:ç©¶æ¥µã€1:é˜²å¾¡ã€2:æ°´ã€3:æ”»æ’ƒã€4:æ¡æ˜ã€5:å¼“ã€6:è¿½åŠ 
+     * @param material ç´ æ
+     * @param result ç”Ÿæˆç‰©ã€‚ãƒãƒ†ãƒªã‚¢ã˜ã‚ƒãªãã¦ã‚‚è‰¯ã„ã€‚
      */
     public static void registerHugeMateria(int master, ItemStack material, ItemStack result) {
         Set<MaterialResultPair> set;
@@ -43,10 +43,10 @@ public class MasterMateriaUtils {
     }
 
     /**
-     * ‘fŞ‚ª‘Î‰‚·‚éƒ}ƒXƒ^[ƒ}ƒeƒŠƒA‚É“o˜^‚³‚ê‚Ä‚é‚©‚Ç‚¤‚©B
-     * @param master ƒ}ƒXƒ^[ƒ}ƒeƒŠƒA‚Ìdamage’l
-     * @param material ‘fŞ
-     * @return “o˜^‚³‚ê‚Ä‚¢‚½‚çtrue
+     * ç´ æãŒå¯¾å¿œã™ã‚‹ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢ã«ç™»éŒ²ã•ã‚Œã¦ã‚‹ã‹ã©ã†ã‹ã€‚
+     * @param master ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢ã®damageå€¤
+     * @param material ç´ æ
+     * @return ç™»éŒ²ã•ã‚Œã¦ã„ãŸã‚‰true
      */
     public static boolean isMaterialValid(int master, ItemStack material) {
         if (!MATERIAL_MAP.containsKey(master)) return false;
@@ -61,10 +61,10 @@ public class MasterMateriaUtils {
     }
 
     /**
-     * ƒ}ƒXƒ^[ƒ}ƒeƒŠƒA•Ê‚Ì‘fŞ‚É‘Î‰‚µ‚Ä‚¢‚é¶¬•¨‚ğ•Ô‚·
-     * @param master ƒ}ƒXƒ^[ƒ}ƒeƒŠƒA‚Ìdamage’l
-     * @param material ‘fŞ
-     * @return ¶¬•¨
+     * ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢åˆ¥ã®ç´ æã«å¯¾å¿œã—ã¦ã„ã‚‹ç”Ÿæˆç‰©ã‚’è¿”ã™
+     * @param master ãƒã‚¹ã‚¿ãƒ¼ãƒãƒ†ãƒªã‚¢ã®damageå€¤
+     * @param material ç´ æ
+     * @return ç”Ÿæˆç‰©
      */
     public static ItemStack getResult(int master, ItemStack material) {
         Set<MaterialResultPair> set = MATERIAL_MAP.get(master);

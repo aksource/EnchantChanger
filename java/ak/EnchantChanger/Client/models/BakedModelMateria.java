@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static ak.EnchantChanger.Client.ClientProxy.resourceLocationsMateria;
 
 /**
+ * ãƒãƒ†ãƒªã‚¢ã®B3Dãƒ¢ãƒ‡ãƒ«æç”»ç”¨ã‚¯ãƒ©ã‚¹
  * Created by A.K. on 2015/07/26.
  */
 public class BakedModelMateria implements ISmartItemModel{
@@ -134,14 +135,14 @@ public class BakedModelMateria implements ISmartItemModel{
 
         @Override
         public Pair<IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-            /* TRSRTransformation‚Ìmulƒƒ\ƒbƒh‚Åì‚Á‚Ä‚é‚ªAMatrix4fƒNƒ‰ƒX‚É’P“Æ‚Ìİ’èƒƒ\ƒbƒh‚ª‘¶İ‚·‚é
-             * TRSR‚ÌˆÓ–¡
-              * T=Transformation •ÀsˆÚ“®@‘æ1ˆø”
-              * R=Rotate ‰ñ“]i‘Oj@‘æ2ˆø”
-              * S=Scale ƒŠƒTƒCƒY@‘æ3ˆø”
-              * R=Rotate ‰ñ“]iŒãj@‘æ4ˆø”
-              * İ’è‚µ‚½‚¢ˆø”‚ÉVector3fƒNƒ‰ƒX,Quat4fƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğw’èB
-              * ‘S•”null‚¾‚Æ‚¨‚»‚ç‚­Identity Matrixi’PˆÊs—ñj‚ª•Ô‚é*/
+            /* TRSRTransformationã®mulãƒ¡ã‚½ãƒƒãƒ‰ã§ä½œã£ã¦ã‚‹ãŒã€Matrix4fã‚¯ãƒ©ã‚¹ã«å˜ç‹¬ã®è¨­å®šãƒ¡ã‚½ãƒƒãƒ‰ãŒå­˜åœ¨ã™ã‚‹
+             * TRSRã®æ„å‘³
+              * T=Transformation ä¸¦è¡Œç§»å‹•ã€€ç¬¬1å¼•æ•°
+              * R=Rotate å›è»¢ï¼ˆå‰ï¼‰ã€€ç¬¬2å¼•æ•°
+              * S=Scale ãƒªã‚µã‚¤ã‚ºã€€ç¬¬3å¼•æ•°
+              * R=Rotate å›è»¢ï¼ˆå¾Œï¼‰ã€€ç¬¬4å¼•æ•°
+              * è¨­å®šã—ãŸã„å¼•æ•°ã«Vector3fã‚¯ãƒ©ã‚¹,Quat4fã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æŒ‡å®šã€‚
+              * å…¨éƒ¨nullã ã¨ãŠãã‚‰ãIdentity Matrixï¼ˆå˜ä½è¡Œåˆ—ï¼‰ãŒè¿”ã‚‹*/
             Matrix4f matrix4fGui = TRSRTransformation.mul(vectorTransGui, null, new Vector3f(guiSize, guiSize, guiSize), null);
             Matrix4f matrix4fHandHeld = TRSRTransformation.mul(vectorTransHand, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
             GlStateManager.disableLighting();

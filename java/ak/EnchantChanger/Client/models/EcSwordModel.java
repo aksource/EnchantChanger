@@ -4,6 +4,7 @@ import ak.EnchantChanger.item.EcItemSword;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -128,7 +129,6 @@ public class EcSwordModel implements ISmartItemModel{
 
             IBakedModel model = null;
             Matrix4f matrix4f = null;
-
             switch (cameraTransformType) {
                 case GUI:
                     RenderItem.applyVanillaTransform(this.guiModel.getItemCameraTransforms().gui);
@@ -160,17 +160,18 @@ public class EcSwordModel implements ISmartItemModel{
 
         @Override
         public List getGeneralQuads() {
+            GlStateManager.depthMask(false);
             return this.guiModel.getGeneralQuads();
         }
 
         @Override
         public boolean isGui3d() {
-            return this.guiModel.isGui3d();
+            return false;
         }
 
         @Override
         public boolean isAmbientOcclusion() {
-            return this.guiModel.isAmbientOcclusion();
+            return false;
         }
 
         @Override

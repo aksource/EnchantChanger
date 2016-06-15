@@ -1,32 +1,36 @@
 package ak.EnchantChanger.utils;
 
+import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static ak.EnchantChanger.api.Constants.MOD_ID;
 import static ak.EnchantChanger.api.Constants.OBJ_ITEM_DOMAIN;
 
 /**
- * •¶š—ñ‚ğˆµ‚¤ƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX
+ * æ–‡å­—åˆ—ã‚’æ‰±ã†ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹
  * Created by A.K. on 2015/08/11.
  */
 public class StringUtils {
 
     /**
-     * •”•ª“I‚ÈƒpƒX•¶š—ñ‚ğ•âŠ®‚·‚éƒƒ\ƒbƒh
-     * @param path •”•ªƒpƒX•¶š—ñ
-     * @return •âŠ®‚³‚ê‚½ƒpƒX•¶š—ñ
+     * éƒ¨åˆ†çš„ãªãƒ‘ã‚¹æ–‡å­—åˆ—ã‚’è£œå®Œã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param path éƒ¨åˆ†ãƒ‘ã‚¹æ–‡å­—åˆ—
+     * @return è£œå®Œã•ã‚ŒãŸãƒ‘ã‚¹æ–‡å­—åˆ—
      */
     public static String makeObjTexturePath(String path) {
         return MOD_ID.toLowerCase() + OBJ_ITEM_DOMAIN + path;
     }
 
     /**
-     * ƒhƒƒCƒ“•t‚«ƒuƒƒbƒNŒÅ—L–¼‚©‚çBlock‚ğæ“¾‚·‚éƒƒ\ƒbƒh
-     * Block‚ªæ“¾‚Å‚«‚È‚©‚Á‚½ê‡‚ÍAAirƒuƒƒbƒN‚ğ•Ô‚·B
-     * @param stringBlockName ƒhƒƒCƒ“•t‚«ƒuƒƒbƒNŒÅ—L–¼
-     * @return ŒÅ—L–¼‚©‚çæ“¾‚µ‚½Block
+     * ãƒ‰ãƒ¡ã‚¤ãƒ³ä»˜ããƒ–ãƒ­ãƒƒã‚¯å›ºæœ‰åã‹ã‚‰Blockã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * BlockãŒå–å¾—ã§ããªã‹ã£ãŸå ´åˆã¯ã€Airãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™ã€‚
+     * @param stringBlockName ãƒ‰ãƒ¡ã‚¤ãƒ³ä»˜ããƒ–ãƒ­ãƒƒã‚¯å›ºæœ‰å
+     * @return å›ºæœ‰åã‹ã‚‰å–å¾—ã—ãŸBlock
      */
     public static Block getBlockFromString(String stringBlockName) {
         Block block = GameData.getBlockRegistry().getObject(stringBlockName);
@@ -40,5 +44,19 @@ public class StringUtils {
             block = Blocks.air;
         }
         return block;
+    }
+
+    public static String getUniqueStrings(Object obj) {
+        GameRegistry.UniqueIdentifier uId = null;
+        if (obj instanceof ItemStack) {
+            obj = ((ItemStack) obj).getItem();
+        }
+        if (obj instanceof Block) {
+            uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
+        }
+        if (obj instanceof Item) {
+            uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
+        }
+        return Optional.fromNullable(uId).or(new GameRegistry.UniqueIdentifier("none:dummy")).toString();
     }
 }

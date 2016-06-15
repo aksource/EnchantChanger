@@ -133,6 +133,10 @@ public class EcContainerMateriaWindow extends Container {
                 nbt.removeTag(tagName);
             }
 
+            if (openItem.hasTagCompound() && openItem.getTagCompound().getKeySet().size() == 0) {
+                openItem.setTagCompound(null);
+            }
+
             for (EnchantmentLvPair data : enchantmentList) {
                 EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
             }

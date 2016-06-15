@@ -3,7 +3,7 @@ package ak.EnchantChanger.block.property;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 /**
- * »p‚ÌIUnlistedPropertyƒNƒ‰ƒX
+ * è£½å§¿ã®IUnlistedPropertyã‚¯ãƒ©ã‚¹
  * Created by Akira on 2015/09/05.
  */
 public class UnlistedPropertyInteger implements IUnlistedProperty<Integer> {

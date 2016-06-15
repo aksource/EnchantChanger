@@ -6,12 +6,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 
 /**
- * ’è”ƒNƒ‰ƒX
+ * å®šæ•°ã‚¯ãƒ©ã‚¹
  * Created by A.K. on 14/10/12.
  */
 public class Constants {
     public static final String MOD_ID = "EnchantChanger";
     public static final String MOD_NAME = "EnchantChanger";
+    public static final String MOD_VERSION = "@VERSION@";
+    public static final String MOD_MC_VERSION = "[1.8,1.8.9]";
     public static final String OBJ_ITEM_DOMAIN = ":item/";
     public static final String EcMeteorPNG = "textures/items/Meteo.png";
     public static final String EcExpBottlePNG = "textures/items/ExExpBottle.png";

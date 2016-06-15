@@ -198,6 +198,8 @@ public class ClientProxy extends CommonProxy {
 
         //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
+        //モデルの光源処理修正イベントクラス登録
+        MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
     }
 
     @Override

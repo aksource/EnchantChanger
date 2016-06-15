@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * –‚æ˜FƒuƒƒbƒN‚ÌIFlexibleBakedModelƒNƒ‰ƒX
+ * é­”æ™„ç‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®IFlexibleBakedModelã‚¯ãƒ©ã‚¹
  * Created by A.K. on 2015/09/05.
  */
 public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmartItemModel, ISmartBlockModel {
@@ -82,8 +82,8 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
     }
 
     /**
-     * Šî’êƒuƒƒbƒN‚ÌItemStack‚©‚çMakoReactorBakedModel‚ð¶¬‚·‚éƒƒ\ƒbƒh
-     * @param itemStack Šî’êƒuƒƒbƒN‚ÌItemStack
+     * åŸºåº•ãƒ–ãƒ­ãƒƒã‚¯ã®ItemStackã‹ã‚‰MakoReactorBakedModelã‚’ç”Ÿæˆã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+     * @param itemStack åŸºåº•ãƒ–ãƒ­ãƒƒã‚¯ã®ItemStack
      * @return MakoReactorBakedModel
      */
     private IBakedModel makeMakoReactorBakedModel(ItemStack itemStack, EnumFacing face) {
@@ -139,14 +139,14 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
         private FaceBakery faceBakery = new FaceBakery();
         private float innerStart = 0.01F;
         private float innerEnd = 15.99F;
-        /** ŽOlÌŽ‹“_Žž‚Ì•½sˆÚ“®ƒxƒNƒgƒ‹ */
+        /** ä¸‰äººç§°è¦–ç‚¹æ™‚ã®å¹³è¡Œç§»å‹•ãƒ™ã‚¯ãƒˆãƒ« */
         private Vector3f translationThirdPerson = new Vector3f(0.0F, 0.1F, -0.175F);
         private float scaleTirdFloat = 0.375F;
-        /** ŽOlÌŽ‹“_Žž‚ÌƒTƒCƒY•â³ */
+        /** ä¸‰äººç§°è¦–ç‚¹æ™‚ã®ã‚µã‚¤ã‚ºè£œæ­£ */
         private Vector3f scaleThirdPerson = new Vector3f(scaleTirdFloat, scaleTirdFloat, scaleTirdFloat);;
-        /** ŽOlÌŽ‹“_Žž‚Ì‰ñ“]ƒxƒNƒgƒ‹ */
+        /** ä¸‰äººç§°è¦–ç‚¹æ™‚ã®å›žè»¢ãƒ™ã‚¯ãƒˆãƒ« */
         private Quat4f rotateThirdPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(10, 0, 0));
-        /** ˆêlÌŽ‹“_Žž‚Ì‰ñ“]ƒxƒNƒgƒ‹ */
+        /** ä¸€äººç§°è¦–ç‚¹æ™‚ã®å›žè»¢ãƒ™ã‚¯ãƒˆãƒ« */
         private Quat4f rotateFirstPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 90, 0));
 
         public MakoReactorBakedModel(TextureAtlasSprite frontTAS, TextureAtlasSprite sideTAS, TextureAtlasSprite blockTAS, EnumFacing face) {

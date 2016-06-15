@@ -4,7 +4,7 @@ import ak.EnchantChanger.api.Constants;
 import net.minecraft.item.Item;
 
 /**
- * 無機能アイテム用クラス
+ * 辟｡讖溯�ｽ繧｢繧､繝�繝逕ｨ繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 14/06/27.
  */
 public class EcItem extends Item {

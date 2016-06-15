@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 魔晄炉のブロッククラス
+ * 鬲疲刋轤峨�ｮ繝悶Ο繝�繧ｯ繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 14/03/08.
  */
 public class EcBlockMakoReactor extends EcBlockMultiPass {

@@ -11,7 +11,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- * マルチパスレンダリングブロック用のTileEntityクラス
+ * 繝槭Ν繝√ヱ繧ｹ繝ｬ繝ｳ繝繝ｪ繝ｳ繧ｰ繝悶Ο繝�繧ｯ逕ｨ縺ｮTileEntity繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 14/03/08.
  */
 public class EcTileMultiPass extends TileEntity {

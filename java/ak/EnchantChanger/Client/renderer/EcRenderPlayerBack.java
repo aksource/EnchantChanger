@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
- * プレイヤーの背中に直前に持っていた追加武器を描画するクラス
+ * 繝励Ξ繧､繝､繝ｼ縺ｮ閭御ｸｭ縺ｫ逶ｴ蜑阪↓謖√▲縺ｦ縺�縺溯ｿｽ蜉豁ｦ蝎ｨ繧呈緒逕ｻ縺吶ｋ繧ｯ繝ｩ繧ｹ
  * Created by A.K. on 14/10/28.
  */
 public class EcRenderPlayerBack {
@@ -135,7 +135,9 @@ public class EcRenderPlayerBack {
             GlStateManager.rotate(-90F, 1.0F, 0F, 0F);
             GlStateManager.rotate(getAngle(backItem), 0F, 1.0F, 0F);
             GlStateManager.rotate(90F, 0F, 0F, 1.0F);
+            GlStateManager.disableLighting();
             mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.THIRD_PERSON);
+            GlStateManager.enableLighting();
         }
         GlStateManager.popMatrix();//GL11.glPopMatrix();
     }
