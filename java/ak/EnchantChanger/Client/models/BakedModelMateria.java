@@ -2,13 +2,12 @@ package ak.EnchantChanger.Client.models;
 
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.EnchantmentUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
@@ -23,27 +22,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ak.EnchantChanger.Client.ClientProxy.resourceLocationsMateria;
+import static ak.EnchantChanger.Client.ClientModelUtils.resourceLocationsMateria;
 
 /**
  * マテリアのB3Dモデル描画用クラス
  * Created by A.K. on 2015/07/26.
+ * @since 2015/07/26
  */
 public class BakedModelMateria implements ISmartItemModel{
 
     public static Map<Integer, ResourceLocation> magicMateriaMap = new ConcurrentHashMap<>();
     public static Map<Integer, ResourceLocation> materiaMap = new ConcurrentHashMap<>();
     private static Map<ResourceLocation, IBakedModel> retexturedModelMap = new ConcurrentHashMap<>();
-//    private ImmutableMap<String, String> retextureMap = new ImmutableMap.Builder<String, String>().put("materia10", "enchantchanger:gui/materia10").build();
-    private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-        public TextureAtlasSprite apply(ResourceLocation location) {
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-        }
-    };
 
-    private IRetexturableModel b3dModel;
+    private IRetexturableModel objModel;
     public BakedModelMateria(IRetexturableModel model) {
-        this.b3dModel = model;
+        this.objModel = model;
     }
 
     public static void registerExtraMateria(int enchantmentId, int texId) {
@@ -52,7 +46,7 @@ public class BakedModelMateria implements ISmartItemModel{
     }
 
     private ImmutableMap<String, String> getTextureMap(ItemStack itemStack) {
-        return new ImmutableMap.Builder<String, String>().put("materia10", getTextureFromItemStack(itemStack).toString()).build();
+        return new ImmutableMap.Builder<String, String>().put("#materia10", getTextureFromItemStack(itemStack).toString()).build();
     }
 
     private ResourceLocation getTextureFromItemStack(ItemStack item) {
@@ -81,60 +75,61 @@ public class BakedModelMateria implements ISmartItemModel{
     public IBakedModel handleItemState(ItemStack stack) {
         ResourceLocation resourceLocation = getTextureFromItemStack(stack);
         if (!retexturedModelMap.containsKey(resourceLocation)) {
-            IModel retextureModel = this.b3dModel.retexture(getTextureMap(stack));
-            IBakedModel bakedModel = retextureModel.bake(b3dModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+            IModel retextureModel = this.objModel.retexture(getTextureMap(stack));
+            IBakedModel bakedModel = retextureModel.bake(objModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, ModelLoader.defaultTextureGetter());
             retexturedModelMap.put(resourceLocation, new ReTexturedModel(bakedModel));
         }
         return retexturedModelMap.get(resourceLocation);
     }
 
     @Override
-    public List getFaceQuads(EnumFacing enumFacing) {
-        return null/*this.b3dModel.getFaceQuads(enumFacing)*/;
+    public List<BakedQuad> getFaceQuads(EnumFacing enumFacing) {
+        return null/*this.objModel.getFaceQuads(enumFacing)*/;
     }
 
     @Override
-    public List getGeneralQuads() {
-        return null/*this.b3dModel.getGeneralQuads()*/;
+    public List<BakedQuad> getGeneralQuads() {
+        return null/*this.objModel.getGeneralQuads()*/;
     }
 
     @Override
     public boolean isAmbientOcclusion() {
-        return false/*this.b3dModel.isAmbientOcclusion()*/;
+        return false/*this.objModel.isAmbientOcclusion()*/;
     }
 
     @Override
     public boolean isGui3d() {
-        return false/*this.b3dModel.isGui3d()*/;
+        return false/*this.objModel.isGui3d()*/;
     }
 
     @Override
     public boolean isBuiltInRenderer() {
-        return false/*this.b3dModel.isBuiltInRenderer()*/;
+        return false/*this.objModel.isBuiltInRenderer()*/;
     }
 
     @Override
-    public TextureAtlasSprite getTexture() {
-        return null/*this.b3dModel.getTexture()*/;
+    public TextureAtlasSprite getParticleTexture() {
+        return null/*this.objModel.getTexture()*/;
     }
 
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
-        return null/*this.b3dModel.getItemCameraTransforms()*/;
+        return null/*this.objModel.getItemCameraTransforms()*/;
     }
 
     private static class ReTexturedModel implements IPerspectiveAwareModel {
-        IBakedModel b3dModel;
+        IFlexibleBakedModel b3dModel;
         private float handheldSize = 0.3F;
-        private float guiSize = 2.0F;
-        private Vector3f vectorTransGui = new Vector3f(1.0F, 0.95F, 0.0F);
+        private float guiSize = 0.75F;
+//        private Vector3f vectorTransGui = new Vector3f(1.0F, 0.95F, 0.0F);
+        private Vector3f vectorTransGui = new Vector3f(0.4F, 0.4F, 0.0F);
         private Vector3f vectorTransHand = new Vector3f(0.1F, 0.15F, -0.01F);
         public ReTexturedModel(IBakedModel bakedModel) {
-            this.b3dModel = bakedModel;
+            this.b3dModel = (bakedModel instanceof IFlexibleBakedModel) ? (IFlexibleBakedModel) bakedModel : new Wrapper(bakedModel, null);
         }
 
         @Override
-        public Pair<IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+        public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
             /* TRSRTransformationのmulメソッドで作ってるが、Matrix4fクラスに単独の設定メソッドが存在する
              * TRSRの意味
               * T=Transformation 並行移動　第1引数
@@ -148,25 +143,25 @@ public class BakedModelMateria implements ISmartItemModel{
             GlStateManager.disableLighting();
             switch (cameraTransformType) {
                 case GUI:
-                    RenderItem.applyVanillaTransform(this.b3dModel.getItemCameraTransforms().gui);
+//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().gui);
                     return Pair.of(this.b3dModel, matrix4fGui);
                 case FIRST_PERSON:
-                    RenderItem.applyVanillaTransform(this.b3dModel.getItemCameraTransforms().firstPerson);
+//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().firstPerson);
                     break;
                 case THIRD_PERSON:
-                    RenderItem.applyVanillaTransform(this.b3dModel.getItemCameraTransforms().thirdPerson);
+//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().thirdPerson);
                     break;
             }
             return Pair.of(this.b3dModel, matrix4fHandHeld);
         }
 
         @Override
-        public List getFaceQuads(EnumFacing enumFacing) {
+        public List<BakedQuad> getFaceQuads(EnumFacing enumFacing) {
             return this.b3dModel.getFaceQuads(enumFacing);
         }
 
         @Override
-        public List getGeneralQuads() {
+        public List<BakedQuad> getGeneralQuads() {
             return this.b3dModel.getGeneralQuads();
         }
 
@@ -186,13 +181,18 @@ public class BakedModelMateria implements ISmartItemModel{
         }
 
         @Override
-        public TextureAtlasSprite getTexture() {
-            return this.b3dModel.getTexture();
+        public TextureAtlasSprite getParticleTexture() {
+            return this.b3dModel.getParticleTexture();
         }
 
         @Override
         public ItemCameraTransforms getItemCameraTransforms() {
             return this.b3dModel.getItemCameraTransforms();
+        }
+
+        @Override
+        public VertexFormat getFormat() {
+            return null;
         }
     }
     static {

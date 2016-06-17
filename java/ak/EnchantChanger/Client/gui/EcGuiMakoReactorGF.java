@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * SS2導入時の魔晄炉のGUIクラス
  * Created by A.K. on 14/10/07.
  */
 public class EcGuiMakoReactorGF extends GuiContainer {
@@ -32,7 +33,6 @@ public class EcGuiMakoReactorGF extends GuiContainer {
         tileEntity = te;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -65,8 +65,8 @@ public class EcGuiMakoReactorGF extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getCommandSenderName()), 25, 3, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getCommandSenderName()), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {

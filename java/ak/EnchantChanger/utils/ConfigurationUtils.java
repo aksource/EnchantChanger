@@ -63,7 +63,6 @@ public class ConfigurationUtils {
     public static boolean enableAPSystem = true;
     public static boolean enableDungeonLoot = true;
     public static int pointAPBase = 200;
-    public static int idMakoPoison = 100;
     public static boolean enableCloudSwordDisplay = true;
     public static int cloudInvXCoord = 0;
     public static int cloudInvYCoord = 0;
@@ -108,7 +107,6 @@ public class ConfigurationUtils {
                 "enableDungeonLoot", enableDungeonLoot).getBoolean(enableDungeonLoot);
         pointAPBase = config.get(Configuration.CATEGORY_GENERAL, "APBasePoint",
                 pointAPBase).getInt();
-        idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", idMakoPoison, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra SwordIds", extraSwordIDs,
                 "Put Ids which you want to operate as  swords.").getStringList();

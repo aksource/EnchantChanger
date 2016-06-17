@@ -5,7 +5,6 @@ import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class EcRenderHugeMateria extends TileEntitySpecialRenderer {
+public class EcRenderHugeMateria extends TileEntitySpecialRenderer<EcTileEntityHugeMateria> {
     private static final ResourceLocation tex = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcHugetex);
     private static final ResourceLocation texture16 = new ResourceLocation(Constants.EcAssetsDomain, "textures/item/hugemateria16.png");
     private static final ResourceLocation objHugeMateria = new ResourceLocation(Constants.EcAssetsDomain, "models/hugemateria.obj");
@@ -24,7 +23,8 @@ public class EcRenderHugeMateria extends TileEntitySpecialRenderer {
 //        modelHugeMateria = AdvancedModelLoader.loadModel(objHugeMateria);
     }
 
-    public void doRenderModel(EcTileEntityHugeMateria tileEntityHugeMateria, double par2, double par4, double par6, float par8, int par10) {
+    @Override
+    public void renderTileEntityAt(EcTileEntityHugeMateria tileEntityHugeMateria, double par2, double par4, double par6, float par8, int par10) {
         bindTexture(texture16);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -53,11 +53,5 @@ public class EcRenderHugeMateria extends TileEntitySpecialRenderer {
 //		GL11.glPopMatrix();
 //		GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
-    }
-
-    @Override
-    public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8, int par10) {
-        if (par1TileEntity != null)
-            this.doRenderModel((EcTileEntityHugeMateria) par1TileEntity, par2, par4, par6, par8, par10);
     }
 }

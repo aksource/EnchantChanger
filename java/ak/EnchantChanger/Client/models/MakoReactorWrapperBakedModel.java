@@ -88,7 +88,7 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
      */
     private IBakedModel makeMakoReactorBakedModel(ItemStack itemStack, EnumFacing face) {
         IBakedModel itemStackModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemStack);
-        TextureAtlasSprite particleTAS = itemStackModel.getTexture();
+        TextureAtlasSprite particleTAS = itemStackModel.getParticleTexture();
         return new MakoReactorBakedModel(frontTAS, sideTAS, particleTAS, face);
     }
     @Override
@@ -117,7 +117,7 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
     }
 
     @Override
-    public TextureAtlasSprite getTexture() {
+    public TextureAtlasSprite getParticleTexture() {
         return null;
     }
 
@@ -159,28 +159,28 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
         }
 
         @Override
-        public Pair<IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+        public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
             Matrix4f matrix4f = null;
             if (ItemCameraTransforms.TransformType.THIRD_PERSON == cameraTransformType) {
                 matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
             } else if (ItemCameraTransforms.TransformType.FIRST_PERSON == cameraTransformType) {
                 matrix4f = TRSRTransformation.mul(null, rotateFirstPerson, null, null);
             }
-            return Pair.of((IBakedModel) this, matrix4f);
+            return Pair.of(this, matrix4f);
         }
 
         @Override
         public List<BakedQuad> getFaceQuads(EnumFacing side) {
-            Vector3f fromVec = new Vector3f(0F, 0F, 0F);
-            Vector3f toVec = new Vector3f(16F, 16F, 16F);
+            org.lwjgl.util.vector.Vector3f fromVec = new org.lwjgl.util.vector.Vector3f(0F, 0F, 0F);
+            org.lwjgl.util.vector.Vector3f toVec = new org.lwjgl.util.vector.Vector3f(16F, 16F, 16F);
             BlockFaceUV uv = new BlockFaceUV(new float[]{0.0F, 0.0F, 16F, 16F}, 0);
             TextureAtlasSprite sideTas = (face == side) ? frontTAS : sideTAS;
             String rlName = (face == side) ? frontTAS.getIconName() : sideTAS.getIconName();
             BlockPartFace partFace = new BlockPartFace(side, 0, rlName, uv);
             BakedQuad bakedQuad = faceBakery.makeBakedQuad(fromVec, toVec, partFace, sideTas, side, ModelRotation.X0_Y0, null, true, true);
 
-            Vector3f fromVecBase = new Vector3f(innerStart, innerStart, innerStart);
-            Vector3f toVecBase = new Vector3f(innerEnd, innerEnd, innerEnd);
+            org.lwjgl.util.vector.Vector3f fromVecBase = new org.lwjgl.util.vector.Vector3f(innerStart, innerStart, innerStart);
+            org.lwjgl.util.vector.Vector3f toVecBase = new org.lwjgl.util.vector.Vector3f(innerEnd, innerEnd, innerEnd);
             BlockFaceUV uvBase = new BlockFaceUV(new float[]{0.0F, 0.0F, 16F, 16F}, 0);
             BlockPartFace partFaceBase = new BlockPartFace(side, 0, blockTAS.getIconName(), uvBase);
             BakedQuad bakedQuadBase = faceBakery.makeBakedQuad(fromVecBase, toVecBase, partFaceBase, blockTAS, side, ModelRotation.X0_Y0, null, true, true);
@@ -214,7 +214,7 @@ public class MakoReactorWrapperBakedModel implements IFlexibleBakedModel, ISmart
         }
 
         @Override
-        public TextureAtlasSprite getTexture() {
+        public TextureAtlasSprite getParticleTexture() {
             return blockTAS;
         }
 

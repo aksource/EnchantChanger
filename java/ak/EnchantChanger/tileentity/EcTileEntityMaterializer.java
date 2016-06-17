@@ -182,7 +182,7 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
         if (stack != null) {
             setInventorySlotContents(slot, null);
@@ -259,7 +259,7 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
      * }
      */
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "container.materializer";
     }
 
@@ -295,6 +295,6 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getCommandSenderName());
+        return new ChatComponentText(getName());
     }
 }

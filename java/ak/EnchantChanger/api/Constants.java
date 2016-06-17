@@ -3,7 +3,6 @@ package ak.EnchantChanger.api;
 import ak.EnchantChanger.CreativeTabEC;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.b3d.B3DLoader;
 
 /**
  * 定数クラス
@@ -39,14 +38,29 @@ public class Constants {
     public static final String MODEL_TYPE_INVENTORY = "inventory";
     public static final String MODEL_TYPE_FLUID = "fluid";
     public static final String MODEL_TYPE_GAS = "gas";
-    public static final ResourceLocation ITEM_BUSTER_SWORD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/bustersword-united.b3d", "Sword");
-    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/unionsword-united.b3d", "centerplate");
-    public static final ResourceLocation ITEM_FIRST_SWORD_CLOSED_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/firstsword-closed-united.b3d", "centerplate");
-    public static final ResourceLocation ITEM_FIRST_SWORD_OPEN_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/firstsword-open-united.b3d", "centerplate");
-    public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/masamune-united.b3d", "sword");
-    public static final ResourceLocation ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/masamune-scabbard-united.b3d", "sword");
-    public static final ResourceLocation ITEM_ULTIMATE_WEAPON_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/ultimateweapon-united.b3d", "sword");
-    public static final ResourceLocation ITEM_MATERIA_MODEL_RL = new ResourceLocation(MOD_ID, "item/spheresmall.b3d");
+//    public static final ResourceLocation ITEM_BUSTER_SWORD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/bustersword-united.b3d", "Sword");
+//    public static final ResourceLocation ITEM_BUSTER_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/bustersword-united.b3d");
+    public static final ResourceLocation ITEM_BUSTER_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "item/bustersword-united.obj");
+//    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/unionsword-united.b3d", "centerplate");
+//    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/unionsword-united.b3d");
+    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "item/unionsword-united.obj");
+//    public static final ResourceLocation ITEM_FIRST_SWORD_CLOSED_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/firstsword-closed-united.b3d", "centerplate");
+//    public static final ResourceLocation ITEM_FIRST_SWORD_CLOSED_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/firstsword-closed-united.b3d");
+    public static final ResourceLocation ITEM_FIRST_SWORD_CLOSED_MODEL_RL = new ResourceLocation(MOD_ID, "item/firstsword-closed-united.obj");
+//    public static final ResourceLocation ITEM_FIRST_SWORD_OPEN_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/firstsword-open-united.b3d", "centerplate");
+//    public static final ResourceLocation ITEM_FIRST_SWORD_OPEN_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/firstsword-open-united.b3d");
+    public static final ResourceLocation ITEM_FIRST_SWORD_OPEN_MODEL_RL = new ResourceLocation(MOD_ID, "item/firstsword-open-united.obj");
+//    public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/masamune-united.b3d", "sword");
+//    public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/masamune-united.b3d");
+    public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new ResourceLocation(MOD_ID, "item/masamune-noscabbard-united.obj");
+//    public static final ResourceLocation ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/masamune-scabbard-united.b3d", "sword");
+//    public static final ResourceLocation ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/masamune-scabbard-united.b3d");
+    public static final ResourceLocation ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL = new ResourceLocation(MOD_ID, "item/masamune-scabbard-united.obj");
+//    public static final ResourceLocation ITEM_ULTIMATE_WEAPON_MODEL_RL = new B3DLoader.B3DMeshLocation(MOD_ID, "models/item/ultimateweapon-united.b3d", "sword");
+//    public static final ResourceLocation ITEM_ULTIMATE_WEAPON_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/ultimateweapon-united.b3d");
+    public static final ResourceLocation ITEM_ULTIMATE_WEAPON_MODEL_RL = new ResourceLocation(MOD_ID, "item/ultimateweapon-united.obj");
+//    public static final ResourceLocation ITEM_MATERIA_MODEL_RL = new ResourceLocation(MOD_ID, "models/item/spheresmall.b3d");
+    public static final ResourceLocation ITEM_MATERIA_MODEL_RL = new ResourceLocation(MOD_ID, "item/spherelight.obj");
     public static final String TEXTURE_NAME_ULTIMATE_EMBLEM = "ultimateweapon256-emblem";
     public static final String TEXTURE_NAME_ULTIMATE_GRIP = "ultimateweapon256-grip";
     public static final String TEXTURE_NAME_ULTIMATE_HAND = "ultimateweapon256-handguard";
@@ -98,4 +112,7 @@ public class Constants {
     public static final byte MAGIC_ID_HASTE = 7;
     public static final byte MAGIC_ID_ABSORPTION = 8;
 
+    public static final String BATTOUKEN_MOD_ID = "battouken";
+
+    public static final int FIELD_INDEX_MINECRAFT_TIMER = 19;
 }

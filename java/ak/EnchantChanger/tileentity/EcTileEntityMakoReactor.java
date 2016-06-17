@@ -25,11 +25,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -45,6 +45,7 @@ import java.util.List;
 //import cofh.api.energy.IEnergyConnection;
 
 /**
+ * 魔晄炉のTileEntityクラス
  * Created by A.K. on 14/03/11.
  */
 @Optional.InterfaceList(
@@ -52,7 +53,7 @@ import java.util.List;
                 @Optional.Interface(iface = "cofh.api.tileentity.IEnergyInfo", modid = "CoFHCore"),
                 @Optional.Interface(iface = "shift.sextiarysector.api.machine.energy.IEnergyHandler", modid = "SextiarySector")}
 )
-public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdatePlayerListBox, ISidedInventory, IFluidHandler/*, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler*/ {
+public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickable, ISidedInventory, IFluidHandler/*, IEnergyHandler, IEnergyInfo , shift.sextiarysector.api.machine.energy.IEnergyHandler*/ {
     public static final int MAX_SMELTING_TIME = 200;
     public static final int SMELTING_MAKO_COST = 5;
     public static final int MAX_GENERATING_RF_TIME = 200;
@@ -487,7 +488,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
         if (stack != null) {
             setInventorySlotContents(slot, null);
@@ -506,7 +507,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements IUpdateP
     }
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "container.makoreactor";
     }
 

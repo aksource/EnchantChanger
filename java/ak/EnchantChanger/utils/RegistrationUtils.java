@@ -11,14 +11,13 @@ import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import static ak.EnchantChanger.utils.ConfigurationUtils.*;
 import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.EnchantChanger.utils.ConfigurationUtils.*;
 /**
  * Created by A.K. on 14/10/12.
  */
@@ -33,28 +32,25 @@ public class RegistrationUtils {
     }
 
     public static void registerBlockAndItem() {
-        GameRegistry.registerBlock(blockEnchantChanger, "EnchantChanger");
-        GameRegistry.registerBlock(blockHugeMateria, "blockhugemateria");
-        GameRegistry.registerBlock(blockMakoReactor, EcItemBlockMakoReactor.class, "blockmakoreactor");
-        GameRegistry.registerBlock(blockLifeStream, "life_stream");
-        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(itemBucketLifeStream), new ItemStack(Items.bucket));
-        GameRegistry.registerItem(itemBucketLifeStream, "bucket_lifestream");
+        GameRegistry.registerBlock(blockEnchantChanger);
+        GameRegistry.registerBlock(blockHugeMateria);
+        GameRegistry.registerBlock(blockMakoReactor, EcItemBlockMakoReactor.class);
+        GameRegistry.registerBlock(blockLifeStream);
+        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack(fluidLifeStream.getName(), FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(itemBucketLifeStream), new ItemStack(Items.bucket));
+        GameRegistry.registerItem(itemBucketLifeStream);
 
-        GameRegistry.registerItem(itemMateria, "materia");
-        GameRegistry.registerItem(itemHugeMateria, "itemhugemateria");
-        GameRegistry.registerItem(itemExExpBottle, "exexpbottle");
-        GameRegistry.registerItem(itemZackSword, "zacksword");
-        GameRegistry.registerItem(itemCloudSwordCore, "cloudswordcore");
-        GameRegistry.registerItem(itemCloudSword, "cloudsword");
-        GameRegistry.registerItem(itemSephirothSword, "masamuneblade");
-        GameRegistry.registerItem(itemUltimateWeapon, "ultimateweapon");
-        GameRegistry.registerItem(itemPortableEnchantChanger,
-                "portableenchantchanger");
-        GameRegistry.registerItem(itemPortableEnchantmentTable,
-                "portableenchantmenttable");
-        GameRegistry.registerItem(itemMasterMateria, "mastermateria");
-        GameRegistry.registerItem(itemImitateSephirothSword,
-                "imitationmasamuneblade");
+        GameRegistry.registerItem(itemMateria);
+        GameRegistry.registerItem(itemHugeMateria);
+        GameRegistry.registerItem(itemExExpBottle);
+        GameRegistry.registerItem(itemZackSword);
+        GameRegistry.registerItem(itemCloudSwordCore);
+        GameRegistry.registerItem(itemCloudSword);
+        GameRegistry.registerItem(itemSephirothSword);
+        GameRegistry.registerItem(itemUltimateWeapon);
+        GameRegistry.registerItem(itemPortableEnchantChanger);
+        GameRegistry.registerItem(itemPortableEnchantmentTable);
+        GameRegistry.registerItem(itemMasterMateria);
+        GameRegistry.registerItem(itemImitateSephirothSword);
     }
 
     public static void registerTileEntities() {
@@ -75,14 +71,6 @@ public class RegistrationUtils {
     }
 
     public static void addStatusEffect() {
-        if (idMakoPoison < Potion.potionTypes.length) {
-            if (Potion.potionTypes[idMakoPoison] == null) {
-                potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
-            } else {
-                throw new IllegalArgumentException("idMakoPoison:id has been used another MOD");
-            }
-        } else {
-            throw new IllegalArgumentException("idMakoPoison:Only set from 24 to 127");
-        }
+        potionMako = new EcPotionMako().setPotionName("EC|MakoPoison");
     }
 }

@@ -1,9 +1,11 @@
 package ak.EnchantChanger.Client.renderer;
 
+import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.EcItemSephirothSword;
 import ak.EnchantChanger.item.EcItemSephirothSwordImit;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
+import com.google.common.base.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -16,7 +18,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
@@ -82,8 +83,7 @@ public class EcRenderPlayerBack {
     private boolean canRenderBack(EntityPlayer player) {
         ItemStack slotZero = player.inventory.getStackInSlot(0);
         if (slotZero != null) {
-            GameRegistry.UniqueIdentifier uId = GameRegistry.findUniqueIdentifierFor(slotZero.getItem());
-            return uId != null && !uId.modId.equals("battouken");
+            return !Optional.fromNullable(slotZero.getItem().getRegistryName()).or("dummy:dummy").matches(Constants.BATTOUKEN_MOD_ID);
         }
         return true;
     }

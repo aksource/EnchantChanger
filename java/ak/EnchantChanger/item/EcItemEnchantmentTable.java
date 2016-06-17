@@ -98,7 +98,7 @@ public class EcItemEnchantmentTable extends EcItem {
         }
 
         @Override
-        public String getCommandSenderName() {
+        public String getName() {
             return "container.enchantment";
         }
 
@@ -109,7 +109,7 @@ public class EcItemEnchantmentTable extends EcItem {
 
         @Override
         public IChatComponent getDisplayName() {
-            return new ChatComponentTranslation(this.getCommandSenderName());
+            return new ChatComponentTranslation(this.getName());
         }
     }
 }

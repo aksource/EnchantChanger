@@ -10,7 +10,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -38,7 +40,7 @@ public class RenderingOverlayEvent {
         int height = mc.displayHeight;
         ScaledResolution res;
         if (ForgeVersion.getBuildVersion() > 1147) {
-            res = new ScaledResolution(mc, width, height);
+            res = new ScaledResolution(mc/*, width, height*/);
             width = res.getScaledWidth();
             height = res.getScaledHeight();
         } else {
@@ -137,12 +139,13 @@ public class RenderingOverlayEvent {
      * tessellator, x, y, width, height, color
      */
     private void renderQuad(Tessellator tessellator, int x, int y, int width, int height, int color) {
-        tessellator.getWorldRenderer().startDrawingQuads();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 //        tessellator.getWorldRenderer().setColorOpaque_I(color);
-        tessellator.getWorldRenderer().addVertex((double) (x + 0), (double) (y + 0), 0.0D);
-        tessellator.getWorldRenderer().addVertex((double) (x + 0), (double) (y + height), 0.0D);
-        tessellator.getWorldRenderer().addVertex((double) (x + width), (double) (y + height), 0.0D);
-        tessellator.getWorldRenderer().addVertex((double) (x + width), (double) (y + 0), 0.0D);
+        worldRenderer.pos((double) (x + 0), (double) (y + 0), 0.0D).endVertex();
+        worldRenderer.pos((double) (x + 0), (double) (y + height), 0.0D).endVertex();
+        worldRenderer.pos((double) (x + width), (double) (y + height), 0.0D).endVertex();
+        worldRenderer.pos((double) (x + width), (double) (y + 0), 0.0D).endVertex();
         tessellator.draw();
     }
 }

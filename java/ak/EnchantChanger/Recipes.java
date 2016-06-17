@@ -4,6 +4,7 @@ import ak.EnchantChanger.block.EcBlockMakoReactor;
 import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
 import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
+import com.google.common.base.Optional;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -148,8 +149,8 @@ public class Recipes {
         for (ItemStack itemStack : ores) {
             makoReactorController = new ItemStack(blockMakoReactor, 1, 0);
             makoReactorController.setTagCompound(new NBTTagCompound());
-            GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
-            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+            String uidStr = Optional.fromNullable(itemStack.getItem().getRegistryName()).or("dummy:dummy");
+            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uidStr);
             makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
             GameRegistry.addRecipe(makoReactorController,
                     "BBB",

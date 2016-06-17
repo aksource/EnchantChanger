@@ -7,14 +7,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EcRenderApOrb extends Render {
+public class EcRenderApOrb extends Render<EcEntityApOrb> {
     private static final ResourceLocation experienceOrbTextures = new ResourceLocation("textures/entity/experience_orb.png");
 
     public EcRenderApOrb(RenderManager renderManager1) {
@@ -23,7 +23,8 @@ public class EcRenderApOrb extends Render {
         this.shadowOpaque = 0.75F;
     }
 
-    public void renderTheAPOrb(EcEntityApOrb ecEntityApOrb, double par2, double par4, double par6, float par8, float par9) {
+    @Override
+    public void doRender(EcEntityApOrb ecEntityApOrb, double par2, double par4, double par6, float par8, float par9) {
         GlStateManager.pushMatrix();//GL11.glPushMatrix();
         GlStateManager.translate(par2, par4, par6);//GL11.glTranslatef((float)par2, (float)par4, (float)par6);
         this.bindEntityTexture(ecEntityApOrb);
@@ -52,30 +53,24 @@ public class EcRenderApOrb extends Render {
         GlStateManager.scale(f11, f11, f11);//GL11.glScalef(f11, f11, f11);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.startDrawingQuads();
-        worldrenderer.setColorRGBA_I(k1, 128);
-        worldrenderer.setNormal(0.0F, 1.0F, 0.0F);
-        worldrenderer.addVertexWithUV((double) (0.0F - f7), (double) (0.0F - f8), 0.0D, (double) f2, (double) f5);
-        worldrenderer.addVertexWithUV((double) (f6 - f7), (double) (0.0F - f8), 0.0D, (double) f3, (double) f5);
-        worldrenderer.addVertexWithUV((double) (f6 - f7), (double) (1.0F - f8), 0.0D, (double) f3, (double) f4);
-        worldrenderer.addVertexWithUV((double) (0.0F - f7), (double) (1.0F - f8), 0.0D, (double) f2, (double) f4);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+//        worldrenderer.setColorRGBA_I(k1, 128);
+//        worldrenderer.setNormal(0.0F, 1.0F, 0.0F);
+        worldrenderer.pos((double) (0.0F - f7), (double) (0.0F - f8), 0.0D).tex((double) f2, (double) f5)
+                .color(l, j1, i1, 128).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos((double) (f6 - f7), (double) (0.0F - f8), 0.0D).tex((double) f3, (double) f5)
+                .color(l, j1, i1, 128).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos((double) (f6 - f7), (double) (1.0F - f8), 0.0D).tex((double) f3, (double) f4)
+                .color(l, j1, i1, 128).normal(0.0F, 1.0F, 0.0F).endVertex();;
+        worldrenderer.pos((double) (0.0F - f7), (double) (1.0F - f8), 0.0D).tex((double) f2, (double) f4)
+                .color(l, j1, i1, 128).normal(0.0F, 1.0F, 0.0F).endVertex();;
         tessellator.draw();
         GlStateManager.disableBlend();//GL11.glDisable(GL11.GL_BLEND);
         GlStateManager.disableRescaleNormal();//GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GlStateManager.popMatrix();//GL11.glPopMatrix();
     }
 
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
+    protected ResourceLocation getEntityTexture(EcEntityApOrb par1Entity) {
         return experienceOrbTextures;
-    }
-
-    /**
-     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
-     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
-     * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
-     * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
-     */
-    public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
-        this.renderTheAPOrb((EcEntityApOrb) par1Entity, par2, par4, par6, par8, par9);
     }
 }

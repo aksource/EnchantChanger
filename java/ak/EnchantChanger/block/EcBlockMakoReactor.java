@@ -5,6 +5,7 @@ import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.block.property.UnlistedPropertyInteger;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileMultiPass;
+import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -26,7 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -127,9 +127,9 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
             for (ItemStack itemStack : ores) {
                 makoReactorController = new ItemStack(this, 1, 0);
                 makoReactorController.setTagCompound(new NBTTagCompound());
-                GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+                String uidStr = Optional.fromNullable(itemStack.getItem().getRegistryName()).or("dummy:dummy");
                 blockMeta = (itemStack.getItem()).getMetadata(itemStack.getItemDamage());
-                makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+                makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uidStr);
                 makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", blockMeta);
                 list.add(makoReactorController);
             }

@@ -23,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -45,8 +44,7 @@ import static ak.EnchantChanger.utils.RegistrationUtils.*;
 @Mod(modid = Constants.MOD_ID,
         name = Constants.MOD_NAME,
         version = Constants.MOD_VERSION,
-        updateJSON = "",
-        dependencies = "required-after:PotionExtensionCore",
+        dependencies = "required-after:Forge@[11.15.0,)",
         useMetadata = true,
         acceptedMinecraftVersions = Constants.MOD_MC_VERSION)
 public class EnchantChanger {
@@ -93,25 +91,25 @@ public class EnchantChanger {
                 event.getSuggestedConfigurationFile());
         initConfig(config);
 
-        itemMateria = (new EcItemMateria("Materia")).setHasSubtypes(true).setMaxDamage(0)/*.setTextureName("ender_pearl")*/;
-        itemExExpBottle = new EcItemExExpBottle("ExExpBottle");
-        itemZackSword = (new EcItemZackSword("ZackSword")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
-        itemCloudSwordCore = (new EcItemCloudSwordCore("CloudSwordCore")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
-        itemCloudSword = (new EcItemCloudSword("CloudSword")).setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14).setCreativeTab(null);
-        itemSephirothSword = (new EcItemSephirothSword("MasamuneBlade")).setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 2);
-        itemUltimateWeapon = (new EcItemUltimateWeapon("UltimateWeapon")).setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 14);
-        itemPortableEnchantChanger = (new EcItemMaterializer("PortableEnchantChanger"));
-        itemPortableEnchantmentTable = (new EcItemEnchantmentTable("PortableEnchantmentTable"));
-        itemMasterMateria = new EcItemMasterMateria("itemMasterMateria")/*.setTextureName("ender_pearl")*/.setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1);
-        itemImitateSephirothSword = (new EcItemSephirothSwordImit("ImitateMasamuneBlade"))/*.setTextureName(Constants.EcTextureDomain + "MasamuneBlade")*/;
-        blockEnchantChanger = (new EcBlockMaterializer()).setUnlocalizedName("EnchantChanger").setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "EnchantChanger-top")*/.setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
-        blockHugeMateria = new EcBlockHugeMateria().setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0).setUnlocalizedName("blockHugeMateria")/*.setBlockTextureName("glass")*/;
-        itemHugeMateria = new EcItemHugeMateria("HugeMateria");
+        itemMateria = (new EcItemMateria("Materia")).setRegistryName("materia").setHasSubtypes(true).setMaxDamage(0)/*.setTextureName("ender_pearl")*/;
+        itemExExpBottle = new EcItemExExpBottle("ExExpBottle").setRegistryName("exexpbottle");
+        itemZackSword = (new EcItemZackSword("ZackSword")).setRegistryName("zacksword").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
+        itemCloudSwordCore = (new EcItemCloudSwordCore("CloudSwordCore")).setRegistryName("cloudswordcore").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14);
+        itemCloudSword = (new EcItemCloudSword("CloudSword")).setRegistryName("cloudsword").setMaxDamage(Item.ToolMaterial.IRON.getMaxUses() * 14).setCreativeTab(null);
+        itemSephirothSword = (new EcItemSephirothSword("MasamuneBlade")).setRegistryName("masamuneblade").setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 2);
+        itemUltimateWeapon = (new EcItemUltimateWeapon("UltimateWeapon")).setRegistryName("ultimateweapon").setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses() * 14);
+        itemPortableEnchantChanger = (new EcItemMaterializer("PortableEnchantChanger")).setRegistryName("portableenchantchanger");
+        itemPortableEnchantmentTable = (new EcItemEnchantmentTable("PortableEnchantmentTable")).setRegistryName("portableenchantmenttable");
+        itemMasterMateria = new EcItemMasterMateria("itemMasterMateria").setRegistryName("mastermateria")/*.setTextureName("ender_pearl")*/.setHasSubtypes(true).setMaxDamage(0).setMaxStackSize(1);
+        itemImitateSephirothSword = (new EcItemSephirothSwordImit("ImitateMasamuneBlade")).setRegistryName("imitationmasamuneblade");
+        blockEnchantChanger = (new EcBlockMaterializer()).setRegistryName("EnchantChanger").setUnlocalizedName("EnchantChanger").setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "EnchantChanger-top")*/.setHardness(5.0f).setResistance(2000.0f).setLightOpacity(0);
+        blockHugeMateria = new EcBlockHugeMateria().setRegistryName("blockhugemateria").setHardness(5.0f).setResistance(2000.0f).setLightLevel(1.0f).setLightOpacity(0).setUnlocalizedName("blockHugeMateria")/*.setBlockTextureName("glass")*/;
+        itemHugeMateria = new EcItemHugeMateria("HugeMateria").setRegistryName("itemhugemateria");
         fluidLifeStream = new Fluid("lifestream", LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
         FluidRegistry.registerFluid(fluidLifeStream);
-        blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako).setUnlocalizedName("lifestream");
-        blockMakoReactor = new EcBlockMakoReactor().setUnlocalizedName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "makoreactor-side")*/;
-        itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
+        blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako).setRegistryName("life_stream").setUnlocalizedName("lifestream");
+        blockMakoReactor = new EcBlockMakoReactor().setRegistryName("blockmakoreactor").setUnlocalizedName("makoreactor").setHardness(5.0f).setResistance(10.0f).setStepSound(Block.soundTypeMetal).setCreativeTab(Constants.TAB_ENCHANT_CHANGER)/*.setBlockTextureName(Constants.EcTextureDomain + "makoreactor-side")*/;
+        itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream").setRegistryName("bucket_lifestream").setContainerItem(Items.bucket).setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
 
         registerBlockAndItem();
         registerEnchantments();
@@ -127,11 +125,11 @@ public class EnchantChanger {
         FillBucketHook.buckets.put(blockLifeStream, itemBucketLifeStream);
         MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
         MinecraftForge.EVENT_BUS.register(itemPortableEnchantmentTable);
-        FMLCommonHandler.instance().bus().register(proxy);
+        MinecraftForge.EVENT_BUS.register(proxy);
         PlayerCustomDataHandler playerCustomDataHandler = new PlayerCustomDataHandler();
         MinecraftForge.EVENT_BUS.register(playerCustomDataHandler);
-        FMLCommonHandler.instance().bus().register(playerCustomDataHandler);
-        FMLCommonHandler.instance().bus().register(new CommonTickHandler());
+        MinecraftForge.EVENT_BUS.register(playerCustomDataHandler);
+        MinecraftForge.EVENT_BUS.register(new CommonTickHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(new GenerateHandler());
 
         registerTileEntities();

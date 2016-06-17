@@ -15,16 +15,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayerListBox, IInventory {
+public class EcTileEntityHugeMateria extends TileEntity implements ITickable, IInventory {
     public int MaterializingTime = 0;
     public float angle = 0;
     //	private static int[][] EnchArray;
@@ -73,7 +73,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayer
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
         if (stack != null) {
             setInventorySlotContents(slot, null);
@@ -185,7 +185,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayer
     }
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "container.hugeMateria";
     }
 
@@ -298,7 +298,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements IUpdatePlayer
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getCommandSenderName());
+        return new ChatComponentText(getName());
     }
 //
 //	static{

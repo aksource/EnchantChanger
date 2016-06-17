@@ -175,7 +175,7 @@ public class EcContainerMaterializer extends Container {
                         }
                     }
             }
-            if (this.checkMateriafromSlot(materializeSource)) {
+            if (this.checkMateriaFromSlot(materializeSource)) {
                 for (int i = 1; i < this.materializeSource.getSizeInventory(); i++) {
                     ItemStack materiaitem = this.materializeSource.getStackInSlot(i);
                     if (materiaitem == null) {
@@ -295,14 +295,14 @@ public class EcContainerMaterializer extends Container {
         if (!this.worldPointer.isRemote) {
             if (!this.ItemSourceLeft()) {
                 for (int var4 = 0; var4 < ResultSlotNum; ++var4) {
-                    ItemStack var5 = this.materializeResult.getStackInSlotOnClosing(var4);
+                    ItemStack var5 = this.materializeResult.removeStackFromSlot(var4);
                     if (var5 != null) {
                         par1EntityPlayer.dropPlayerItemWithRandomChoice(var5, false);
                     }
                 }
             }
             for (int var2 = 0; var2 < SourceSlotNum; ++var2) {
-                ItemStack var3 = this.materializeSource.getStackInSlotOnClosing(var2);
+                ItemStack var3 = this.materializeSource.removeStackFromSlot(var2);
                 if (var3 != null) {
                     par1EntityPlayer.dropPlayerItemWithRandomChoice(var3, false);
                 }
@@ -315,7 +315,7 @@ public class EcContainerMaterializer extends Container {
         return this.materializeSource.getStackInSlot(0) != null;
     }
 
-    private boolean checkMateriafromSlot(IInventory Source) {
+    private boolean checkMateriaFromSlot(IInventory Source) {
         boolean ret = false;
         for (int i = 0; i < Source.getSizeInventory(); i++) {
             if (Source.getStackInSlot(i) != null && Source.getStackInSlot(i).getItem() instanceof EcItemMateria)

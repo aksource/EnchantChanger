@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static ak.EnchantChanger.api.Constants.MOD_ID;
@@ -26,6 +25,10 @@ public class StringUtils {
         return MOD_ID.toLowerCase() + OBJ_ITEM_DOMAIN + path;
     }
 
+    public static String makeObjMaterialKeyName(String materilaName) {
+        return "#" + materilaName;
+    }
+
     /**
      * ドメイン付きブロック固有名からBlockを取得するメソッド
      * Blockが取得できなかった場合は、Airブロックを返す。
@@ -33,13 +36,14 @@ public class StringUtils {
      * @return 固有名から取得したBlock
      */
     public static Block getBlockFromString(String stringBlockName) {
-        Block block = GameData.getBlockRegistry().getObject(stringBlockName);
-//        String[] strings = stringBlockName.split(":");
-//        if (strings.length > 1) {
-//            block = GameRegistry.findBlock(strings[0], strings[1]);
-//        } else {
-//            block = GameRegistry.findBlock("minecraft", strings[0]);
-//        }
+//        Block block = GameData.getBlockRegistry().getObject(stringBlockName);
+        Block block;
+        String[] strings = stringBlockName.split(":");
+        if (strings.length > 1) {
+            block = GameRegistry.findBlock(strings[0], strings[1]);
+        } else {
+            block = GameRegistry.findBlock("minecraft", strings[0]);
+        }
         if (block == null) {
             block = Blocks.air;
         }
@@ -47,16 +51,16 @@ public class StringUtils {
     }
 
     public static String getUniqueStrings(Object obj) {
-        GameRegistry.UniqueIdentifier uId = null;
+        String uId = null;
         if (obj instanceof ItemStack) {
             obj = ((ItemStack) obj).getItem();
         }
         if (obj instanceof Block) {
-            uId = GameRegistry.findUniqueIdentifierFor((Block) obj);
+            uId = ((Block) obj).getRegistryName();
         }
         if (obj instanceof Item) {
-            uId = GameRegistry.findUniqueIdentifierFor((Item) obj);
+            uId = ((Item) obj).getRegistryName();
         }
-        return Optional.fromNullable(uId).or(new GameRegistry.UniqueIdentifier("none:dummy")).toString();
+        return Optional.fromNullable(uId).or("none:dummy");
     }
 }

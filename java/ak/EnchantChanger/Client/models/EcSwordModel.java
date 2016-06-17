@@ -5,9 +5,10 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -38,12 +39,14 @@ public class EcSwordModel implements ISmartItemModel{
 
 
     public EcSwordModel(IBakedModel model1, List<IRetexturableModel> retexturableModelList, float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
-       this.guiModel = guiModel;
+       this.guiModel = model1;
         List<IPerspectiveAwareModel> list = new ArrayList<>();
         for (IRetexturableModel model : retexturableModelList) {
-            IBakedModel retexturedModel;
+            IFlexibleBakedModel retexturedModel;
             retexturedModel = model.retexture(textureMap).bake(model.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
-            PerspectiveModel perspectiveModel = new PerspectiveModel(model1, retexturedModel, sizeFPV, sizeTPV);
+            PerspectiveModel perspectiveModel = new PerspectiveModel(
+                    (model1 instanceof IFlexibleBakedModel) ? (IFlexibleBakedModel) model1 : new IFlexibleBakedModel.Wrapper(model1, null),
+                    retexturedModel, sizeFPV, sizeTPV);
             list.add(perspectiveModel);
         }
         this.modelList = list;
@@ -62,12 +65,12 @@ public class EcSwordModel implements ISmartItemModel{
 
 
     @Override
-    public List getFaceQuads(EnumFacing facing) {
+    public List<BakedQuad> getFaceQuads(EnumFacing facing) {
         return null;
     }
 
     @Override
-    public List getGeneralQuads() {
+    public List<BakedQuad> getGeneralQuads() {
         return null;
     }
 
@@ -87,7 +90,7 @@ public class EcSwordModel implements ISmartItemModel{
     }
 
     @Override
-    public TextureAtlasSprite getTexture() {
+    public TextureAtlasSprite getParticleTexture() {
         return null;
     }
 
@@ -105,61 +108,61 @@ public class EcSwordModel implements ISmartItemModel{
         /** 一人称視点時の平行移動ベクトル */
         private Vector3f translationFirstPerson = new Vector3f(0.0F, 0.0F, 0.1F);
         /** 三人称視点時の平行移動ベクトル */
-        private Vector3f translationThirdPerson = new Vector3f(0.03F, 0.05F, -0.13F);
+//        private Vector3f translationThirdPerson = new Vector3f(0.03F, 0.05F, -0.13F);
+        private Vector3f translationThirdPerson = new Vector3f(-0.03F, 0.05F, -0.13F);
         /** 一人称視点時の回転ベクトル */
         private Quat4f rotateFirstPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(10, 0, 0));
         /** 三人称視点時の回転ベクトル */
+//        private Quat4f rotateThirdPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(-90, 0, 0));
         private Quat4f rotateThirdPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(-90, 0, 0));
         /** インベントリアイコン用モデル */
-        private IBakedModel guiModel;
+        private IFlexibleBakedModel guiModel;
         /** 一人称・三人称視点用モデル */
-        private IBakedModel handHeldModel;
-        public PerspectiveModel (IBakedModel guiModel, IBakedModel handHeldModel, float sizeFPV, float sizeTPV) {
+        private IFlexibleBakedModel handHeldModel;
+        public PerspectiveModel (IFlexibleBakedModel guiModel, IFlexibleBakedModel handHeldModel, float sizeFPV, float sizeTPV) {
             this.guiModel = guiModel;
             this.handHeldModel = handHeldModel;
             this.scaleFirstPerson = new Vector3f(sizeFPV, sizeFPV, sizeFPV);
             this.scaleThirdPerson = new Vector3f(sizeTPV, sizeTPV, sizeTPV);
-//        this.rotateThirdPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 30, 0)));
+            this.rotateThirdPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, -90, 0)));
             rotateFirstPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 120, 0)));
-//        rotateFirstPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 0, 25)));
+//            rotateFirstPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 0, 90)));
         }
 
         @Override
-        public Pair<IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+        public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
 
-            IBakedModel model = null;
+            IFlexibleBakedModel model = null;
             Matrix4f matrix4f = null;
             switch (cameraTransformType) {
                 case GUI:
-                    RenderItem.applyVanillaTransform(this.guiModel.getItemCameraTransforms().gui);
                     model = this.guiModel;
                     matrix4f = null;
                     break;
                 case FIRST_PERSON:
-//                RenderItem.applyVanillaTransform(this.handHeldModel.getItemCameraTransforms().firstPerson);
                     matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPerson, scaleFirstPerson, null);
                     model = this.handHeldModel;
                     break;
                 case HEAD:
-//                RenderItem.applyVanillaTransform(this.handHeldModel.getItemCameraTransforms().head);
                     model = this.handHeldModel;
                     break;
                 case THIRD_PERSON:
-//                RenderItem.applyVanillaTransform(vanillaToolTPTransformation.toItemTransform());
                     matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
                     model = this.handHeldModel;
                     break;
+                default:
+                    model = this.guiModel;
             }
             return Pair.of(model, matrix4f);
         }
 
         @Override
-        public List getFaceQuads(EnumFacing facing) {
+        public List<BakedQuad> getFaceQuads(EnumFacing facing) {
             return this.guiModel.getFaceQuads(facing);
         }
 
         @Override
-        public List getGeneralQuads() {
+        public List<BakedQuad> getGeneralQuads() {
             GlStateManager.depthMask(false);
             return this.guiModel.getGeneralQuads();
         }
@@ -180,13 +183,18 @@ public class EcSwordModel implements ISmartItemModel{
         }
 
         @Override
-        public TextureAtlasSprite getTexture() {
-            return this.guiModel.getTexture();
+        public TextureAtlasSprite getParticleTexture() {
+            return this.guiModel.getParticleTexture();
         }
 
         @Override
         public ItemCameraTransforms getItemCameraTransforms() {
             return this.guiModel.getItemCameraTransforms();
+        }
+
+        @Override
+        public VertexFormat getFormat() {
+            return null;
         }
     }
 }

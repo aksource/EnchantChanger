@@ -10,6 +10,6 @@
     "authorList": ["A.K."],
     "credits": "",
     "requiredMods": ["Forge"],
-    "dependencies": ["PotionExtensionCore"]
+    "dependencies": [""]
 }
 ]

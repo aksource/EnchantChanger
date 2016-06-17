@@ -1,6 +1,6 @@
 package ak.EnchantChanger.item;
 
-import ak.EnchantChanger.Client.ClientProxy;
+import ak.EnchantChanger.Client.ClientInputUtils;
 import ak.EnchantChanger.ExtendedPlayerData;
 import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.api.ICustomReachItem;
@@ -162,8 +162,8 @@ public class EcItemSword extends ItemSword implements ICustomReachItem {
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         if (entityLiving.worldObj.isRemote) {
             Minecraft mc = Minecraft.getMinecraft();
-            Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 17);
-            MovingObjectPosition mop = ClientProxy.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
+            Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, Constants.FIELD_INDEX_MINECRAFT_TIMER);
+            MovingObjectPosition mop = ClientInputUtils.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
             if (mop !=null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && mop.entityHit != null) {
                 mc.objectMouseOver = mop;
                 mc.pointedEntity = mop.entityHit;
