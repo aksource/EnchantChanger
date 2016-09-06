@@ -445,8 +445,6 @@ public class EcItemMateria extends EcItem {
 
     public WeightedRandomChestContent addMateriaInChest(int kind, int par2, int par3, int par4) {
         ItemStack var6 = new ItemStack(this, 1, kind + 1);
-        if (kind < 5)
-            var6.addEnchantment(Enchantment.enchantmentsList[ConfigurationUtils.idEnchantmentMeteor + kind], 1);
         return new WeightedRandomChestContent(var6, par2, par3, par4);
     }
 
