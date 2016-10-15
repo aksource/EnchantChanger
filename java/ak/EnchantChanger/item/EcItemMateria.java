@@ -37,7 +37,7 @@ import java.util.List;
 public class EcItemMateria extends EcItem {
     public static final String[] MateriaMagicNames = new String[]{"Black", "White", "Teleport", "Floating",
             "Thunder", "Despell", "Haste", "Absorption"};
-    public static final String[] MAGIC_NAME = new String[]{"enchantment.Meteo", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
+    public static final String[] MAGIC_NAME = new String[]{"enchantment.Meteor", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
             "enchantment.Thunder", "enchantment.Despell", "enchantment.Haste", "enchantment.Absorption"};
     public static int MagicMateriaNum = MateriaMagicNames.length;
     public static int[] magicEnch = new int[]{ConfigurationUtils.idEnchantmentMeteor, ConfigurationUtils.idEnchantmentHoly,
