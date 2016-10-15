@@ -42,6 +42,9 @@ enchantment.Holy=Holy
 enchantment.Teleport=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
+enchantment.Despell=Despell(No Function)
+enchantment.Haste=Haste(No Function)
+enchantment.Absorption=Absorption(No Function)
 #Potion
 EC|MakoPoison=魔晄中毒
 #death
