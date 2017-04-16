@@ -8,8 +8,8 @@
     "mcversion": "${mcversion}",
     "url": "http://forum.minecraftuser.jp/viewtopic.php?f=13&t=6672",
     "authorList": ["A.K."],
-    "credits": "Special thanks to chicken_bones",
+    "credits": "",
     "requiredMods": ["Forge"],
-    "dependencies": ["PotionExtensionCore"]
+    "dependencies": [""]
 }
 ]

@@ -3,8 +3,6 @@ package ak.EnchantChanger.inventory;
 import ak.EnchantChanger.item.EcItemBucketLifeStream;
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,6 +10,8 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static ak.EnchantChanger.tileentity.EcTileEntityMakoReactor.*;
 
@@ -21,6 +21,7 @@ import static ak.EnchantChanger.tileentity.EcTileEntityMakoReactor.*;
 public class EcContainerMakoReactor extends Container {
     private EcTileEntityMakoReactor tileEntityMakoReactor;
     private int lastSmeltingTime;
+
     public EcContainerMakoReactor(InventoryPlayer inventoryPlayer, EcTileEntityMakoReactor te) {
         this.tileEntityMakoReactor = te;
         int i;
@@ -65,21 +66,19 @@ public class EcContainerMakoReactor extends Container {
     public boolean canInteractWith(EntityPlayer entityPlayer) {
         return this.tileEntityMakoReactor.isUseableByPlayer(entityPlayer);
     }
-    public void addCraftingToCrafters(ICrafting par1ICrafting)
-    {
-        super.addCraftingToCrafters(par1ICrafting);
+
+    public void onCraftGuiOpened(ICrafting par1ICrafting) {
+        super.onCraftGuiOpened(par1ICrafting);
         par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
     }
-    public void detectAndSendChanges()
-    {
+
+    public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        for (Object object :  this.crafters)
-        {
-            ICrafting var2 = (ICrafting)object;
+        for (Object object : this.crafters) {
+            ICrafting var2 = (ICrafting) object;
 
-            if (this.lastSmeltingTime != this.tileEntityMakoReactor.smeltingTime)
-            {
+            if (this.lastSmeltingTime != this.tileEntityMakoReactor.smeltingTime) {
                 var2.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
             }
 
@@ -87,14 +86,14 @@ public class EcContainerMakoReactor extends Container {
 
         this.lastSmeltingTime = this.tileEntityMakoReactor.smeltingTime;
     }
+
     @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int par1, int par2)
-    {
-        if (par1 == 0)
-        {
+    public void updateProgressBar(int par1, int par2) {
+        if (par1 == 0) {
             this.tileEntityMakoReactor.smeltingTime = par2;
         }
     }
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack retItem = null;
@@ -113,7 +112,7 @@ public class EcContainerMakoReactor extends Container {
                         return null;
                     }
                 }
-                if (FurnaceRecipes.smelting().getSmeltingResult(item) != null) {
+                if (FurnaceRecipes.instance().getSmeltingResult(item) != null) {
                     if (!mergeItemStack(item, SLOTS_MATERIAL[0], SLOTS_MATERIAL[SLOTS_MATERIAL.length - 1] + 1, false)) {
                         return null;
                     }

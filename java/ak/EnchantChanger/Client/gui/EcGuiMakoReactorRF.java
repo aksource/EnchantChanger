@@ -1,28 +1,10 @@
 package ak.EnchantChanger.Client.gui;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.EcContainerMakoReactor;
-import ak.EnchantChanger.network.MessageRFStepping;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
-import cofh.core.gui.GuiBaseAdv;
-import cofh.core.gui.element.TabEnergy;
-import cofh.lib.gui.element.TabBase;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import org.lwjgl.input.Keyboard;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by A.K. on 14/10/04.
  */
-public class EcGuiMakoReactorRF extends GuiBaseAdv {
-    public static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMako);
+public class EcGuiMakoReactorRF/* extends GuiBaseAdv */ {
+ /*   public static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiMako);
     private EcTileEntityMakoReactor tileEntity;
     private InventoryPlayer inventoryPlayer;
     private EcGuiMakoReactorButton prevButton;
@@ -62,7 +44,7 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
         }
 
         if (pushed) {
-            PacketHandler.INSTANCE.sendToServer(new MessageRFStepping(tileEntity.getOutputMaxRFValue(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord));
+            PacketHandler.INSTANCE.sendToServer(new MessageRFStepping(tileEntity.getOutputMaxRFValue(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
         }
     }
 
@@ -70,7 +52,7 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseZ);
         fontRendererObj.drawString(StatCollector.translateToLocal(tileEntity.getInventoryName()), 25, 3, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getInventoryName()), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {
@@ -123,5 +105,5 @@ public class EcGuiMakoReactorRF extends GuiBaseAdv {
     public boolean doesGuiPauseGame()
     {
         return false;
-    }
+    }*/
 }

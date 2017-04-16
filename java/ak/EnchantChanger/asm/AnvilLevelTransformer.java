@@ -1,7 +1,7 @@
 package ak.EnchantChanger.asm;
 
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -12,13 +12,14 @@ import org.objectweb.asm.tree.*;
  */
 public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
     private static final String TARGET_CLASS_NAME = "net.minecraft.inventory.ContainerRepair";
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (/*!FMLLaunchHandler.side().isClient() || */!transformedName.equals(TARGET_CLASS_NAME)) {return basicClass;}
+        if (!transformedName.equals(TARGET_CLASS_NAME)) {
+            return basicClass;
+        }
         try {
-            AKInternalCorePlugin.logger.info("Start transforming ContainerRepair Class");
             basicClass = changeableAnvilMaxLevel(name, basicClass);
-            AKInternalCorePlugin.logger.info("Finish transforming ContainerRepair Class");
             return basicClass;
         } catch (Exception e) {
             throw new RuntimeException("failed : AnvilLevelTransformer loading", e);
@@ -39,16 +40,16 @@ public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
             }
         }
         if (mnode != null) {
-            AKInternalCorePlugin.logger.info("Transforming updateRepairOutput Method");
+            AKInternalCorePlugin.logger.debug("Transforming updateRepairOutput Method");
             AbstractInsnNode oldInsnNode1 = null;
             AbstractInsnNode oldInsnNode2 = null;
             AbstractInsnNode oldInsnNode3 = null;
             for (AbstractInsnNode abstractInsnNode : mnode.instructions.toArray()) {
-                if (abstractInsnNode instanceof  IntInsnNode) {
-                    if (((IntInsnNode)abstractInsnNode).operand == 40) {
+                if (abstractInsnNode instanceof IntInsnNode) {
+                    if (((IntInsnNode) abstractInsnNode).operand == 40) {
                         if (oldInsnNode1 == null) oldInsnNode1 = abstractInsnNode;
                         else oldInsnNode3 = abstractInsnNode;
-                    } else if (((IntInsnNode)abstractInsnNode).operand == 39) {
+                    } else if (((IntInsnNode) abstractInsnNode).operand == 39) {
                         oldInsnNode2 = abstractInsnNode;
                     }
                 }

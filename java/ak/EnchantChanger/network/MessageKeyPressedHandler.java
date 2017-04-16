@@ -6,13 +6,14 @@ import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.item.EcItemSword;
 import ak.EnchantChanger.utils.ConfigurationUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
 import static ak.EnchantChanger.api.Constants.*;
 
 /**
@@ -23,10 +24,16 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
     public IMessage onMessage(MessageKeyPressed message, MessageContext ctx) {
         EntityPlayer player = ctx.getServerHandler().playerEntity;
         if (player != null && player.getCurrentEquippedItem() != null && message.keyIndex != -1) {
-            switch(message.keyIndex) {
-                case MagicKEY :doMagic(player.getCurrentEquippedItem(), player); break;
-                case MateriaKEY:openMateriaWindow(player);break;
-                case CtrlKEY:doCtrlKeyAction(player.getCurrentEquippedItem(), player); break;
+            switch (message.keyIndex) {
+                case MagicKEY:
+                    doMagic(player.getCurrentEquippedItem(), player);
+                    break;
+                case MateriaKEY:
+                    openMateriaWindow(player);
+                    break;
+                case CtrlKEY:
+                    doCtrlKeyAction(player.getCurrentEquippedItem(), player);
+                    break;
             }
         }
         return null;
@@ -39,8 +46,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
             if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)) != null
-                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
-            {
+                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword) {
                 EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
             }
         }
@@ -58,7 +64,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private void doCtrlKeyAction(ItemStack itemStack, EntityPlayer player) {
         if (itemStack.getItem() instanceof EcItemSword) {
-            ((EcItemSword)itemStack.getItem()).doCtrlKeyAction(itemStack, player.worldObj, player);
+            ((EcItemSword) itemStack.getItem()).doCtrlKeyAction(itemStack, player.worldObj, player);
         }
     }
 

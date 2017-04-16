@@ -1,9 +1,11 @@
-﻿#Block
+#Block
 tile.EnchantChanger.name=Enchant Changer
 tile.blockHugeMateria.name=HugeMateria
 tile.lifestream.name=Fluid Mako
 tile.makoreactor-machine.name=Mako Reactor Machine Block
 tile.makoreactor-case.name=Mako Reactor Casing Block
+#Fluid
+fluid.lifestream=Fluid Mako
 #Item
 ItemMateria.Base.name=Inactive Materia
 ItemMateria.name=Materia
@@ -56,17 +58,17 @@ enchantchanger.cloudswordcore.mode.inactive=Putting Away Mode
 Key.EcMagic=Magic Key
 Key.EcMateria=Materia Window Key
 #EnchantmentType
-enchantmenttype.all=All Items
-enchantmenttype.armor=All Armors
-enchantmenttype.armor_feet=Feet
-enchantmenttype.armor_legs=Legs
-enchantmenttype.armor_torso=Torso
-enchantmenttype.armor_head=Head
-enchantmenttype.weapon=Weapons
-enchantmenttype.digger=Digging Tools
-enchantmenttype.fishing_rod=Fishing Rod
-enchantmenttype.breakable=Breakable Tools
-enchantmenttype.bow=Bows
+enchantmenttype.ALL=All Items
+enchantmenttype.ARMOR=All Armors
+enchantmenttype.ARMOR_FEET=Feet
+enchantmenttype.ARMOR_LEGS=Legs
+enchantmenttype.ARMOR_TORSO=Torso
+enchantmenttype.ARMOR_HEAD=Head
+enchantmenttype.WEAPON=Weapons
+enchantmenttype.DIGGER=Digging Tools
+enchantmenttype.FISHING_ROD=Fishing Rod
+enchantmenttype.BREAKABLE=Breakable Tools
+enchantmenttype.BOW=Bows
 enchantmenttype.ecsword=Swords of EnchantChanger
 #EnchantmentInfo
 info.enchantment.damage.all=More Sword Damage for All Mob
@@ -86,6 +88,7 @@ info.enchantment.untouching=Digging block as it is
 info.enchantment.durability=Difficult to break
 info.enchantment.lootBonus=Drop more items from Mob
 info.enchantment.lootBonusDigger=Drop more items from block
+info.enchantment.waterWalker=Walk faster in the water
 info.enchantment.arrowDamage=More arrow Damage
 info.enchantment.arrowFire=Add Flame to Arrow
 info.enchantment.arrowKnockback=Punch Mob

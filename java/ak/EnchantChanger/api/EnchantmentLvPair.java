@@ -8,6 +8,7 @@ import net.minecraft.enchantment.Enchantment;
 public class EnchantmentLvPair {
     public Enchantment enchantment;
     public int lv;
+
     public EnchantmentLvPair(Enchantment enchantmentId, int enchantmentLv) {
         this.enchantment = enchantmentId;
         this.lv = enchantmentLv;

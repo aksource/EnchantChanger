@@ -1,17 +1,17 @@
 package ak.EnchantChanger.eventhandler;
 
 import ak.EnchantChanger.ExtendedPlayerData;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class CommonTickHandler {
     @SubscribeEvent
     public void playerTick(PlayerTickEvent event) {
-    	EntityPlayer player = event.player;
-    	if(player != null) {
-    		this.doLimitBreak(player);
-    	}
+        EntityPlayer player = event.player;
+        if (player != null) {
+            this.doLimitBreak(player);
+        }
     }
 
     private void doLimitBreak(EntityPlayer player) {

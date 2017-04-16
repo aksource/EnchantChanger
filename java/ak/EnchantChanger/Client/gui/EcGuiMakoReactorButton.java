@@ -1,19 +1,19 @@
 package ak.EnchantChanger.Client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * Created by A.K. on 14/10/01.
  */
 @SideOnly(Side.CLIENT)
-public class EcGuiMakoReactorButton extends GuiButton{
+public class EcGuiMakoReactorButton extends GuiButton {
     boolean reversed;
 
-    public EcGuiMakoReactorButton (int id, int xPos, int yPos, boolean  reversed){
+    public EcGuiMakoReactorButton(int id, int xPos, int yPos, boolean reversed) {
         super(id, xPos, yPos, 12, 19, "");
         this.reversed = reversed;
     }

@@ -6,129 +6,169 @@ import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
-public class EcBlockHugeMateria extends BlockContainer
-{
-	public EcBlockHugeMateria()
-	{
-		super(Material.rock);
-	}
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-	@Override
-	public TileEntity createTileEntity(World world, int metadata)
-	{
-		return metadata == 0 ?new EcTileEntityHugeMateria():null;
-	}
-	@Override
-	public int getRenderType()
-	{
-		return -1;
-	}
-	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-	{
-		if(par1World.isRemote)
-		{
-			return true;
-		}
-		else if(par1World.getBlock(par2, par3-1, par4) == this && par1World.getBlockMetadata(par2, par3, par4) != 0)
-		{
-			return this.onBlockActivated(par1World, par2, par3 - 1, par4, par5EntityPlayer, par6, par7, par8, par9);
-		}
-		else
-		{
-			if(par1World.getBlock(par2, par3, par4) != null)
-				par5EntityPlayer.openGui(EnchantChanger.instance, Constants.GUI_ID_HUGE_MATERIA,par1World,par2,par3,par4);
-			return true;
-		}
 
-	}
-	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5)
-	{
-		int var6 = par1World.getBlockMetadata(par2, par3, par4);
+public class EcBlockHugeMateria extends BlockContainer {
+    public static final IProperty propertyParts = PropertyInteger.create("part", 0, 2);
+    //不要？
+//    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
-		if (var6 != 0){
-			if(var6 ==1){
-				if (par1World.getBlock(par2, par3 - 1, par4) != this || par1World.getBlock(par2, par3 + 1, par4) != this){
-					par1World.setBlockToAir(par2, par3, par4);
-				}
-				if (par5 != this){
-					this.onNeighborBlockChange(par1World, par2, par3 - 1, par4, par5);
-					this.onNeighborBlockChange(par1World, par2, par3 + 1, par4, par5);
-				}
-			}else{//var6 ==2
-					if (par1World.getBlock(par2, par3 - 1, par4) != this){
-						par1World.setBlockToAir(par2, par3, par4);
-					}
-			}
-		}else{
-			boolean var7 = false;
+    public EcBlockHugeMateria() {
+        super(Material.rock);
+    }
 
-			if (par1World.getBlock(par2, par3 + 1, par4) != this){
-				par1World.setBlockToAir(par2, par3, par4);
-				var7 = true;
-			}
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
 
-			if (var7){
-				if (!par1World.isRemote){
-					this.dropBlockAsItem(par1World, par2, par3, par4, var6, 0);
-				}
-			}
-		}
-	}
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 
-	@Override
-	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-	{
-		if(par1World.getTileEntity(par2, par3, par4) != null){
-			EcTileEntityHugeMateria t = (EcTileEntityHugeMateria)par1World.getTileEntity(par2, par3, par4);
-			for(int l = 0; l < t.getSizeInventory(); l++) {
-				ItemStack ist = t.getStackInSlot(l);
-				if(ist == null || ist.stackSize <= 0) {
-					continue;
-				}
-				EntityItem eit = new EntityItem(par1World, (double)par2+0.5D, (double)par3+0.5D, (double)par4+0.5D, ist);
-				par1World.spawnEntityInWorld(eit);
-			}
-		}
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-	}
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-	{
-		int var1 = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-		switch(var1)
-		{
-		case 0:this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 3.0F, 1.0F);return;
-		case 1:this.setBlockBounds(0.0F, -1.0F, 0.0F, 1.0F, 2.0F, 1.0F);return;
-		case 2:this.setBlockBounds(0.0F, -2.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		}
-	}
-	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3)
-	{
-		return par1  != 0 ? null : EnchantChanger.itemHugeMateria;
-	}
-	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
-		return var2 == 0 ?new EcTileEntityHugeMateria():null;
-	}
+    @Override
+    public int getRenderType() {
+        return 3;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public EnumWorldBlockLayer getBlockLayer() {
+        return EnumWorldBlockLayer.TRANSLUCENT;
+    }
+
+    //なくても描画される？
+/*    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        try {
+            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
+            B3DLoader.B3DState defaultState = ((B3DLoader.Wrapper) model).getDefaultState();
+            return ((IExtendedBlockState) this.extendedState.getBaseState()).withProperty(B3DLoader.B3DFrameProperty.instance, defaultState);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return this.extendedState.getBaseState();
+        }
+    }*/
+
+    @Override
+    public boolean onBlockActivated(World par1World, BlockPos blockPos, IBlockState state1, EntityPlayer par5EntityPlayer, EnumFacing par6, float par7, float par8, float par9) {
+        if (par1World.isRemote) {
+            return true;
+        } else if (par1World.getBlockState(blockPos.down()).getBlock() == this && (Integer) state1.getValue(propertyParts) != 0) {
+            return this.onBlockActivated(par1World, blockPos.down(), par1World.getBlockState(blockPos.down()), par5EntityPlayer, par6, par7, par8, par9);
+        } else {
+            if (par1World.getTileEntity(blockPos) != null)
+                par5EntityPlayer.openGui(EnchantChanger.instance, Constants.GUI_ID_HUGE_MATERIA, par1World, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+            return true;
+        }
+
+    }
+
+    @Override
+    public void onNeighborBlockChange(World par1World, BlockPos blockPos, IBlockState state1, Block par5) {
+        int var6 = (int) state1.getValue(propertyParts);
+
+        if (var6 != 0) {
+            if (var6 == 1) {
+                if (par1World.getBlockState(blockPos.down()).getBlock() != this || par1World.getBlockState(blockPos.up()).getBlock() != this) {
+                    par1World.setBlockToAir(blockPos);
+                }
+                if (par5 != this) {
+                    this.onNeighborBlockChange(par1World, blockPos.down(), par1World.getBlockState(blockPos.down()), par5);
+                    this.onNeighborBlockChange(par1World, blockPos.up(), par1World.getBlockState(blockPos.up()), par5);
+                }
+            } else {//var6 ==2
+                if (par1World.getBlockState(blockPos.down()).getBlock() != this) {
+                    par1World.setBlockToAir(blockPos);
+                }
+            }
+        } else {
+            boolean var7 = false;
+
+            if (par1World.getBlockState(blockPos.up()).getBlock() != this) {
+                par1World.setBlockToAir(blockPos);
+                var7 = true;
+            }
+
+            if (var7) {
+                if (!par1World.isRemote) {
+                    this.dropBlockAsItem(par1World, blockPos, state1, 0);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void breakBlock(World par1World, BlockPos blockPos, IBlockState state1) {
+        if (par1World.getTileEntity(blockPos) != null) {
+            EcTileEntityHugeMateria t = (EcTileEntityHugeMateria) par1World.getTileEntity(blockPos);
+            for (int l = 0; l < t.getSizeInventory(); l++) {
+                ItemStack ist = t.getStackInSlot(l);
+                if (ist == null || ist.stackSize <= 0) {
+                    continue;
+                }
+                EntityItem eit = new EntityItem(par1World, (double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.5D, (double) blockPos.getZ() + 0.5D, ist);
+                par1World.spawnEntityInWorld(eit);
+            }
+        }
+        super.breakBlock(par1World, blockPos, state1);
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, BlockPos blockPos) {
+        int var1 = (int) par1IBlockAccess.getBlockState(blockPos).getValue(propertyParts);
+        switch (var1) {
+            case 0:
+                this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 3.0F, 1.0F);
+                return;
+            case 1:
+                this.setBlockBounds(0.0F, -1.0F, 0.0F, 1.0F, 2.0F, 1.0F);
+                return;
+            case 2:
+                this.setBlockBounds(0.0F, -2.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        }
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState par1, Random par2Random, int par3) {
+        return (int) par1.getValue(propertyParts) != 0 ? null : EnchantChanger.itemHugeMateria;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World var1, int var2) {
+        return var2 == 0 ? new EcTileEntityHugeMateria() : null;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        IBlockState blockState = super.getStateFromMeta(meta);
+        return blockState.withProperty(propertyParts, meta);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return (Integer)state.getValue(propertyParts);
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, propertyParts);
+    }
 }

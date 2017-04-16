@@ -25,11 +25,11 @@ import java.util.List;
  * Created by A.K..
  */
 public class EcContainerMateriaWindow extends Container {
+    public int maxSlot = 16;
+    public IInventory materiaInventory = new EcSlotMateriaInventory(this, "MateriaWindow", maxSlot);
     private InventoryPlayer invPlayer;
     private int openSlotNum;
     private ItemStack openItem;
-    public int maxSlot = 16;
-    public IInventory materiaInventory = new EcSlotMateriaInventory(this, "MateriaWindow", maxSlot);
     private boolean initializing = false;
 
     public EcContainerMateriaWindow(InventoryPlayer inventoryPlayer, ItemStack item, int slot) {
@@ -72,7 +72,7 @@ public class EcContainerMateriaWindow extends Container {
             }
         }
 
-        if (item.isItemEnchanted()) {
+        if (EnchantmentUtils.isEnchanted(item)) {
             NBTTagList enchantments = item.getEnchantmentTagList();
             int id, lv, dmg;
             for (int i = 0; i < enchantments.tagCount(); i++) {
@@ -81,7 +81,7 @@ public class EcContainerMateriaWindow extends Container {
                     id = enchantments.getCompoundTagAt(i).getShort("id");
                     dmg = this.setMateriaDmgfromEnch(id);
                     materia = new ItemStack(EnchantChanger.itemMateria, 1, dmg);
-                    EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.enchantmentsList[id], lv);
+                    EnchantmentUtils.addEnchantmentToItem(materia, Enchantment.getEnchantmentById(id), lv);
                     this.materiaInventory.setInventorySlotContents(slotnum, materia);
                     slotnum++;
                 }
@@ -90,6 +90,7 @@ public class EcContainerMateriaWindow extends Container {
         this.initializing = true;
     }
 
+    @Deprecated
     private int setMateriaDmgfromEnch(int enchID) {
         if (enchID == ConfigurationUtils.idEnchantmentMeteor)
             return 1;
@@ -127,12 +128,22 @@ public class EcContainerMateriaWindow extends Container {
 
             ArrayList<EnchantmentLvPair> enchantmentList = getEnchantmentListFromInventory();
 
-            if (openItem.isItemEnchanted()) {
-                nbt.removeTag("ench");
+            if (EnchantmentUtils.isEnchanted(openItem)) {
+                String tagName = EnchantmentUtils.getTagName(openItem);
+                nbt.removeTag(tagName);
             }
 
-            for (EnchantmentLvPair data :  enchantmentList) {
+            if (openItem.hasTagCompound() && openItem.getTagCompound().getKeySet().size() == 0) {
+                openItem.setTagCompound(null);
+            }
+
+            for (EnchantmentLvPair data : enchantmentList) {
                 EnchantmentUtils.addEnchantmentToItem(openItem, data.enchantment, data.lv);
+            }
+            ItemStack result = EnchantmentUtils.getBookResult(openItem, enchantmentList);
+            if (!result.isItemEqual(openItem)) {
+                openItem = result;
+                this.getSlotFromInventory(invPlayer, openSlotNum).putStack(result);
             }
         }
     }
@@ -184,12 +195,13 @@ public class EcContainerMateriaWindow extends Container {
         if (itemStack.getItemDamage() > 0 && openItem.getItem() instanceof EcItemSword) {
             return true;
         }
-        Enchantment enchantment = EnchantmentUtils.enchKind(itemStack);
+        Enchantment enchantment = EnchantmentUtils.getEnchantmentFromItemStack(itemStack);
         return EnchantmentUtils.isEnchantmentValid(enchantment, openItem);
     }
 
     @Override
-    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer){}
+    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer) {
+    }
 
     @Override
     public ItemStack slotClick(int slot, int mouse, int keyboard, EntityPlayer par4EntityPlayer) {
@@ -205,8 +217,8 @@ public class EcContainerMateriaWindow extends Container {
         EnchantmentLvPair enchData;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
-            if (slotItem != null && slotItem.isItemEnchanted()) {
-                enchData = new EnchantmentLvPair(EnchantmentUtils.enchKind(slotItem), EnchantmentUtils.enchLv(slotItem));
+            if (slotItem != null && EnchantmentUtils.isEnchanted(slotItem)) {
+                enchData = new EnchantmentLvPair(EnchantmentUtils.getEnchantmentFromItemStack(slotItem), EnchantmentUtils.getEnchantmentLv(slotItem));
                 list.add(enchData);
             }
         }
@@ -219,9 +231,13 @@ public class EcContainerMateriaWindow extends Container {
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
             if (slotItem != null && slotItem.getItemDamage() > 0) {
-                list.add((byte)slotItem.getItemDamage());
+                list.add((byte) slotItem.getItemDamage());
             }
         }
         return list;
+    }
+
+    public ItemStack getOpenItem() {
+        return openItem;
     }
 }

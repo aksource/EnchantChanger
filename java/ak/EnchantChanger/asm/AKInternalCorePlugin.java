@@ -1,22 +1,24 @@
 package ak.EnchantChanger.asm;
 
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by A.K. on 14/03/13.
  */
 public class AKInternalCorePlugin implements IFMLLoadingPlugin {
-    public static Logger logger = Logger.getLogger("AKInternalCore");
+    public static Logger logger = LogManager.getLogger("AKInternalCore");
     public static int maxDamageModifier;
     public static int maxAnvilLevelModifier;
     public static int setAnvilLevelModifier;
     public static int beaconBaseRange;
     public static int beaconLevelRange;
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{"ak.EnchantChanger.asm.EnchantmentHelperTransformer",
@@ -33,13 +35,12 @@ public class AKInternalCorePlugin implements IFMLLoadingPlugin {
 
     @Override
     public String getSetupClass() {
-        return "codechicken.core.launch.DepLoader";
+        return null/*"codechicken.core.launch.DepLoader"*/;
     }
 
     @Override
     public void injectData(Map<String, Object> data) {
-        if (data.containsKey("mcLocation"))
-        {
+        if (data.containsKey("mcLocation")) {
             File mcLocation = (File) data.get("mcLocation");
             File configLocation = new File(mcLocation, "config");
             File configFile = new File(configLocation, "AKCore.cfg");

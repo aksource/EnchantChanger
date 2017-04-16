@@ -7,8 +7,13 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemStackWrapper {
     private ItemStack containItemStack;
+
     public ItemStackWrapper(ItemStack itemStack) {
         containItemStack = itemStack;
+    }
+
+    public static ItemStackWrapper getItemStackWrappaer(ItemStack itemStack) {
+        return new ItemStackWrapper(itemStack);
     }
 
     @Override
@@ -34,7 +39,7 @@ public class ItemStackWrapper {
             return false;
         }
 
-        ItemStackWrapper otherItemStackWrapper = (ItemStackWrapper)obj;
+        ItemStackWrapper otherItemStackWrapper = (ItemStackWrapper) obj;
         return otherItemStackWrapper.getContainItemStack().isItemEqual(otherItemStackWrapper.getContainItemStack());
     }
 
@@ -49,9 +54,5 @@ public class ItemStackWrapper {
 
     public ItemStack getContainItemStackCopy() {
         return containItemStack.copy();
-    }
-
-    public static ItemStackWrapper getItemStackWrappaer(ItemStack itemStack) {
-        return new ItemStackWrapper(itemStack);
     }
 }

@@ -3,66 +3,53 @@ package ak.EnchantChanger.block;
 
 import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-public class EcBlockMaterializer extends BlockContainer
-{
-    @SideOnly(Side.CLIENT)
-	private IIcon top;
-    @SideOnly(Side.CLIENT)
-	private IIcon side;
-    @SideOnly(Side.CLIENT)
-	private IIcon bottom;
-	public EcBlockMaterializer()
-	{
-		super(Material.rock);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
-	}
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister par1IconRegister)
-	{
-		this.top = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-top");
-		this.side = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-side");
-		this.bottom = par1IconRegister.registerIcon(Constants.EcTextureDomain + "EnchantChanger-bottom");
-	}
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-	@Override
-	public IIcon getIcon(int par1, int par2)
-	{
-		return par1 == 0 ? this.bottom : (par1 == 1 ? this.top : this.side);
-	}
 
-	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-	{
-        if (ConfigurationUtils.difficulty < 2 || checkCost(par5EntityPlayer)) {
-            par5EntityPlayer.openGui(EnchantChanger.instance, 0, par1World, par2, par3, par4);
+public class EcBlockMaterializer extends BlockContainer {
+
+    public EcBlockMaterializer() {
+        super(Material.rock);
+        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
+    }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
+
+    @Override
+    public boolean isNormalCube() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderType() {
+        return 3;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos blockPos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (ConfigurationUtils.difficulty < 2 || checkCost(player)) {
+            player.openGui(EnchantChanger.instance, 0, world, blockPos.getX(), blockPos.getY(), blockPos.getZ());
         }
-        ExtendedPlayerData.get(par5EntityPlayer).setLimitGaugeValue(0);//test
+        ExtendedPlayerData.get(player).setLimitGaugeValue(0);//test
         return true;
-	}
+    }
 
     private boolean checkCost(EntityPlayer player) {
         int expLv = player.experienceLevel;
@@ -74,15 +61,15 @@ public class EcBlockMaterializer extends BlockContainer
         return false;
     }
 
-	@Override
-	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-	{
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-		par1World.removeTileEntity(par2, par3, par4);
-	}
-	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new EcTileEntityMaterializer();
-	}
+    @Override
+    public void breakBlock(World world, BlockPos blockPos, IBlockState state) {
+        super.breakBlock(world, blockPos, state);
+        world.removeTileEntity(blockPos);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World var1, int var2) {
+        return new EcTileEntityMaterializer();
+    }
 
 }

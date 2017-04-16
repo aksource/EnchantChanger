@@ -1,135 +1,110 @@
 package ak.EnchantChanger.Client;
 
+import ak.EnchantChanger.Client.models.BakedModelMateria;
+import ak.EnchantChanger.Client.models.MakoReactorModelLoader;
 import ak.EnchantChanger.Client.renderer.*;
 import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.api.ICustomReachItem;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
 import ak.EnchantChanger.entity.EcEntityMeteor;
 import ak.EnchantChanger.eventhandler.LivingEventHooks;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.network.MessageExtendedReachAttack;
 import ak.EnchantChanger.network.MessageKeyPressed;
 import ak.EnchantChanger.network.MessageLevitation;
 import ak.EnchantChanger.network.PacketHandler;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.MultiToolHolders.ItemMultiToolHolder;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Timer;
-import net.minecraft.util.Vec3;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.b3d.B3DLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.util.List;
-
-import static ak.EnchantChanger.api.Constants.MagicKEY;
+import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.EnchantChanger.api.Constants.*;
 
 public class ClientProxy extends CommonProxy {
-	public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
-			Keyboard.KEY_V, "EnchantChanger");
+    public static final float MOVE_FACTOR = 0.4F;
+    public static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
+            Keyboard.KEY_V, "EnchantChanger");
     public static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "EnchantChanger");
     public static int customRenderPass;
     public static int multiPassRenderType;
-    public static EcRenderMultiPassBlock ecRenderMultiPassBlock = new EcRenderMultiPassBlock();
     public static Minecraft mc = Minecraft.getMinecraft();
-    private static Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, 16);
-
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
-    public static final float moveFactor = 0.4F;
+    @Override
+    public void registerPreRenderInformation() {
+        //1.8からのモデル登録。
+        B3DLoader.instance.addDomain(Constants.MOD_ID);
+        OBJLoader.instance.addDomain(Constants.MOD_ID);
+        /* 魔晄炉用モデルローダー登録 */
+        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
+//        registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
+//        registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
+//        registerCustomBlockModel(blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
+    }
 
-	@Override
-	public void registerRenderInformation() {
+    @Override
+    public void registerRenderInformation() {
+        ClientModelUtils.registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
+        ClientModelUtils.registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
+        ClientModelUtils.registerCustomBlockModel(blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
-		RenderingRegistry.registerEntityRenderingHandler(
-				EcEntityExExpBottle.class, new EcRenderItemThrowable(0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
-				new EcRenderItemThrowable(ConfigurationUtils.sizeMeteor));
-		RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
-				new EcRenderApOrb());
-        multiPassRenderType = RenderingRegistry.getNextAvailableRenderId();
-        RenderingRegistry.registerBlockHandler(ecRenderMultiPassBlock);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(EnchantChanger.blockMakoReactor), ecRenderMultiPassBlock);
+        RenderingRegistry.registerEntityRenderingHandler(
+                EcEntityExExpBottle.class, manager -> new EcRenderItemThrowable(manager, 0.5F));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
+                manager -> new EcRenderItemThrowable(manager, ConfigurationUtils.sizeMeteor));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
+                manager -> new EcRenderApOrb(manager));
 
-		ClientRegistry.registerKeyBinding(MagicKey);
+        //キー登録
+        ClientRegistry.registerKeyBinding(MagicKey);
         ClientRegistry.registerKeyBinding(MateriaKey);
-		IItemRenderer swordRenderer = new EcRenderSwordModel();
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemSephirothSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemZackSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.ItemCloudSwordCore,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemCloudSword,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemUltimateWeapon,
-				swordRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemImitateSephirothSword,
-				swordRenderer);
-		IItemRenderer materiaRenderer = new EcRenderMateria();
-		MinecraftForgeClient.registerItemRenderer(EnchantChanger.itemMateria,
-				materiaRenderer);
-		MinecraftForgeClient.registerItemRenderer(
-				EnchantChanger.itemMasterMateria, materiaRenderer);
-
+        ClientModelUtils.registerModels();
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
-        FMLCommonHandler.instance().bus().register(ecRenderPlayerBack);
 
         //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
+        //モデルの光源処理修正イベントクラス登録
+        MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
     }
 
-	@Override
-	public void registerTileEntitySpecialRenderer() {
-		ClientRegistry.bindTileEntitySpecialRenderer(
-				EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
-	}
+    @Override
+    public void registerTileEntitySpecialRenderer() {
+        ClientRegistry.bindTileEntitySpecialRenderer(
+                EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
+    }
 
     @Override
     public void registerExtraMateriaRendering(NBTTagCompound nbt) {
         if (nbt.hasKey("enchantId") && nbt.hasKey("materiaTexId")) {
             int enchantId = nbt.getInteger("enchantId");
             int texId = nbt.getInteger("materiaTexId");
-            EcRenderMateria.registerExtraMateria(enchantId, texId);
+            BakedModelMateria.registerExtraMateria(enchantId, texId);
         }
     }
 
     @Override
     public EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().thePlayer;
+        return mc.thePlayer;
     }
 
     @Override
@@ -151,7 +126,7 @@ public class ClientProxy extends CommonProxy {
         //Sprint判定。updatePlayerMoveStateしているので、再度判定する必要が有る。
         if (((EntityPlayerSP) player).onGround && !var3
                 && ((EntityPlayerSP) player).movementInput.moveForward >= var2
-                && ! player.isSprinting() && var4 && !player.isUsingItem()
+                && !player.isSprinting() && var4 && !player.isUsingItem()
                 && !player.isPotionActive(Potion.blindness)) {
             if (this.sprintToggleTimer == 0) {
                 this.sprintToggleTimer = 7;
@@ -171,8 +146,8 @@ public class ClientProxy extends CommonProxy {
 
         boolean var5 = LivingEventHooks.getLevitationModeToNBT(player);
         if (var5) {
-            movePlayerY(player);
-            movePlayerXZ(player);
+            ClientInputUtils.movePlayerY(player);
+            ClientInputUtils.movePlayerXZ(player);
         }
 
         if (player.onGround && var5) {
@@ -182,33 +157,7 @@ public class ClientProxy extends CommonProxy {
         PacketHandler.INSTANCE.sendToServer(new MessageLevitation(LivingEventHooks.getLevitationModeToNBT(player)));
     }
 
-
-    private static void movePlayerY(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP)player;
-
-        player.motionY = 0.0D;
-
-        if (playerSP.movementInput.sneak) {
-            player.motionY -= moveFactor;
-        }
-
-        if (playerSP.movementInput.jump) {
-            player.motionY += moveFactor;
-        }
-    }
-
-    private static void movePlayerXZ(EntityPlayer player) {
-        EntityPlayerSP playerSP = (EntityPlayerSP)player;
-        float moveForward = playerSP.movementInput.moveForward;
-        float moveStrafe = playerSP.movementInput.moveStrafe;
-
-        if (moveForward != 0 || moveStrafe != 0) {
-            player.motionX = player.motionZ = 0;
-        }
-        player.moveFlying(moveStrafe, moveForward, moveFactor * 1.2F);
-    }
-
-    private byte getKeyIndex() {
+    private static byte getKeyIndex() {
         byte key = -1;
         if (MagicKey.isPressed()) {
             key = Constants.MagicKEY;
@@ -226,110 +175,48 @@ public class ClientProxy extends CommonProxy {
             byte keyIndex = getKeyIndex();
             if (keyIndex != -1 && entityPlayer.getCurrentEquippedItem() != null) {
                 PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
-                switch(keyIndex) {
-                    case MagicKEY :doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer); break;
+                switch (keyIndex) {
+                    case MagicKEY:
+                        ClientInputUtils.doMagic(entityPlayer.getCurrentEquippedItem(), entityPlayer);
+                        break;
                 }
             }
         }
     }
 
-    private void doMagic(ItemStack itemStack, EntityPlayer player) {
-        if (itemStack.getItem() instanceof EcItemSword) {
-            EcItemSword.doMagic(itemStack, player.worldObj, player);
-        } else if (EnchantChanger.loadMTH && itemStack.getItem() instanceof ItemMultiToolHolder) {
-            //ツールホルダーとの連携処理。
-            ItemMultiToolHolder mth = (ItemMultiToolHolder) player.inventory.getCurrentItem().getItem();
-            if (mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)) != null
-                    && mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)).getItem() instanceof EcItemSword)
-            {
-                EcItemSword.doMagic(mth.getInventoryFromItemStack(itemStack).getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack)), player.worldObj, player);
-            }
-        }
-    }
-
-    @SubscribeEvent
+    //    @SubscribeEvent
     public void mouseHandlingEvent(InputEvent.MouseInputEvent event) {
-        if (mc.gameSettings.keyBindAttack.getIsKeyPressed() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
-            changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
+        if (mc.gameSettings.keyBindAttack.isKeyDown() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
+            ClientInputUtils.changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
         }
-    }
-
-    private void changeObjectMouseOver(EntityPlayer player) {
-        ItemStack heldItem = player.getCurrentEquippedItem();
-        if (heldItem != null && heldItem.getItem() instanceof ICustomReachItem) {
-            double extendedReach = ((ICustomReachItem)heldItem.getItem()).getReach(heldItem);
-            MovingObjectPosition MOP = getMouseOverSpecialReach(player, extendedReach, timer.renderPartialTicks);
-            if (MOP != null && MOP.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
-                mc.objectMouseOver = MOP;
-                Entity pointedEntity = MOP.entityHit;
-                if (pointedEntity instanceof EntityLivingBase || pointedEntity instanceof EntityItemFrame) {
-                    PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(pointedEntity));
-                }
-            }
-        }
-    }
-
-    private MovingObjectPosition getMouseOverSpecialReach(EntityLivingBase viewingEntity, double reach, float partialTicks) {
-        MovingObjectPosition MOP = null;
-        if (viewingEntity != null) {
-            if (viewingEntity.worldObj != null) {
-                MOP = viewingEntity.rayTrace(reach, partialTicks);
-                Vec3 viewPosition = viewingEntity.getPosition(partialTicks);
-                double d1 = 0;
-
-                if (MOP != null) {
-                    d1 = MOP.hitVec.distanceTo(viewPosition);
-                }
-
-                Vec3 lookVector = viewingEntity.getLook(partialTicks);
-                Vec3 reachVector = viewPosition.addVector(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach);
-                Vec3 vec33 = null;
-                float f1 = 1.0F;
-                @SuppressWarnings("unchecked")
-                List<Entity> list = viewingEntity.worldObj.getEntitiesWithinAABBExcludingEntity(viewingEntity, viewingEntity.boundingBox.addCoord(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach).expand(f1, f1, f1));
-                double d2 = d1;
-                Entity pointedEntity = null;
-                for (Entity entity : list) {
-                    if (entity.canBeCollidedWith())  {
-                        float collisionSize = entity.getCollisionBorderSize();
-                        AxisAlignedBB axisalignedbb = entity.boundingBox.expand(collisionSize, collisionSize, collisionSize);
-                        MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(viewPosition, reachVector);
-
-                        if (axisalignedbb.isVecInside(viewPosition)) {
-                            if (0.0D < d2 || d2 == 0.0D) {
-                                pointedEntity = entity;
-                                vec33 = movingobjectposition == null ? viewPosition : movingobjectposition.hitVec;
-                                d2 = 0.0D;
-                            }
-                        } else if (movingobjectposition != null)  {
-                            double d3 = viewPosition.distanceTo(movingobjectposition.hitVec);
-
-                            if (d3 < d2 || d2 == 0.0D) {
-                                if (entity == viewingEntity.ridingEntity && !entity.canRiderInteract()) {
-                                    if (d2 == 0.0D) {
-                                        pointedEntity = entity;
-                                        vec33 = movingobjectposition.hitVec;
-                                    }
-                                } else {
-                                    pointedEntity = entity;
-                                    vec33 = movingobjectposition.hitVec;
-                                    d2 = d3;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (pointedEntity != null && (d2 < d1 || MOP == null)) {
-                    MOP = new MovingObjectPosition(pointedEntity, vec33);
-                }
-            }
-        }
-        return MOP;
     }
 
     @SubscribeEvent
-    public void textureStitch(TextureStitchEvent.Post event) {
-        EnchantChanger.fluidLifeStream.setIcons(EnchantChanger.blockLifeStream.getIcon(0,0));
+    public void textureStitch(TextureStitchEvent.Pre event) {
+        TextureMap textureMap = event.map;
+        for (int i = 0; i < 16; i++) {
+            ClientModelUtils.textureAtlasSpritesMateriaArray[i] = textureMap.registerSprite(ClientModelUtils.resourceLocationsMateria[i]);
+        }
+        for (String key : ClientModelUtils.textureMapUltimate.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapUltimate.get(key)));
+        }
+        for (String key : ClientModelUtils.textureMapBuster.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapBuster.get(key)));
+        }
+        for (String key : ClientModelUtils.textureMapMasamune.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapMasamune.get(key)));
+        }
+        for (String key : ClientModelUtils.textureMapFirst.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapFirst.get(key)));
+        }
+        for (String key : ClientModelUtils.textureMapUnion.keySet()) {
+            textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapUnion.get(key)));
+        }
     }
+
+    @SubscribeEvent
+    public void bakedModelRegister(ModelBakeEvent event) {
+        ClientModelUtils.changeModels(event);
+    }
+
 }

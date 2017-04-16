@@ -2,12 +2,15 @@ package ak.EnchantChanger.eventhandler;
 
 import ak.EnchantChanger.item.EcItemMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import static ak.EnchantChanger.EnchantChanger.*;
+
 /**
  * Created by A.K. on 14/10/12.
  */
@@ -44,11 +47,11 @@ public class GenerateHandler {
         if (event.rand.nextInt(ConfigurationUtils.lifeStreamLakeRatio) == 0) {
             int k = event.chunkX * 16;
             int l = event.chunkZ * 16;
-            int x,y,z;
+            int x, y, z;
             x = k + event.rand.nextInt(16) + 8;
             y = event.rand.nextInt(16);
             z = l + event.rand.nextInt(16) + 8;
-            (new WorldGenLakes(blockLifeStream)).generate(event.world, event.rand, x, y, z);
+            (new WorldGenLakes(blockLifeStream)).generate(event.world, event.rand, new BlockPos(x, y, z));
             logger.info(String.format("LifeStreamLake is generated at (%d, %d, %d)", x, y, z));
         }
     }

@@ -63,7 +63,6 @@ public class ConfigurationUtils {
     public static boolean enableAPSystem = true;
     public static boolean enableDungeonLoot = true;
     public static int pointAPBase = 200;
-    public static int idMakoPoison = 100;
     public static boolean enableCloudSwordDisplay = true;
     public static int cloudInvXCoord = 0;
     public static int cloudInvYCoord = 0;
@@ -108,7 +107,6 @@ public class ConfigurationUtils {
                 "enableDungeonLoot", enableDungeonLoot).getBoolean(enableDungeonLoot);
         pointAPBase = config.get(Configuration.CATEGORY_GENERAL, "APBasePoint",
                 pointAPBase).getInt();
-        idMakoPoison = config.get(Configuration.CATEGORY_GENERAL, "idMakoPoison", idMakoPoison, "Mako Poison Effect Id").getInt();
         extraSwordIDs = config.get(Configuration.CATEGORY_GENERAL,
                 "Extra SwordIds", extraSwordIDs,
                 "Put Ids which you want to operate as  swords.").getStringList();
@@ -164,7 +162,7 @@ public class ConfigurationUtils {
         cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", cloudInvYCoord).getInt();
         enableBackSword = config.get(Configuration.CATEGORY_GENERAL, "EnableBackSword", enableBackSword, "TRUE:Render Sword on player's back. ").getBoolean();
         enchantChangerCost = config.get(Configuration.CATEGORY_GENERAL, "EnchantChangerOpenCost", enchantChangerCost, "Cost to open EnchantChanger or Materia Window when mods difficulty is hard").getInt();
-        soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary" , soldierSalary, "Monthly Salary of soldier.").getInt();
+        soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary", soldierSalary, "Monthly Salary of soldier.").getInt();
         materiaGeneratingRatio = config.get(Configuration.CATEGORY_GENERAL, "MateriaGeneratingRatio", materiaGeneratingRatio, "Materia generating ratio in Mako reactor").getInt();
         config.save();
     }

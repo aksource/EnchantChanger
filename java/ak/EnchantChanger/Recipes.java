@@ -4,16 +4,17 @@ import ak.EnchantChanger.block.EcBlockMakoReactor;
 import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
 import ak.EnchantChanger.recipe.EcRecipeMateria;
 import ak.EnchantChanger.utils.ConfigurationUtils;
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.google.common.base.Optional;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static ak.EnchantChanger.EnchantChanger.*;
 
@@ -24,7 +25,7 @@ public class Recipes {
 
     public static void init() {
         ItemStack[] materiaArray = new ItemStack[256];
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.enchantmentsBookList) {
             if (enchantment != null) {
                 materiaArray[enchantment.effectId] = new ItemStack(EnchantChanger.itemMateria);
                 materiaArray[enchantment.effectId].addEnchantment(enchantment, enchantment.getMaxLevel());
@@ -49,7 +50,7 @@ public class Recipes {
                 'Y', Items.iron_ingot);
         if (ConfigurationUtils.difficulty < 2) {
             GameRegistry.addRecipe(
-                    new ItemStack(ItemCloudSwordCore, 1),
+                    new ItemStack(itemCloudSwordCore, 1),
                     " X ",
                     "XYX",
                     " Z ",
@@ -58,7 +59,7 @@ public class Recipes {
                     'Z', Items.iron_ingot);
         } else {
             GameRegistry.addRecipe(
-                    new ItemStack(ItemCloudSwordCore, 1),
+                    new ItemStack(itemCloudSwordCore, 1),
                     " X ",
                     "DYD",
                     " Z ",
@@ -105,7 +106,7 @@ public class Recipes {
                         "ABA",
                         " A ",
                         'A', Blocks.diamond_block,
-                        'B', new ItemStack(itemMasterMateria, 1,  OreDictionary.WILDCARD_VALUE));
+                        'B', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
         GameRegistry.addShapelessRecipe(new ItemStack(
                 itemPortableEnchantChanger, 1), blockEnchantChanger);
         GameRegistry.addShapelessRecipe(new ItemStack(
@@ -135,7 +136,7 @@ public class Recipes {
                         'X', Items.ender_eye,
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
 
-        for (String baseOreName: EcBlockMakoReactor.baseBlocksOreName) {
+        for (String baseOreName : EcBlockMakoReactor.baseBlocksOreName) {
             addOreDictRecipe(baseOreName);
         }
     }
@@ -143,13 +144,13 @@ public class Recipes {
 
     private static void addOreDictRecipe(String OreDictName) {
         ItemStack makoReactorController;
-        ArrayList<ItemStack> ores = OreDictionary.getOres(OreDictName);
+        List<ItemStack> ores = OreDictionary.getOres(OreDictName);
         if (ores.isEmpty()) return;
         for (ItemStack itemStack : ores) {
             makoReactorController = new ItemStack(blockMakoReactor, 1, 0);
             makoReactorController.setTagCompound(new NBTTagCompound());
-            GameRegistry.UniqueIdentifier uid = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
-            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uid.toString());
+            String uidStr = Optional.fromNullable(itemStack.getItem().getRegistryName()).or("dummy:dummy");
+            makoReactorController.getTagCompound().setString("EnchantChanger|baseBlock", uidStr);
             makoReactorController.getTagCompound().setInteger("EnchantChanger|baseMeta", itemStack.getItemDamage());
             GameRegistry.addRecipe(makoReactorController,
                     "BBB",

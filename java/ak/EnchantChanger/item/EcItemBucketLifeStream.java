@@ -14,7 +14,7 @@ public class EcItemBucketLifeStream extends ItemBucket {
         super(block);
         String s = String.format("%s%s", Constants.EcTextureDomain, name);
         this.setUnlocalizedName(s);
-        this.setTextureName(s);
+//        this.setTextureName(s);
     }
 
     @Override

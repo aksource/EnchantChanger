@@ -1,7 +1,7 @@
 package ak.EnchantChanger.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 /**
  * Created by A.K. on 14/10/01.
@@ -13,7 +13,8 @@ public class MessageRFStepping implements IMessage {
     public int yPos;
     public int zPos;
 
-    public MessageRFStepping(){}
+    public MessageRFStepping() {
+    }
 
     public MessageRFStepping(int outputRFValue, int x, int y, int z) {
         this.outputRFValue = outputRFValue;

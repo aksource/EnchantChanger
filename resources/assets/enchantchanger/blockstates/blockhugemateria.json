@@ -1,0 +1,31 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "hugemateria16": "enchantchanger:item/hugemateria16"
+        },
+        "transform" : {
+            "translation" : [
+                0.0,0.0,0.0
+            ]
+        }
+    },
+    "variants": {
+        "part=0": {
+            "submodel" : "enchantchanger:hugemateria.b3d",
+            "transform" : {
+                "translation" : [
+                    0.0,0.0,0.0
+                ]
+            }
+        },
+        "part=1": {
+            "submodel" : "enchantchanger:dummy_block",
+            "transform": "forge:default-block"
+        },
+        "part=2": {
+            "submodel" : "enchantchanger:dummy_block",
+            "transform": "forge:default-block"
+        }
+    }
+}

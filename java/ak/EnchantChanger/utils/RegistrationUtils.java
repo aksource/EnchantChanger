@@ -1,6 +1,5 @@
 package ak.EnchantChanger.utils;
 
-import ak.EnchantChanger.EnchantChanger;
 import ak.EnchantChanger.enchantment.*;
 import ak.EnchantChanger.entity.EcEntityApOrb;
 import ak.EnchantChanger.entity.EcEntityExExpBottle;
@@ -10,16 +9,15 @@ import ak.EnchantChanger.potion.EcPotionMako;
 import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
 import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
 import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import static ak.EnchantChanger.EnchantChanger.*;
 import static ak.EnchantChanger.utils.ConfigurationUtils.*;
-
 /**
  * Created by A.K. on 14/10/12.
  */
@@ -34,28 +32,25 @@ public class RegistrationUtils {
     }
 
     public static void registerBlockAndItem() {
-        GameRegistry.registerBlock(EnchantChanger.blockEnchantChanger, "EnchantChanger");
-        GameRegistry.registerBlock(EnchantChanger.blockHugeMateria, "blockhugemateria");
-        GameRegistry.registerBlock(EnchantChanger.blockMakoReactor, EcItemBlockMakoReactor.class, "blockmakoreactor");
-        GameRegistry.registerBlock(EnchantChanger.blockLifeStream, "life_stream");
-        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack("lifestream", FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(EnchantChanger.itemBucketLifeStream), new ItemStack(Items.bucket));
+        GameRegistry.registerBlock(blockEnchantChanger);
+        GameRegistry.registerBlock(blockHugeMateria);
+        GameRegistry.registerBlock(blockMakoReactor, EcItemBlockMakoReactor.class);
+        GameRegistry.registerBlock(blockLifeStream);
+        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack(fluidLifeStream.getName(), FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(itemBucketLifeStream), new ItemStack(Items.bucket));
+        GameRegistry.registerItem(itemBucketLifeStream);
 
-        GameRegistry.registerItem(EnchantChanger.itemMateria, "materia");
-        GameRegistry.registerItem(EnchantChanger.itemHugeMateria, "itemhugemateria");
-        GameRegistry.registerItem(EnchantChanger.itemExExpBottle, "exexpbottle");
-        GameRegistry.registerItem(EnchantChanger.itemZackSword, "zacksword");
-        GameRegistry.registerItem(EnchantChanger.ItemCloudSwordCore, "cloudswordcore");
-        GameRegistry.registerItem(EnchantChanger.itemCloudSword, "cloudsword");
-        GameRegistry.registerItem(EnchantChanger.itemSephirothSword, "masamuneblade");
-        GameRegistry.registerItem(EnchantChanger.itemUltimateWeapon, "ultimateweapon");
-        GameRegistry.registerItem(EnchantChanger.itemPortableEnchantChanger,
-                "portableenchantchanger");
-        GameRegistry.registerItem(EnchantChanger.itemPortableEnchantmentTable,
-                "portableenchantmenttable");
-        GameRegistry.registerItem(EnchantChanger.itemMasterMateria, "mastermateria");
-        GameRegistry.registerItem(EnchantChanger.itemImitateSephirothSword,
-                "imitationmasamuneblade");
-        GameRegistry.registerItem(EnchantChanger.itemBucketLifeStream, "bucket_lifestream");
+        GameRegistry.registerItem(itemMateria);
+        GameRegistry.registerItem(itemHugeMateria);
+        GameRegistry.registerItem(itemExExpBottle);
+        GameRegistry.registerItem(itemZackSword);
+        GameRegistry.registerItem(itemCloudSwordCore);
+        GameRegistry.registerItem(itemCloudSword);
+        GameRegistry.registerItem(itemSephirothSword);
+        GameRegistry.registerItem(itemUltimateWeapon);
+        GameRegistry.registerItem(itemPortableEnchantChanger);
+        GameRegistry.registerItem(itemPortableEnchantmentTable);
+        GameRegistry.registerItem(itemMasterMateria);
+        GameRegistry.registerItem(itemImitateSephirothSword);
     }
 
     public static void registerTileEntities() {
@@ -76,14 +71,6 @@ public class RegistrationUtils {
     }
 
     public static void addStatusEffect() {
-        if (idMakoPoison < Potion.potionTypes.length) {
-            if (Potion.potionTypes[idMakoPoison] == null) {
-                EnchantChanger.potionMako = new EcPotionMako(idMakoPoison).setPotionName("EC|MakoPoison");
-            } else {
-                throw new IllegalArgumentException("idMakoPoison:id has been used another MOD");
-            }
-        } else {
-            throw new IllegalArgumentException("idMakoPoison:Only set from 24 to 127");
-        }
+        potionMako = new EcPotionMako().setPotionName("EC|MakoPoison");
     }
 }
