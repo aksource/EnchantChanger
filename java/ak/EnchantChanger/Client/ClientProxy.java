@@ -68,11 +68,11 @@ public class ClientProxy extends CommonProxy {
         ClientModelUtils.registerCustomBlockModel(blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
         RenderingRegistry.registerEntityRenderingHandler(
-                EcEntityExExpBottle.class, new EcRenderItemThrowable(mc.getRenderManager(), 0.5F));
+                EcEntityExExpBottle.class, manager -> new EcRenderItemThrowable(manager, 0.5F));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
-                new EcRenderItemThrowable(mc.getRenderManager(), ConfigurationUtils.sizeMeteor));
+                manager -> new EcRenderItemThrowable(manager, ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
-                new EcRenderApOrb(mc.getRenderManager()));
+                manager -> new EcRenderApOrb(manager));
 
         //キー登録
         ClientRegistry.registerKeyBinding(MagicKey);

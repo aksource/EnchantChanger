@@ -152,7 +152,7 @@ public class ClientModelUtils {
     protected static void registerCustomBlockModel(Block block, int meta, String modelLocation, String type, boolean noModelLoc) {
         registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type, noModelLoc);
         if (type.equals(MODEL_TYPE_FLUID)) {
-            ModelResourceLocation modelResourceLocation = MODEL_RESOURCE_LOCATION_MAP.get(block.getUnlocalizedName());
+            ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(block.getRegistryName().toString(), block.getRegistryName().toString(), type);
             ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocation));
         }
     }
