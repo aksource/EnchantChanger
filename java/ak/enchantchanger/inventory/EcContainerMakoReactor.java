@@ -1,8 +1,8 @@
-package ak.EnchantChanger.inventory;
+package ak.enchantchanger.inventory;
 
-import ak.EnchantChanger.item.EcItemBucketLifeStream;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.item.EcItemBucketLifeStream;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +13,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
-import static ak.EnchantChanger.tileentity.EcTileEntityMakoReactor.*;
+import static ak.enchantchanger.tileentity.EcTileEntityMakoReactor.*;
 
 /**
  * Created by A.K. on 14/09/20.

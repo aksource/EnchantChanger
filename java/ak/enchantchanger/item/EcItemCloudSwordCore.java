@@ -1,7 +1,7 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.Constants;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

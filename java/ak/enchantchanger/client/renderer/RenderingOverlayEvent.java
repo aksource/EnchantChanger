@@ -1,11 +1,11 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.item.EcItemCloudSword;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.item.EcItemCloudSword;
+import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

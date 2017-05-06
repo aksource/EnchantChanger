@@ -1,4 +1,4 @@
-package ak.EnchantChanger.asm;
+package ak.enchantchanger.asm;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.common.config.Configuration;

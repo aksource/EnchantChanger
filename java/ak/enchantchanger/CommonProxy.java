@@ -1,10 +1,10 @@
-package ak.EnchantChanger;
+package ak.enchantchanger;
 
-import ak.EnchantChanger.Client.gui.*;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.*;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.client.gui.*;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.inventory.*;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;

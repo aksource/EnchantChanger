@@ -1,4 +1,4 @@
-package ak.EnchantChanger.inventory;
+package ak.enchantchanger.inventory;
 
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
 
 public class EcItemSephirothSwordImit extends EcItemSword {

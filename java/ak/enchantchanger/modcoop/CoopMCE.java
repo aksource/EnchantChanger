@@ -1,8 +1,8 @@
-package ak.EnchantChanger.modcoop;
+package ak.enchantchanger.modcoop;
 
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.StatCheckUtils;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.StatCheckUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;

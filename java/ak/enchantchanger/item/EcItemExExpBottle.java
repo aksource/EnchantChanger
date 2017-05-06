@@ -1,6 +1,6 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.entity.EcEntityExExpBottle;
+import ak.enchantchanger.entity.EcEntityExExpBottle;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

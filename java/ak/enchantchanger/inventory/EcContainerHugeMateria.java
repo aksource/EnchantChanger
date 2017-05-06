@@ -1,8 +1,8 @@
-package ak.EnchantChanger.inventory;
+package ak.enchantchanger.inventory;
 
-import ak.EnchantChanger.item.EcItemMasterMateria;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.item.EcItemMasterMateria;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

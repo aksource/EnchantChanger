@@ -1,6 +1,6 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.entity.EcEntityApOrb;
+import ak.enchantchanger.entity.EcEntityApOrb;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.OpenGlHelper;

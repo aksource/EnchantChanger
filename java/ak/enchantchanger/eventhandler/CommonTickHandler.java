@@ -1,6 +1,6 @@
-package ak.EnchantChanger.eventhandler;
+package ak.enchantchanger.eventhandler;
 
-import ak.EnchantChanger.ExtendedPlayerData;
+import ak.enchantchanger.ExtendedPlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,10 +1,10 @@
-package ak.EnchantChanger.tileentity;
+package ak.enchantchanger.tileentity;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.MasterMateriaUtils;
-import ak.EnchantChanger.item.EcItemMasterMateria;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.MasterMateriaUtils;
+import ak.enchantchanger.item.EcItemMasterMateria;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;

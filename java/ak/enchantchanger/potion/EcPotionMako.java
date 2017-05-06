@@ -1,9 +1,9 @@
-package ak.EnchantChanger.potion;
+package ak.enchantchanger.potion;
 
-import ak.EnchantChanger.Client.ClientProxy;
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.client.ClientProxy;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;

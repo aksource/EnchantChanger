@@ -1,4 +1,4 @@
-package ak.EnchantChanger.Client.gui;
+package ak.enchantchanger.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,6 +1,6 @@
-package ak.EnchantChanger.entity;
+package ak.enchantchanger.entity;
 
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,8 +1,8 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import ak.EnchantChanger.entity.EcEntityMeteor;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.entity.EcEntityExExpBottle;
+import ak.enchantchanger.entity.EcEntityMeteor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;

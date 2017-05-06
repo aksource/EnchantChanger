@@ -1,4 +1,4 @@
-package ak.EnchantChanger.api;
+package ak.enchantchanger.api;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.api.Constants;
+import ak.enchantchanger.api.Constants;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,8 +1,8 @@
-package ak.EnchantChanger.entity;
+package ak.enchantchanger.entity;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import ak.MultiToolHolders.inventory.InventoryToolHolder;
 import net.minecraft.block.material.Material;

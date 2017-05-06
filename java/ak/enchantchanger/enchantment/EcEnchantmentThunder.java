@@ -1,6 +1,6 @@
-package ak.EnchantChanger.enchantment;
+package ak.enchantchanger.enchantment;
 
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 

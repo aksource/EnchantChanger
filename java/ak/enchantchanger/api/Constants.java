@@ -1,6 +1,6 @@
-package ak.EnchantChanger.api;
+package ak.enchantchanger.api;
 
-import ak.EnchantChanger.CreativeTabEC;
+import ak.enchantchanger.CreativeTabEC;
 import net.minecraft.creativetab.CreativeTabs;
 
 /**

@@ -1,8 +1,8 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.utils.StatCheckUtils;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.utils.StatCheckUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;

@@ -1,4 +1,4 @@
-package ak.EnchantChanger;
+package ak.enchantchanger;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.Teleporter;

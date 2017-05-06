@@ -1,8 +1,8 @@
-package ak.EnchantChanger.recipe;
+package ak.enchantchanger.recipe;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.api.Constants;
+import ak.enchantchanger.api.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;

@@ -1,6 +1,6 @@
-package ak.EnchantChanger.network;
+package ak.enchantchanger.network;
 
-import ak.EnchantChanger.ExtendedPlayerData;
+import ak.enchantchanger.ExtendedPlayerData;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;

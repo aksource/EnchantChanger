@@ -1,4 +1,4 @@
-package ak.EnchantChanger.entity;
+package ak.enchantchanger.entity;
 
 import cpw.mods.fml.common.registry.IThrowableEntity;
 import net.minecraft.entity.Entity;

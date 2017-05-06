@@ -1,6 +1,6 @@
-package ak.EnchantChanger.network;
+package ak.enchantchanger.network;
 
-import ak.EnchantChanger.api.Constants;
+import ak.enchantchanger.api.Constants;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;

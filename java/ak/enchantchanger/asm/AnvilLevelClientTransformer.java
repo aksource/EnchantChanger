@@ -1,4 +1,4 @@
-package ak.EnchantChanger.asm;
+package ak.enchantchanger.asm;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.*;
  * Created by A.K. on 14/04/22.
  */
 public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes {
-    private static final String TARGET_CLASS_NAME = "net.minecraft.client.gui.GuiRepair";
+    private static final String TARGET_CLASS_NAME = "net.minecraft.Client.gui.GuiRepair";
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
@@ -50,7 +50,7 @@ public class AnvilLevelClientTransformer implements IClassTransformer, Opcodes {
             }
 
             if (oldInsnNode != null) {
-                AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
+                AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
                 mnode.instructions.set(oldInsnNode, newInsnNode1);
                 ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
                 classNode.accept(cw);

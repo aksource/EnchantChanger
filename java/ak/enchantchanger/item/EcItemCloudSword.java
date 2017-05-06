@@ -1,9 +1,9 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.inventory.EcInventoryCloudSword;
-import ak.EnchantChanger.network.MessageCloudSword;
-import ak.EnchantChanger.network.PacketHandler;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.inventory.EcInventoryCloudSword;
+import ak.enchantchanger.network.MessageCloudSword;
+import ak.enchantchanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

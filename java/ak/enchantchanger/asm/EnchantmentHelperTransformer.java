@@ -1,4 +1,4 @@
-package ak.EnchantChanger.asm;
+package ak.enchantchanger.asm;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -51,9 +51,9 @@ public class EnchantmentHelperTransformer implements IClassTransformer, Opcodes 
             }
 
             if (oldInsnNode1 != null && oldInsnNode2 != null) {
-                AbstractInsnNode newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
+                AbstractInsnNode newInsnNode = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
                 mnode.instructions.set(oldInsnNode1, newInsnNode);
-                newInsnNode = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
+                newInsnNode = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "maxDamageModifier", "I");
                 mnode.instructions.set(oldInsnNode2, newInsnNode);
                 ClassWriter cw = new ClassWriter((ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS));
                 classNode.accept(cw);

@@ -1,4 +1,4 @@
-package ak.EnchantChanger.Client;
+package ak.enchantchanger.client;
 
 public class ClientTickHandler {
     //下のメソッドの処理はClientProxyで行われている。

@@ -1,9 +1,9 @@
-package ak.EnchantChanger;
+package ak.enchantchanger;
 
-import ak.EnchantChanger.block.EcBlockMakoReactor;
-import ak.EnchantChanger.recipe.EcRecipeMasterMateria;
-import ak.EnchantChanger.recipe.EcRecipeMateria;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.block.EcBlockMakoReactor;
+import ak.enchantchanger.recipe.EcRecipeMasterMateria;
+import ak.enchantchanger.recipe.EcRecipeMateria;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -15,7 +15,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import java.util.ArrayList;
 
-import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.enchantchanger.EnchantChanger.*;
 
 /**
  * Created by A.K. on 14/06/27.

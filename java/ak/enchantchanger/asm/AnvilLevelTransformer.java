@@ -1,4 +1,4 @@
-package ak.EnchantChanger.asm;
+package ak.enchantchanger.asm;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -56,9 +56,9 @@ public class AnvilLevelTransformer implements IClassTransformer, Opcodes {
             }
 
             if (oldInsnNode1 != null && oldInsnNode2 != null && oldInsnNode3 != null) {
-                AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
-                AbstractInsnNode newInsnNode2 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "setAnvilLevelModifier", "I");
-                AbstractInsnNode newInsnNode3 = new FieldInsnNode(GETSTATIC, "ak/EnchantChanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
+                AbstractInsnNode newInsnNode1 = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
+                AbstractInsnNode newInsnNode2 = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "setAnvilLevelModifier", "I");
+                AbstractInsnNode newInsnNode3 = new FieldInsnNode(GETSTATIC, "ak/enchantchanger/asm/AKInternalCorePlugin", "maxAnvilLevelModifier", "I");
                 mnode.instructions.set(oldInsnNode1, newInsnNode1);
                 mnode.instructions.set(oldInsnNode2, newInsnNode2);
                 mnode.instructions.set(oldInsnNode3, newInsnNode3);

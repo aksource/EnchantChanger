@@ -1,14 +1,14 @@
-package ak.EnchantChanger.eventhandler;
+package ak.enchantchanger.eventhandler;
 
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
-import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.enchantchanger.EnchantChanger.*;
 
 /**
  * Created by A.K. on 14/10/12.

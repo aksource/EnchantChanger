@@ -1,4 +1,4 @@
-package ak.EnchantChanger.asm;
+package ak.enchantchanger.asm;
 
 import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.DummyModContainer;

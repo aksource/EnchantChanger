@@ -1,7 +1,7 @@
-package ak.EnchantChanger.eventhandler;
+package ak.enchantchanger.eventhandler;
 
-import ak.EnchantChanger.network.MessagePlayerProperties;
-import ak.EnchantChanger.network.PacketHandler;
+import ak.enchantchanger.network.MessagePlayerProperties;
+import ak.enchantchanger.network.PacketHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayerMP;

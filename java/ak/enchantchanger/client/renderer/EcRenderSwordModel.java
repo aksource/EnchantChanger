@@ -1,8 +1,8 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.Client.models.*;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.item.*;
+import ak.enchantchanger.client.models.*;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.item.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

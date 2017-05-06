@@ -1,4 +1,4 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

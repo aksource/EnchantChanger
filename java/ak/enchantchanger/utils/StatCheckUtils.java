@@ -1,4 +1,4 @@
-package ak.EnchantChanger.utils;
+package ak.enchantchanger.utils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

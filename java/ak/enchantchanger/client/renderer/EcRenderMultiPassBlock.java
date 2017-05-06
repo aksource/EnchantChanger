@@ -1,7 +1,7 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.tileentity.EcTileMultiPass;
+import ak.enchantchanger.CommonProxy;
+import ak.enchantchanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;

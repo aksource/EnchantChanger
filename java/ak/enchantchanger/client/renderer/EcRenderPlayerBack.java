@@ -1,9 +1,9 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.item.EcItemSephirothSword;
-import ak.EnchantChanger.item.EcItemSephirothSwordImit;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.item.EcItemSephirothSword;
+import ak.enchantchanger.item.EcItemSephirothSwordImit;
+import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.registry.GameRegistry;

@@ -1,4 +1,4 @@
-package ak.EnchantChanger.utils;
+package ak.enchantchanger.utils;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.config.Configuration;

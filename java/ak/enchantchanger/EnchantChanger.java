@@ -1,16 +1,16 @@
-package ak.EnchantChanger;
+package ak.enchantchanger;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.api.MakoUtils;
-import ak.EnchantChanger.block.EcBlockHugeMateria;
-import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
-import ak.EnchantChanger.block.EcBlockMakoReactor;
-import ak.EnchantChanger.block.EcBlockMaterializer;
-import ak.EnchantChanger.eventhandler.*;
-import ak.EnchantChanger.item.*;
-import ak.EnchantChanger.modcoop.CoopMCE;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.MakoUtils;
+import ak.enchantchanger.block.EcBlockHugeMateria;
+import ak.enchantchanger.block.EcBlockLifeStreamFluid;
+import ak.enchantchanger.block.EcBlockMakoReactor;
+import ak.enchantchanger.block.EcBlockMaterializer;
+import ak.enchantchanger.eventhandler.*;
+import ak.enchantchanger.item.*;
+import ak.enchantchanger.modcoop.CoopMCE;
+import ak.enchantchanger.network.PacketHandler;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.base.Optional;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -36,10 +36,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.logging.Logger;
 
-import static ak.EnchantChanger.Recipes.registerRecipes;
-import static ak.EnchantChanger.utils.ConfigurationUtils.enableDungeonLoot;
-import static ak.EnchantChanger.utils.ConfigurationUtils.initConfig;
-import static ak.EnchantChanger.utils.RegistrationUtils.*;
+import static ak.enchantchanger.Recipes.registerRecipes;
+import static ak.enchantchanger.utils.ConfigurationUtils.enableDungeonLoot;
+import static ak.enchantchanger.utils.ConfigurationUtils.initConfig;
+import static ak.enchantchanger.utils.RegistrationUtils.*;
 
 @Mod(modid = "EnchantChanger", name = "EnchantChanger", version = "@VERSION@", dependencies = "required-after:Forge@[10.12.1.1090,)", useMetadata = true)
 public class EnchantChanger {

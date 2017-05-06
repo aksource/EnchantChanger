@@ -1,12 +1,12 @@
-package ak.EnchantChanger.inventory;
+package ak.enchantchanger.inventory;
 
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.EnchantmentLvPair;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.EnchantmentLvPair;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;

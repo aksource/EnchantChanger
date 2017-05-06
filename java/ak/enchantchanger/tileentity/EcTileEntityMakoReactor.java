@@ -1,13 +1,13 @@
-package ak.EnchantChanger.tileentity;
+package ak.enchantchanger.tileentity;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.MakoUtils;
-import ak.EnchantChanger.block.EcBlockLifeStreamFluid;
-import ak.EnchantChanger.fluid.EcMakoReactorTank;
-import ak.EnchantChanger.modcoop.CoopRFAPI;
-import ak.EnchantChanger.modcoop.CoopSS;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.MakoUtils;
+import ak.enchantchanger.block.EcBlockLifeStreamFluid;
+import ak.enchantchanger.fluid.EcMakoReactorTank;
+import ak.enchantchanger.modcoop.CoopRFAPI;
+import ak.enchantchanger.modcoop.CoopSS;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IEnergyInfo;

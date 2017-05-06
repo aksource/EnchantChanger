@@ -1,4 +1,4 @@
-package ak.EnchantChanger.modcoop;
+package ak.enchantchanger.modcoop;
 
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.tileentity.TileEntity;

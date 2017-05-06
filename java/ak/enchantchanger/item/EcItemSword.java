@@ -1,14 +1,14 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.Client.ClientProxy;
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.api.ICustomReachItem;
-import ak.EnchantChanger.network.MessageExtendedReachAttack;
-import ak.EnchantChanger.network.MessageKeyPressed;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.client.ClientProxy;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.ICustomReachItem;
+import ak.enchantchanger.network.MessageExtendedReachAttack;
+import ak.enchantchanger.network.MessageKeyPressed;
+import ak.enchantchanger.network.PacketHandler;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;

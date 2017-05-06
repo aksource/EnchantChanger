@@ -1,10 +1,10 @@
-package ak.EnchantChanger.block;
+package ak.enchantchanger.block;
 
-import ak.EnchantChanger.Client.ClientProxy;
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
-import ak.EnchantChanger.tileentity.EcTileMultiPass;
+import ak.enchantchanger.client.ClientProxy;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.tileentity.EcTileMultiPass;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

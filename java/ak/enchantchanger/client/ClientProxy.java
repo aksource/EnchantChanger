@@ -1,21 +1,21 @@
-package ak.EnchantChanger.Client;
+package ak.enchantchanger.client;
 
-import ak.EnchantChanger.Client.renderer.*;
-import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.api.ICustomReachItem;
-import ak.EnchantChanger.entity.EcEntityApOrb;
-import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import ak.EnchantChanger.entity.EcEntityMeteor;
-import ak.EnchantChanger.eventhandler.LivingEventHooks;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.network.MessageExtendedReachAttack;
-import ak.EnchantChanger.network.MessageKeyPressed;
-import ak.EnchantChanger.network.MessageLevitation;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.client.renderer.*;
+import ak.enchantchanger.CommonProxy;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.ICustomReachItem;
+import ak.enchantchanger.entity.EcEntityApOrb;
+import ak.enchantchanger.entity.EcEntityExExpBottle;
+import ak.enchantchanger.entity.EcEntityMeteor;
+import ak.enchantchanger.eventhandler.LivingEventHooks;
+import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.network.MessageExtendedReachAttack;
+import ak.enchantchanger.network.MessageKeyPressed;
+import ak.enchantchanger.network.MessageLevitation;
+import ak.enchantchanger.network.PacketHandler;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -49,7 +49,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-import static ak.EnchantChanger.api.Constants.MagicKEY;
+import static ak.enchantchanger.api.Constants.MagicKEY;
 
 public class ClientProxy extends CommonProxy {
     public static final float moveFactor = 0.4F;

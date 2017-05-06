@@ -1,11 +1,11 @@
-package ak.EnchantChanger.block;
+package ak.enchantchanger.block;
 
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

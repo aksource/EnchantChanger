@@ -1,15 +1,15 @@
-package ak.EnchantChanger.utils;
+package ak.enchantchanger.utils;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.enchantment.*;
-import ak.EnchantChanger.entity.EcEntityApOrb;
-import ak.EnchantChanger.entity.EcEntityExExpBottle;
-import ak.EnchantChanger.entity.EcEntityMeteor;
-import ak.EnchantChanger.item.EcItemBlockMakoReactor;
-import ak.EnchantChanger.potion.EcPotionMako;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
-import ak.EnchantChanger.tileentity.EcTileEntityMaterializer;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.enchantment.*;
+import ak.enchantchanger.entity.EcEntityApOrb;
+import ak.enchantchanger.entity.EcEntityExExpBottle;
+import ak.enchantchanger.entity.EcEntityMeteor;
+import ak.enchantchanger.item.EcItemBlockMakoReactor;
+import ak.enchantchanger.potion.EcPotionMako;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
@@ -18,7 +18,7 @@ import net.minecraft.potion.Potion;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import static ak.EnchantChanger.utils.ConfigurationUtils.*;
+import static ak.enchantchanger.utils.ConfigurationUtils.*;
 
 /**
  * Created by A.K. on 14/10/12.

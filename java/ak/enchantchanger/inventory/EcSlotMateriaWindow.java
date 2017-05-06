@@ -1,7 +1,7 @@
-package ak.EnchantChanger.inventory;
+package ak.enchantchanger.inventory;
 
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

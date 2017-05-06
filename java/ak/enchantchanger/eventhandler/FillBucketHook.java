@@ -1,4 +1,4 @@
-package ak.EnchantChanger.eventhandler;
+package ak.enchantchanger.eventhandler;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

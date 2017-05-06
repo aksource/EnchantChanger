@@ -1,7 +1,7 @@
-package ak.EnchantChanger.network;
+package ak.enchantchanger.network;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.ExtendedPlayerData;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.ExtendedPlayerData;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

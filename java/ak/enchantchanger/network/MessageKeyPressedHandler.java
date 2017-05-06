@@ -1,10 +1,10 @@
-package ak.EnchantChanger.network;
+package ak.enchantchanger.network;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 
-import static ak.EnchantChanger.api.Constants.*;
+import static ak.enchantchanger.api.Constants.*;
 
 /**
  * Created by A.K. on 14/07/31.

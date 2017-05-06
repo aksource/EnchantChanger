@@ -1,7 +1,7 @@
-package ak.EnchantChanger.network;
+package ak.enchantchanger.network;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.item.EcItemCloudSword;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.item.EcItemCloudSword;
 import ak.MultiToolHolders.ItemMultiToolHolder;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;

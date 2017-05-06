@@ -1,4 +1,4 @@
-package ak.EnchantChanger.fluid;
+package ak.enchantchanger.fluid;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;

@@ -1,7 +1,7 @@
-package ak.EnchantChanger.api;
+package ak.enchantchanger.api;
 
-import ak.EnchantChanger.item.EcItemMasterMateria;
-import ak.EnchantChanger.item.EcItemMateria;
+import ak.enchantchanger.item.EcItemMasterMateria;
+import ak.enchantchanger.item.EcItemMateria;
 import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
@@ -10,7 +10,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.List;
 import java.util.Map;
 
-import static ak.EnchantChanger.EnchantChanger.*;
+import static ak.enchantchanger.EnchantChanger.*;
 
 /**
  * Created by A.K. on 14/10/12.

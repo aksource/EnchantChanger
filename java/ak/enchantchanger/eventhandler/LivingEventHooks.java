@@ -1,14 +1,14 @@
-package ak.EnchantChanger.eventhandler;
+package ak.enchantchanger.eventhandler;
 
-import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.entity.EcEntityApOrb;
-import ak.EnchantChanger.item.EcItemMateria;
-import ak.EnchantChanger.item.EcItemSword;
-import ak.EnchantChanger.network.MessagePlayerProperties;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.utils.ConfigurationUtils;
+import ak.enchantchanger.CommonProxy;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.entity.EcEntityApOrb;
+import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.network.MessagePlayerProperties;
+import ak.enchantchanger.network.PacketHandler;
+import ak.enchantchanger.utils.ConfigurationUtils;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;

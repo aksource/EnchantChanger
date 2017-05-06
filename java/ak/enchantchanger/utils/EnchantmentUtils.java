@@ -1,9 +1,9 @@
-package ak.EnchantChanger.utils;
+package ak.enchantchanger.utils;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.MasterMateriaUtils;
-import ak.EnchantChanger.enchantment.*;
-import ak.EnchantChanger.item.EcItemSword;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.MasterMateriaUtils;
+import ak.enchantchanger.enchantment.*;
+import ak.enchantchanger.item.EcItemSword;
 import net.minecraft.enchantment.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

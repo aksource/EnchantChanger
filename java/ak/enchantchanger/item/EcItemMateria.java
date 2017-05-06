@@ -1,10 +1,10 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
-import ak.EnchantChanger.ExtendedPlayerData;
-import ak.EnchantChanger.MateriaTeleporter;
-import ak.EnchantChanger.entity.EcEntityMeteor;
-import ak.EnchantChanger.utils.ConfigurationUtils;
-import ak.EnchantChanger.utils.EnchantmentUtils;
+import ak.enchantchanger.ExtendedPlayerData;
+import ak.enchantchanger.MateriaTeleporter;
+import ak.enchantchanger.entity.EcEntityMeteor;
+import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.EnchantmentUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

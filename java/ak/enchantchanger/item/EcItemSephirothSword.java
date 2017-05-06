@@ -1,4 +1,4 @@
-package ak.EnchantChanger.item;
+package ak.enchantchanger.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

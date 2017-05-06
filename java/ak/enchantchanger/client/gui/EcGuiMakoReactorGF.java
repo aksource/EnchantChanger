@@ -1,10 +1,10 @@
-package ak.EnchantChanger.Client.gui;
+package ak.enchantchanger.client.gui;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.EcContainerMakoReactor;
-import ak.EnchantChanger.network.MessageRFStepping;
-import ak.EnchantChanger.network.PacketHandler;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.inventory.EcContainerMakoReactor;
+import ak.enchantchanger.network.MessageRFStepping;
+import ak.enchantchanger.network.PacketHandler;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;

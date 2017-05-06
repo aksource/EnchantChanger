@@ -1,4 +1,4 @@
-package ak.EnchantChanger.enchantment;
+package ak.enchantchanger.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;

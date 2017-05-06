@@ -1,8 +1,8 @@
-package ak.EnchantChanger.Client.renderer;
+package ak.enchantchanger.client.renderer;
 
-import ak.EnchantChanger.Client.models.EcModelHMateria;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.client.models.EcModelHMateria;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

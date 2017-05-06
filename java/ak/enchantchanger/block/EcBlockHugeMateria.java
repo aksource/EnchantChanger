@@ -1,8 +1,8 @@
-package ak.EnchantChanger.block;
+package ak.enchantchanger.block;
 
-import ak.EnchantChanger.EnchantChanger;
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.tileentity.EcTileEntityHugeMateria;
+import ak.enchantchanger.EnchantChanger;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

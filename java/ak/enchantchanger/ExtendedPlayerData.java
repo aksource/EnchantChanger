@@ -1,8 +1,8 @@
-package ak.EnchantChanger;
+package ak.enchantchanger;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.network.MessagePlayerProperties;
-import ak.EnchantChanger.network.PacketHandler;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.network.MessagePlayerProperties;
+import ak.enchantchanger.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

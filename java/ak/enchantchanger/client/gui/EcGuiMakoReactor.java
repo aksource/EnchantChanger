@@ -1,8 +1,8 @@
-package ak.EnchantChanger.Client.gui;
+package ak.enchantchanger.client.gui;
 
-import ak.EnchantChanger.api.Constants;
-import ak.EnchantChanger.inventory.EcContainerMakoReactor;
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.inventory.EcContainerMakoReactor;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

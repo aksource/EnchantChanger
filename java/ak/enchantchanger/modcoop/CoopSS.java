@@ -1,6 +1,6 @@
-package ak.EnchantChanger.modcoop;
+package ak.enchantchanger.modcoop;
 
-import ak.EnchantChanger.tileentity.EcTileEntityMakoReactor;
+import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import shift.sextiarysector.api.gearforce.tileentity.IGearForceHandler;

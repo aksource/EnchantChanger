@@ -1,8 +1,8 @@
-package ak.EnchantChanger.block;
+package ak.enchantchanger.block;
 
-import ak.EnchantChanger.Client.ClientProxy;
-import ak.EnchantChanger.CommonProxy;
-import ak.EnchantChanger.tileentity.EcTileMultiPass;
+import ak.enchantchanger.client.ClientProxy;
+import ak.enchantchanger.CommonProxy;
+import ak.enchantchanger.tileentity.EcTileMultiPass;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
