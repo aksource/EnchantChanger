@@ -1,0 +1,35 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "blocks/gold_block",
+        "front": "enchantchanger:blocks/makoreactor-front",
+        "base": "blocks/gold_block",
+        "cross": "enchantchanger:blocks/makoreactor-side"
+    },
+    "elements": [
+        {   "__comment": "frame",
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#cross" }
+            }
+        },
+        {   "__comment": "metal base",
+            "from": [ 0.01, 0.01, 0.01 ],
+            "to": [ 15.99, 15.99, 15.99 ],
+            "faces": {
+                "down":  { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" },
+                "up":    { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" },
+                "north": { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" },
+                "south": { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" },
+                "west":  { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" },
+                "east":  { "uv": [ 0.01, 0.01, 15.99, 15.99 ], "texture": "#base" }
+            }
+        }
+    ]
+}

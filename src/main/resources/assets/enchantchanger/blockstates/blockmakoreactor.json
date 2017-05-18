@@ -1,0 +1,27 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "enchantchanger:blockmakoreactor_iron",
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "base=iron,facing=north": { "model": "enchantchanger:blockmakoreactor_iron" },
+        "base=iron,facing=south": { "model": "enchantchanger:blockmakoreactor_iron", "y": 180 },
+        "base=iron,facing=west":  { "model": "enchantchanger:blockmakoreactor_iron", "y": 270 },
+        "base=iron,facing=east":  { "model": "enchantchanger:blockmakoreactor_iron", "y": 90 },
+        "base=gold,facing=north": { "model": "enchantchanger:blockmakoreactor_gold" },
+        "base=gold,facing=south": { "model": "enchantchanger:blockmakoreactor_gold", "y": 180 },
+        "base=gold,facing=west":  { "model": "enchantchanger:blockmakoreactor_gold", "y": 270 },
+        "base=gold,facing=east":  { "model": "enchantchanger:blockmakoreactor_gold", "y": 90 },
+        "inventory": [{
+            "base=iron,facing=north": {
+                "north": { "model": "enchantchanger:blockmakoreactor_iron" },
+                "south": { "model": "enchantchanger:blockmakoreactor_iron", "y": 180 }
+            },
+            "base=gold,facing=north": {
+                "north": { "model": "enchantchanger:blockmakoreactor_gold" },
+                "south": { "model": "enchantchanger:blockmakoreactor_gold", "y": 180 }
+            }
+        }]
+    }
+}
