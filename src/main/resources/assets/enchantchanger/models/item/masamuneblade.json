@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/MasamuneBlade"
+        "layer0": "enchantchanger:items/masamune_blade"
     },
     "display": {
         "thirdperson": {

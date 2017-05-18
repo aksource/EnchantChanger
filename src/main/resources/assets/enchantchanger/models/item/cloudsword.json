@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/CloudSword"
+        "layer0": "enchantchanger:items/cloud_sword"
     },
     "display": {
         "thirdperson": {

@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/UltimateWeapon"
+        "layer0": "enchantchanger:items/ultimate_weapon"
     },
     "display": {
         "thirdperson": {

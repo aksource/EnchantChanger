@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/ExExpBottle"
+        "layer0": "enchantchanger:items/ex_exp_bottle"
     },
     "display": {
         "thirdperson": {

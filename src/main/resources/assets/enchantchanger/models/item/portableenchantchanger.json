@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/PortableEnchantChanger"
+        "layer0": "enchantchanger:items/portable_enchant_changer"
     },
     "display": {
         "thirdperson": {

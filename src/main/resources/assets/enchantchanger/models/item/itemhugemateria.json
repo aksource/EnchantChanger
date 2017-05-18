@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/HugeMateria"
+        "layer0": "enchantchanger:items/huge_materia"
     },
     "display": {
         "thirdperson": {

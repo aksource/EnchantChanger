@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "enchantchanger:items/FirstSword-open"
+        "layer0": "enchantchanger:items/first_sword_open"
     },
     "display": {
         "thirdperson": {
