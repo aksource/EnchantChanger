@@ -77,7 +77,7 @@ public class EnchantChanger {
     public static boolean loadSS = false;
     @Mod.Instance("EnchantChanger")
     public static EnchantChanger instance;
-    @SidedProxy(clientSide = "ak.EnchantChanger.Client.ClientProxy", serverSide = "ak.EnchantChanger.CommonProxy")
+    @SidedProxy(clientSide = "ak.enchantchanger.client.ClientProxy", serverSide = "ak.enchantchanger.CommonProxy")
     public static CommonProxy proxy;
 
     public static String getUniqueStrings(Object obj) {
