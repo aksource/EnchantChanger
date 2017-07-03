@@ -4,6 +4,7 @@ import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.enchantchanger.utils.Items;
 import com.google.common.collect.Lists;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -49,15 +50,18 @@ public class GenerateHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onLootTableLoading(LootTableLoadEvent event) {
-        event.getTable().addPool(
-                new LootPool(
-                        makeMagicMateriaEntry(),
-                        new LootCondition[]{},
-                        new RandomValueRange(1, 1),
-                        new RandomValueRange(0, 0),
-                        "magic_materia_pool"
-                )
-        );
+        ResourceLocation name = event.getName();
+        if (name.getResourcePath().matches("chests/.*")) {
+            event.getTable().addPool(
+                    new LootPool(
+                            makeMagicMateriaEntry(),
+                            new LootCondition[]{},
+                            new RandomValueRange(1, 1),
+                            new RandomValueRange(0, 0),
+                            "magic_materia_pool"
+                    )
+            );
+        }
     }
 
     private LootEntry[] makeMagicMateriaEntry() {
