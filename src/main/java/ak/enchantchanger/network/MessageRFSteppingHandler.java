@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class MessageRFSteppingHandler implements IMessageHandler<MessageRFStepping, IMessage> {
     @Override
     public IMessage onMessage(MessageRFStepping message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.world;
+        World world = ctx.getServerHandler().player.world;
         TileEntity tile = world.getTileEntity(new BlockPos(message.xPos, message.yPos, message.zPos));
         if (tile != null && tile instanceof EcTileEntityMakoReactor) {
             ((EcTileEntityMakoReactor) tile).setOutputMaxRFValue(message.outputRFValue);

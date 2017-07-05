@@ -26,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * 魔晄炉のブロッククラス
@@ -67,7 +68,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
                                             @Nonnull EntityLivingBase placer, @Nonnull EnumHand hand) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return this.getDefaultState().withProperty(PROP_BASE_TYPE, EnumMRBaseType.getByIndex(meta)).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @Override
@@ -98,7 +99,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
         for (EnumMRBaseType type : EnumMRBaseType.values()) {
             ItemStack makoReactorController = new ItemStack(this, 1, type.ordinal());
             list.add(makoReactorController);
@@ -132,7 +133,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
                                 new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
                         if (itemstack.hasTagCompound()) {
-                            entityitem.getEntityItem().setTagCompound(itemstack.getTagCompound().copy());
+                            entityitem.getItem().setTagCompound(itemstack.getTagCompound().copy());
                         }
 
                         float f3 = 0.05F;

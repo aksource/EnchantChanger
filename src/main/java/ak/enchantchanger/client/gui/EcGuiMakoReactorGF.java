@@ -67,16 +67,16 @@ public class EcGuiMakoReactorGF extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRendererObj.drawString(I18n.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
-        fontRendererObj.drawString(I18n.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
+        fontRenderer.drawString(I18n.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
+        fontRenderer.drawString(I18n.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {
             List<String> list = new ArrayList<>();
             list.add(String.format("Mako : %dmB", tileEntity.tank.getFluidAmount()));
-            drawHoveringText(list, mouseX - x, mouseZ - y, fontRendererObj);
+            drawHoveringText(list, mouseX - x, mouseZ - y, fontRenderer);
         }
-        fontRendererObj.drawString(I18n.translateToLocal(String.format("Max %d Speed/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
+        fontRenderer.drawString(I18n.translateToLocal(String.format("Max %d Speed/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
     }
 
     @Override

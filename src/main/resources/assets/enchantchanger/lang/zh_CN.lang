@@ -1,5 +1,5 @@
 
-tile.EnchantChanger.name=附魔变更机
+tile.enchant_changer.name=附魔变更机
 item.enchantchanger:HugeMateria.name=巨大材料
 item.enchantchanger:ExExpBottle.name=超级经验瓶
 item.enchantchanger:ZackSword.name=强力剑

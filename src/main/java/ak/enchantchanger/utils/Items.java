@@ -65,7 +65,7 @@ public class Items {
         itemHugeMateria = new EcItemHugeMateria("HugeMateria")
                 .setRegistryName("itemhugemateria");
 
-        itemBlockMakoReactor = new EcItemBlockMakoReactor(blockMakoReactor).setRegistryName("blockmakoreactor");
+        itemBlockMakoReactor = new EcItemBlockMakoReactor(blockMakoReactor).setRegistryName(Constants.REG_BLOCK_MAKO_REACTOR);
         itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream")
                 .setRegistryName("bucket_lifestream")
                 .setContainerItem(net.minecraft.init.Items.BUCKET)

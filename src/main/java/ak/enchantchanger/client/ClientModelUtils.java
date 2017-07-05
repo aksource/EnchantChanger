@@ -1,5 +1,6 @@
 package ak.enchantchanger.client;
 
+import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.api.MasterMateriaType;
 import ak.enchantchanger.client.models.BakedModelMateria;
 import ak.enchantchanger.client.models.EcSwordModel;
@@ -25,6 +26,8 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.b3d.B3DLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -79,6 +82,19 @@ public class ClientModelUtils {
 
     private ClientModelUtils() {}
 
+    static void registerModelsOnPreInit() {
+        //1.8からのモデル登録。
+        B3DLoader.INSTANCE.addDomain(Constants.MOD_ID);
+        OBJLoader.INSTANCE.addDomain(Constants.MOD_ID);
+//        registerCustomBlockModel(Blocks.blockHugeMateria, 0, Blocks.blockHugeMateria.getRegistryName().toString(), MODEL_TYPE_INVENTORY, false);
+        registerCustomBlockModel(Blocks.blockMakoReactor, 0, Blocks.blockMakoReactor.getRegistryName().toString() + "_iron", MODEL_TYPE_INVENTORY);
+        registerCustomBlockModel(Blocks.blockMakoReactor, 1, Blocks.blockMakoReactor.getRegistryName().toString() + "_gold", MODEL_TYPE_INVENTORY);
+
+        registerFluidBlockModel(Blocks.blockLifeStream, MODEL_TYPE_FLUID);
+        /* 魔晄炉用モデルローダー登録 */
+//        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
+    }
+
     static void registerModels() {
         registerItemModel(Items.itemZackSword, 0);
         registerItemModel(Items.itemCloudSwordCore, 0);
@@ -127,18 +143,15 @@ public class ClientModelUtils {
         ResourceLocation name = ecSword.getRegistryName();
         List<IRetexturableModel> modelList = new ArrayList<>();
         IBakedModel iconModel = modelRegistry.getObject(MODEL_RESOURCE_LOCATION_MAP.get(name));
-        IModel model = null;
         try {
             for (ResourceLocation rl : rlList) {
-                model = ModelLoaderRegistry.getModel(rl);
+                IModel model = ModelLoaderRegistry.getModel(rl);
                 modelList.add((IRetexturableModel) model);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (model instanceof IRetexturableModel) {
-            modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new EcSwordModel(iconModel, modelList, sizeFPV, sizeTPV, textureMap));
-        }
+        modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new EcSwordModel(iconModel, modelList, sizeFPV, sizeTPV, textureMap));
     }
 
     private static void changeMateriaModel(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, ResourceLocation name, ResourceLocation rl) {
@@ -151,25 +164,26 @@ public class ClientModelUtils {
         modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new BakedModelMateria(model));
     }
 
-    static void registerCustomBlockModel(Block block, int meta, String modelLocation, String type, boolean noModelLoc) {
-        registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type, noModelLoc);
-        if (type.equals(MODEL_TYPE_FLUID)) {
-            ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(block.getRegistryName(), block.getRegistryName().toString(), type);
-            ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocation));
-        }
+    static void registerCustomBlockModel(Block block, int meta, String modelLocation, String type) {
+        registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type);
     }
 
-    private static void registerCustomItemModel(Item item, int meta, String modelLocation, String type, boolean noModelLoc) {
-//        if (noModelLoc) {
-//            ModelBakery.registerItemVariants(item);
-//        } else {
-//            ModelBakery.addVariantName(item, modelLocation);
-//        }
+    /**
+     * 液体ブロックモデルの登録<br />
+     * preInitで行うこと
+     * @param block 流体ブロック
+     * @param type fluid or gas
+     */
+    static void registerFluidBlockModel(Block block, String type) {
+        ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(block.getRegistryName(), block.getRegistryName().toString(), type);
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new CustomItemMeshDefinition(modelResourceLocation));
+        ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocation));
+    }
+
+    private static void registerCustomItemModel(Item item, int meta, String modelLocation, String type) {
         ResourceLocation itemName = item.getRegistryName();
         ModelResourceLocation modelResourceLocation = setModelRsrcToMap(itemName, modelLocation, type);
         ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
-//        ModelLoader.setCustomMeshDefinition(item, new CustomItemMeshDefinition(modelResourceLocation));
-        //enchantchanger.logger.info("added ModelLocation of " + Constants.EcAssetsDomain + ":" + modelLocation);
     }
 
     private static void registerBlockModel(Block block, int meta) {
@@ -177,7 +191,6 @@ public class ClientModelUtils {
     }
 
     private static void registerItemModel(Item item, int meta) {
-//        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(GameRegistry.findUniqueIdentifierFor(item).toString(), MODEL_TYPE_INVENTORY);
         ModelResourceLocation modelResourceLocation = setModelRsrcToMap(item.getRegistryName(), item.getRegistryName().toString(), MODEL_TYPE_INVENTORY);
         mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
 //        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);

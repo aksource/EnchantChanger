@@ -81,10 +81,10 @@ public class RenderingOverlayEvent {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_BLEND);
-        int prevFontSize = this.mc.fontRendererObj.FONT_HEIGHT;
-        this.mc.fontRendererObj.FONT_HEIGHT = 2;
-        this.mc.fontRendererObj.drawString(str, x, y, 0xFFFFFF);
-        this.mc.fontRendererObj.FONT_HEIGHT = prevFontSize;
+        int prevFontSize = this.mc.fontRenderer.FONT_HEIGHT;
+        this.mc.fontRenderer.FONT_HEIGHT = 2;
+        this.mc.fontRenderer.drawString(str, x, y, 0xFFFFFF);
+        this.mc.fontRenderer.FONT_HEIGHT = prevFontSize;
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
@@ -129,9 +129,9 @@ public class RenderingOverlayEvent {
         if (itemstack != null) {
             RenderHelper.enableGUIStandardItemLighting();
             itemRenderer.renderItemAndEffectIntoGUI(itemstack, par2, par3);//Itemの描画
-            itemRenderer.renderItemOverlays(this.mc.fontRendererObj, itemstack, par2, par3);//耐久値の描画           RenderHelper.disableStandardItemLighting();
+            itemRenderer.renderItemOverlays(this.mc.fontRenderer, itemstack, par2, par3);//耐久値の描画           RenderHelper.disableStandardItemLighting();
             String s = itemstack.getDisplayName();
-            this.mc.fontRendererObj.drawString(s, par2 + 16, par3 + 4, 0xFFFFFF);
+            this.mc.fontRenderer.drawString(s, par2 + 16, par3 + 4, 0xFFFFFF);
         }
     }
 

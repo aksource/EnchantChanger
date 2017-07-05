@@ -12,45 +12,29 @@ import ak.enchantchanger.network.MessageKeyPressed;
 import ak.enchantchanger.network.PacketHandler;
 import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.stats.AchievementList;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Timer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomModelItem {
@@ -101,6 +85,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
         if (worldIn.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
             PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
         }
+        doMagic(playerIn.getHeldItem(handIn), worldIn, playerIn);
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
@@ -168,180 +153,10 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
     // 内蔵武器切り替え用攻撃メソッドの移植
     void attackTargetEntityWithTheItem(Entity entity,
                                               EntityPlayer player, @Nonnull ItemStack stack, boolean cancelHurt) {
-        if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player,
-                entity))) {
-            return;
-        }
-        if (!stack.isEmpty()
-                && stack.getItem().onLeftClickEntity(stack, player, entity)) {
-            return;
-        }
-        if (entity.canBeAttackedWithItem()) {
-            if (!entity.hitByEntity(player)) {
-                float var2 = (float) this.getItemStrength(stack);
-                if (player.isPotionActive(MobEffects.STRENGTH)) {
-                    var2 += 3 << player.getActivePotionEffect(
-                            MobEffects.STRENGTH).getAmplifier();
-                }
-
-                if (player.isPotionActive(MobEffects.WEAKNESS)) {
-                    var2 -= 2 << player.getActivePotionEffect(MobEffects.WEAKNESS)
-                            .getAmplifier();
-                }
-
-                int var3 = 0;
-                int var4 = 0;
-
-                if (entity instanceof EntityLivingBase) {
-                    var4 = this.getEnchantmentModifierLiving(stack, player,
-                            (EntityLivingBase) entity);
-                    var3 += EnchantmentHelper.getEnchantmentLevel(
-                            Enchantments.KNOCKBACK, stack);
-                }
-
-                if (player.isSprinting()) {
-                    ++var3;
-                }
-
-                if (var2 > 0 || var4 > 0) {
-                    boolean var5 = player.fallDistance > 0.0F
-                            && !player.onGround && !player.isOnLadder()
-                            && !player.isInWater()
-                            && !player.isPotionActive(MobEffects.BLINDNESS)
-                            && player.getRidingEntity() == null
-                            && entity instanceof EntityLivingBase;
-
-                    if (var5 && var2 > 0) {
-                        var2 *= 1.5F;
-                    }
-
-                    var2 += var4;
-                    boolean var6 = false;
-                    int var7 = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
-
-                    if (entity instanceof EntityLivingBase && var7 > 0
-                            && !entity.isBurning()) {
-                        var6 = true;
-                        entity.setFire(1);
-                    }
-
-                    boolean var8 = entity.attackEntityFrom(
-                            DamageSource.causePlayerDamage(player), var2);
-
-                    if (var8) {
-                        if (var3 > 0) {
-                            entity.addVelocity(
-                                    (double) (-MathHelper
-                                            .sin(player.rotationYaw
-                                                    * (float) Math.PI / 180.0F)
-                                            * (float) var3 * 0.5F),
-                                    0.1D,
-                                    (double) (MathHelper.cos(player.rotationYaw
-                                            * (float) Math.PI / 180.0F)
-                                            * (float) var3 * 0.5F));
-                            player.motionX *= 0.6D;
-                            player.motionZ *= 0.6D;
-                            player.setSprinting(false);
-                        }
-
-                        if (var5) {
-                            player.onCriticalHit(entity);
-                        }
-
-                        if (var4 > 0) {
-                            player.onEnchantmentCritical(entity);
-                        }
-
-                        if (var2 >= 18) {
-                            player.addStat(AchievementList.OVERKILL);
-                        }
-
-                        player.setLastAttacker(entity);
-
-                        if (entity instanceof EntityLivingBase) {
-                            EnchantmentHelper.applyThornEnchantments((EntityLivingBase) entity, player);
-                        }
-                        EnchantmentHelper.applyArthropodEnchantments(player, entity);
-                        Object object = entity;
-
-                        if (entity instanceof EntityDragonPart) {
-                            IEntityMultiPart ientitymultipart = ((EntityDragonPart) entity).entityDragonObj;
-
-                            if (ientitymultipart != null && ientitymultipart instanceof EntityLivingBase) {
-                                object = ientitymultipart;
-                            }
-                        }
-
-                        if (!stack.isEmpty() && object instanceof EntityLivingBase) {
-                            stack.hitEntity((EntityLivingBase) object, player);
-                            if (cancelHurt)
-                                entity.hurtResistantTime = 0;
-                            if (stack.isEmpty()) {
-                                this.destroyTheItem(player, stack, EnumHand.MAIN_HAND);
-                            }
-                        }
-                    }
-
-                    if (entity instanceof EntityLivingBase) {
-                        player.addStat(StatList.DAMAGE_DEALT,
-                                Math.round(var2 * 10.0F));
-
-                        if (var7 > 0 && var8) {
-                            entity.setFire(var7 * 4);
-                        } else if (var6) {
-                            entity.extinguish();
-                        }
-                    }
-
-                    player.addExhaustion(0.3F);
-                }
-            }
-        }
-    }
-
-    private double getItemStrength(ItemStack item) {
-        Multimap multimap = item.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
-        double d1 = 0;
-        if (!multimap.isEmpty()) {
-
-            for (Object object : multimap.entries()) {
-                Entry entry = (Entry) object;
-                AttributeModifier attributemodifier = (AttributeModifier) entry
-                        .getValue();
-                if (attributemodifier.getOperation() != 1
-                        && attributemodifier.getOperation() != 2) {
-                    d1 = attributemodifier.getAmount();
-                } else {
-                    d1 = attributemodifier.getAmount() * 100.0D;
-                }
-            }
-        }
-        return d1;
-    }
-
-    private int getEnchantmentModifierLiving(ItemStack stack,
-                                            EntityLivingBase attacker, EntityLivingBase enemy) {
-        int calc = 0;
-        if (stack != null) {
-            NBTTagList nbttaglist = stack.getEnchantmentTagList();
-
-            if (nbttaglist != null) {
-                for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                    short short1 = nbttaglist.getCompoundTagAt(i)
-                            .getShort("id");
-                    short short2 = nbttaglist.getCompoundTagAt(i)
-                            .getShort("lvl");
-                    Enchantment enchantment = Enchantment.getEnchantmentByID(short1);
-                    if (enchantment != null) {
-                        calc += enchantment.calcDamageByCreature(short2, enemy.getCreatureAttribute());
-                    }
-                }
-            }
-        }
-        return calc > 0 ? 1 + attacker.getEntityWorld().rand.nextInt(calc) : 0;
-    }
-
-    public void destroyTheItem(EntityPlayer player, ItemStack orig, EnumHand hand) {
+        ItemStack prevItem = player.getHeldItemMainhand();
+        player.setHeldItem(EnumHand.MAIN_HAND, stack);
+        player.attackTargetEntityWithCurrentItem(entity);
+        player.setHeldItem(EnumHand.MAIN_HAND, prevItem);
     }
 
     @Override

@@ -1,0 +1,9 @@
+{
+    "parent": "block/enchanting_table_base",
+    "textures": {
+        "particle": "enchantchanger:blocks/enchantchanger-bottom",
+        "bottom": "enchantchanger:blocks/enchantchanger-bottom",
+        "top": "enchantchanger:blocks/enchantchanger-top",
+        "side": "enchantchanger:blocks/enchantchanger-side"
+    }
+}

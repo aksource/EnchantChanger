@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import java.util.Map;
 public class EcItemMateria extends EcItem {
     public static final String[] MateriaMagicNames = new String[]{"Black", "White", "Teleport", "Floating",
             "Thunder", "Despell", "Haste", "Absorption"};
-    public static final String[] MAGIC_NAME = new String[]{"enchantment.Meteo", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
+    public static final String[] MAGIC_NAME = new String[]{"enchantment.Meteor", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
             "enchantment.Thunder", "enchantment.Despell", "enchantment.Haste", "enchantment.Absorption"};
     public static int MagicMateriaNum = MateriaMagicNames.length;
     private static final Map<ResourceLocation, ResourceLocation> ENCHANTMENT_EFFECT_MAP = new HashMap<>();
@@ -84,7 +85,7 @@ public class EcItemMateria extends EcItem {
 //                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
 //                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
 //            } else {
-//                entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+//                entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
 //            }
             entityplayer.fallDistance = 0.0F;
             if (telepoDim) {
@@ -97,7 +98,7 @@ public class EcItemMateria extends EcItem {
                         entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
             }
         }
-        entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
+        entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
     }
 
 //	public void addMateriaLv(ItemStack item, int addLv)
@@ -149,9 +150,9 @@ public class EcItemMateria extends EcItem {
     public static Vec3d setTeleportPoint(World world, EntityPlayer entityplayer) {
         double var1 = 1.0D;
         double distLimit = 150.0D;
-        double viewX = entityplayer.getLookVec().xCoord;
-        double viewY = entityplayer.getLookVec().yCoord;
-        double viewZ = entityplayer.getLookVec().zCoord;
+        double viewX = entityplayer.getLookVec().x;
+        double viewY = entityplayer.getLookVec().y;
+        double viewZ = entityplayer.getLookVec().z;
 /*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
         double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
         double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
@@ -201,9 +202,9 @@ public class EcItemMateria extends EcItem {
             return;
         }
         decreasePlayerFood(entityplayer, 6);
-        Vec3d EndPoint = setTeleportPoint(world, entityplayer);
-        if (EndPoint != null && !world.isRemote)
-            world.spawnEntity(new EcEntityMeteor(world, EndPoint.xCoord, (double) 200, EndPoint.zCoord, 0.0D,
+        Vec3d point = setTeleportPoint(world, entityplayer);
+        if (point != null && !world.isRemote)
+            world.spawnEntity(new EcEntityMeteor(world, point.x, (double) 200, point.z, 0.0D,
                     -1D, 0D, 0.0F, 0.0F));
     }
 
@@ -214,7 +215,7 @@ public class EcItemMateria extends EcItem {
         decreasePlayerFood(entityplayer, 6);
         Vec3d EndPoint = setTeleportPoint(world, entityplayer);
         if (EndPoint != null)
-            world.spawnEntity(new EntityLightningBolt(world, EndPoint.xCoord, EndPoint.yCoord, EndPoint.zCoord, false));
+            world.spawnEntity(new EntityLightningBolt(world, EndPoint.x, EndPoint.y, EndPoint.z, false));
     }
 
     private static void decreasePlayerFood(EntityPlayer player, int dec) {
@@ -325,7 +326,7 @@ public class EcItemMateria extends EcItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
         subItems.add(new ItemStack(this, 1, 0));
         ItemStack stack1, stack2, /*stack3, */stack4;
         for (Enchantment enchantment : Enchantment.REGISTRY) {

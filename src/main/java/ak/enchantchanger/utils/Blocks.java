@@ -28,27 +28,27 @@ public class Blocks {
     public static Material materialMako = new MaterialLiquid(MapColor.GRASS);
 
     public static void init() {
-        blockEnchantChanger = (new EcBlockMaterializer())
-                .setRegistryName("enchantchanger")
-                .setUnlocalizedName("enchantchanger")
+        blockEnchantChanger = new EcBlockMaterializer()
+                .setRegistryName(Constants.REG_BLOCK_ENCHANTCHANGER)
+                .setUnlocalizedName(Constants.REG_BLOCK_ENCHANTCHANGER)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER)
                 .setHardness(5.0f)
                 .setResistance(2000.0f)
                 .setLightOpacity(0);
         blockHugeMateria = new EcBlockHugeMateria()
-                .setRegistryName("blockhugemateria")
+                .setRegistryName(Constants.REG_BLOCK_HUGE_MATERIA)
                 .setHardness(5.0f)
                 .setResistance(2000.0f)
                 .setLightLevel(1.0f)
                 .setLightOpacity(0)
-                .setUnlocalizedName("blockHugeMateria");
-        fluidLifeStream = new Fluid("lifestream", LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
+                .setUnlocalizedName(Constants.REG_BLOCK_HUGE_MATERIA);
+        fluidLifeStream = new Fluid(Constants.REG_FLUID_LIFE_STREAM, LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
         FluidRegistry.registerFluid(Blocks.fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako)
-                .setRegistryName("life_stream").setUnlocalizedName("lifestream");
+                .setRegistryName(Constants.REG_BLOCK_LIFE_STREAM).setUnlocalizedName(Constants.REG_BLOCK_LIFE_STREAM);
         blockMakoReactor = new EcBlockMakoReactor()
-                .setRegistryName("blockmakoreactor")
-                .setUnlocalizedName("makoreactor")
+                .setRegistryName(Constants.REG_BLOCK_MAKO_REACTOR)
+                .setUnlocalizedName(Constants.REG_BLOCK_MAKO_REACTOR)
                 .setHardness(5.0f)
                 .setResistance(10.0f)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);

@@ -99,8 +99,8 @@ public class LivingEventHooks {
         if (!event.getEntityLiving().getEntityWorld().isRemote) {
             EntityPlayer player;
             ItemStack itemStack;
-            if (event.getSource().getDamageType().equals("player") && event.getSource().getEntity() instanceof EntityPlayer) {
-                player = (EntityPlayer) event.getSource().getEntity();
+            if (event.getSource().getDamageType().equals("player") && event.getSource().getTrueSource() instanceof EntityPlayer) {
+                player = (EntityPlayer) event.getSource().getTrueSource();
                 addLimitGaugeValue(player);
             }
 
@@ -123,8 +123,8 @@ public class LivingEventHooks {
     @SuppressWarnings("unused")
     public void onLivingDeathEvent(LivingDeathEvent event) {
         DamageSource killer = event.getSource();
-        if (event.getEntityLiving() instanceof EntityLiving && killer.getEntity() != null && killer.getEntity() instanceof EntityPlayer)
-            spawnAPOrb((EntityLiving) event.getEntityLiving(), (EntityPlayer) killer.getEntity());
+        if (event.getEntityLiving() instanceof EntityLiving && killer.getTrueSource() != null && killer.getTrueSource() instanceof EntityPlayer)
+            spawnAPOrb((EntityLiving) event.getEntityLiving(), (EntityPlayer) killer.getTrueSource());
     }
 
     private void spawnAPOrb(@Nonnull EntityLiving dead, @Nonnull EntityPlayer killer) {

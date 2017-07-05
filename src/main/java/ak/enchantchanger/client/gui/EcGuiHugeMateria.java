@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class EcGuiHugeMateria extends GuiContainer {
 
-    private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcGuiHuge);
+    private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.TEXTURES_GUI_HUGE_MATERIA);
     private EcTileEntityHugeMateria tileEntity;
 
     public EcGuiHugeMateria(InventoryPlayer inventoryPlayer, EcTileEntityHugeMateria te) {
@@ -29,9 +29,9 @@ public class EcGuiHugeMateria extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         //draw text and stuff here
         //the parameters for drawString are: string, x, y, color
-        fontRendererObj.drawString(I18n.translateToLocal("container.hugeMateria"), 8, 6, 4210752);
+        fontRenderer.drawString(I18n.translateToLocal("container.hugeMateria"), 8, 6, 4210752);
         //draws "Inventory" or your regional equivalent
-        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 
     @Override

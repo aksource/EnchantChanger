@@ -1,11 +1,11 @@
 #Block
-tile.EnchantChanger.name=エンチャントチェンジャー
-tile.blockHugeMateria.name=ヒュージマテリア
-tile.lifestream.name=魔晄
-tile.makoreactor-machine.name=魔晄炉操作ブロック
-tile.makoreactor-case.name=魔晄炉ケースブロック
+tile.enchant_changer.name=エンチャントチェンジャー
+tile.block_huge_materia.name=ヒュージマテリア
+tile.life_stream.name=魔晄
+tile.mako_reactor-machine.name=魔晄炉操作ブロック
+tile.mako_reactor-case.name=魔晄炉ケースブロック
 #Fluid
-fluid.lifestream=魔晄
+fluid.life_stream=魔晄
 #Item
 ItemMateria.Base.name=不活性マテリア
 ItemMateria.name=マテリア
@@ -42,6 +42,9 @@ enchantment.Holy=Holy
 enchantment.Teleport=Teleporting
 enchantment.Floating=Floating
 enchantment.Thunder=Thunder
+enchantment.Despell=Despell
+enchantment.Haste=Haste
+enchantment.Absorption=Absorption
 #Potion
 EC|MakoPoison=魔晄中毒
 #death

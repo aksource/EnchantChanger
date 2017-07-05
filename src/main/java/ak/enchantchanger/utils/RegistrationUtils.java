@@ -8,6 +8,7 @@ import ak.enchantchanger.potion.EcPotionMako;
 import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -23,6 +24,7 @@ public class RegistrationUtils {
 
     public static void registerBlockAndItem() {
         GameRegistry.register(blockEnchantChanger);
+        GameRegistry.register(new ItemBlock(blockEnchantChanger).setRegistryName(blockEnchantChanger.getRegistryName()));
         GameRegistry.register(blockHugeMateria);
         GameRegistry.register(blockMakoReactor);
         GameRegistry.register(itemBlockMakoReactor);

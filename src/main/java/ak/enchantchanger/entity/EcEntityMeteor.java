@@ -40,22 +40,18 @@ public class EcEntityMeteor extends Entity {
         this.accelerationZ = motionZ / var14 * 0.1D;
     }
 
+    @Override
     protected void entityInit() {
     }
 
-    /**
-     * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
-     * length * 64 * renderDistanceWeight Args: distance
-     */
+    @Override
     public boolean isInRangeToRenderDist(double distance) {
         double var3 = this.getEntityBoundingBox().getAverageEdgeLength() * 4.0D;
         var3 *= 64.0D;
         return distance < var3 * var3;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
+    @Override
     public void onUpdate() {
         if (!this.world.isRemote &&
                 (this.shootingEntity != null
@@ -72,11 +68,11 @@ public class EcEntityMeteor extends Entity {
             var2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
             if (var3 != null) {
-                var2 = new Vec3d(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
+                var2 = new Vec3d(var3.hitVec.x, var3.hitVec.y, var3.hitVec.z);
             }
 
             Entity var4 = null;
-            List<Entity> var5 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> var5 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
             EntityLivingBase entitylivingbase = this.getThrower();
 
@@ -112,10 +108,9 @@ public class EcEntityMeteor extends Entity {
             float var16 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-//            for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
-//            {
-//                ;
-//            }
+            for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+                ;
+            }
 
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -198,20 +193,20 @@ public class EcEntityMeteor extends Entity {
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         this.setBeenAttacked();
 
-        if (source.getEntity() != null) {
-            Vec3d lookVec = source.getEntity().getLookVec();
+        if (source.getTrueSource() != null) {
+            Vec3d lookVec = source.getTrueSource().getLookVec();
 
             if (lookVec != null) {
-                this.motionX = lookVec.xCoord;
-                this.motionY = lookVec.yCoord;
-                this.motionZ = lookVec.zCoord;
+                this.motionX = lookVec.x;
+                this.motionY = lookVec.y;
+                this.motionZ = lookVec.z;
                 this.accelerationX = this.motionX * 0.1D;
                 this.accelerationY = this.motionY * 0.1D;
                 this.accelerationZ = this.motionZ * 0.1D;
             }
 
-            if (source.getEntity() instanceof EntityLiving) {
-                this.shootingEntity = (EntityLiving) source.getEntity();
+            if (source.getTrueSource() instanceof EntityLiving) {
+                this.shootingEntity = (EntityLiving) source.getTrueSource();
             }
 
             return true;

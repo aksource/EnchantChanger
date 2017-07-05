@@ -110,11 +110,11 @@ public class EcEntitySword extends Entity {
             var2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
             if (var3 != null) {
-                var2 = new Vec3d(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
+                var2 = new Vec3d(var3.hitVec.x, var3.hitVec.y, var3.hitVec.z);
             }
 
             Entity var4 = null;
-            List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
 
             for (Entity entity : entityList) {
@@ -238,20 +238,20 @@ public class EcEntitySword extends Entity {
     public boolean attackEntityFrom(@Nonnull DamageSource damageSource, float amount) {
         this.setBeenAttacked();
 
-        if (damageSource.getEntity() != null) {
-            Vec3d lookVec = damageSource.getEntity().getLookVec();
+        if (damageSource.getTrueSource() != null) {
+            Vec3d lookVec = damageSource.getTrueSource().getLookVec();
 
             if (lookVec != null) {
-                this.motionX = lookVec.xCoord;
-                this.motionY = lookVec.yCoord;
-                this.motionZ = lookVec.zCoord;
+                this.motionX = lookVec.x;
+                this.motionY = lookVec.y;
+                this.motionZ = lookVec.z;
                 this.accelerationX = this.motionX * 0.1D;
                 this.accelerationY = this.motionY * 0.1D;
                 this.accelerationZ = this.motionZ * 0.1D;
             }
 
-            if (damageSource.getEntity() instanceof EntityLiving) {
-                this.enemyEntity = (EntityLiving) damageSource.getEntity();
+            if (damageSource.getTrueSource() instanceof EntityLiving) {
+                this.enemyEntity = (EntityLiving) damageSource.getTrueSource();
             }
 
             return true;

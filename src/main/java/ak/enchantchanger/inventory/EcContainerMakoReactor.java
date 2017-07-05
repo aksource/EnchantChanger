@@ -83,7 +83,7 @@ public class EcContainerMakoReactor extends Container {
         for (IContainerListener listener : this.listeners) {
 
             if (this.lastSmeltingTime != this.tileEntityMakoReactor.smeltingTime) {
-                listener.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
+                listener.sendWindowProperty(this, 0, this.tileEntityMakoReactor.smeltingTime);
             }
 
         }

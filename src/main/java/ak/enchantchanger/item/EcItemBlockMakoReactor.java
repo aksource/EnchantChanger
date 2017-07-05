@@ -14,10 +14,10 @@ import javax.annotation.Nonnull;
  * Created by A.K. on 14/09/10.
  */
 public class EcItemBlockMakoReactor extends ItemBlock {
-    private static String[] nameArray = {"tile.makoreactor-machine", "tile.makoreactor-machine"};
 
     public EcItemBlockMakoReactor(Block block) {
         super(block);
+        this.setHasSubtypes(true);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class EcItemBlockMakoReactor extends ItemBlock {
     @Override
     @Nonnull
     public String getUnlocalizedName(@Nonnull ItemStack itemStack) {
-        return "tile.makoreactor-machine";
+        return "tile.mako_reactor-machine";
     }
 
     /**

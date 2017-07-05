@@ -1,12 +1,9 @@
 package ak.enchantchanger.client.models;
 
 import ak.enchantchanger.api.ICustomModelItem;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -15,11 +12,11 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.Attributes;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.IRetexturableModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -41,19 +38,13 @@ public class EcSwordModel implements IBakedModel {
      */
     private final IBakedModel guiModel;
     private final ItemOverrideList itemOverrideList;
-    private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-        public TextureAtlasSprite apply(ResourceLocation location) {
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-        }
-    };
-
 
     public EcSwordModel(IBakedModel model1, List<IRetexturableModel> reTexturableModelList, float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
         this.guiModel = model1;
         List<IPerspectiveAwareModel> list = new ArrayList<>();
         for (IRetexturableModel model : reTexturableModelList) {
             IBakedModel reTexturedModel;
-            reTexturedModel = model.retexture(textureMap).bake(model.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+            reTexturedModel = model.retexture(textureMap).bake(model.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, ModelLoader.defaultTextureGetter());
             PerspectiveModel perspectiveModel = new PerspectiveModel(model1, reTexturedModel, sizeFPV, sizeTPV);
             list.add(perspectiveModel);
         }
@@ -110,7 +101,7 @@ public class EcSwordModel implements IBakedModel {
         private final List<IPerspectiveAwareModel> modelList;
 
         ItemOverrideListSword(IBakedModel guiModel, List<IPerspectiveAwareModel> modelList) {
-            super(guiModel.getOverrides().getOverrides());
+            super(Lists.newArrayList());
             this.guiModel = guiModel;
             this.modelList = modelList;
         }
@@ -140,21 +131,32 @@ public class EcSwordModel implements IBakedModel {
         /**
          * 一人称視点時の平行移動ベクトル
          */
-        private Vector3f translationFirstPerson = new Vector3f(0.0F, 0.0F, 0.1F);
+        private Vector3f translationFirstPerson = new Vector3f(0.5F, 0.0F, 0.1F);
         /**
          * 三人称視点時の平行移動ベクトル
          */
-//        private Vector3f translationThirdPerson = new Vector3f(0.03F, 0.05F, -0.13F);
-        private Vector3f translationThirdPerson = new Vector3f(-0.03F, 0.05F, -0.13F);
+//        private Vector3f translationThirdPerson = new Vector3f(-0.03F, 0.05F, -0.13F);
+        private Vector3f translationThirdPerson = new Vector3f(0.0F, 0.05F, 0.0F);
+        /**
+         * 三人称視点時の平行移動ベクトル（左手装備時用）
+         */
+        private Vector3f translationThirdPersonLeft = new Vector3f(-0.03F, 0.05F, 0.0F);
         /**
          * 一人称視点時の回転ベクトル
          */
         private Quat4f rotateFirstPerson = TRSRTransformation.quatFromXYZDegrees(new Vector3f(10, 0, 0));
         /**
+         * 一人称視点時の回転ベクトル（左手装備時用）
+         */
+        private Quat4f rotateFirstPersonLeft = TRSRTransformation.quatFromXYZDegrees(new Vector3f(10, 0, 0));
+        /**
          * 三人称視点時の回転ベクトル
          */
-//        private Quat4f rotateThirdPerson = TRSRTransformation.quatFromYXZDegrees(new Vector3f(-90, 0, 0));
-        private Quat4f rotateThirdPerson = TRSRTransformation.quatFromXYZDegrees(new Vector3f(-90, 0, 0));
+        private Quat4f rotateThirdPerson = TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 90, 0));
+        /**
+         * 三人称視点時の回転ベクトル（左手装備時用）
+         */
+        private Quat4f rotateThirdPersonLeft = TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0));
         /**
          * インベントリアイコン用モデル
          */
@@ -169,30 +171,41 @@ public class EcSwordModel implements IBakedModel {
             this.handHeldModel = handHeldModel;
             this.scaleFirstPerson = new Vector3f(sizeFPV, sizeFPV, sizeFPV);
             this.scaleThirdPerson = new Vector3f(sizeTPV, sizeTPV, sizeTPV);
-            this.rotateThirdPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0)));
-            rotateFirstPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 120, 0)));
-//            rotateFirstPerson.mul(TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, 0, 90)));
+//            this.rotateThirdPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0)));
+//            this.rotateThirdPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 90, 0)));
+            rotateFirstPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 90, 0)));
+            rotateFirstPersonLeft.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0)));
         }
 
         @Override
         public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
 
             IBakedModel model;
-            Matrix4f matrix4f = null;
+            Matrix4f matrix4f = new Matrix4f();
+            matrix4f.setIdentity();
             switch (cameraTransformType) {
                 case GUI:
                     model = this.guiModel;
-                    matrix4f = null;
                     break;
                 case FIRST_PERSON_RIGHT_HAND:
-                    matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPerson, scaleFirstPerson, null);
+//                    matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPerson, scaleFirstPerson, null);
+//                    model = this.handHeldModel;
+                    model = this.guiModel;
+                    break;
+                case FIRST_PERSON_LEFT_HAND:
+                    matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPersonLeft, scaleFirstPerson, null);
                     model = this.handHeldModel;
                     break;
                 case HEAD:
                     model = this.handHeldModel;
                     break;
                 case THIRD_PERSON_RIGHT_HAND:
-                    matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
+//                    matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
+//                    model = this.handHeldModel;
+                    model = this.guiModel;
+                    break;
+                case THIRD_PERSON_LEFT_HAND:
+                    matrix4f = TRSRTransformation.mul(translationThirdPersonLeft, rotateThirdPersonLeft, scaleThirdPerson, null);
                     model = this.handHeldModel;
                     break;
                 default:
@@ -204,18 +217,18 @@ public class EcSwordModel implements IBakedModel {
         @Override
         @Nonnull
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-            GlStateManager.depthMask(false);
+//            GlStateManager.depthMask(false);
             return this.guiModel.getQuads(state, side, rand);
         }
 
         @Override
         public boolean isGui3d() {
-            return false;
+            return this.guiModel.isGui3d();
         }
 
         @Override
         public boolean isAmbientOcclusion() {
-            return false;
+            return this.guiModel.isAmbientOcclusion();
         }
 
         @Override

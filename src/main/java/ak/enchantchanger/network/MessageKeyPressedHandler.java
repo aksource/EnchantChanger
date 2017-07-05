@@ -24,7 +24,7 @@ import static ak.enchantchanger.api.Constants.*;
 public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPressed, IMessage> {
     @Override
     public IMessage onMessage(MessageKeyPressed message, MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().playerEntity;
+        EntityPlayer player = ctx.getServerHandler().player;
         if (player != null && !player.getHeldItemMainhand().isEmpty() && message.keyIndex != -1) {
             switch (message.keyIndex) {
                 case MagicKEY:

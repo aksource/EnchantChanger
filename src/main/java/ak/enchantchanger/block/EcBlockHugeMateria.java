@@ -30,10 +30,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
+import static net.minecraft.init.Items.AIR;
+
 public class EcBlockHugeMateria extends BlockContainer {
-    public static final IProperty propertyParts = PropertyInteger.create("part", 0, 2);
+    public static final IProperty<Integer> PART = PropertyInteger.create("part", 0, 2);
     //不要？
-//    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{propertyParts}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
+//    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{PART}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
     public EcBlockHugeMateria() {
         super(Material.ROCK);
@@ -81,7 +83,7 @@ public class EcBlockHugeMateria extends BlockContainer {
         if (worldIn.isRemote) {
             return true;
         } else if (worldIn.getBlockState(pos.down()).getBlock() == this
-                && (Integer) state.getValue(propertyParts) != 0) {
+                && state.getValue(PART) != 0) {
             return this.onBlockActivated(worldIn, pos.down(),
                     worldIn.getBlockState(pos.down()), playerIn, hand, facing, hitX, hitY, hitZ);
         } else {
@@ -101,7 +103,7 @@ public class EcBlockHugeMateria extends BlockContainer {
         IBlockState state = world.getBlockState(pos);
         IBlockState neighborState = world.getBlockState(neighbor);
         Block neighborBlock = neighborState.getBlock();
-        int var6 = (int) state.getValue(propertyParts);
+        int var6 = state.getValue(PART);
 
         if (var6 != 0) {
             if (var6 == 1) {
@@ -155,7 +157,7 @@ public class EcBlockHugeMateria extends BlockContainer {
     @Override
     @Nonnull
     public AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
-        Integer var1 = (Integer) source.getBlockState(pos).getValue(propertyParts);
+        Integer var1 = state.getValue(PART);
         AxisAlignedBB aabb;
         switch (var1) {
             case 0:
@@ -176,28 +178,28 @@ public class EcBlockHugeMateria extends BlockContainer {
     @Override
     @Nonnull
     public Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune) {
-        return (int) state.getValue(propertyParts) != 0 ? null : Items.itemHugeMateria;
+        return state.getValue(PART) != 0 ? AIR : Items.itemHugeMateria;
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int var2) {
-        return var2 == 0 ? new EcTileEntityHugeMateria() : null;
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return meta == 0 ? new EcTileEntityHugeMateria() : null;
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState blockState = super.getStateFromMeta(meta);
-        return blockState.withProperty(propertyParts, meta);
+        return blockState.withProperty(PART, meta);
     }
 
     @Override
     public int getMetaFromState(@Nonnull IBlockState state) {
-        return (Integer) state.getValue(propertyParts);
+        return state.getValue(PART);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, propertyParts);
+        return new BlockStateContainer(this, PART);
     }
 }

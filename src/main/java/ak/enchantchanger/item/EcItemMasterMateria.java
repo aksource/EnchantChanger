@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EcItemMasterMateria extends EcItem {
 
@@ -22,7 +23,7 @@ public class EcItemMasterMateria extends EcItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
         for (MasterMateriaType type: MasterMateriaType.values()) {
             subItems.add(new ItemStack(this, 1, type.getMeta()));
         }

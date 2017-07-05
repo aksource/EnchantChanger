@@ -10,11 +10,11 @@ import ak.enchantchanger.entity.EcEntityMeteor;
 import ak.enchantchanger.network.MessageKeyPressed;
 import ak.enchantchanger.network.MessageLevitation;
 import ak.enchantchanger.network.PacketHandler;
-import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
-import ak.enchantchanger.utils.Blocks;
 import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.enchantchanger.utils.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,8 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.b3d.B3DLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -34,47 +32,48 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
 import static ak.enchantchanger.EnchantChanger.livingeventhooks;
-import static ak.enchantchanger.api.Constants.*;
+import static ak.enchantchanger.api.Constants.MagicKEY;
+import static net.minecraft.init.Items.FIRE_CHARGE;
 
 public class ClientProxy extends CommonProxy {
     static final float MOVE_FACTOR = 0.4F;
-    private static KeyBinding MagicKey = new KeyBinding("Key.EcMagic",
-            Keyboard.KEY_V, "enchantchanger");
-    private static KeyBinding MateriaKey = new KeyBinding("Key.EcMateria", Keyboard.KEY_R, "enchantchanger");
-    public static int customRenderPass;
-    public static int multiPassRenderType;
     public static Minecraft mc = Minecraft.getMinecraft();
+    private static final KeyBinding MAGIC_KEY = new KeyBinding("Key.EcMagic",
+            Keyboard.KEY_V, Constants.MOD_ID);
+    private static final KeyBinding MATERIA_KEY = new KeyBinding("Key.EcMateria",
+            Keyboard.KEY_R, Constants.MOD_ID);
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
+    private static byte getKeyIndex() {
+        byte key = -1;
+        if (MAGIC_KEY.isPressed()) {
+            key = Constants.MagicKEY;
+        } else if (MATERIA_KEY.isPressed()) {
+            key = Constants.MateriaKEY;
+        }
+
+        return key;
+    }
+
     @Override
     public void registerPreRenderInformation() {
-        //1.8からのモデル登録。
-        B3DLoader.INSTANCE.addDomain(Constants.MOD_ID);
-        OBJLoader.INSTANCE.addDomain(Constants.MOD_ID);
-        /* 魔晄炉用モデルローダー登録 */
-//        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
-//        registerCustomBlockModel(blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
-//        registerCustomBlockModel(blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
-//        registerCustomBlockModel(blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
+        ClientModelUtils.registerModelsOnPreInit();
+        RenderingRegistry.registerEntityRenderingHandler(
+                EcEntityExExpBottle.class, manager -> new RenderSnowball<>(manager, Items.itemExExpBottle, mc.getRenderItem()));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
+                manager -> new EcRenderItemThrowable(manager, FIRE_CHARGE, mc.getRenderItem(), ConfigurationUtils.sizeMeteor));
+        RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
+                EcRenderApOrb::new);
     }
 
     @Override
     public void registerRenderInformation() {
-        ClientModelUtils.registerCustomBlockModel(Blocks.blockHugeMateria, 0, "blockhugemateria", MODEL_TYPE_INVENTORY, false);
-        ClientModelUtils.registerCustomBlockModel(Blocks.blockLifeStream, 0, "life_stream", MODEL_TYPE_FLUID, true);
-        ClientModelUtils.registerCustomBlockModel(Blocks.blockMakoReactor, 0, "blockmakoreactor", MODEL_TYPE_INVENTORY, false);
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
-        RenderingRegistry.registerEntityRenderingHandler(
-                EcEntityExExpBottle.class, manager -> new EcRenderItemThrowable(manager, 0.5F));
-        RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
-                manager -> new EcRenderItemThrowable(manager, ConfigurationUtils.sizeMeteor));
-        RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
-                EcRenderApOrb::new);
 
         //キー登録
-        ClientRegistry.registerKeyBinding(MagicKey);
-        ClientRegistry.registerKeyBinding(MateriaKey);
+        ClientRegistry.registerKeyBinding(MAGIC_KEY);
+        ClientRegistry.registerKeyBinding(MATERIA_KEY);
         ClientModelUtils.registerModels();
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
@@ -83,12 +82,12 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(this);
         //モデルの光源処理修正イベントクラス登録
         MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
+
+        MinecraftForge.EVENT_BUS.register(new RenderingObjModelEvent());
     }
 
     @Override
     public void registerTileEntitySpecialRenderer() {
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                EcTileEntityHugeMateria.class, new EcRenderHugeMateria());
     }
 
     @Override
@@ -156,18 +155,8 @@ public class ClientProxy extends CommonProxy {
         PacketHandler.INSTANCE.sendToServer(new MessageLevitation(livingeventhooks.getLevitationModeToNBT(player)));
     }
 
-    private static byte getKeyIndex() {
-        byte key = -1;
-        if (MagicKey.isPressed()) {
-            key = Constants.MagicKEY;
-        } else if (MateriaKey.isPressed()) {
-            key = Constants.MateriaKEY;
-        }
-
-        return key;
-    }
-
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void KeyHandlingEvent(InputEvent.KeyInputEvent event) {
         if (FMLClientHandler.instance().getClient().inGameHasFocus && FMLClientHandler.instance().getClientPlayerEntity() != null) {
             EntityPlayer entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
@@ -191,6 +180,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void textureStitch(TextureStitchEvent.Pre event) {
         TextureMap textureMap = event.getMap();
         for (int i = 0; i < 16; i++) {
@@ -213,7 +203,8 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    @SubscribeEvent
+//    @SubscribeEvent
+    @SuppressWarnings("unused")
     public void bakedModelRegister(ModelBakeEvent event) {
         ClientModelUtils.changeModels(event);
     }

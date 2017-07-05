@@ -39,7 +39,7 @@ public class EcContainerHugeMateria extends Container {
     @Override
     public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, this.tileEntity.materializingTime);
+        listener.sendWindowProperty(this, 0, this.tileEntity.materializingTime);
     }
 
     public void detectAndSendChanges() {
@@ -48,7 +48,7 @@ public class EcContainerHugeMateria extends Container {
         for (IContainerListener listener : this.listeners) {
 
             if (this.lastMaterializingTime != this.tileEntity.materializingTime) {
-                listener.sendProgressBarUpdate(this, 0, this.tileEntity.materializingTime);
+                listener.sendWindowProperty(this, 0, this.tileEntity.materializingTime);
             }
 
         }

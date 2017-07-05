@@ -1,5 +1,6 @@
 package ak.enchantchanger.item;
 
+import ak.enchantchanger.entity.EcEntityExExpBottle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,12 @@ public class EcItemExExpBottle extends EcItem {
         }
         worldIn.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+        if (!worldIn.isRemote) {
+            EcEntityExExpBottle exExpBottle = new EcEntityExExpBottle(worldIn, playerIn);
+            exExpBottle.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
+            worldIn.spawnEntity(exExpBottle);
+        }
         return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
     }
 }

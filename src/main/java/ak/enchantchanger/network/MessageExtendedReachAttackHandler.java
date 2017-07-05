@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class MessageExtendedReachAttackHandler implements IMessageHandler<MessageExtendedReachAttack, IMessage> {
     @Override
     public IMessage onMessage(MessageExtendedReachAttack message, MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().playerEntity;
+        EntityPlayer player = ctx.getServerHandler().player;
         Entity targetEntity = message.getEntityFromId(player.world);
         if (targetEntity != null && !targetEntity.isDead) {
             player.attackTargetEntityWithCurrentItem(targetEntity);

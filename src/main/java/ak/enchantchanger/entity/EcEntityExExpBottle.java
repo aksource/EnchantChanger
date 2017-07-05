@@ -20,26 +20,20 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
         super(world, throwerIn);
     }
 
-    /**
-     * Gets the amount of gravity to apply to the thrown entity with each tick.
-     */
     @Override
     protected float getGravityVelocity() {
         return 0.07F;
     }
 
-    /**
-     * Called when this EntityThrowable hits a block or entity.
-     */
     @Override
     protected void onImpact(@Nonnull RayTraceResult rayTraceResult) {
         if (!this.world.isRemote) {
             this.world.playEvent(2002, new BlockPos(this.posX, this.posY, this.posZ), 0);
-            int var2 = 30 + this.world.rand.nextInt(5) + this.world.rand.nextInt(5);
+            int expValue = 30 + this.world.rand.nextInt(5) + this.world.rand.nextInt(5);
 
-            while (var2 > 0) {
-                int var3 = EntityXPOrb.getXPSplit(var2);
-                var2 -= var3;
+            while (expValue > 0) {
+                int var3 = EntityXPOrb.getXPSplit(expValue);
+                expValue -= var3;
                 this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, var3));
             }
 

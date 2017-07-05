@@ -5,8 +5,10 @@ import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -38,11 +40,9 @@ public class BakedModelMateria implements IBakedModel{
     public static Map<ResourceLocation, ResourceLocation> materiaMap = new ConcurrentHashMap<>();
     private static Map<ResourceLocation, IBakedModel> reTexturedModelMap = new ConcurrentHashMap<>();
 
-    private IRetexturableModel objModel;
-    private ItemOverrideList itemOverrideList;
+    private final ItemOverrideList itemOverrideList;
 
     public BakedModelMateria(IRetexturableModel model) {
-        this.objModel = model;
         itemOverrideList = new ItemOverrideListMateria(model);
     }
 
@@ -139,9 +139,9 @@ public class BakedModelMateria implements IBakedModel{
     private static class ReTexturedModel implements IPerspectiveAwareModel {
         IBakedModel b3dModel;
         private float handheldSize = 0.3F;
-        private float guiSize = 0.75F;
+        private float guiSize = 0.48F;
 //        private Vector3f vectorTransGui = new Vector3f(1.0F, 0.95F, 0.0F);
-        private Vector3f vectorTransGui = new Vector3f(0.4F, 0.4F, 0.0F);
+        private Vector3f vectorTransGui = new Vector3f(0.28F, 0.28F, 0.0F);
         private Vector3f vectorTransHand = new Vector3f(0.1F, 0.15F, -0.01F);
         public ReTexturedModel(IBakedModel bakedModel) {
             this.b3dModel = bakedModel;
@@ -159,16 +159,13 @@ public class BakedModelMateria implements IBakedModel{
               * 全部nullだとおそらくIdentity Matrix（単位行列）が返る*/
             Matrix4f matrix4fGui = TRSRTransformation.mul(vectorTransGui, null, new Vector3f(guiSize, guiSize, guiSize), null);
             Matrix4f matrix4fHandHeld = TRSRTransformation.mul(vectorTransHand, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
-            GlStateManager.disableLighting();
+//            GlStateManager.disableLighting();
             switch (cameraTransformType) {
                 case GUI:
-//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().gui);
                     return Pair.of(this.b3dModel, matrix4fGui);
                 case FIRST_PERSON_RIGHT_HAND:
-//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().firstPerson);
                     break;
                 case THIRD_PERSON_RIGHT_HAND:
-//                    RenderItem.applyVanillaTransform(this.objModel.getItemCameraTransforms().thirdPerson);
                     break;
             }
             return Pair.of(this.b3dModel, matrix4fHandHeld);

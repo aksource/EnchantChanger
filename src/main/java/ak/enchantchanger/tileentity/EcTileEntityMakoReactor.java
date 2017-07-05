@@ -251,7 +251,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         if (this.getWorld().rand.nextInt(ConfigurationUtils.materiaGeneratingRatio) == 0 && items.get(SLOTS_RESULT[SLOTS_RESULT.length - 1]).isEmpty()) {
             ItemStack materia = new ItemStack(Items.itemMateria);
             EnchantmentData enchantmentData = EnchantmentUtils.getEnchantmentData(this.getWorld().rand);
-            EnchantmentUtils.addEnchantmentToItem(materia, enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
+            EnchantmentUtils.addEnchantmentToItem(materia, enchantmentData.enchantment, enchantmentData.enchantmentLevel);
             items.set(SLOTS_RESULT[SLOTS_RESULT.length - 1], materia);
         }
         this.markDirty();
@@ -404,9 +404,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
     public void setHugeMateria(BlockPos blockPos) {
         Block hugeMateria = ak.enchantchanger.utils.Blocks.blockHugeMateria;
-        world.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 0));
-        world.setBlockState(blockPos.up(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 1));
-        world.setBlockState(blockPos.up(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.propertyParts, 2));
+        world.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 0));
+        world.setBlockState(blockPos.up(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 1));
+        world.setBlockState(blockPos.up(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 2));
     }
 
     @Override

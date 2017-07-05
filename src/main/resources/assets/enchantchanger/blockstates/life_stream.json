@@ -1,13 +1,9 @@
 {
     "forge_marker": 1,
-    "defaults": {
-        "model": "forge:fluid",
-        "transform": "forge:default-item"
-    },
     "variants": {
         "fluid": {
             "model" : "forge:fluid",
-            "custom": { "fluid": "lifestream" }
+            "custom": { "fluid": "life_stream" }
         }
     }
 }
