@@ -39,7 +39,7 @@ public class Constants {
     public static final String MODEL_TYPE_FLUID = "fluid";
     public static final String MODEL_TYPE_GAS = "gas";
     public static final ResourceLocation ITEM_BUSTER_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "item/bustersword.obj");
-    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "item/unionsword-united.obj");
+    public static final ResourceLocation ITEM_UNION_SWORD_MODEL_RL = new ResourceLocation(MOD_ID, "item/unionsword.obj");
     public static final ResourceLocation ITEM_FIRST_SWORD_CLOSED_MODEL_RL = new ResourceLocation(MOD_ID, "item/firstsword-closed-united.obj");
     public static final ResourceLocation ITEM_FIRST_SWORD_OPEN_MODEL_RL = new ResourceLocation(MOD_ID, "item/firstsword-open-united.obj");
     public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new ResourceLocation(MOD_ID, "item/masamune-noscabbard-united.obj");

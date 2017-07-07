@@ -59,7 +59,7 @@ public class RenderingOverlayEvent {
         ItemStack holdItem = player.getHeldItemMainhand();
         if (!holdItem.isEmpty() && holdItem.getItem() instanceof EcItemSword) {
             int slot = player.inventory.currentItem;
-            renderLimitGauge(player, slot, width, height, event.getPartialTicks());
+//            renderLimitGauge(player, slot, width, height, event.getPartialTicks());
             if (ConfigurationUtils.enableCloudSwordDisplay && holdItem.getItem() instanceof EcItemCloudSword) {
                 renderCloudSwordInventory(holdItem, event.getPartialTicks());
             }

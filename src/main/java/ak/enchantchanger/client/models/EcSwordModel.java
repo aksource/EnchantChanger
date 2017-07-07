@@ -4,6 +4,7 @@ import ak.enchantchanger.api.ICustomModelItem;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -183,14 +184,14 @@ public class EcSwordModel implements IBakedModel {
             IBakedModel model;
             Matrix4f matrix4f = new Matrix4f();
             matrix4f.setIdentity();
+            GlStateManager.disableLighting();
             switch (cameraTransformType) {
                 case GUI:
                     model = this.guiModel;
                     break;
                 case FIRST_PERSON_RIGHT_HAND:
-//                    matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPerson, scaleFirstPerson, null);
-//                    model = this.handHeldModel;
-                    model = this.guiModel;
+                    matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPerson, scaleFirstPerson, null);
+                    model = this.handHeldModel;
                     break;
                 case FIRST_PERSON_LEFT_HAND:
                     matrix4f = TRSRTransformation.mul(translationFirstPerson, rotateFirstPersonLeft, scaleFirstPerson, null);
@@ -200,16 +201,15 @@ public class EcSwordModel implements IBakedModel {
                     model = this.handHeldModel;
                     break;
                 case THIRD_PERSON_RIGHT_HAND:
-//                    matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
-//                    model = this.handHeldModel;
-                    model = this.guiModel;
+                    matrix4f = TRSRTransformation.mul(translationThirdPerson, rotateThirdPerson, scaleThirdPerson, null);
+                    model = this.handHeldModel;
                     break;
                 case THIRD_PERSON_LEFT_HAND:
                     matrix4f = TRSRTransformation.mul(translationThirdPersonLeft, rotateThirdPersonLeft, scaleThirdPerson, null);
                     model = this.handHeldModel;
                     break;
                 default:
-                    model = this.guiModel;
+                    model = this.handHeldModel;
             }
             return Pair.of(model, matrix4f);
         }
@@ -217,7 +217,6 @@ public class EcSwordModel implements IBakedModel {
         @Override
         @Nonnull
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-//            GlStateManager.depthMask(false);
             return this.guiModel.getQuads(state, side, rand);
         }
 

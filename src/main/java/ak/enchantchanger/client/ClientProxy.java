@@ -83,7 +83,6 @@ public class ClientProxy extends CommonProxy {
         //モデルの光源処理修正イベントクラス登録
         MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
 
-        MinecraftForge.EVENT_BUS.register(new RenderingObjModelEvent());
     }
 
     @Override
@@ -203,7 +202,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-//    @SubscribeEvent
+    @SubscribeEvent
     @SuppressWarnings("unused")
     public void bakedModelRegister(ModelBakeEvent event) {
         ClientModelUtils.changeModels(event);
