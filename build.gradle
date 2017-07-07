@@ -3,16 +3,7 @@ sourceSets.main {
     resources.srcDirs project.projectDir.name
 }
 dependencies {
-    compile project(':MultiToolHolders')//, project(':PotionExtension')
-//, files('lib/CoFHCore-[1.7.10]3.0.0B6-dev-32.jar'), files('lib/MCEconomy2-1.1.0-api-dev.jar'), files('lib/SextiarySector-2.0.5.a-1.7.10-api-dev.jar')
-    //compile project(':MultiToolHolders'), project(':PotionExtension'), files('lib/CoFHCore-[1.7.10]3.0.0B6-dev-32.jar'), project(':MCEconomy2'), project(':SextiarySector')
-}
-jar {
-    manifest {
-        //ak.enchantchanger.asm.AKInternalCorePlugin
-        //codechicken.core.launch.DepLoader
-        attributes 'FMLCorePlugin': 'ak.enchantchanger.asm.AKInternalCorePlugin', 'FMLCorePluginContainsFMLMod': 'true'
-    }
+    compile project(':MultiToolHolders')
 }
 version = "1.11.2-1.9.0"
 minecraft {
