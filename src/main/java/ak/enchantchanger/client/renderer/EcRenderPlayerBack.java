@@ -29,8 +29,8 @@ import javax.annotation.Nonnull;
 public class EcRenderPlayerBack {
 
     private static final float anglePlayerSneaking = 30F;
-    private static final float translateValue = -0.3F;
-    private static final float translateSneakingValue = 0.2F;
+    private static final float translateValue = -0.1F;
+    private static final float translateSneakingValue = 0F;
     private ItemStack prevHeldItem = ItemStack.EMPTY;
     private ItemStack nowHeldItem = ItemStack.EMPTY;
 
@@ -98,7 +98,7 @@ public class EcRenderPlayerBack {
         if (itemStack.getItem() instanceof EcItemSephirothSword || itemStack.getItem() instanceof EcItemSephirothSwordImit) {
             return -90F;
         }
-        return -20F;
+        return -160F;
     }
 
     private float getTranslateSide(@Nonnull ItemStack itemStack) {
@@ -117,32 +117,23 @@ public class EcRenderPlayerBack {
 
     private float getTranslateY(@Nonnull ItemStack itemStack) {
         if (itemStack.getItem() instanceof EcItemSephirothSword || itemStack.getItem() instanceof EcItemSephirothSwordImit) {
-            return 1.0F;
+            return 0.7F;
         }
-        return 2.0F;
+        return 1.5F;
     }
 
     private void renderPlayerBackItem(@Nonnull ItemStack backItem, @Nonnull EntityLivingBase livingBase, float partialTicks) {
         GlStateManager.pushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
         if (backItem.getItem() instanceof EcItemSword) {
-/*            GlStateManager.scale(0.8F, 0.8F, 0.8F);//GL11.glScalef(0.8F, 0.8F, 0.8F);
-            GlStateManager.translate(0F, 0F, 0.4F);//GL11.glTranslatef(0F, 0F, 0.4F);
-            GlStateManager.rotate(getAngle(backItem), 0F, 0F, 1.0F);//GL11.glRotatef(getAngle(backItem), 0F, 0F, 1.0F);
-            if (player.isSneaking()) {
-                GlStateManager.rotate(anglePlayerSneaking, 1.0F, 0F, 0F);//GL11.glRotatef(30F, 1.0F, 0F, 0F);
-            }
-            GlStateManager.rotate(180F, 0F, 1.0F, 0F);//GL11.glRotatef(180F, 0F, 1.0F, 0F);
-            GlStateManager.translate(getTransrateX(backItem), -0.5F, 0F);//GL11.glTranslatef(getTransrateX(backItem), -0.5F, 0F);*/
-
             this.translateDependingYaw(backItem, livingBase, partialTicks);
             this.rotateYawSneaking(livingBase, partialTicks);
             this.rotateLivingYaw(livingBase, partialTicks, -1.0F);
-            GlStateManager.rotate(-90F, 1.0F, 0F, 0F);
-            GlStateManager.rotate(getAngle(backItem), 0F, 1.0F, 0F);
-            GlStateManager.rotate(90F, 0F, 0F, 1.0F);
+//            GlStateManager.rotate(-90F, 1.0F, 0F, 0F);
+//            GlStateManager.rotate(90F, 0F, 1.0F, 0F);
+            GlStateManager.rotate(getAngle(backItem), 0F, 0F, 1.0F);
             GlStateManager.disableLighting();
-            mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND);
+            mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.HEAD);
             GlStateManager.enableLighting();
         }
         GlStateManager.popMatrix();
