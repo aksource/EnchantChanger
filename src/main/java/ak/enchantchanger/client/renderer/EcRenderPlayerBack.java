@@ -42,8 +42,8 @@ public class EcRenderPlayerBack {
         EntityPlayer entityPlayer = event.getEntityPlayer();
         ItemStack heldItem = entityPlayer.getHeldItemMainhand();
         if (ConfigurationUtils.enableBackSword && !ItemStack.areItemStacksEqual(heldItem, this.prevHeldItem)
-                && isBackItem(this.prevHeldItem)) {
-            renderPlayerBackItem(this.prevHeldItem/*, event.renderer*/, entityPlayer, event.getPartialRenderTick());
+                && isBackItem(this.prevHeldItem) && canRenderBack(entityPlayer)) {
+            renderPlayerBackItem(this.prevHeldItem, entityPlayer, event.getPartialRenderTick());
         }
     }
 
@@ -129,8 +129,6 @@ public class EcRenderPlayerBack {
             this.translateDependingYaw(backItem, livingBase, partialTicks);
             this.rotateYawSneaking(livingBase, partialTicks);
             this.rotateLivingYaw(livingBase, partialTicks, -1.0F);
-//            GlStateManager.rotate(-90F, 1.0F, 0F, 0F);
-//            GlStateManager.rotate(90F, 0F, 1.0F, 0F);
             GlStateManager.rotate(getAngle(backItem), 0F, 0F, 1.0F);
             GlStateManager.disableLighting();
             mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.HEAD);
