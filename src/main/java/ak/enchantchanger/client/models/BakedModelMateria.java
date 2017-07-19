@@ -33,13 +33,55 @@ import static ak.enchantchanger.client.ClientModelUtils.resourceLocationsMateria
 /**
  * マテリアのB3Dモデル描画用クラス
  * Created by A.K. on 2015/07/26.
+ *
  * @since 2015/07/26
  */
-public class BakedModelMateria implements IBakedModel{
+public class BakedModelMateria implements IBakedModel {
 
     public static Map<Integer, ResourceLocation> magicMateriaMap = new ConcurrentHashMap<>();
     public static Map<ResourceLocation, ResourceLocation> materiaMap = new ConcurrentHashMap<>();
     private static Map<ResourceLocation, IBakedModel> reTexturedModelMap = new ConcurrentHashMap<>();
+
+    static {
+        magicMateriaMap.put(0, resourceLocationsMateria[0]);
+        magicMateriaMap.put(1, resourceLocationsMateria[15]);
+        magicMateriaMap.put(2, resourceLocationsMateria[5]);
+        magicMateriaMap.put(3, resourceLocationsMateria[9]);
+        magicMateriaMap.put(4, resourceLocationsMateria[1]);
+        magicMateriaMap.put(5, resourceLocationsMateria[7]);
+        magicMateriaMap.put(6, resourceLocationsMateria[6]);
+        magicMateriaMap.put(7, resourceLocationsMateria[10]);
+        materiaMap.put(new ResourceLocation("protection"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("fire_protection"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("feather_falling"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("blast_protection"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("projectile_protection"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("respiration"), resourceLocationsMateria[4]);
+        materiaMap.put(new ResourceLocation("aqua_affinity"), resourceLocationsMateria[4]);
+        materiaMap.put(new ResourceLocation("thorns"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("depth_strider"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("frost_walker"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("binding_curse"), resourceLocationsMateria[8]);
+        materiaMap.put(new ResourceLocation("sharpness"), resourceLocationsMateria[13]);
+        materiaMap.put(new ResourceLocation("smite"), resourceLocationsMateria[13]);
+        materiaMap.put(new ResourceLocation("bane_of_arthropods"), resourceLocationsMateria[13]);
+        materiaMap.put(new ResourceLocation("knockback"), resourceLocationsMateria[14]);
+        materiaMap.put(new ResourceLocation("fire_aspect"), resourceLocationsMateria[1]);
+        materiaMap.put(new ResourceLocation("looting"), resourceLocationsMateria[9]);
+        materiaMap.put(new ResourceLocation("sweeping"), resourceLocationsMateria[14]);
+        materiaMap.put(new ResourceLocation("efficiency"), resourceLocationsMateria[5]);
+        materiaMap.put(new ResourceLocation("silk_touch"), resourceLocationsMateria[7]);
+        materiaMap.put(new ResourceLocation("unbreaking"), resourceLocationsMateria[3]);
+        materiaMap.put(new ResourceLocation("fortune"), resourceLocationsMateria[9]);
+        materiaMap.put(new ResourceLocation("power"), resourceLocationsMateria[13]);
+        materiaMap.put(new ResourceLocation("punch"), resourceLocationsMateria[14]);
+        materiaMap.put(new ResourceLocation("flame"), resourceLocationsMateria[1]);
+        materiaMap.put(new ResourceLocation("infinity"), resourceLocationsMateria[12]);
+        materiaMap.put(new ResourceLocation("luck_of_the_sea"), resourceLocationsMateria[4]);
+        materiaMap.put(new ResourceLocation("lure"), resourceLocationsMateria[4]);
+        materiaMap.put(new ResourceLocation("mending"), resourceLocationsMateria[10]);
+        materiaMap.put(new ResourceLocation("vanishing_curse"), resourceLocationsMateria[10]);
+    }
 
     private final ItemOverrideList itemOverrideList;
 
@@ -118,6 +160,7 @@ public class BakedModelMateria implements IBakedModel{
 
     private static class ItemOverrideListMateria extends ItemOverrideList {
         private final IRetexturableModel objModel;
+
         public ItemOverrideListMateria(IRetexturableModel objModel) {
             super(Lists.newArrayList());
             this.objModel = objModel;
@@ -139,11 +182,11 @@ public class BakedModelMateria implements IBakedModel{
 
     private static class ReTexturedModel implements IPerspectiveAwareModel {
         IBakedModel b3dModel;
-        private float handheldSize = 0.3F;
+        private float handheldSize = 0.1F;
         private float guiSize = 0.48F;
-//        private Vector3f vectorTransGui = new Vector3f(1.0F, 0.95F, 0.0F);
         private Vector3f vectorTransGui = new Vector3f(0.28F, 0.28F, 0.0F);
         private Vector3f vectorTransHand = new Vector3f(0.1F, 0.15F, -0.01F);
+
         public ReTexturedModel(IBakedModel bakedModel) {
             this.b3dModel = bakedModel;
         }
@@ -160,16 +203,27 @@ public class BakedModelMateria implements IBakedModel{
               * 全部nullだとおそらくIdentity Matrix（単位行列）が返る*/
             Matrix4f matrix4fGui = TRSRTransformation.mul(vectorTransGui, null, new Vector3f(guiSize, guiSize, guiSize), null);
             Matrix4f matrix4fHandHeld = TRSRTransformation.mul(vectorTransHand, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
+            Matrix4f matrix4fGround = TRSRTransformation.mul(null, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
             GlStateManager.disableLighting();
+            Matrix4f matrix4f = matrix4fGround;
             switch (cameraTransformType) {
                 case GUI:
-                    return Pair.of(this.b3dModel, matrix4fGui);
-                case FIRST_PERSON_RIGHT_HAND:
+                    matrix4f = matrix4fGui;
                     break;
+                case FIRST_PERSON_RIGHT_HAND:
+                case FIRST_PERSON_LEFT_HAND:
                 case THIRD_PERSON_RIGHT_HAND:
+                case THIRD_PERSON_LEFT_HAND:
+                    matrix4f = matrix4fHandHeld;
+                    break;
+                case GROUND:
+                case HEAD:
+                case FIXED:
+                case NONE:
+                default:
                     break;
             }
-            return Pair.of(this.b3dModel, matrix4fHandHeld);
+            return Pair.of(this.b3dModel, matrix4f);
         }
 
         @Override
@@ -210,45 +264,5 @@ public class BakedModelMateria implements IBakedModel{
         public ItemOverrideList getOverrides() {
             return this.b3dModel.getOverrides();
         }
-    }
-    static {
-        magicMateriaMap.put(0, resourceLocationsMateria[0]);
-        magicMateriaMap.put(1, resourceLocationsMateria[15]);
-        magicMateriaMap.put(2, resourceLocationsMateria[5]);
-        magicMateriaMap.put(3, resourceLocationsMateria[9]);
-        magicMateriaMap.put(4, resourceLocationsMateria[1]);
-        magicMateriaMap.put(5, resourceLocationsMateria[7]);
-        magicMateriaMap.put(6, resourceLocationsMateria[6]);
-        magicMateriaMap.put(7, resourceLocationsMateria[10]);
-        materiaMap.put(new ResourceLocation("protection"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("fire_protection"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("feather_falling"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("blast_protection"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("projectile_protection"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("respiration"), resourceLocationsMateria[4]);
-        materiaMap.put(new ResourceLocation("aqua_affinity"), resourceLocationsMateria[4]);
-        materiaMap.put(new ResourceLocation("thorns"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("depth_strider"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("frost_walker"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("binding_curse"), resourceLocationsMateria[8]);
-        materiaMap.put(new ResourceLocation("sharpness"), resourceLocationsMateria[13]);
-        materiaMap.put(new ResourceLocation("smite"), resourceLocationsMateria[13]);
-        materiaMap.put(new ResourceLocation("bane_of_arthropods"), resourceLocationsMateria[13]);
-        materiaMap.put(new ResourceLocation("knockback"), resourceLocationsMateria[14]);
-        materiaMap.put(new ResourceLocation("fire_aspect"), resourceLocationsMateria[1]);
-        materiaMap.put(new ResourceLocation("looting"), resourceLocationsMateria[9]);
-        materiaMap.put(new ResourceLocation("sweeping"), resourceLocationsMateria[14]);
-        materiaMap.put(new ResourceLocation("efficiency"), resourceLocationsMateria[5]);
-        materiaMap.put(new ResourceLocation("silk_touch"), resourceLocationsMateria[7]);
-        materiaMap.put(new ResourceLocation("unbreaking"), resourceLocationsMateria[3]);
-        materiaMap.put(new ResourceLocation("fortune"), resourceLocationsMateria[9]);
-        materiaMap.put(new ResourceLocation("power"), resourceLocationsMateria[13]);
-        materiaMap.put(new ResourceLocation("punch"), resourceLocationsMateria[14]);
-        materiaMap.put(new ResourceLocation("flame"), resourceLocationsMateria[1]);
-        materiaMap.put(new ResourceLocation("infinity"), resourceLocationsMateria[12]);
-        materiaMap.put(new ResourceLocation("luck_of_the_sea"), resourceLocationsMateria[4]);
-        materiaMap.put(new ResourceLocation("lure"), resourceLocationsMateria[4]);
-        materiaMap.put(new ResourceLocation("mending"), resourceLocationsMateria[10]);
-        materiaMap.put(new ResourceLocation("vanishing_curse"), resourceLocationsMateria[10]);
     }
 }
