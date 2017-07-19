@@ -78,6 +78,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
         int l = MathHelper.floor((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(blockPos);
         if (tile instanceof EcTileEntityMakoReactor) {
+            tile.baseBlock = EnumMRBaseType.getByIndex(item.getItemDamage()).getRegistryName();
             ((EcTileEntityMakoReactor) tile).setFace((byte) setter.getHorizontalFacing().getOpposite().getIndex());
         }
     }

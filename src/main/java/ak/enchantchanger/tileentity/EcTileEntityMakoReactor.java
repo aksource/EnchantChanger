@@ -60,7 +60,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     public static final int[] SLOTS_MATERIAL = new int[]{0, 1, 2};
     public static final int[] SLOTS_FUEL = new int[]{3};
     public static final int[] SLOTS_RESULT = new int[]{4, 5, 6, 7};
-    public static final int SUM_OF_ALLSLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
+    public static final int SUM_OF_ALL_SLOTS = SLOTS_MATERIAL.length + SLOTS_FUEL.length + SLOTS_RESULT.length;
     public static final Range<Integer> RANGE_MATERIAL_SLOTS = Range.closedOpen(0, 3);
     public static final Range<Integer> RANGE_FUEL_SLOTS = Range.closedOpen(3, 4);
     public static final int STEP_RF_VALUE = 10;
@@ -80,7 +80,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
     public byte face;
-    private final NonNullList<ItemStack> items = NonNullList.withSize(SUM_OF_ALLSLOTS, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> items = NonNullList.withSize(SUM_OF_ALL_SLOTS, ItemStack.EMPTY);
     private final NonNullList<ItemStack> smeltingItems = NonNullList.withSize(SLOTS_MATERIAL.length, ItemStack.EMPTY);
     private int creatingHugeMateriaPoint;
     private BlockPos posHugeMateria = null;
@@ -205,7 +205,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
             if (canSmelting()) {
                 for (int i = 0; i < SLOTS_MATERIAL.length; i++) {
-                    if (smeltingItems.get(SLOTS_FUEL[i]).isEmpty() && canSmeltThisItem(items.get(SLOTS_FUEL[i]))) {
+                    if (smeltingItems.get(i).isEmpty() && canSmeltThisItem(items.get(SLOTS_MATERIAL[i]))) {
                         smeltingItems.set(i, decrStackSize(SLOTS_MATERIAL[i], 1));
                         upToDate = true;
                     }
@@ -235,7 +235,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         for (int i = 0; i < smeltingItems.size(); i++) {
             if (!smeltingItems.get(i).isEmpty()) {
                 smelted = getSmeltedItem(smeltingItems.get(i));
-                if (items.get(i).isEmpty()) {
+                if (items.get(SLOTS_RESULT[i]).isEmpty()) {
                     items.set(SLOTS_RESULT[i], smelted.copy());
                     smeltingItems.set(i, ItemStack.EMPTY);
                 } else {
@@ -313,7 +313,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
     public boolean isSmelting() {
         for (ItemStack itemStack : smeltingItems) {
-            if (itemStack != null) {
+            if (!itemStack.isEmpty()) {
                 return true;
             }
         }
@@ -389,7 +389,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     public boolean canSmeltThisItem(ItemStack itemStack) {
-        return itemStack != null && getSmeltedItem(itemStack) != null;
+        return !itemStack.isEmpty() && !getSmeltedItem(itemStack).isEmpty();
     }
 
     public ItemStack getSmeltedItem(ItemStack itemStack) {

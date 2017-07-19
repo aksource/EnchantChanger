@@ -107,8 +107,8 @@ public class EcContainerMakoReactor extends Container {
         if (slot.getHasStack()) {
             ItemStack item = slot.getStack();
             retItem = item.copy();
-            if (slotIndex >= 0 && slotIndex < SUM_OF_ALLSLOTS) {
-                if (!mergeItemStack(item, SUM_OF_ALLSLOTS, SUM_OF_ALLSLOTS + 36, true)) {
+            if (slotIndex >= 0 && slotIndex < SUM_OF_ALL_SLOTS) {
+                if (!mergeItemStack(item, SUM_OF_ALL_SLOTS, SUM_OF_ALL_SLOTS + 36, true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onSlotChange(item, retItem);
