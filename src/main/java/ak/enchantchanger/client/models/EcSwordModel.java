@@ -209,8 +209,12 @@ public class EcSwordModel implements IBakedModel {
                     matrix4f = TRSRTransformation.mul(translationThirdPersonLeft, rotateThirdPersonLeft, scaleThirdPerson, null);
                     model = this.handHeldModel;
                     break;
+                case GROUND:
+                    matrix4f = null;
+                    model = this.guiModel;
+                    break;
                 default:
-                    model = this.handHeldModel;
+                    model = this.guiModel;
             }
             return Pair.of(model, matrix4f);
         }
