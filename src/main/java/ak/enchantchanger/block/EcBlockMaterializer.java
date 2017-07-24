@@ -9,6 +9,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EcBlockMaterializer extends BlockContainer {
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
@@ -56,8 +58,8 @@ public class EcBlockMaterializer extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
-                                    @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing,
-                                    float hitX, float hitY, float hitZ) {
+                                    @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nullable ItemStack heldItem,
+                                    @Nonnull EnumFacing side, float hitX, float hitY, float hitZ) {
         if (ConfigurationUtils.difficulty < 2 || checkCost(playerIn)) {
             playerIn.openGui(EnchantChanger.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -71,7 +73,7 @@ public class EcBlockMaterializer extends BlockContainer {
             player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }
-        player.sendMessage(new TextComponentString(String.format("Need %dLevel to open enchantchanger", ConfigurationUtils.enchantChangerCost)));
+        player.addChatMessage(new TextComponentString(String.format("Need %dLevel to open enchantchanger", ConfigurationUtils.enchantChangerCost)));
         return false;
     }
 
@@ -82,6 +84,7 @@ public class EcBlockMaterializer extends BlockContainer {
     }
 
     @Override
+    @Nullable
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new EcTileEntityMaterializer();
     }

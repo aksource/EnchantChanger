@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class MessageLevitationHandler implements IMessageHandler<MessageLevitation, IMessage> {
     @Override
     public IMessage onMessage(MessageLevitation message, MessageContext ctx) {
-        if (ctx.getServerHandler().player != null) {
-            EnchantChanger.livingeventhooks.setLevitationModeToNBT(ctx.getServerHandler().player, message.isLevitation);
+        if (ctx.getServerHandler().playerEntity != null) {
+            EnchantChanger.livingeventhooks.setLevitationModeToNBT(ctx.getServerHandler().playerEntity, message.isLevitation);
         }
         return null;
     }

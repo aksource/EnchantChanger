@@ -101,7 +101,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public EntityPlayer getPlayer() {
-        return mc.player;
+        return mc.thePlayer;
     }
 
     @Override
@@ -160,7 +160,7 @@ public class ClientProxy extends CommonProxy {
         if (FMLClientHandler.instance().getClient().inGameHasFocus && FMLClientHandler.instance().getClientPlayerEntity() != null) {
             EntityPlayer entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
             byte keyIndex = getKeyIndex();
-            if (keyIndex != -1 && !entityPlayer.getHeldItemMainhand().isEmpty()) {
+            if (keyIndex != -1 && entityPlayer.getHeldItemMainhand() != null) {
                 PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyIndex));
                 switch (keyIndex) {
                     case MagicKEY:

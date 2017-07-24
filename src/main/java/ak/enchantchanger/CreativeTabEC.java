@@ -2,7 +2,7 @@ package ak.enchantchanger;
 
 import ak.enchantchanger.utils.Items;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 
 import javax.annotation.Nonnull;
 
@@ -19,7 +19,7 @@ public class CreativeTabEC extends CreativeTabs {
 
     @Override
     @Nonnull
-    public ItemStack getTabIconItem() {
-        return new ItemStack(Items.itemZackSword);
+    public Item getTabIconItem() {
+        return Items.itemZackSword;
     }
 }

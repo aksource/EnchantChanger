@@ -23,16 +23,15 @@ public class EcItemMaterializer extends EcItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        ItemStack itemStack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStackIn, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand) {
         if (!worldIn.isRemote) {
             IPlayerStatusHandler statusHandler = CapabilityPlayerStatusHandler.getPlayerStatusHandler(playerIn);
             boolean soldierFlg = !statusHandler.getSoldierMode();
             statusHandler.setSoldierMode(soldierFlg);
-            playerIn.sendMessage(new TextComponentString("Materia Setting Mode : " + soldierFlg));
+            playerIn.addChatMessage(new TextComponentString("Materia Setting Mode : " + soldierFlg));
             statusHandler.setSoldierWorkStartTime(worldIn.getWorldTime());
             statusHandler.setMobKillCount(StatCheckUtils.getTotalMobKillCount(playerIn));
         }
-        return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
+        return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
     }
 }

@@ -20,7 +20,7 @@ public class ModelLightningFixer {
     public void lightningDisableProcess(RenderPlayerEvent.Pre event) {
         EntityPlayer player = event.getEntityPlayer();
         ItemStack heldItem = player.getHeldItemMainhand();
-        if (!heldItem.isEmpty() && isAdditionalModelItem(heldItem)) {
+        if (heldItem != null && isAdditionalModelItem(heldItem)) {
             GlStateManager.disableLighting();
         }
     }
@@ -30,7 +30,7 @@ public class ModelLightningFixer {
     public void lightningEnableProcess(RenderPlayerEvent.Post event) {
         EntityPlayer player = event.getEntityPlayer();
         ItemStack heldItem = player.getHeldItemMainhand();
-        if (!heldItem.isEmpty() && isAdditionalModelItem(heldItem)) {
+        if (heldItem != null && isAdditionalModelItem(heldItem)) {
             GlStateManager.enableLighting();
         }
     }

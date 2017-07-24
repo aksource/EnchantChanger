@@ -68,7 +68,7 @@ public class ClientInputUtils {
             ItemMultiToolHolder mth = (ItemMultiToolHolder) player.getHeldItemMainhand().getItem();
             InventoryToolHolder inventoryToolHolder = mth.getInventoryFromItemStack(player.getHeldItemMainhand());
             ItemStack innerItemStack = inventoryToolHolder.getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack));
-            if (!innerItemStack.isEmpty() && innerItemStack.getItem() instanceof EcItemSword) {
+            if (innerItemStack != null && innerItemStack.getItem() instanceof EcItemSword) {
                 EcItemSword.doMagic(innerItemStack, player.getEntityWorld(), player);
             }
         }
@@ -103,10 +103,10 @@ public class ClientInputUtils {
         }
 
         Vec3d lookVector = viewingEntity.getLook(partialTicks);
-        Vec3d reachVector = viewPosition.addVector(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach);
+        Vec3d reachVector = viewPosition.addVector(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach);
         Vec3d vec33 = null;
         float f1 = 1.0F;
-        List<Entity> list = viewingEntity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(viewingEntity, viewingEntity.getEntityBoundingBox().expand(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach).expand(f1, f1, f1));
+        List<Entity> list = viewingEntity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(viewingEntity, viewingEntity.getEntityBoundingBox().expand(lookVector.xCoord * reach, lookVector.yCoord * reach, lookVector.zCoord * reach).expand(f1, f1, f1));
         double d2 = d1;
         Entity pointedEntity = null;
         for (Entity entity : list) {
@@ -115,7 +115,7 @@ public class ClientInputUtils {
                 AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(collisionSize, collisionSize, collisionSize);
                 RayTraceResult RayTraceResult = axisalignedbb.calculateIntercept(viewPosition, reachVector);
 
-                if (axisalignedbb.contains(viewPosition)) {
+                if (axisalignedbb.isVecInside(viewPosition)) {
                     if (0.0D < d2 || d2 == 0.0D) {
                         pointedEntity = entity;
                         vec33 = RayTraceResult == null ? viewPosition : RayTraceResult.hitVec;

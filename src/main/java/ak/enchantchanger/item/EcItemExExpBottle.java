@@ -27,10 +27,10 @@ public class EcItemExExpBottle extends EcItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (!playerIn.capabilities.isCreativeMode) {
-            heldItem.shrink(1);
+            heldItem.stackSize--;
         }
         worldIn.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
@@ -38,7 +38,7 @@ public class EcItemExExpBottle extends EcItem {
         if (!worldIn.isRemote) {
             EcEntityExExpBottle exExpBottle = new EcEntityExExpBottle(worldIn, playerIn);
             exExpBottle.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
-            worldIn.spawnEntity(exExpBottle);
+            worldIn.spawnEntityInWorld(exExpBottle);
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
     }

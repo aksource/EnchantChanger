@@ -24,8 +24,8 @@ import static ak.enchantchanger.api.Constants.*;
 public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPressed, IMessage> {
     @Override
     public IMessage onMessage(MessageKeyPressed message, MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().player;
-        if (player != null && !player.getHeldItemMainhand().isEmpty() && message.keyIndex != -1) {
+        EntityPlayer player = ctx.getServerHandler().playerEntity;
+        if (player != null && player.getHeldItemMainhand() != null && message.keyIndex != -1) {
             switch (message.keyIndex) {
                 case MagicKEY:
                     doMagic(player.getHeldItemMainhand(), player);
@@ -43,22 +43,23 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private void doMagic(ItemStack itemStack, EntityPlayer player) {
         if (itemStack.getItem() instanceof EcItemSword) {
-            EcItemSword.doMagic(itemStack, player.world, player);
+            EcItemSword.doMagic(itemStack, player.worldObj, player);
         } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
             //ツールホルダーとの連携処理。
             ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
             InventoryToolHolder inventoryToolHolder = mth.getInventoryFromItemStack(itemStack);
             int slot = ItemMultiToolHolder.getSlotNumFromItemStack(itemStack);
-            if (!inventoryToolHolder.getStackInSlot(slot).isEmpty()
+            if (inventoryToolHolder.getStackInSlot(slot) != null
                     && inventoryToolHolder.getStackInSlot(slot).getItem() instanceof EcItemSword) {
-                EcItemSword.doMagic(inventoryToolHolder.getStackInSlot(slot), player.world, player);
+                EcItemSword.doMagic(inventoryToolHolder.getStackInSlot(slot), player.worldObj, player);
             }
         }
     }
 
     private void openMateriaWindow(EntityPlayer player) {
         if (canOpenMateriaWindow(player)) {
-            player.openGui(EnchantChanger.instance, Constants.GUI_ID_MATERIA_WINDOW, player.world, MathHelper.ceil(player.posX), MathHelper.ceil(player.posY), MathHelper.ceil(player.posZ));
+            player.openGui(EnchantChanger.instance, Constants.GUI_ID_MATERIA_WINDOW, player.worldObj,
+                    MathHelper.ceiling_double_int(player.posX), MathHelper.ceiling_double_int(player.posY), MathHelper.ceiling_double_int(player.posZ));
         }
     }
 
@@ -69,7 +70,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
 
     private void doCtrlKeyAction(ItemStack itemStack, EntityPlayer player) {
         if (itemStack.getItem() instanceof EcItemSword) {
-            ((EcItemSword) itemStack.getItem()).doCtrlKeyAction(itemStack, player.world, player);
+            ((EcItemSword) itemStack.getItem()).doCtrlKeyAction(itemStack, player.worldObj, player);
         }
     }
 
@@ -79,7 +80,7 @@ public class MessageKeyPressedHandler implements IMessageHandler<MessageKeyPress
             player.addExperienceLevel(-ConfigurationUtils.enchantChangerCost);
             return true;
         }
-        player.sendMessage(new TextComponentString(String.format("Need %dLevel to open materia window", ConfigurationUtils.enchantChangerCost)));
+        player.addChatMessage(new TextComponentString(String.format("Need %dLevel to open materia window", ConfigurationUtils.enchantChangerCost)));
         return false;
     }
 }

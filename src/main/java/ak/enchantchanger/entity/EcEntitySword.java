@@ -39,7 +39,7 @@ public class EcEntitySword extends Entity {
         this.setSize(size, size);
         this.setLocationAndAngles(x, y, z, Yaw, Pitch);
         this.setPosition(x, y, z);
-        double scale = (double) MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        double scale = (double) MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
         this.accelerationX = motionX / scale * 0.1D;
         this.accelerationY = motionY / scale * 0.1D;
         this.accelerationZ = motionZ / scale * 0.1D;
@@ -55,7 +55,7 @@ public class EcEntitySword extends Entity {
         motionX += this.rand.nextGaussian() * 0.4D;
         motionY += this.rand.nextGaussian() * 0.4D;
         motionZ += this.rand.nextGaussian() * 0.4D;
-        double var9 = (double) MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        double var9 = (double) MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
         this.accelerationX = motionX / var9 * 0.1D;
         this.accelerationY = motionY / var9 * 0.1D;
         this.accelerationZ = motionZ / var9 * 0.1D;
@@ -74,16 +74,16 @@ public class EcEntitySword extends Entity {
 
     @Override
     public void onUpdate() {
-        if (!this.world.isRemote &&
+        if (!this.worldObj.isRemote &&
                 (this.enemyEntity != null && this.enemyEntity.isDead
-                        || !this.world.isBlockLoaded(new BlockPos(this.posX, this.posY, this.posZ)))) {
+                        || !this.worldObj.isBlockLoaded(new BlockPos(this.posX, this.posY, this.posZ)))) {
             this.setDead();
         } else {
             super.onUpdate();
             this.setFire(1);
 
             if (this.inGround) {
-                if (this.world.getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getBlock() == this.inTile) {
+                if (this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getBlock() == this.inTile) {
                     ++this.ticksAlive;
 
                     if (this.ticksAlive == 600) {
@@ -105,16 +105,16 @@ public class EcEntitySword extends Entity {
 
             Vec3d var15 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d var2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult var3 = this.world.rayTraceBlocks(var15, var2);
+            RayTraceResult var3 = this.worldObj.rayTraceBlocks(var15, var2);
             var15 = new Vec3d(this.posX, this.posY, this.posZ);
             var2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
             if (var3 != null) {
-                var2 = new Vec3d(var3.hitVec.x, var3.hitVec.y, var3.hitVec.z);
+                var2 = new Vec3d(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
             }
 
             Entity var4 = null;
-            List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> entityList = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
 
             for (Entity entity : entityList) {
@@ -146,7 +146,7 @@ public class EcEntitySword extends Entity {
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
-            float var16 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
 //			for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
@@ -173,7 +173,7 @@ public class EcEntitySword extends Entity {
             if (this.isInWater()) {
                 for (int var19 = 0; var19 < 4; ++var19) {
                     float var18 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double) var18, this.posY - this.motionY * (double) var18, this.posZ - this.motionZ * (double) var18, this.motionX, this.motionY, this.motionZ);
+                    this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double) var18, this.posY - this.motionY * (double) var18, this.posZ - this.motionZ * (double) var18, this.motionX, this.motionY, this.motionZ);
                 }
 
                 var17 = 0.8F;
@@ -185,7 +185,7 @@ public class EcEntitySword extends Entity {
             this.motionX *= (double) var17;
             this.motionY *= (double) var17;
             this.motionZ *= (double) var17;
-            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+            this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
         }
     }
@@ -194,14 +194,14 @@ public class EcEntitySword extends Entity {
      * Called when this EntityFireball hits a block or entity.
      */
     protected void onImpact(RayTraceResult traceResult) {
-        if (!this.world.isRemote) {
+        if (!this.worldObj.isRemote) {
             /**
              if (traceResult.entityHit != null && traceResult.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 4))
              {
              ;
              }
              */
-            this.world.newExplosion(null, this.posX, this.posY, this.posZ, expLimit, true, false);
+            this.worldObj.newExplosion(null, this.posX, this.posY, this.posZ, expLimit, true, false);
             this.setDead();
         }
     }
@@ -238,20 +238,20 @@ public class EcEntitySword extends Entity {
     public boolean attackEntityFrom(@Nonnull DamageSource damageSource, float amount) {
         this.setBeenAttacked();
 
-        if (damageSource.getTrueSource() != null) {
-            Vec3d lookVec = damageSource.getTrueSource().getLookVec();
+        if (damageSource.getSourceOfDamage() != null) {
+            Vec3d lookVec = damageSource.getSourceOfDamage().getLookVec();
 
             if (lookVec != null) {
-                this.motionX = lookVec.x;
-                this.motionY = lookVec.y;
-                this.motionZ = lookVec.z;
+                this.motionX = lookVec.xCoord;
+                this.motionY = lookVec.yCoord;
+                this.motionZ = lookVec.zCoord;
                 this.accelerationX = this.motionX * 0.1D;
                 this.accelerationY = this.motionY * 0.1D;
                 this.accelerationZ = this.motionZ * 0.1D;
             }
 
-            if (damageSource.getTrueSource() instanceof EntityLiving) {
-                this.enemyEntity = (EntityLiving) damageSource.getTrueSource();
+            if (damageSource.getSourceOfDamage() instanceof EntityLiving) {
+                this.enemyEntity = (EntityLiving) damageSource.getSourceOfDamage();
             }
 
             return true;

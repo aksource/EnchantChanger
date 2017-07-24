@@ -19,7 +19,7 @@ public class EcItemUltimateWeapon extends EcItemSword {
 
     @Override
     public boolean onLeftClickEntity(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player, @Nonnull Entity entity) {
-        if (player.world.isRemote) return false;
+        if (player.worldObj.isRemote) return false;
         float ultimateWeaponDamage;
         if (entity instanceof EntityLivingBase) {
             float mobmaxhealth = ((EntityLivingBase) entity).getMaxHealth() / 3 + 1;
@@ -50,6 +50,6 @@ public class EcItemUltimateWeapon extends EcItemSword {
             damageratio = 0.3F;
         }
         int EXPLv = player.experienceLevel;
-        return MathHelper.floor((10 + EXPLv / 5) * damageratio);
+        return MathHelper.floor_double((10 + EXPLv / 5) * damageratio);
     }
 }

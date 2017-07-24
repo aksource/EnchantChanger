@@ -1,15 +1,13 @@
 package ak.enchantchanger.entity;
 
+import ak.MultiToolHolders.ItemMultiToolHolder;
+import ak.MultiToolHolders.inventory.InventoryToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.enchantchanger.utils.EnchantmentUtils;
-import ak.MultiToolHolders.ItemMultiToolHolder;
-import ak.MultiToolHolders.inventory.InventoryToolHolder;
-import com.google.common.collect.Lists;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -21,7 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class EcEntityApOrb extends Entity {
     /**
@@ -107,18 +104,18 @@ public class EcEntityApOrb extends Entity {
         this.prevPosZ = this.posZ;
         this.motionY -= 0.029999999329447746D;
 
-        if (this.world.getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getMaterial() == Material.LAVA) {
+        if (this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getMaterial() == Material.LAVA) {
             this.motionY = 0.20000000298023224D;
             this.motionX = (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
             this.motionZ = (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-            this.world.playSound(this.posX, this.posY, this.posZ,
+            this.worldObj.playSound(this.posX, this.posY, this.posZ,
                     SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.NEUTRAL,
                     0.4F, 2.0F + this.rand.nextFloat() * 0.4F, true);
         }
 
         this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
         double var1 = 8.0D;
-        EntityPlayer var3 = this.world.getClosestPlayerToEntity(this, var1);
+        EntityPlayer var3 = this.worldObj.getClosestPlayerToEntity(this, var1);
 
         if (var3 != null) {
             double var4 = (var3.posX - this.posX) / var1;
@@ -135,11 +132,11 @@ public class EcEntityApOrb extends Entity {
             }
         }
 
-        this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+        this.moveEntity(this.motionX, this.motionY, this.motionZ);
         float var14 = 0.98F;
 
         if (this.onGround) {
-            var14 = this.world.getBlockState(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ))
+            var14 = this.worldObj.getBlockState(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ))
                     .getBlock().slipperiness * 0.98F;
         }
 
@@ -160,11 +157,11 @@ public class EcEntityApOrb extends Entity {
     }
 
     public boolean handleWaterMovement() {
-        return this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
+        return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
     }
 
     protected void dealFireDamage(int par1) {
-        this.attackEntityFrom(DamageSource.IN_FIRE, par1);
+        this.attackEntityFrom(DamageSource.inFire, par1);
     }
 
     private boolean attackEntityFrom(DamageSource damageSource, int i) {
@@ -194,10 +191,10 @@ public class EcEntityApOrb extends Entity {
 
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer entityIn) {
-        if (!this.world.isRemote) {
+        if (!this.worldObj.isRemote) {
             if (this.field_35126_c == 0 && entityIn.xpCooldown == 0) {
                 entityIn.xpCooldown = 2;
-                this.world.playSound(this.posX, this.posY, this.posZ,
+                this.worldObj.playSound(this.posX, this.posY, this.posZ,
                         SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
                         SoundCategory.PLAYERS,
                         0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F),
@@ -210,18 +207,21 @@ public class EcEntityApOrb extends Entity {
     }
 
     private void addAp(@Nonnull EntityPlayer player) {
-        List<ItemStack> items = Lists.newArrayList();
-        items.addAll(player.inventory.mainInventory.subList(0, 9));
-        items.addAll(player.inventory.armorInventory);
-        items.addAll(player.inventory.offHandInventory);
+        ItemStack[] items = new ItemStack[13];
+        for (int i = 0; i < 9; i++) {
+            items[i] = player.inventory.getStackInSlot(i);
+        }
+        System.arraycopy(player.inventory.armorInventory, 0, items, 9, player.inventory.armorInventory.length);
 
         for (ItemStack itemStack : items) {
             if (itemStack != null && itemStack.isItemEnchanted()) {
                 if (EnchantChanger.loadMTH && itemStack.getItem() instanceof ItemMultiToolHolder) {
                     InventoryToolHolder tools = ((ItemMultiToolHolder) itemStack.getItem()).getInventoryFromItemStack(itemStack);
-                    for (int j = 0; j < tools.getSizeInventory(); j++) {
-                        if (!tools.getStackInSlot(j).isEmpty() && tools.getStackInSlot(j).isItemEnchanted()) {
-                            addApToItem(tools.getStackInSlot(j));
+                    if (tools != null) {
+                        for (int j = 0; j < tools.getSizeInventory(); j++) {
+                            if (tools.getStackInSlot(j) != null && tools.getStackInSlot(j).isItemEnchanted()) {
+                                addApToItem(tools.getStackInSlot(j));
+                            }
                         }
                     }
                 } else {

@@ -24,7 +24,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -39,6 +38,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 //import cofh.api.energy.IEnergyConnection;
@@ -75,13 +75,13 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
             {0, 1, 0, 1, 2, 1, 0, 1, 0},
             {0, 0, 0, 0, 1, 0, 0, 0, 0}
     };
+    private final List<ItemStack> items = new ArrayList<>(SUM_OF_ALL_SLOTS);
+    private final List<ItemStack> smeltingItems = new ArrayList<>(SLOTS_MATERIAL.length);
     public int smeltingTime;
     public int generatingRFTime = MAX_GENERATING_RF_TIME;
     public EcMakoReactorTank tank = new EcMakoReactorTank(1000 * 10);
     //    public static final Range<Integer> rangeResultSlot = Range.closedOpen(4, 7);
     public byte face;
-    private final NonNullList<ItemStack> items = NonNullList.withSize(SUM_OF_ALL_SLOTS, ItemStack.EMPTY);
-    private final NonNullList<ItemStack> smeltingItems = NonNullList.withSize(SLOTS_MATERIAL.length, ItemStack.EMPTY);
     private int creatingHugeMateriaPoint;
     private BlockPos posHugeMateria = null;
     private int outputMaxRFValue = 100;
@@ -97,7 +97,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         nbtTagCompound.setInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_CREATE_HUGE_MATERIA, creatingHugeMateriaPoint);
         NBTTagList nbtTagList = new NBTTagList();
         for (int i = 0; i < items.size(); i++) {
-            if (!items.get(i).isEmpty()) {
+            if (items.get(i) != null) {
                 NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
                 nbtTagCompound1.setByte(ak.enchantchanger.api.Constants.NBT_SLOT, (byte) i);
                 items.get(i).writeToNBT(nbtTagCompound1);
@@ -108,7 +108,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
         NBTTagList nbtTagList2 = new NBTTagList();
         for (int i = 0; i < smeltingItems.size(); i++) {
-            if (!smeltingItems.isEmpty()) {
+            if (smeltingItems != null) {
                 NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
                 nbtTagCompound1.setByte(ak.enchantchanger.api.Constants.NBT_SLOT, (byte) i);
                 smeltingItems.get(i).writeToNBT(nbtTagCompound1);
@@ -140,19 +140,19 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
             NBTTagCompound nbtTagCompound = nbtTagList.getCompoundTagAt(i);
             byte slot = nbtTagCompound.getByte(ak.enchantchanger.api.Constants.NBT_SLOT);
             if (slot >= 0 && slot < items.size()) {
-                items.set(slot, new ItemStack(nbtTagCompound));
+                items.set(slot, ItemStack.loadItemStackFromNBT(nbtTagCompound));
             }
         }
 
         NBTTagList nbtTagList2 = nbt.getTagList(ak.enchantchanger.api.Constants.NBT_REACTOR_SMELTING_ITEMS, Constants.NBT.TAG_COMPOUND);
         for (int j = 0; j < smeltingItems.size(); j++) {
-            smeltingItems.set(j, ItemStack.EMPTY);
+            smeltingItems.set(j, null);
         }
         for (int i = 0; i < nbtTagList2.tagCount(); i++) {
             NBTTagCompound nbtTagCompound = nbtTagList2.getCompoundTagAt(i);
             byte slot = nbtTagCompound.getByte(ak.enchantchanger.api.Constants.NBT_SLOT);
             if (slot >= 0 && slot < smeltingItems.size()) {
-                smeltingItems.set(slot, new ItemStack(nbtTagCompound));
+                smeltingItems.set(slot, ItemStack.loadItemStackFromNBT(nbtTagCompound));
             }
         }
 
@@ -191,12 +191,12 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
             }
 
             //魔晄バケツ・マテリアからの搬入処理
-            if (!tank.isFull() && !items.get(SLOTS_FUEL[0]).isEmpty() && MakoUtils.isMako(items.get(SLOTS_FUEL[0]))) {
+            if (!tank.isFull() && items.get(SLOTS_FUEL[0]) != null && MakoUtils.isMako(items.get(SLOTS_FUEL[0]))) {
                 int makoAmount = MakoUtils.getMakoFromItem(items.get(SLOTS_FUEL[0]));
                 if (tank.getFluidAmount() + makoAmount <= tank.getCapacity()) {
                     tank.fill(new FluidStack(ak.enchantchanger.utils.Blocks.fluidLifeStream, makoAmount), true);
-                    items.get(SLOTS_FUEL[0]).shrink(1);
-                    if (items.get(SLOTS_FUEL[0]).getCount() <= 0) {
+                    items.get(SLOTS_FUEL[0]).stackSize--;
+                    if (items.get(SLOTS_FUEL[0]).stackSize <= 0) {
                         setInventorySlotContents(SLOTS_FUEL[0], items.get(SLOTS_FUEL[0]).getItem().getContainerItem(items.get(SLOTS_FUEL[0])));
                     }
                     upToDate = true;
@@ -205,7 +205,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
             if (canSmelting()) {
                 for (int i = 0; i < SLOTS_MATERIAL.length; i++) {
-                    if (smeltingItems.get(i).isEmpty() && canSmeltThisItem(items.get(SLOTS_MATERIAL[i]))) {
+                    if (smeltingItems.get(i) == null && canSmeltThisItem(items.get(SLOTS_MATERIAL[i]))) {
                         smeltingItems.set(i, decrStackSize(SLOTS_MATERIAL[i], 1));
                         upToDate = true;
                     }
@@ -233,25 +233,25 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         creatingHugeMateriaPoint += SMELTING_MAKO_COST;
         ItemStack smelted;
         for (int i = 0; i < smeltingItems.size(); i++) {
-            if (!smeltingItems.get(i).isEmpty()) {
+            if (smeltingItems.get(i) != null) {
                 smelted = getSmeltedItem(smeltingItems.get(i));
-                if (items.get(SLOTS_RESULT[i]).isEmpty()) {
+                if (items.get(SLOTS_RESULT[i]) == null) {
                     items.set(SLOTS_RESULT[i], smelted.copy());
-                    smeltingItems.set(i, ItemStack.EMPTY);
+                    smeltingItems.set(i, null);
                 } else {
                     if (items.get(SLOTS_RESULT[i]).isItemEqual(smelted)
                             && ItemStack.areItemStackTagsEqual(items.get(SLOTS_RESULT[i]), smelted)
-                            && items.get(SLOTS_RESULT[i]).getCount() < items.get(SLOTS_RESULT[i]).getMaxStackSize()) {
-                        items.get(SLOTS_RESULT[i]).grow(smelted.getCount());
-                        smeltingItems.set(i, ItemStack.EMPTY);
+                            && items.get(SLOTS_RESULT[i]).stackSize < items.get(SLOTS_RESULT[i]).getMaxStackSize()) {
+                        items.get(SLOTS_RESULT[i]).stackSize += smelted.stackSize;
+                        smeltingItems.set(i, null);
                     }
                 }
             }
         }
-        if (this.getWorld().rand.nextInt(ConfigurationUtils.materiaGeneratingRatio) == 0 && items.get(SLOTS_RESULT[SLOTS_RESULT.length - 1]).isEmpty()) {
+        if (this.getWorld().rand.nextInt(ConfigurationUtils.materiaGeneratingRatio) == 0 && items.get(SLOTS_RESULT[SLOTS_RESULT.length - 1]) == null) {
             ItemStack materia = new ItemStack(Items.itemMateria);
             EnchantmentData enchantmentData = EnchantmentUtils.getEnchantmentData(this.getWorld().rand);
-            EnchantmentUtils.addEnchantmentToItem(materia, enchantmentData.enchantment, enchantmentData.enchantmentLevel);
+            EnchantmentUtils.addEnchantmentToItem(materia, enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
             items.set(SLOTS_RESULT[SLOTS_RESULT.length - 1], materia);
         }
         this.markDirty();
@@ -313,7 +313,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
     public boolean isSmelting() {
         for (ItemStack itemStack : smeltingItems) {
-            if (!itemStack.isEmpty()) {
+            if (itemStack != null) {
                 return true;
             }
         }
@@ -329,7 +329,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         for (int y = -1; y <= 3; y++) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
-                    checkBlockState = world.getBlockState(posHugeMateria.add(x, y, z));
+                    checkBlockState = worldObj.getBlockState(posHugeMateria.add(x, y, z));
                     index = (x + 1) + (z + 1) * 3;
                     if (CONSTRUCTING_BLOCKS_INFO[y + 1][index] == 1 && !isBaseBlock(checkBlockState)) {
                         return false;
@@ -381,7 +381,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     public boolean canMakeHugeMateria() {
         if (posHugeMateria == null) return false;
         for (int i = 0; i < 3; i++) {
-            if (!world.isAirBlock(posHugeMateria.up(i))) {
+            if (!worldObj.isAirBlock(posHugeMateria.up(i))) {
                 return false;
             }
         }
@@ -389,7 +389,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     public boolean canSmeltThisItem(ItemStack itemStack) {
-        return !itemStack.isEmpty() && !getSmeltedItem(itemStack).isEmpty();
+        return itemStack != null && getSmeltedItem(itemStack) != null;
     }
 
     public ItemStack getSmeltedItem(ItemStack itemStack) {
@@ -404,9 +404,9 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
     public void setHugeMateria(BlockPos blockPos) {
         Block hugeMateria = ak.enchantchanger.utils.Blocks.blockHugeMateria;
-        world.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 0));
-        world.setBlockState(blockPos.up(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 1));
-        world.setBlockState(blockPos.up(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 2));
+        worldObj.setBlockState(blockPos, hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 0));
+        worldObj.setBlockState(blockPos.up(), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 1));
+        worldObj.setBlockState(blockPos.up(2), hugeMateria.getDefaultState().withProperty(EcBlockHugeMateria.PART, 2));
     }
 
     @Override
@@ -439,50 +439,47 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Override
-    @Nonnull
     public ItemStack getStackInSlot(int slot) {
         if (slot < items.size()) {
             return items.get(slot);
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @Override
-    @Nonnull
     public ItemStack decrStackSize(int slot, int size) {
-        if (slot < items.size() && !items.get(slot).isEmpty()) {
+        if (slot < items.size() && items.get(slot) != null) {
             ItemStack returnStack;
-            if (items.get(slot).getCount() <= size) {
+            if (items.get(slot).stackSize <= size) {
                 returnStack = items.get(slot);
-                items.set(slot, ItemStack.EMPTY);
+                items.set(slot, null);
                 return returnStack;
             } else {
                 returnStack = items.get(slot).splitStack(size);
-                if (items.get(slot).getCount() <= 0) {
-                    items.set(size, ItemStack.EMPTY);
+                if (items.get(slot).stackSize <= 0) {
+                    items.set(size, null);
                 }
                 return returnStack;
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @Override
-    @Nonnull
     public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty()) {
-            setInventorySlotContents(slot, ItemStack.EMPTY);
+        if (stack != null) {
+            setInventorySlotContents(slot, null);
         }
         return stack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, @Nonnull ItemStack item) {
+    public void setInventorySlotContents(int slot, ItemStack item) {
         if (slot < items.size()) {
             items.set(slot, item);
-            if (!items.get(slot).isEmpty() && items.get(slot).getCount() > this.getInventoryStackLimit()) {
-                items.get(slot).setCount(this.getInventoryStackLimit());
+            if (items.get(slot) != null && items.get(slot).stackSize > this.getInventoryStackLimit()) {
+                items.get(slot).stackSize = this.getInventoryStackLimit();
             }
         }
     }
@@ -504,7 +501,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Override
-    public boolean isUsableByPlayer(@Nonnull EntityPlayer player) {
+    public boolean isUseableByPlayer(@Nonnull EntityPlayer player) {
         return this.getWorld().getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5D, 0.5D, 0.5D)) <= 64;
     }
 
@@ -536,7 +533,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
             }
 
             if (RANGE_FUEL_SLOTS.contains(slot)) {
-                return !item.isEmpty() && MakoUtils.isMako(item);
+                return item != null && MakoUtils.isMako(item);
             }
         }
         return false;
@@ -566,11 +563,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     @Nonnull
     public ITextComponent getDisplayName() {
         return new TextComponentString(getName());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return items.stream().filter(itemStack -> !itemStack.isEmpty()).count() > 0;
     }
 
     @Override
@@ -612,13 +604,11 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int receiveEnergy(EnumFacing facing, int i, boolean b) {
         return 0;//発電のみ
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int extractEnergy(EnumFacing facing, int i, boolean b) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), i));
         if (!b) {
@@ -629,13 +619,11 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getEnergyStored(EnumFacing facing) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getMaxEnergyStored(EnumFacing facing) {
         return MAX_RF_CAPACITY;
     }
@@ -674,37 +662,31 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoEnergyPerTick() {
         return nowRF;
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoMaxEnergyPerTick() {
         return getOutputMaxRFValue();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoEnergyStored() {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoMaxEnergyStored() {
         return MAX_RF_CAPACITY;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int addEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         return 0;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int drawEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), speed));
         if (!simulate) {
@@ -715,31 +697,26 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public boolean canInterface(EnumFacing from) {
         return true;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int getPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public long getSpeedStored(EnumFacing from) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int getMaxPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public long getMaxSpeedStored(EnumFacing from) {
         return MAX_RF_CAPACITY;
     }

@@ -12,7 +12,7 @@ public class Constants {
     public static final String MOD_ID = "enchantchanger";
     public static final String MOD_NAME = "EnchantChanger";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final String MOD_MC_VERSION = "[1.11,1.99.99]";
+    public static final String MOD_MC_VERSION = "[1.10,1.10.2]";
     public static final String OBJ_ITEM_DOMAIN = ":item/";
     public static final String TEXTURES_METEO_PNG = "textures/items/meteo.png";
     public static final String TEXTURES_EX_EXP_BOTTLE_PNG = "textures/items/ex_exp_bottle.png";

@@ -22,7 +22,7 @@ public class EcItemHugeMateria extends EcItem {
 
     @Override
     @Nonnull
-    public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos,
+    public EnumActionResult onItemUse(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos,
                                       @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
         BlockPos settingPos = pos;
         if (facing == EnumFacing.DOWN) {
@@ -37,32 +37,29 @@ public class EcItemHugeMateria extends EcItem {
         if (player.canPlayerEdit(settingPos, facing, heldItem)
                 && player.canPlayerEdit(settingPos2, facing, heldItem)
                 && player.canPlayerEdit(settingPos3, facing, heldItem)
-                && worldIn.mayPlace(hugeMateria, settingPos, false, facing, null)
-                && worldIn.mayPlace(hugeMateria, settingPos2, false, facing, null)
-                && worldIn.mayPlace(hugeMateria, settingPos3, false, facing, null)
                 ) {
             if (!hugeMateria.canPlaceBlockAt(worldIn, settingPos)
                     || !hugeMateria.canPlaceBlockAt(worldIn, settingPos2)
                     || !hugeMateria.canPlaceBlockAt(worldIn, settingPos3)) {
                 return EnumActionResult.FAIL;
             }
-            IBlockState blockState0 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 0, player, hand);
-            IBlockState blockState1 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 1, player, hand);
-            IBlockState blockState2 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 2, player, hand);
+            IBlockState blockState0 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 0, player, itemStack);
+            IBlockState blockState1 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 1, player, itemStack);
+            IBlockState blockState2 = hugeMateria.getStateForPlacement(worldIn, settingPos, facing, hitX, hitY, hitZ, 2, player, itemStack);
             boolean flag0 = worldIn.setBlockState(settingPos, blockState0, 1);
             boolean flag1 = worldIn.setBlockState(settingPos2, blockState1, 1);
             boolean flag2 = worldIn.setBlockState(settingPos3, blockState2, 1);
             if (flag0 && flag1 && flag2) {
                 SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, player);
                 worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                heldItem.shrink(1);
+                heldItem.stackSize--;
 
-                worldIn.notifyNeighborsOfStateChange(settingPos, hugeMateria, false);
-                worldIn.notifyNeighborsOfStateChange(settingPos2, hugeMateria, false);
-                worldIn.notifyNeighborsOfStateChange(settingPos3, hugeMateria, false);
+                worldIn.notifyNeighborsOfStateChange(settingPos, hugeMateria);
+                worldIn.notifyNeighborsOfStateChange(settingPos2, hugeMateria);
+                worldIn.notifyNeighborsOfStateChange(settingPos3, hugeMateria);
                 return EnumActionResult.SUCCESS;
             }
         }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return super.onItemUse(itemStack, player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 }

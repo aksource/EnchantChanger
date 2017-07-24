@@ -38,20 +38,20 @@ public class EcGuiMateriaWindow extends GuiContainer {
 //        itemRender.renderItemAndEffectIntoGUI(fontRenderer, Minecraft.getMinecraft().renderEngine, itemStack, itemRenderPosX, itemRenderPosY);
         ItemStack openItem = ((EcContainerMateriaWindow) this.inventorySlots).getOpenItem();
         mc.getRenderItem().renderItemAndEffectIntoGUI(openItem, itemRenderPosX, itemRenderPosY);//Itemの描画
-        mc.getRenderItem().renderItemOverlays(this.mc.fontRenderer, openItem, itemRenderPosX, itemRenderPosY);//耐久値の描画
+        mc.getRenderItem().renderItemOverlays(this.mc.fontRendererObj, openItem, itemRenderPosX, itemRenderPosY);//耐久値の描画
         itemRender.zLevel = 0.0F;
         GlStateManager.popMatrix();
     }
 
     protected void keyTyped(char c, int keycode) throws IOException {
         if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode() || keycode == Minecraft.getMinecraft().gameSettings.keyBindDrop.getKeyCode()) {
-            Minecraft.getMinecraft().player.closeScreen();
+            Minecraft.getMinecraft().thePlayer.closeScreen();
         } else super.keyTyped(c, keycode);
     }
 
     public void updateScreen() {
         super.updateScreen();
-        EntityPlayer player = mc.player;
+        EntityPlayer player = mc.thePlayer;
         if (!player.isEntityAlive() || player.isDead) {
             player.closeScreen();
         }

@@ -87,9 +87,8 @@ public class EcContainerMaterializer extends Container {
     }
 
     @Override
-    @Nonnull
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
-        ItemStack retItemStack = ItemStack.EMPTY;
+        ItemStack retItemStack = null;
         Slot slot = this.getSlot(index);
 
         if (slot.getHasStack()) {
@@ -98,39 +97,39 @@ public class EcContainerMaterializer extends Container {
 
             if (index >= 0 && index < RESULT_SLOT_NUM + SourceSlotNum) {
                 if (!this.mergeItemStack(itemstack, RESULT_SLOT_NUM + SourceSlotNum, RESULT_SLOT_NUM + SourceSlotNum + 36, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             } else {
                 if (itemstack.getItem() instanceof EcItemMateria) {
                     for (int i = 1; i < SourceSlotNum; i++) {
                         if (!(this.getSlot(i)).getHasStack()) {
                             (this.getSlot(i)).putStack(itemstack.copy());
-                            itemstack.shrink(1);
+                            itemstack.stackSize--;
                             i = SourceSlotNum;
                         }
                     }
                 } else if ((this.getSlot(0)).getHasStack()) {
-                    return ItemStack.EMPTY;
-                } else if (itemstack.hasTagCompound() && itemstack.getCount() == 1) {
+                    return null;
+                } else if (itemstack.hasTagCompound() && itemstack.stackSize == 1) {
                     (this.getSlot(0)).putStack(itemstack.copy());
-                    itemstack.setCount(0);
-                } else if (itemstack.getCount() >= 1) {
+                    itemstack.stackSize = 0;
+                } else if (itemstack.stackSize >= 1) {
                     (this.getSlot(0)).putStack(new ItemStack(itemstack.getItem(), 1, itemstack.getItemDamage()));
-                    itemstack.shrink(1);
+                    itemstack.stackSize--;
                 }
             }
 
-            if (itemstack.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (itemstack.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack.getCount() == retItemStack.getCount()) {
-                return ItemStack.EMPTY;
+            if (itemstack.stackSize == retItemStack.stackSize) {
+                return null;
             }
 
-            slot.onTake(playerIn, itemstack);
+            slot.onPickupFromSlot(playerIn, itemstack);
         }
 
         return retItemStack;
@@ -139,7 +138,7 @@ public class EcContainerMaterializer extends Container {
     @Override
     public void onCraftMatrixChanged(@Nonnull IInventory inventoryIn) {
         ItemStack baseItem = this.materializeSource.getStackInSlot(0);
-        if (!baseItem.isEmpty()) {
+        if (baseItem != null) {
             if (EnchantChanger.loadMTH && baseItem.getItem() instanceof ItemMultiToolHolder) {
                 return;
             }
@@ -173,7 +172,7 @@ public class EcContainerMaterializer extends Container {
             if (this.checkMateriaFromSlot(materializeSource)) {
                 for (int i = 1; i < this.materializeSource.getSizeInventory(); i++) {
                     ItemStack materiaitem = this.materializeSource.getStackInSlot(i);
-                    if (materiaitem.isEmpty()) {
+                    if (materiaitem == null) {
                         continue;
                     }
 
@@ -183,7 +182,7 @@ public class EcContainerMaterializer extends Container {
 
                         if (!EnchantmentUtils.isEnchantmentValid(enchKind, baseItem) || !EnchantmentUtils.checkLvCap(materiaitem)) {
                             for (int i1 = 0; i1 < RESULT_SLOT_NUM; i1++) {
-                                this.materializeResult.setInventorySlotContents(i1, ItemStack.EMPTY);
+                                this.materializeResult.setInventorySlotContents(i1, null);
                             }
                             this.enchantmentList.clear();
                             this.enchantmentLevelList.clear();
@@ -192,7 +191,7 @@ public class EcContainerMaterializer extends Container {
                         }
 
                         for (Pair<Enchantment, Integer> data : this.itemEnchantmentLvPair) {
-                            if (!data.getLeft()./*canApplyTogether*/func_191560_c(enchKind)) {
+                            if (!data.getLeft().canApplyTogether(enchKind)) {
                                 this.enchantmentRemoveData.add(data);
                             }
                         }
@@ -232,7 +231,7 @@ public class EcContainerMaterializer extends Container {
                 this.materializeResult.setInventorySlotContents(0, result);
 
                 for (int i = 1; i < RESULT_SLOT_NUM; i++) {
-                    this.materializeResult.setInventorySlotContents(i, ItemStack.EMPTY);
+                    this.materializeResult.setInventorySlotContents(i, null);
                 }
             } else if (enchTagList != null && enchTagList.tagCount() > 0) {//extract enchantment from Item
                 int endIndex = itemEnchantmentLvPair.size() > 8 ? 8 : itemEnchantmentLvPair.size();
@@ -247,13 +246,13 @@ public class EcContainerMaterializer extends Container {
                         EnchantmentUtils.addEnchantmentToItem(materia, data.getLeft(), decreasedLv);
                         this.materializeResult.setInventorySlotContents(slotIndex + 1, materia);
                     } else {
-                        this.materializeResult.setInventorySlotContents(slotIndex + 1, ItemStack.EMPTY);
+                        this.materializeResult.setInventorySlotContents(slotIndex + 1, null);
                     }
                     slotIndex++;
                 }
                 result = EnchantmentUtils.getBookResult(result, itemEnchantmentLvPair.subList(endIndex, itemEnchantmentLvPair.size()));
                 this.materializeResult.setInventorySlotContents(0, result);
-            } else if (!magicList.isEmpty()) {
+            } else if (magicList != null) {
                 result.getTagCompound().removeTag(NBT_KEY_ENCHANT_CHANGER_MAGIC);
                 int slotIndex = 0;
                 for (byte b : magicList) {
@@ -265,7 +264,7 @@ public class EcContainerMaterializer extends Container {
                 this.materializeResult.setInventorySlotContents(0, result);
             } else {
                 for (int i = 0; i < RESULT_SLOT_NUM; i++) {
-                    this.materializeResult.setInventorySlotContents(i, ItemStack.EMPTY);
+                    this.materializeResult.setInventorySlotContents(i, null);
                 }
             }
             this.enchantmentList.clear();
@@ -284,14 +283,14 @@ public class EcContainerMaterializer extends Container {
             if (!this.ItemSourceLeft()) {
                 for (int rSlotIndex = 0; rSlotIndex < RESULT_SLOT_NUM; ++rSlotIndex) {
                     ItemStack stack = this.materializeResult.removeStackFromSlot(rSlotIndex);
-                    if (!stack.isEmpty()) {
+                    if (stack != null) {
                         playerIn.dropItem(stack, false);
                     }
                 }
             }
             for (int sSlotIndex = 0; sSlotIndex < SourceSlotNum; ++sSlotIndex) {
                 ItemStack stack = this.materializeSource.removeStackFromSlot(sSlotIndex);
-                if (!stack.isEmpty()) {
+                if (stack != null) {
                     playerIn.dropItem(stack, false);
                 }
             }
@@ -300,13 +299,13 @@ public class EcContainerMaterializer extends Container {
     }
 
     private boolean ItemSourceLeft() {
-        return !this.materializeSource.getStackInSlot(0).isEmpty();
+        return this.materializeSource.getStackInSlot(0) != null;
     }
 
-    private boolean checkMateriaFromSlot(IInventory Source) {
+    private boolean checkMateriaFromSlot(IInventory source) {
         boolean ret = false;
-        for (int i = 0; i < Source.getSizeInventory(); i++) {
-            if (!Source.getStackInSlot(i).isEmpty() && Source.getStackInSlot(i).getItem() instanceof EcItemMateria)
+        for (int i = 0; i < source.getSizeInventory(); i++) {
+            if (source.getStackInSlot(i) != null && source.getStackInSlot(i).getItem() instanceof EcItemMateria)
                 ret = true;
         }
         return ret;

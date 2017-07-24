@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -27,6 +26,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * 魔晄炉のブロッククラス
@@ -65,9 +65,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
 
     @Override
     @Nonnull
-    public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing,
-                                            float hitX, float hitY, float hitZ, int meta,
-                                            @Nonnull EntityLivingBase placer, @Nonnull EnumHand hand) {
+    public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
         return this.getDefaultState().withProperty(PROP_BASE_TYPE, EnumMRBaseType.getByIndex(meta)).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
@@ -75,7 +73,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos blockPos, @Nonnull IBlockState state,
                                 @Nonnull EntityLivingBase setter, @Nonnull ItemStack item) {
         super.onBlockPlacedBy(world, blockPos, state, setter, item);
-        int l = MathHelper.floor((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int l = MathHelper.floor_double((double) (setter.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         EcTileMultiPass tile = (EcTileMultiPass) world.getTileEntity(blockPos);
         if (tile instanceof EcTileEntityMakoReactor) {
             tile.baseBlock = EnumMRBaseType.getByIndex(item.getItemDamage()).getRegistryName();
@@ -84,9 +82,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
-                                    @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing,
-                                    float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         EcTileEntityMakoReactor tile = (EcTileEntityMakoReactor) worldIn.getTileEntity(pos);
         if (tile != null && tile.isActivated()) {
             playerIn.openGui(EnchantChanger.instance, Constants.GUI_ID_MAKO_REACTOR, worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -100,7 +96,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull List<ItemStack> list) {
         for (EnumMRBaseType type : EnumMRBaseType.values()) {
             ItemStack makoReactorController = new ItemStack(this, 1, type.ordinal());
             list.add(makoReactorController);
@@ -114,19 +110,19 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
             for (int i1 = 0; i1 < tile.getSizeInventory(); ++i1) {
                 ItemStack itemstack = tile.getStackInSlot(i1);
 
-                if (!itemstack.isEmpty()) {
+                if (itemstack != null) {
                     float f = world.rand.nextFloat() * 0.8F + 0.1F;
                     float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
                     float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
 
-                    while (itemstack.getCount() > 0) {
+                    while (itemstack.stackSize > 0) {
                         int j1 = world.rand.nextInt(21) + 10;
 
-                        if (j1 > itemstack.getCount()) {
-                            j1 = itemstack.getAnimationsToGo();
+                        if (j1 > itemstack.stackSize) {
+                            j1 = itemstack.animationsToGo;
                         }
 
-                        itemstack.shrink(j1);
+                        itemstack.stackSize -= j1;
                         EntityItem entityitem = new EntityItem(world,
                                 blockPos.getX() + f,
                                 blockPos.getY() + f1,
@@ -134,14 +130,14 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
                                 new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
                         if (itemstack.hasTagCompound()) {
-                            entityitem.getItem().setTagCompound(itemstack.getTagCompound().copy());
+                            entityitem.getEntityItem().setTagCompound(itemstack.getTagCompound().copy());
                         }
 
                         float f3 = 0.05F;
                         entityitem.motionX = (double) ((float) world.rand.nextGaussian() * f3);
                         entityitem.motionY = (double) ((float) world.rand.nextGaussian() * f3 + 0.2F);
                         entityitem.motionZ = (double) ((float) world.rand.nextGaussian() * f3);
-                        world.spawnEntity(entityitem);
+                        world.spawnEntityInWorld(entityitem);
                     }
                 }
             }

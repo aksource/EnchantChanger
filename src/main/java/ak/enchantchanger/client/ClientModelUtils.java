@@ -45,8 +45,8 @@ import static ak.enchantchanger.client.ClientProxy.mc;
 public class ClientModelUtils {
 
     private static final Map<ResourceLocation, ModelResourceLocation> MODEL_RESOURCE_LOCATION_MAP = Maps.newHashMap();
-    static TextureAtlasSprite[] textureAtlasSpritesMateriaArray = new TextureAtlasSprite[16];
     public static ResourceLocation[] resourceLocationsMateria = new ResourceLocation[16];
+    static TextureAtlasSprite[] textureAtlasSpritesMateriaArray = new TextureAtlasSprite[16];
     static ImmutableMap<String, String> textureMapUltimate = new ImmutableMap.Builder<String, String>()
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_ULTIMATE_EMBLEM), StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_EMBLEM))
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_ULTIMATE_GRIP), StringUtils.makeObjTexturePath(TEXTURE_NAME_ULTIMATE_GRIP))
@@ -80,6 +80,13 @@ public class ClientModelUtils {
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_RUNE_GRIP), StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_GRIP))
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_RUNE_HAND), StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_HAND)).build();
 
+    static {
+        for (int i = 0; i < 16; i++) {
+            resourceLocationsMateria[i] = new ResourceLocation(MOD_ID,
+                    String.format("gui/materia%d", i));
+        }
+    }
+
     private ClientModelUtils() {}
 
     static void registerModelsOnPreInit() {
@@ -91,8 +98,6 @@ public class ClientModelUtils {
         registerCustomBlockModel(Blocks.blockMakoReactor, 1, Blocks.blockMakoReactor.getRegistryName().toString() + "_gold", MODEL_TYPE_INVENTORY);
 
         registerFluidBlockModel(Blocks.blockLifeStream, MODEL_TYPE_FLUID);
-        /* 魔晄炉用モデルローダー登録 */
-//        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
     }
 
     static void registerModels() {
@@ -139,7 +144,7 @@ public class ClientModelUtils {
     }
 
     private static void changeSwordModel(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, Item ecSword, List<ResourceLocation> rlList,
-                                           float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
+                                         float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
         ResourceLocation name = ecSword.getRegistryName();
         List<IRetexturableModel> modelList = new ArrayList<>();
         IBakedModel iconModel = modelRegistry.getObject(MODEL_RESOURCE_LOCATION_MAP.get(name));
@@ -164,20 +169,24 @@ public class ClientModelUtils {
         modelRegistry.putObject(MODEL_RESOURCE_LOCATION_MAP.get(name), new BakedModelMateria(model));
     }
 
-    static void registerCustomBlockModel(Block block, int meta, String modelLocation, String type) {
+    private static void registerCustomBlockModel(Block block, int meta, String modelLocation, String type) {
         registerCustomItemModel(Item.getItemFromBlock(block), meta, modelLocation, type);
     }
 
     /**
      * 液体ブロックモデルの登録<br />
      * preInitで行うこと
+     *
      * @param block 流体ブロック
-     * @param type fluid or gas
+     * @param type  fluid or gas
      */
-    static void registerFluidBlockModel(Block block, String type) {
+    private static void registerFluidBlockModel(Block block, String type) {
         ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(block.getRegistryName(), block.getRegistryName().toString(), type);
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new CustomItemMeshDefinition(modelResourceLocation));
+        ModelResourceLocation modelResourceLocationInv = new ModelResourceLocation(block.getRegistryName(), MODEL_TYPE_INVENTORY);
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new CustomItemMeshDefinition(modelResourceLocationInv));
         ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocation));
+        ModelLoader.setCustomStateMapper(block, new FluidStateMapperBase(modelResourceLocationInv));
     }
 
     private static void registerCustomItemModel(Item item, int meta, String modelLocation, String type) {
@@ -195,7 +204,6 @@ public class ClientModelUtils {
         mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
 //        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
     }
-
 
     private static ModelResourceLocation setCustomModelRsrcToMap(ResourceLocation objName, String modelLocation, String type) {
         return setModelRsrcToMap(objName, modelLocation, type);
@@ -231,13 +239,6 @@ public class ClientModelUtils {
         @Nonnull
         protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
             return this.modelResourceLocation;
-        }
-    }
-
-    static {
-        for (int i = 0; i < 16; i++) {
-            resourceLocationsMateria[i] = new ResourceLocation(MOD_ID,
-                    String.format("gui/materia%d", i));
         }
     }
 }

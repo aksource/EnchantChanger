@@ -106,7 +106,7 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
 
     @Override
     public void setLimitGaugeValue(int value) {
-        this.limitValue = MathHelper.clamp(value, Constants.LIMIT_GAUGE_MIN, Constants.LIMIT_GAUGE_MAX);
+        this.limitValue = MathHelper.clamp_int(value, Constants.LIMIT_GAUGE_MIN, Constants.LIMIT_GAUGE_MAX);
     }
 
     @Override

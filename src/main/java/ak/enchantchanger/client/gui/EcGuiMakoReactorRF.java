@@ -79,7 +79,7 @@ public class EcGuiMakoReactorRF/* extends GuiBaseAdv */ {
 
         this.drawTexturedModalRect(x + 81, y + 26, 176, 0, smelt, 41);
 
-        if (!tileEntity.tank.isEmpty()) {
+        if (!tileEntity.tank == null) {
             int fluidAmount = tileEntity.getFluidAmountScaled(50);
             this.drawTexturedModalRect(x + 11, y + 21 + (50 - fluidAmount), 177, 70, 9, fluidAmount);
         }

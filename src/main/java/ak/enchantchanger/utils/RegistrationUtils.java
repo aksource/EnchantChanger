@@ -1,6 +1,5 @@
 package ak.enchantchanger.utils;
 
-import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.entity.EcEntityApOrb;
 import ak.enchantchanger.entity.EcEntityExExpBottle;
 import ak.enchantchanger.entity.EcEntityMeteor;
@@ -9,7 +8,6 @@ import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -29,6 +27,7 @@ public class RegistrationUtils {
         GameRegistry.register(blockMakoReactor);
         GameRegistry.register(itemBlockMakoReactor);
         GameRegistry.register(blockLifeStream);
+        GameRegistry.register(new ItemBlock(blockLifeStream).setRegistryName(blockLifeStream.getRegistryName()));
 //        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack(fluidLifeStream.getName(), FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(itemBucketLifeStream), new ItemStack(bucket));
         GameRegistry.register(itemBucketLifeStream);
 
@@ -55,14 +54,11 @@ public class RegistrationUtils {
     }
 
     public static void registerEntities(Object mod) {
-        EntityRegistry.registerModEntity(new ResourceLocation(Constants.MOD_ID, "itemExExpBottle"),
-                EcEntityExExpBottle.class,
+        EntityRegistry.registerModEntity(EcEntityExExpBottle.class,
                 "itemExExpBottle", 0, mod, 250, 5, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(Constants.MOD_ID, "enchantmentMeteor"),
-                EcEntityMeteor.class, "enchantmentMeteor", 1, mod,
+        EntityRegistry.registerModEntity(EcEntityMeteor.class, "enchantmentMeteor", 1, mod,
                 250, 5, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(Constants.MOD_ID, "apOrb"),
-                EcEntityApOrb.class, "apOrb", 2, mod,
+        EntityRegistry.registerModEntity(EcEntityApOrb.class, "apOrb", 2, mod,
                 64, 1, false);
     }
 

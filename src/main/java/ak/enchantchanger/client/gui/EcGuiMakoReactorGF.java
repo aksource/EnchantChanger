@@ -67,16 +67,16 @@ public class EcGuiMakoReactorGF extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ) {
-        fontRenderer.drawString(I18n.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
-        fontRenderer.drawString(I18n.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal(tileEntity.getName()), 25, 3, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal(inventoryPlayer.getName()), 8, ySize - 96 + 2, 4210752);
         int x = this.guiLeft;
         int y = this.guiTop;
         if (mouseX >= x + 11 && mouseX <= x + 20 && mouseZ >= y + 21 && mouseZ <= y + 71) {
             List<String> list = new ArrayList<>();
             list.add(String.format("Mako : %dmB", tileEntity.tank.getFluidAmount()));
-            drawHoveringText(list, mouseX - x, mouseZ - y, fontRenderer);
+            drawHoveringText(list, mouseX - x, mouseZ - y, fontRendererObj);
         }
-        fontRenderer.drawString(I18n.translateToLocal(String.format("Max %d Speed/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal(String.format("Max %d Speed/t", tileEntity.getOutputMaxRFValue())), 115, 6, 4210752);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class EcGuiMakoReactorGF extends GuiContainer {
 
         this.drawTexturedModalRect(x + 81, y + 26, 176, 0, smelt, 41);
 
-        if (!tileEntity.tank.isEmpty()) {
+        if (tileEntity.tank != null) {
             int fluidAmount = tileEntity.getFluidAmountScaled(50);
             this.drawTexturedModalRect(x + 11, y + 21 + (50 - fluidAmount), 177, 70, 9, fluidAmount);
         }
@@ -102,7 +102,7 @@ public class EcGuiMakoReactorGF extends GuiContainer {
     @Override
     protected void keyTyped(char c, int keycode) {
         if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
-            Minecraft.getMinecraft().player.closeScreen();
+            Minecraft.getMinecraft().thePlayer.closeScreen();
         }
     }
 
@@ -111,7 +111,7 @@ public class EcGuiMakoReactorGF extends GuiContainer {
         super.updateScreen();
         this.prevButton.enabled = tileEntity.getOutputMaxRFValue() - EcTileEntityMakoReactor.STEP_RF_VALUE >= 10;
         this.nextButton.enabled = tileEntity.getOutputMaxRFValue() + EcTileEntityMakoReactor.STEP_RF_VALUE <= EcTileEntityMakoReactor.MAX_OUTPUT_RF_VALUE;
-        EntityPlayer player = mc.player;
+        EntityPlayer player = mc.thePlayer;
         if (!player.isEntityAlive() || player.isDead) {
             player.closeScreen();
         }

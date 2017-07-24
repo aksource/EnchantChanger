@@ -36,7 +36,7 @@ public class EcItemEnchantmentTable extends EcItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         BlockPos pos = playerIn.getPosition();
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (heldItem.hasTagCompound()
@@ -51,7 +51,7 @@ public class EcItemEnchantmentTable extends EcItem {
 
     @Override
     @Nonnull
-    public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos,
+    public EnumActionResult onItemUse(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos,
                                       @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             ItemStack stack = player.getHeldItem(hand);
@@ -63,12 +63,12 @@ public class EcItemEnchantmentTable extends EcItem {
             nbtTagCompound.setInteger(REGISTERED_POS_Y, pos.up().getY());
             nbtTagCompound.setInteger(REGISTERED_POS_Z, pos.getZ());
             if (worldIn.isRemote) {
-                player.sendMessage(
+                player.addChatMessage(
                         new TextComponentString(
                                 String.format("registered position x:%d, y:%d, z:%d!!", pos.getX(), pos.up().getY(), pos.getZ())));
             }
         }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return super.onItemUse(itemStack, player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class EcItemEnchantmentTable extends EcItem {
     public void openEnchantmentContainerEvent(PlayerContainerEvent.Open event) {
         Container container = event.getEntityPlayer().openContainer;
         ItemStack itemStack = event.getEntityPlayer().getHeldItemMainhand();
-        if (container instanceof ContainerEnchantment && !itemStack.isEmpty() && itemStack.getItem() instanceof EcItemEnchantmentTable) {
+        if (container instanceof ContainerEnchantment && itemStack != null && itemStack.getItem() instanceof EcItemEnchantmentTable) {
             event.setResult(Event.Result.ALLOW);
         }
     }
@@ -101,7 +101,7 @@ public class EcItemEnchantmentTable extends EcItem {
         @Override
         @Nonnull
         public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
-            return new ContainerEnchantment(playerInventory, playerIn.world, pos);
+            return new ContainerEnchantment(playerInventory, playerIn.worldObj, pos);
         }
 
         @Override

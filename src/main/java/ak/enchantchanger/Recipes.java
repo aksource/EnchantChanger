@@ -137,7 +137,7 @@ public class Recipes {
     private static void addOreDictRecipe(String OreDictName) {
         ItemStack makoReactorController;
         List<ItemStack> ores = OreDictionary.getOres(OreDictName);
-        if (ores.isEmpty()) return;
+        if (ores == null) return;
         for (ItemStack itemStack : ores) {
             makoReactorController = new ItemStack(ak.enchantchanger.utils.Blocks.blockMakoReactor, 1, 0);
             makoReactorController.setTagCompound(new NBTTagCompound());

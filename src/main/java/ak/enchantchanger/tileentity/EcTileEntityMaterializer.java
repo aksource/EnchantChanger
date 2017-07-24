@@ -4,15 +4,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
-    private final NonNullList<ItemStack> materializerItemstacks = NonNullList.withSize(7, ItemStack.EMPTY);
+    private final List<ItemStack> materializerItemstacks = new ArrayList<>(7);
 
     public EcTileEntityMaterializer() {}
 
@@ -23,30 +24,28 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
 
     @Override
-    @Nonnull
     public ItemStack getStackInSlot(int slot) {
         return materializerItemstacks.get(slot);
     }
 
     @Override
-    public void setInventorySlotContents(int slot, @Nonnull ItemStack stack) {
+    public void setInventorySlotContents(int slot, ItemStack stack) {
         materializerItemstacks.set(slot, stack);
-        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
-            stack.setCount(getInventoryStackLimit());
+        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+            stack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    @Nonnull
     public ItemStack decrStackSize(int slot, int amt) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty()) {
-            if (stack.getCount() <= amt) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+        if (stack != null) {
+            if (stack.stackSize <= amt) {
+                setInventorySlotContents(slot, null);
             } else {
                 stack = stack.splitStack(amt);
-                if (stack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                if (stack.stackSize == 0) {
+                    setInventorySlotContents(slot, null);
                 }
             }
         }
@@ -55,11 +54,10 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
 
 
     @Override
-    @Nonnull
     public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty()) {
-            setInventorySlotContents(slot, ItemStack.EMPTY);
+        if (stack != null) {
+            setInventorySlotContents(slot, null);
         }
         return stack;
     }
@@ -70,8 +68,8 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean isUsableByPlayer(@Nonnull EntityPlayer player) {
-        return world.getTileEntity(this.getPos()) == this &&
+    public boolean isUseableByPlayer(@Nonnull EntityPlayer player) {
+        return worldObj.getTileEntity(this.getPos()) == this &&
                 player.getDistanceSq(this.getPos().add(0.5D, 0.5D, 0.5D)) < 64;
     }
 
@@ -122,10 +120,5 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
     @Nonnull
     public ITextComponent getDisplayName() {
         return new TextComponentString(getName());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return materializerItemstacks.stream().filter(itemStack -> !itemStack.isEmpty()).count() > 0;
     }
 }

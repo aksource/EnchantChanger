@@ -31,12 +31,10 @@ public class EcSlotItemToEnchant extends Slot {
     }
 
     @Override
-    @Nonnull
-    public ItemStack onTake(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
-        ItemStack taken = super.onTake(thePlayer, stack);
+    public void onPickupFromSlot(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
+        super.onPickupFromSlot(thePlayer, stack);
         for (int i = 0; i < EcContainerMaterializer.RESULT_SLOT_NUM; i++) {
-            this.materializeResult.setInventorySlotContents(i, ItemStack.EMPTY);
+            this.materializeResult.setInventorySlotContents(i, null);
         }
-        return taken;
     }
 }

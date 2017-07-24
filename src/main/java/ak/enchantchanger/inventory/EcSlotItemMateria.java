@@ -30,10 +30,8 @@ public class EcSlotItemMateria extends Slot {
     }
 
     @Override
-    @Nonnull
-    public ItemStack onTake(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
+    public void onPickupFromSlot(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
         this.materializeResult.markDirty();
         this.materializeSource.markDirty();
-        return super.onTake(thePlayer, stack);
     }
 }

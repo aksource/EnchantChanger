@@ -7,6 +7,7 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * ライフストリーム入りバケツクラス
@@ -25,7 +26,7 @@ public class EcItemBucketLifeStream extends ItemBucket {
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getContainerItem(@Nonnull ItemStack itemStack) {
         return new ItemStack(Items.BUCKET);
     }

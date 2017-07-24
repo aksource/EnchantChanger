@@ -9,7 +9,7 @@
     "url": "http://forum.minecraftuser.jp/viewtopic.php?f=13&t=6672",
     "authorList": ["A.K."],
     "credits": "",
-    "requiredMods": ["Forge"],
-    "dependencies": [""]
+    "requiredMods": ["forge"],
+    "dependencies": []
 }
 ]

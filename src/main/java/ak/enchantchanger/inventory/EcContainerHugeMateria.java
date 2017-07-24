@@ -33,13 +33,13 @@ public class EcContainerHugeMateria extends Container {
 
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer player) {
-        return this.tileEntity.isUsableByPlayer(player);
+        return this.tileEntity.isUseableByPlayer(player);
     }
 
     @Override
     public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
-        listener.sendWindowProperty(this, 0, this.tileEntity.materializingTime);
+        listener.sendProgressBarUpdate(this, 0, this.tileEntity.materializingTime);
     }
 
     public void detectAndSendChanges() {
@@ -48,7 +48,7 @@ public class EcContainerHugeMateria extends Container {
         for (IContainerListener listener : this.listeners) {
 
             if (this.lastMaterializingTime != this.tileEntity.materializingTime) {
-                listener.sendWindowProperty(this, 0, this.tileEntity.materializingTime);
+                listener.sendProgressBarUpdate(this, 0, this.tileEntity.materializingTime);
             }
 
         }
@@ -82,9 +82,8 @@ public class EcContainerHugeMateria extends Container {
     }
 
     @Override
-    @Nonnull
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
-        ItemStack retItem = ItemStack.EMPTY;
+        ItemStack retItem = null;
         Slot slot = this.inventorySlots.get(index);
 
         if (slot.getHasStack()) {
@@ -93,39 +92,39 @@ public class EcContainerHugeMateria extends Container {
 
             if (index >= 0 && index < 5) {
                 if (!this.mergeItemStack(itemstack, 5, 5 + 36, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             } else {
                 if (itemstack.getItem() instanceof EcItemMasterMateria) {
                     if (!this.mergeItemStack(itemstack, 0, 1, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 } else if (itemstack.getItem() instanceof EcItemMateria && itemstack.getItemDamage() == 0) {
                     if (!this.mergeItemStack(itemstack, 1, 2, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 } else if (tileEntity.isBottle(itemstack)) {
                     if (!this.mergeItemStack(itemstack, 2, 3, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 } else {
                     if (!this.mergeItemStack(itemstack, 3, 4, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 }
             }
 
-            if (itemstack.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (itemstack.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack.getCount() == retItem.getCount()) {
-                return ItemStack.EMPTY;
+            if (itemstack.stackSize == retItem.stackSize) {
+                return null;
             }
 
-            retItem = slot.onTake(playerIn, itemstack);
+            slot.onPickupFromSlot(playerIn, itemstack);
         }
 
         return retItem;

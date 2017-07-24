@@ -31,24 +31,22 @@ public class EcSlotEnchantedItem extends Slot {
     }
 
     @Override
-    @Nonnull
-    public ItemStack onTake(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
+    public void onPickupFromSlot(@Nonnull EntityPlayer thePlayer, @Nonnull ItemStack stack) {
         for (int i = 0; i < EcContainerMaterializer.SourceSlotNum; i++) {
             this.materializeSource.decrStackSize(i, 1);
         }
         InventoryPlayer inventoryPlayer = thePlayer.inventory;
         for (int i = 0; i < EcContainerMaterializer.RESULT_SLOT_NUM; i++) {
             ItemStack SlotStack = this.materializeResult.getStackInSlot(i);
-            if (SlotStack.isEmpty()) {
+            if (SlotStack == null) {
                 continue;
             }
             if (inventoryPlayer.addItemStackToInventory(SlotStack.copy())) {
-                this.materializeResult.setInventorySlotContents(i, ItemStack.EMPTY);
+                this.materializeResult.setInventorySlotContents(i, null);
             } else {
                 thePlayer.dropItem(SlotStack.copy(), false);
-                this.materializeResult.setInventorySlotContents(i, ItemStack.EMPTY);
+                this.materializeResult.setInventorySlotContents(i, null);
             }
         }
-        return super.onTake(thePlayer, stack);
     }
 }

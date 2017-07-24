@@ -80,13 +80,13 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn,
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn,
                                                     @Nonnull EnumHand handIn) {
         if (worldIn.isRemote && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
             PacketHandler.INSTANCE.sendToServer(new MessageKeyPressed(Constants.CtrlKEY));
         }
         doMagic(playerIn.getHeldItem(handIn), worldIn, playerIn);
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.onItemRightClick(itemStack, worldIn, playerIn, handIn);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
         if (limitBreakId == Constants.LIMIT_BREAK_POWER_UP) {
             doPowerUp(player);
         }
-        player.sendMessage(new TextComponentString("LIMIT BREAK!!"));
+        player.addChatMessage(new TextComponentString("LIMIT BREAK!!"));
     }
 
     private void doOmniSlashFirst(EntityPlayer player) {

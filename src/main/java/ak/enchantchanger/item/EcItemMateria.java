@@ -85,7 +85,7 @@ public class EcItemMateria extends EcItem {
 //                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
 //                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
 //            } else {
-//                entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
+//                entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
 //            }
             entityplayer.fallDistance = 0.0F;
             if (telepoDim) {
@@ -98,7 +98,7 @@ public class EcItemMateria extends EcItem {
                         entityplayer.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
             }
         }
-        entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
+        entityplayer.setPositionAndUpdate(vector.xCoord, vector.yCoord, vector.zCoord);
     }
 
 //	public void addMateriaLv(ItemStack item, int addLv)
@@ -150,9 +150,9 @@ public class EcItemMateria extends EcItem {
     public static Vec3d setTeleportPoint(World world, EntityPlayer entityplayer) {
         double var1 = 1.0D;
         double distLimit = 150.0D;
-        double viewX = entityplayer.getLookVec().x;
-        double viewY = entityplayer.getLookVec().y;
-        double viewZ = entityplayer.getLookVec().z;
+        double viewX = entityplayer.getLookVec().xCoord;
+        double viewY = entityplayer.getLookVec().yCoord;
+        double viewZ = entityplayer.getLookVec().zCoord;
 /*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
         double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
         double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
@@ -191,8 +191,8 @@ public class EcItemMateria extends EcItem {
                 entityplayer.getEntityBoundingBox().expand(5D, 5D, 5D));
         for (EntityLivingBase entityLivingBase : EntityList) {
             if (entityLivingBase.isEntityUndead()) {
-                int var1 = MathHelper.floor(entityLivingBase.getMaxHealth() / 2);
-                entityLivingBase.attackEntityFrom(DamageSource.MAGIC, var1);
+                int var1 = MathHelper.floor_double(entityLivingBase.getMaxHealth() / 2);
+                entityLivingBase.attackEntityFrom(DamageSource.magic, var1);
             }
         }
     }
@@ -204,7 +204,7 @@ public class EcItemMateria extends EcItem {
         decreasePlayerFood(entityplayer, 6);
         Vec3d point = setTeleportPoint(world, entityplayer);
         if (point != null && !world.isRemote)
-            world.spawnEntity(new EcEntityMeteor(world, point.x, (double) 200, point.z, 0.0D,
+            world.spawnEntityInWorld(new EcEntityMeteor(world, point.xCoord, (double) 200, point.zCoord, 0.0D,
                     -1D, 0D, 0.0F, 0.0F));
     }
 
@@ -215,7 +215,7 @@ public class EcItemMateria extends EcItem {
         decreasePlayerFood(entityplayer, 6);
         Vec3d EndPoint = setTeleportPoint(world, entityplayer);
         if (EndPoint != null)
-            world.spawnEntity(new EntityLightningBolt(world, EndPoint.x, EndPoint.y, EndPoint.z, false));
+            world.spawnEntityInWorld(new EntityLightningBolt(world, EndPoint.xCoord, EndPoint.yCoord, EndPoint.zCoord, false));
     }
 
     private static void decreasePlayerFood(EntityPlayer player, int dec) {
@@ -241,10 +241,9 @@ public class EcItemMateria extends EcItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        ItemStack itemStack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         // Clientかスタック数が>1の場合はそのままリターン
-        if (worldIn.isRemote || itemStack.getCount() > 1)
+        if (worldIn.isRemote || itemStack.stackSize > 1)
             return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
 
         if (itemStack.getItemDamage() == 0 && itemStack.isItemEnchanted()) {
@@ -260,7 +259,7 @@ public class EcItemMateria extends EcItem {
                     if (playerIn.isSneaking()) {
                         boolean ggmode = status.isGgMode();
                         status.setGgMode(!ggmode);
-                        playerIn.sendMessage(new TextComponentString("Great Gospel Mode " + status.isGgMode()));
+                        playerIn.addChatMessage(new TextComponentString("Great Gospel Mode " + status.isGgMode()));
                     } else {
                         doHoly(worldIn, playerIn);
                     }
@@ -289,7 +288,7 @@ public class EcItemMateria extends EcItem {
                     return;
                 case 7:
                     doHaste(player, entity);
-                    player.sendMessage(new TextComponentString("Haste!"));
+                    player.addChatMessage(new TextComponentString("Haste!"));
                     return;
                 default:
             }
@@ -305,7 +304,7 @@ public class EcItemMateria extends EcItem {
                     entity.addPotionEffect(new PotionEffect(potion, 20 * 60 * ConfigurationUtils.minutesMateriaEffects,
                             lv));
                     player.addExperienceLevel(-LevelUPEXP(item, false));
-                    player.sendMessage(new TextComponentString(EntityName + " gets " + potion.getName()));
+                    player.addChatMessage(new TextComponentString(EntityName + " gets " + potion.getName()));
                     decreasePlayerFood(player, 6);
                 }
             }
@@ -326,7 +325,7 @@ public class EcItemMateria extends EcItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull List<ItemStack> subItems) {
         subItems.add(new ItemStack(this, 1, 0));
         ItemStack stack1, stack2, /*stack3, */stack4;
         for (Enchantment enchantment : Enchantment.REGISTRY) {

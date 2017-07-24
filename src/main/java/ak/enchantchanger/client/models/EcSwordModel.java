@@ -5,10 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -111,7 +108,7 @@ public class EcSwordModel implements IBakedModel {
         @Nonnull
         public IBakedModel handleItemState(@Nonnull IBakedModel originalModel, @Nonnull ItemStack stack,
                                            @Nullable World world, @Nullable EntityLivingBase entity) {
-            if (!stack.isEmpty() && stack.getItem() instanceof ICustomModelItem) {
+            if (stack != null && stack.getItem() instanceof ICustomModelItem) {
                 ICustomModelItem modelItem = (ICustomModelItem) stack.getItem();
                 return modelItem.getPresentModel(stack, this.modelList);
             }
@@ -209,8 +206,12 @@ public class EcSwordModel implements IBakedModel {
                     matrix4f = TRSRTransformation.mul(translationThirdPersonLeft, rotateThirdPersonLeft, scaleThirdPerson, null);
                     model = this.handHeldModel;
                     break;
+                case GROUND:
+                    matrix4f = null;
+                    model = this.guiModel;
+                    break;
                 default:
-                    model = this.handHeldModel;
+                    model = this.guiModel;
             }
             return Pair.of(model, matrix4f);
         }

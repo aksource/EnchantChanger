@@ -11,7 +11,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -47,8 +46,7 @@ public class EcRecipeMasterMateria implements IRecipe {
                         Enchantments.BANE_OF_ARTHROPODS,
                         Enchantments.KNOCKBACK,
                         Enchantments.FIRE_ASPECT,
-                        Enchantments.LOOTING,
-                        Enchantments.field_191530_r// sweeping
+                        Enchantments.LOOTING
                 ));
         RECIPE_MAP.put(MasterMateriaType.DIGGING,
                 Sets.newHashSet(
@@ -66,14 +64,14 @@ public class EcRecipeMasterMateria implements IRecipe {
                 ));
     }
 
-    private ItemStack output = ItemStack.EMPTY;
+    private ItemStack output = null;
 
     @Override
     public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World worldIn) {
         Set<Enchantment> enchantmentSet = Sets.newHashSet();
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack craftItem = inv.getStackInSlot(i);
-            if (craftItem.isEmpty()) continue;
+            if (craftItem == null) continue;
             if (craftItem.getItem() instanceof EcItemMateria && craftItem.isItemEnchanted()) {
                 NBTTagCompound nbtTagCompound = (NBTTagCompound) craftItem.getEnchantmentTagList().get(0);
                 Enchantment enchantment = Enchantment.getEnchantmentByID(nbtTagCompound.getShort(Constants.NBT_KEY_ENCHANT_ID));
@@ -88,7 +86,6 @@ public class EcRecipeMasterMateria implements IRecipe {
     }
 
     @Override
-    @Nonnull
     public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
         return this.output.copy();
     }
@@ -99,7 +96,6 @@ public class EcRecipeMasterMateria implements IRecipe {
     }
 
     @Override
-    @Nonnull
     public ItemStack getRecipeOutput() {
         return this.output;
     }
@@ -117,12 +113,12 @@ public class EcRecipeMasterMateria implements IRecipe {
 
     @Override
     @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
-        NonNullList<ItemStack> nonNullList = NonNullList.withSize(inventoryCrafting.getSizeInventory(), ItemStack.EMPTY);
+    public ItemStack[] getRemainingItems(@Nonnull InventoryCrafting inventoryCrafting) {
+        ItemStack[] nonNullList = new ItemStack[inventoryCrafting.getSizeInventory()];
 
-        for (int i = 0; i < nonNullList.size(); ++i) {
+        for (int i = 0; i < nonNullList.length; ++i) {
             ItemStack itemstack = inventoryCrafting.getStackInSlot(i);
-            nonNullList.set(i, net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack));
+            nonNullList[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
         }
 
         return nonNullList;

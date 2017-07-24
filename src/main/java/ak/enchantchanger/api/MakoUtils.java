@@ -40,10 +40,6 @@ public class MakoUtils {
         ItemStack copyItemWild = itemStack.copy();
         copyItemWild.setItemDamage(OreDictionary.WILDCARD_VALUE);
         return MAKO_AMOUNT_MAP.containsKey(ItemStackWrapper.getItemStackWrapper(copyItemWild)) || MAKO_AMOUNT_MAP.containsKey(ItemStackWrapper.getItemStackWrapper(itemStack));
-//        return itemStack.getItem() instanceof EcItemBucketLifeStream
-//                || itemStack.getItem() instanceof EcItemMateria
-//                || itemStack.getItem() instanceof EcItemMasterMateria
-//                || isChalcedony(itemStack);
     }
 
     public static boolean isChalcedony(ItemStack itemStack) {

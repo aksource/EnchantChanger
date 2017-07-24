@@ -43,7 +43,7 @@ public class Blocks {
                 .setLightOpacity(0)
                 .setUnlocalizedName(Constants.REG_BLOCK_HUGE_MATERIA);
         fluidLifeStream = new Fluid(Constants.REG_FLUID_LIFE_STREAM, LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
-        FluidRegistry.registerFluid(Blocks.fluidLifeStream);
+        FluidRegistry.registerFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako)
                 .setRegistryName(Constants.REG_BLOCK_LIFE_STREAM).setUnlocalizedName(Constants.REG_BLOCK_LIFE_STREAM);
         blockMakoReactor = new EcBlockMakoReactor()

@@ -99,8 +99,8 @@ public class LivingEventHooks {
         if (!event.getEntityLiving().getEntityWorld().isRemote) {
             EntityPlayer player;
             ItemStack itemStack;
-            if (event.getSource().getDamageType().equals("player") && event.getSource().getTrueSource() instanceof EntityPlayer) {
-                player = (EntityPlayer) event.getSource().getTrueSource();
+            if (event.getSource().getDamageType().equals("player") && event.getSource().getSourceOfDamage() instanceof EntityPlayer) {
+                player = (EntityPlayer) event.getSource().getSourceOfDamage();
                 addLimitGaugeValue(player);
             }
 
@@ -113,7 +113,7 @@ public class LivingEventHooks {
 
     private void addLimitGaugeValue(EntityPlayer player) {
         ItemStack itemStack = player.getHeldItemMainhand();
-        if (!itemStack.isEmpty() && itemStack.getItem() instanceof EcItemSword) {
+        if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
             CapabilityPlayerStatusHandler.getPlayerStatusHandler(player).addLimitGaugeValue(1);
             //PacketHandler.INSTANCE.sendTo(new MessagePlayerProperties(player), (EntityPlayerMP) player);
         }
@@ -123,20 +123,20 @@ public class LivingEventHooks {
     @SuppressWarnings("unused")
     public void onLivingDeathEvent(LivingDeathEvent event) {
         DamageSource killer = event.getSource();
-        if (event.getEntityLiving() instanceof EntityLiving && killer.getTrueSource() != null && killer.getTrueSource() instanceof EntityPlayer)
-            spawnAPOrb((EntityLiving) event.getEntityLiving(), (EntityPlayer) killer.getTrueSource());
+        if (event.getEntityLiving() instanceof EntityLiving && killer.getSourceOfDamage() != null && killer.getSourceOfDamage() instanceof EntityPlayer)
+            spawnAPOrb((EntityLiving) event.getEntityLiving(), (EntityPlayer) killer.getSourceOfDamage());
     }
 
     private void spawnAPOrb(@Nonnull EntityLiving dead, @Nonnull EntityPlayer killer) {
         if (ConfigurationUtils.enableAPSystem
-                && !killer.getHeldItemMainhand().isEmpty()
+                && killer.getHeldItemMainhand() != null
                 && killer.getHeldItemMainhand().isItemEnchanted()
                 && !dead.getEntityWorld().isRemote) {
             int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
             long lastTime = CapabilityPlayerStatusHandler.getPlayerStatusHandler(killer).getApCoolingTime();
             if (lastTime != 0 && lastTime - dead.getEntityWorld().getTotalWorldTime() < 20) exp = 2;
             if (exp > 0) {
-                dead.getEntityWorld().spawnEntity(new EcEntityApOrb(dead.getEntityWorld(), dead.posX, dead.posY,
+                dead.getEntityWorld().spawnEntityInWorld(new EcEntityApOrb(dead.getEntityWorld(), dead.posX, dead.posY,
                         dead.posZ, exp / 2));
                 CapabilityPlayerStatusHandler.getPlayerStatusHandler(killer).setApCoolingTime(dead.getEntityWorld().getTotalWorldTime());
             }
@@ -167,7 +167,7 @@ public class LivingEventHooks {
             return;
         }
         ItemStack playerItem = player.getHeldItemMainhand();
-        if (!playerItem.isEmpty() && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
+        if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 2) {
             player.capabilities.disableDamage = true;
             if (MpCount(1, mpTermGG))
                 player.getFoodStats().addStats(-1, 1.0F);
@@ -182,13 +182,13 @@ public class LivingEventHooks {
                 return;
             }
             ItemStack playerItem = player.getHeldItemMainhand();
-            if (!playerItem.isEmpty() && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
+            if (playerItem != null && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
                 List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(
                         ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
                 for (Object aEntityList : EntityList) {
                     Entity entity = (Entity) aEntityList;
                     if (entity instanceof EntityLiving) {
-                        entity.attackEntityFrom(DamageSource.GENERIC, 1);
+                        entity.attackEntityFrom(DamageSource.generic, 1);
                         player.getFoodStats().addStats(1, 1.0f);
                     }
                 }

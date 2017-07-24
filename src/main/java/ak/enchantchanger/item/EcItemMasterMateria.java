@@ -4,10 +4,10 @@ import ak.enchantchanger.api.MasterMateriaType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class EcItemMasterMateria extends EcItem {
 
@@ -23,7 +23,7 @@ public class EcItemMasterMateria extends EcItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull List<ItemStack> subItems) {
         for (MasterMateriaType type: MasterMateriaType.values()) {
             subItems.add(new ItemStack(this, 1, type.getMeta()));
         }

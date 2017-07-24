@@ -7,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
+
 public class EcInventoryCloudSword extends InventoryBasic {
     public ItemStack sword;
 
@@ -31,7 +33,7 @@ public class EcInventoryCloudSword extends InventoryBasic {
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(@Nonnull EntityPlayer player) {
         super.openInventory(player);
         if (!sword.hasTagCompound()) {
             sword.setTagCompound(new NBTTagCompound());
@@ -40,7 +42,7 @@ public class EcInventoryCloudSword extends InventoryBasic {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(@Nonnull EntityPlayer player) {
         super.closeInventory(player);
         writeToNBT(sword.getTagCompound());
     }
@@ -53,7 +55,7 @@ public class EcInventoryCloudSword extends InventoryBasic {
             int slot = var4.getByte("Slot") & 255;
 
             if (slot >= 0 && slot < this.getSizeInventory()) {
-                this.setInventorySlotContents(slot, new ItemStack(var4));
+                this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(var4));
             }
         }
     }
@@ -62,7 +64,7 @@ public class EcInventoryCloudSword extends InventoryBasic {
         NBTTagList tagList = new NBTTagList();
 
         for (int var3 = 0; var3 < this.getSizeInventory(); ++var3) {
-            if (!this.getStackInSlot(var3).isEmpty()) {
+            if (this.getStackInSlot(var3) != null) {
                 NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) var3);
                 this.getStackInSlot(var3).writeToNBT(var4);

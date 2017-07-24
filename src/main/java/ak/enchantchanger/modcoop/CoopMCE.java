@@ -15,13 +15,14 @@ public class CoopMCE {
     private static final long TERM_EVENT = 1200L;
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer
-                && ((EntityPlayer) event.getEntityLiving()).world.getTotalWorldTime() % TERM_EVENT == 0L) {
+                && ((EntityPlayer) event.getEntityLiving()).worldObj.getTotalWorldTime() % TERM_EVENT == 0L) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             IPlayerStatusHandler data = CapabilityPlayerStatusHandler.getPlayerStatusHandler(player);
             long startTime = data.getSoldierWorkStartTime();
-            long nowTime = player.world.getWorldTime();
+            long nowTime = player.worldObj.getWorldTime();
             if (startTime == 0) {
                 data.setSoldierWorkStartTime(nowTime);
             }

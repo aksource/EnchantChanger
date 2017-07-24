@@ -26,7 +26,7 @@ public class EcGuiMakoReactorButton extends GuiButton {
         if (this.visible) {
             mc.getTextureManager().bindTexture(EcGuiMakoReactor.GUI);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            boolean flag = x >= this.x && y >= this.y && x < this.x + this.width && y < this.y + this.height;
+            boolean flag = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
             int k = 120;
             int l = 176;
 
@@ -40,7 +40,7 @@ public class EcGuiMakoReactorButton extends GuiButton {
                 k += this.height;
             }
 
-            this.drawTexturedModalRect(this.x, this.y, l, k, this.width, this.height);
+            this.drawTexturedModalRect(this.xPosition, this.yPosition, l, k, this.width, this.height);
         }
     }
 }

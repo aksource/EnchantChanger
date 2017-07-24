@@ -18,17 +18,13 @@ public class EcGuiMaterializer extends GuiContainer {
     private static final ResourceLocation GUI = new ResourceLocation(Constants.EcAssetsDomain, Constants.TEXTURES_GUI_MATERIALIZER_PNG);
 
     public EcGuiMaterializer(World world, InventoryPlayer inventoryPlayer) {
-        //the container is instanciated and passed to the superclass for handling
         super(new EcContainerMaterializer(world, inventoryPlayer));
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        //draw text and stuff here
-        //the parameters for drawString are: string, x, y, color
-        fontRenderer.drawString(I18n.translateToLocal("container.materializer"), 8, 6, 4210752);
-        //draws "Inventory" or your regional equivalent
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal("container.materializer"), 8, 6, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 
     @Override
@@ -43,13 +39,13 @@ public class EcGuiMaterializer extends GuiContainer {
 
     protected void keyTyped(char c, int keycode) {
         if (keycode == 1 || keycode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
-            Minecraft.getMinecraft().player.closeScreen();
+            Minecraft.getMinecraft().thePlayer.closeScreen();
         }
     }
 
     public void updateScreen() {
         super.updateScreen();
-        EntityPlayer player = mc.player;
+        EntityPlayer player = mc.thePlayer;
         if (!player.isEntityAlive() || player.isDead) {
             player.closeScreen();
         }

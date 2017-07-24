@@ -14,8 +14,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,8 +52,7 @@ public class EcItemCloudSwordCore extends EcItemSword {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        ItemStack heldItem = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack heldItem, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         if (playerIn.isSneaking()) {
             if (!worldIn.isRemote) {
                 invertActive(heldItem);
@@ -103,7 +100,7 @@ public class EcItemCloudSwordCore extends EcItemSword {
             if (i == CurrentSlot)
                 continue;
             sword = player.inventory.getStackInSlot(i);
-            if (!sword.isEmpty() && sword.getItem() instanceof ItemSword) {
+            if (sword != null && sword.getItem() instanceof ItemSword) {
                 Index++;
             }
         }
@@ -117,16 +114,11 @@ public class EcItemCloudSwordCore extends EcItemSword {
             if (i == CurrentSlot)
                 continue;
             sword = player.inventory.getStackInSlot(i);
-            if (!sword.isEmpty() && sword.getItem() instanceof ItemSword && !(sword.getItem() instanceof EcItemSword)) {
+            if (sword != null && sword.getItem() instanceof ItemSword && !(sword.getItem() instanceof EcItemSword)) {
                 this.nowAttackingSwordSlot = i;
                 this.attackTargetEntityWithTheItem(entity, player, sword, true);
             }
         }
-    }
-
-    public void destroyTheItem(EntityPlayer player, ItemStack orig, EnumHand hand) {
-        MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, orig, hand));
-        player.inventory.setInventorySlotContents(this.nowAttackingSwordSlot, ItemStack.EMPTY);
     }
 
     public void unionSword(EntityPlayer player, IInventory swordData) {
@@ -137,9 +129,9 @@ public class EcItemCloudSwordCore extends EcItemSword {
             if (i == CurrentSlot)
                 continue;
             sword = player.inventory.getStackInSlot(i);
-            if (!sword.isEmpty() && sword.getItem() instanceof ItemSword && !(sword.getItem() instanceof EcItemSword) && Index < 5) {
+            if (sword != null && sword.getItem() instanceof ItemSword && !(sword.getItem() instanceof EcItemSword) && Index < 5) {
                 swordData.setInventorySlotContents(Index, sword);
-                player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                player.inventory.setInventorySlotContents(i, null);
                 Index++;
             }
         }

@@ -65,7 +65,7 @@ public class EcContainerMateriaWindow extends Container {
 
     private void initMateriaInventory() {
         ItemStack item = this.invPlayer.getStackInSlot(this.openSlotNum);
-        if (item.isEmpty()) return;
+        if (item == null) return;
         ItemStack materia;
         int slotnum = 0;
         if (EnchantmentUtils.hasMagic(item)) {
@@ -97,7 +97,7 @@ public class EcContainerMateriaWindow extends Container {
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer player) {
         ItemStack item = player.getHeldItemMainhand();
-        return !item.isEmpty()
+        return item != null
                 && !(item.getItem() instanceof EcItemMateria || item.getItem() instanceof EcItemMasterMateria)
                 && !(EnchantChanger.loadMTH && item.getItem() instanceof ItemMultiToolHolder);
     }
@@ -139,9 +139,8 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     @Override
-    @Nonnull
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
-        ItemStack retItemStack = ItemStack.EMPTY;
+        ItemStack retItemStack = null;
         Slot slot = this.getSlot(index);
 
         if (slot.getHasStack()) {
@@ -150,33 +149,33 @@ public class EcContainerMateriaWindow extends Container {
 
             if (index >= 0 && index < MAX_SLOT) {
                 if (!this.mergeItemStack(itemstack, MAX_SLOT, MAX_SLOT + 36, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
             } else {
                 if (itemstack.getItem() instanceof EcItemMateria) {
                     for (int i = 0; i < MAX_SLOT; i++) {
                         if (!(this.getSlot(i)).getHasStack() && this.checkEnchantmentValid(itemstack)) {
                             ItemStack copyItem = itemstack.copy();
-                            copyItem.setCount(1);
+                            copyItem.stackSize = 1;
                             (this.getSlot(i)).putStack(copyItem);
-                            itemstack.shrink(1);
+                            itemstack.stackSize--;
                             break;
                         }
                     }
                 }
             }
 
-            if (itemstack.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (itemstack.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack.getCount() == retItemStack.getCount()) {
-                return ItemStack.EMPTY;
+            if (itemstack.stackSize == retItemStack.stackSize) {
+                return null;
             }
 
-            slot.onTake(playerIn, itemstack);
+            slot.onPickupFromSlot(playerIn, itemstack);
         }
 
         return retItemStack;
@@ -195,10 +194,9 @@ public class EcContainerMateriaWindow extends Container {
     }
 
     @Override
-    @Nonnull
     public ItemStack slotClick(int slotId, int dragType, @Nonnull ClickType clickTypeIn, @Nonnull EntityPlayer player) {
         if (slotId == MAX_SLOT + this.openSlotNum) {
-            return ItemStack.EMPTY;
+            return null;
         }
         return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
@@ -210,7 +208,7 @@ public class EcContainerMateriaWindow extends Container {
         Pair<Enchantment, Integer> enchData;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
-            if (!slotItem.isEmpty() && EnchantmentUtils.isEnchanted(slotItem)) {
+            if (slotItem != null && EnchantmentUtils.isEnchanted(slotItem)) {
                 enchData = Pair.of(EnchantmentUtils.getEnchantmentFromItemStack(slotItem), EnchantmentUtils.getEnchantmentLv(slotItem));
                 list.add(enchData);
             }
@@ -223,7 +221,7 @@ public class EcContainerMateriaWindow extends Container {
         ItemStack slotItem;
         for (int i = 0; i < this.materiaInventory.getSizeInventory(); i++) {
             slotItem = this.materiaInventory.getStackInSlot(i);
-            if (!slotItem.isEmpty() && slotItem.getItemDamage() > 0) {
+            if (slotItem != null && slotItem.getItemDamage() > 0) {
                 list.add((byte) slotItem.getItemDamage());
             }
         }

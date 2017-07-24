@@ -46,7 +46,7 @@ public class EcItemCloudSword extends EcItemSword {
         IInventory swordData = getInventoryFromItemStack(stack);
         if (slot == 5/* || swordData == null*/)
             return super.onLeftClickEntity(stack, player, entity);
-        if (!swordData.getStackInSlot(slot).isEmpty()) {
+        if (swordData.getStackInSlot(slot) != null) {
             this.attackTargetEntityWithTheItem(entity, player, swordData.getStackInSlot(slot), false);
             swordData.markDirty();
             return true;
@@ -56,13 +56,13 @@ public class EcItemCloudSword extends EcItemSword {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         if (playerIn.isSneaking()) {
             ItemStack heldItem = playerIn.getHeldItem(handIn);
             this.doCastOffSwords(heldItem, worldIn, playerIn);
             return ActionResult.newResult(EnumActionResult.SUCCESS, this.makeCloudSwordCore(heldItem));
         } else {
-            return super.onItemRightClick(worldIn, playerIn, handIn);
+            return super.onItemRightClick(itemStack, worldIn, playerIn, handIn);
         }
     }
 
@@ -85,21 +85,21 @@ public class EcItemCloudSword extends EcItemSword {
             for (int i = 0; i < 5; i++) {
                 int j;
                 for (j = 0; j < 9; j++) {
-                    if (player.inventory.getStackInSlot(j).isEmpty()) {
+                    if (player.inventory.getStackInSlot(j) == null) {
                         player.inventory.setInventorySlotContents(j, swordData.getStackInSlot(i));
                         break;
                     }
                 }
                 if (j == 9)
                     player.dropItem(swordData.getStackInSlot(i), false);
-                swordData.setInventorySlotContents(i, net.minecraft.item.ItemStack.EMPTY);
+                swordData.setInventorySlotContents(i, null);
             }
         }
     }
 
     public void destroyTheItem(EntityPlayer player, ItemStack orig, EnumHand hand) {
         IInventory swordData = getInventoryFromItemStack(orig);
-        swordData.setInventorySlotContents(getSlotNumFromItemStack(orig), ItemStack.EMPTY);
+        swordData.setInventorySlotContents(getSlotNumFromItemStack(orig), null);
         MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, orig, hand));
         this.doCastOffSwords(orig, player.getEntityWorld(), player);
         player.inventory.setInventorySlotContents(player.inventory.currentItem,

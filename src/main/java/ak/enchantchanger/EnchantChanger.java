@@ -36,7 +36,7 @@ import static ak.enchantchanger.utils.RegistrationUtils.*;
 @Mod(modid = Constants.MOD_ID,
         name = Constants.MOD_NAME,
         version = Constants.MOD_VERSION,
-        dependencies = "required-after:forge",
+        dependencies = "required-after:Forge",
         useMetadata = true,
         acceptedMinecraftVersions = Constants.MOD_MC_VERSION)
 public class EnchantChanger {

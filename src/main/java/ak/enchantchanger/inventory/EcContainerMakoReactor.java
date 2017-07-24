@@ -67,7 +67,7 @@ public class EcContainerMakoReactor extends Container {
 
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer entityPlayer) {
-        return this.tileEntityMakoReactor.isUsableByPlayer(entityPlayer);
+        return this.tileEntityMakoReactor.isUseableByPlayer(entityPlayer);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class EcContainerMakoReactor extends Container {
         for (IContainerListener listener : this.listeners) {
 
             if (this.lastSmeltingTime != this.tileEntityMakoReactor.smeltingTime) {
-                listener.sendWindowProperty(this, 0, this.tileEntityMakoReactor.smeltingTime);
+                listener.sendProgressBarUpdate(this, 0, this.tileEntityMakoReactor.smeltingTime);
             }
 
         }
@@ -100,41 +100,40 @@ public class EcContainerMakoReactor extends Container {
     }
 
     @Override
-    @Nonnull
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int slotIndex) {
-        ItemStack retItem = ItemStack.EMPTY;
+        ItemStack retItem = null;
         Slot slot = this.getSlot(slotIndex);
         if (slot.getHasStack()) {
             ItemStack item = slot.getStack();
             retItem = item.copy();
             if (slotIndex >= 0 && slotIndex < SUM_OF_ALL_SLOTS) {
                 if (!mergeItemStack(item, SUM_OF_ALL_SLOTS, SUM_OF_ALL_SLOTS + 36, true)) {
-                    return ItemStack.EMPTY;
+                    return null;
                 }
                 slot.onSlotChange(item, retItem);
             } else {
                 if (item.getItem() instanceof EcItemBucketLifeStream || item.getItem() instanceof EcItemMateria) {
                     if (!mergeItemStack(item, SLOTS_FUEL[0], SLOTS_FUEL[SLOTS_FUEL.length - 1] + 1, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 }
-                if (!FurnaceRecipes.instance().getSmeltingResult(item).isEmpty()) {
+                if (FurnaceRecipes.instance().getSmeltingResult(item) != null) {
                     if (!mergeItemStack(item, SLOTS_MATERIAL[0], SLOTS_MATERIAL[SLOTS_MATERIAL.length - 1] + 1, false)) {
-                        return ItemStack.EMPTY;
+                        return null;
                     }
                 }
             }
-            if (item.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+            if (item.stackSize == 0) {
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (item.getCount() == retItem.getCount()) {
-                return ItemStack.EMPTY;
+            if (item.stackSize == retItem.stackSize) {
+                return null;
             }
 
-            slot.onTake(player, item);
+            slot.onPickupFromSlot(player, item);
         }
         return retItem;
     }

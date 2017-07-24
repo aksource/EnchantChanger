@@ -15,7 +15,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.util.Constants;
@@ -25,13 +24,15 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EcTileEntityHugeMateria extends TileEntity implements ITickable, IInventory {
     public int materializingTime = 0;
     public float angle = 0;
     private ItemStack result = null;
     private int consumedExpBottle = 0;
-    private final NonNullList<ItemStack> slotItems = NonNullList.withSize(5, ItemStack.EMPTY);
+    private final List<ItemStack> slotItems = new ArrayList<>(5);
 
     @Override
     public int getSizeInventory() {
@@ -39,30 +40,28 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     }
 
     @Override
-    @Nonnull
     public ItemStack getStackInSlot(int slot) {
         return slotItems.get(slot);
     }
 
     @Override
-    public void setInventorySlotContents(int slot, @Nonnull ItemStack stack) {
+    public void setInventorySlotContents(int slot, ItemStack stack) {
         slotItems.set(slot, stack);
-        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
-            stack.setCount(getInventoryStackLimit());
+        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+            stack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    @Nonnull
     public ItemStack decrStackSize(int slot, int amt) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty()) {
-            if (stack.getCount() <= amt) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
+        if (stack != null) {
+            if (stack.stackSize <= amt) {
+                setInventorySlotContents(slot, null);
             } else {
                 stack = stack.splitStack(amt);
-                if (stack.getCount() == 0) {
-                    setInventorySlotContents(slot, ItemStack.EMPTY);
+                if (stack.stackSize == 0) {
+                    setInventorySlotContents(slot, null);
                 }
             }
         }
@@ -70,11 +69,10 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     }
 
     @Override
-    @Nonnull
     public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty()) {
-            setInventorySlotContents(slot, ItemStack.EMPTY);
+        if (stack != null) {
+            setInventorySlotContents(slot, null);
         }
         return stack;
     }
@@ -85,8 +83,8 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     }
 
     @Override
-    public boolean isUsableByPlayer(@Nonnull EntityPlayer player) {
-        return world.getTileEntity(this.getPos()) == this &&
+    public boolean isUseableByPlayer(@Nonnull EntityPlayer player) {
+        return worldObj.getTileEntity(this.getPos()) == this &&
                 player.getDistanceSq(this.getPos().add(0.5D, 0.5D, 0.65D)) < 64;
     }
 
@@ -113,7 +111,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
             int var5 = var4.getByte("Slot") & 255;
 
             if (var5 >= 0 && var5 < this.slotItems.size()) {
-                this.slotItems.set(var5, new ItemStack(var4));
+                this.slotItems.set(var5, ItemStack.loadItemStackFromNBT(var4));
             }
         }
         this.materializingTime = nbtTagCompound.getShort("materializingTime");
@@ -127,7 +125,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
         NBTTagList nbtTagList = new NBTTagList();
 
         for (int var3 = 0; var3 < this.slotItems.size(); ++var3) {
-            if (!this.slotItems.get(var3).isEmpty()) {
+            if (this.slotItems.get(var3) != null) {
                 NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) var3);
                 this.slotItems.get(var3).writeToNBT(var4);
@@ -171,7 +169,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
 //		}
         boolean var2 = false;
 
-        if (!this.world.isRemote) {
+        if (!this.worldObj.isRemote) {
             if (this.canMake()) {
                 ++this.materializingTime;
 
@@ -202,15 +200,15 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
         ItemStack expBottle = this.getStackInSlot(2);
         ItemStack material = this.getStackInSlot(3);
         ItemStack resultItem = this.getStackInSlot(4);
-        if (base.isEmpty()
+        if (base == null
                 || !(base.getItem() instanceof EcItemMateria)
-                || !resultItem.isEmpty()
-                || material.isEmpty()
-                || (!expBottle.isEmpty() && !isBottle(expBottle))) {
+                || resultItem != null
+                || material == null
+                || (expBottle != null && !isBottle(expBottle))) {
             return false;
         }
 
-        if (!hMateria.isEmpty() && hMateria.getItem() instanceof EcItemMasterMateria) {
+        if (hMateria != null && hMateria.getItem() instanceof EcItemMasterMateria) {
             int dmg = hMateria.getItemDamage();
             return dmg >= 0 && dmg < 6 && makeResult(material, dmg);
         }
@@ -231,7 +229,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     }
 
     private boolean containMasterMateria() {
-        return !this.getStackInSlot(0).isEmpty() && this.getStackInSlot(0).getItem() instanceof EcItemMasterMateria;
+        return this.getStackInSlot(0) != null && this.getStackInSlot(0).getItem() instanceof EcItemMasterMateria;
     }
 
     private boolean isValidItem(ItemStack item1, ItemStack item2) {
@@ -250,8 +248,8 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
             Enchantment enchantment = EnchantmentUtils.getEnchantmentFromItemStack(materia);
             int lv = EnchantmentUtils.getEnchantmentLv(materia);
             ItemStack lvUpItem = EnchantmentUtils.getLvUpItem(enchantment, lv);
-            consumedExpBottle = lvUpItem.getCount();
-            if (!lvUpItem.isItemEqual(bottle) || lvUpItem.getCount() > bottle.getCount()) {
+            consumedExpBottle = lvUpItem.stackSize;
+            if (!lvUpItem.isItemEqual(bottle) || lvUpItem.stackSize > bottle.stackSize) {
                 return false;
             }
             result = materia.copy();
@@ -311,10 +309,5 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     @Override
     public ITextComponent getDisplayName() {
         return new TextComponentString(getName());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return slotItems.stream().filter(itemStack -> !itemStack.isEmpty()).count() == 0;
     }
 }

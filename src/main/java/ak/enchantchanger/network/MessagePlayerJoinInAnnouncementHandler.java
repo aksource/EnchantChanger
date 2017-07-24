@@ -13,7 +13,7 @@ public class MessagePlayerJoinInAnnouncementHandler implements IMessageHandler<M
     public MessagePlayerProperties onMessage(MessagePlayerJoinInAnnouncement message, MessageContext ctx) {
         //UUIDの文字列を受け取る
         String uuidString = message.getUuidString();
-        EntityPlayer player = ctx.getServerHandler().player;
+        EntityPlayer player = ctx.getServerHandler().playerEntity;
         //取得したPlayerが同一UUIDを持つか判定
         if (player.getGameProfile().getId().toString().equals(uuidString)) {
             //クライアント側にデータを送る

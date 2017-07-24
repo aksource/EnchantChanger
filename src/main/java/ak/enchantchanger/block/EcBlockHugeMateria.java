@@ -28,14 +28,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
-
-import static net.minecraft.init.Items.AIR;
 
 public class EcBlockHugeMateria extends BlockContainer {
     public static final IProperty<Integer> PART = PropertyInteger.create("part", 0, 2);
-    //不要？
-//    private ExtendedBlockState extendedState = new ExtendedBlockState(this, new IProperty[]{PART}, new IUnlistedProperty[]{B3DLoader.B3DFrameProperty.instance});
 
     public EcBlockHugeMateria() {
         super(Material.ROCK);
@@ -63,36 +60,23 @@ public class EcBlockHugeMateria extends BlockContainer {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
-    //なくても描画される？
-/*    @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        try {
-            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
-            B3DLoader.B3DState defaultState = ((B3DLoader.Wrapper) model).getDefaultState();
-            return ((IExtendedBlockState) this.extendedState.getBaseState()).withProperty(B3DLoader.B3DFrameProperty.instance, defaultState);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return this.extendedState.getBaseState();
-        }
-    }*/
-
     @Override
     public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
-                                    @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing,
+                                    @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @
+                                                Nullable ItemStack heldItem, @Nonnull EnumFacing side,
                                     float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
             return true;
         } else if (worldIn.getBlockState(pos.down()).getBlock() == this
                 && state.getValue(PART) != 0) {
             return this.onBlockActivated(worldIn, pos.down(),
-                    worldIn.getBlockState(pos.down()), playerIn, hand, facing, hitX, hitY, hitZ);
+                    worldIn.getBlockState(pos.down()), playerIn, hand, heldItem, side, hitX, hitY, hitZ);
         } else {
             if (worldIn.getTileEntity(pos) != null)
                 playerIn.openGui(EnchantChanger.instance, Constants.GUI_ID_HUGE_MATERIA,
                         worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
-
     }
 
     @Override
@@ -141,14 +125,14 @@ public class EcBlockHugeMateria extends BlockContainer {
         if (t != null) {
             for (int l = 0; l < t.getSizeInventory(); l++) {
                 ItemStack stack = t.getStackInSlot(l);
-                if (stack.isEmpty()) {
+                if (stack == null) {
                     continue;
                 }
                 EntityItem eit = new EntityItem(worldIn,
                         (double) pos.getX() + 0.5D,
                         (double) pos.getY() + 0.5D,
                         (double) pos.getZ() + 0.5D, stack);
-                worldIn.spawnEntity(eit);
+                worldIn.spawnEntityInWorld(eit);
             }
         }
         super.breakBlock(worldIn, pos, state);
@@ -176,17 +160,18 @@ public class EcBlockHugeMateria extends BlockContainer {
     }
 
     @Override
-    @Nonnull
     public Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune) {
-        return state.getValue(PART) != 0 ? AIR : Items.itemHugeMateria;
+        return state.getValue(PART) != 0 ? null : Items.itemHugeMateria;
     }
 
     @Override
+    @Nullable
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return meta == 0 ? new EcTileEntityHugeMateria() : null;
     }
 
     @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         IBlockState blockState = super.getStateFromMeta(meta);
         return blockState.withProperty(PART, meta);

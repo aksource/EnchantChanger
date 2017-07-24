@@ -18,14 +18,14 @@ public class MessageCloudSwordHandler implements IMessageHandler<MessageCloudSwo
     public IMessage onMessage(MessageCloudSword message, MessageContext ctx) {
         EntityPlayer player = EnchantChanger.proxy.getPlayer();
         ItemStack itemStack = player.getHeldItemMainhand();
-        if (!itemStack.isEmpty()) {
+        if (itemStack != null) {
             if (itemStack.getItem() instanceof EcItemCloudSword) {
                 EcItemCloudSword.setSlotNumToItemStack(itemStack, message.slotNum);
             } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
                 ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
                 InventoryToolHolder toolHolder = mth.getInventoryFromItemStack(itemStack);
                 itemStack = toolHolder.getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack));
-                if (!itemStack.isEmpty() && itemStack.getItem() instanceof EcItemCloudSword) {
+                if (itemStack != null && itemStack.getItem() instanceof EcItemCloudSword) {
                     EcItemCloudSword.setSlotNumToItemStack(itemStack, message.slotNum);
                 }
             }

@@ -27,14 +27,14 @@ public class EcEntityExExpBottle extends EntityThrowable implements IThrowableEn
 
     @Override
     protected void onImpact(@Nonnull RayTraceResult rayTraceResult) {
-        if (!this.world.isRemote) {
-            this.world.playEvent(2002, new BlockPos(this.posX, this.posY, this.posZ), 0);
-            int expValue = 30 + this.world.rand.nextInt(5) + this.world.rand.nextInt(5);
+        if (!this.worldObj.isRemote) {
+            this.worldObj.playEvent(2002, new BlockPos(this.posX, this.posY, this.posZ), 0);
+            int expValue = 30 + this.worldObj.rand.nextInt(5) + this.worldObj.rand.nextInt(5);
 
             while (expValue > 0) {
                 int var3 = EntityXPOrb.getXPSplit(expValue);
                 expValue -= var3;
-                this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, var3));
+                this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, var3));
             }
 
             this.setDead();

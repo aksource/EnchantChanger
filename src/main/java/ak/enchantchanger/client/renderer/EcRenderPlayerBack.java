@@ -31,14 +31,14 @@ public class EcRenderPlayerBack {
     private static final float anglePlayerSneaking = 30F;
     private static final float translateValue = -0.1F;
     private static final float translateSneakingValue = 0F;
-    private ItemStack prevHeldItem = ItemStack.EMPTY;
-    private ItemStack nowHeldItem = ItemStack.EMPTY;
+    private ItemStack prevHeldItem = null;
+    private ItemStack nowHeldItem = null;
 
 
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void renderPlayerEvent(RenderPlayerEvent.Post event) {
-        if (prevHeldItem.isEmpty()) return;
+        if (prevHeldItem == null) return;
         EntityPlayer entityPlayer = event.getEntityPlayer();
         ItemStack heldItem = entityPlayer.getHeldItemMainhand();
         if (ConfigurationUtils.enableBackSword && !ItemStack.areItemStacksEqual(heldItem, this.prevHeldItem)
@@ -53,12 +53,12 @@ public class EcRenderPlayerBack {
         if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
             ItemStack heldItem = event.player.getHeldItemMainhand();
             if (!isSwordInQuickBar(event.player.inventory)) {
-                this.prevHeldItem = ItemStack.EMPTY;
+                this.prevHeldItem = null;
                 return;
             }
-            if (heldItem.isEmpty()) return;
+            if (heldItem == null) return;
 
-            if (this.nowHeldItem.isEmpty()) {
+            if (this.nowHeldItem == null) {
                 this.nowHeldItem = heldItem;
             }
             if (!ItemStack.areItemStacksEqual(heldItem, this.nowHeldItem)) {
@@ -73,7 +73,7 @@ public class EcRenderPlayerBack {
     private boolean isSwordInQuickBar(@Nonnull InventoryPlayer inventoryPlayer) {
         for (int i = 0; i < 9; i++) {
             ItemStack itemStack = inventoryPlayer.getStackInSlot(i);
-            if (!itemStack.isEmpty() && itemStack.getItem() instanceof EcItemSword) {
+            if (itemStack != null && itemStack.getItem() instanceof EcItemSword) {
                 return true;
             }
         }
@@ -87,7 +87,7 @@ public class EcRenderPlayerBack {
 
     private boolean canRenderBack(@Nonnull EntityPlayer player) {
         ItemStack slotZero = player.inventory.getStackInSlot(0);
-        if (!slotZero.isEmpty() && slotZero.getItem().getRegistryName() != null) {
+        if (slotZero != null && slotZero.getItem().getRegistryName() != null) {
             ResourceLocation registryName = slotZero.getItem().getRegistryName();
             return !registryName.toString().matches(Constants.BATTOUKEN_MOD_ID);
         }
