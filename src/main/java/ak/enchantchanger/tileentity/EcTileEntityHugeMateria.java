@@ -108,12 +108,12 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
         super.readFromNBT(nbtTagCompound);
         NBTTagList tagList = nbtTagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
-        for (int var3 = 0; var3 < tagList.tagCount(); ++var3) {
-            NBTTagCompound var4 = tagList.getCompoundTagAt(var3);
-            int var5 = var4.getByte("Slot") & 255;
+        for (int count = 0; count < tagList.tagCount(); ++count) {
+            NBTTagCompound tag = tagList.getCompoundTagAt(count);
+            int slot = tag.getByte("Slot") & 255;
 
-            if (var5 >= 0 && var5 < this.slotItems.size()) {
-                this.slotItems.set(var5, new ItemStack(var4));
+            if (slot < this.slotItems.size()) {
+                this.slotItems.set(slot, new ItemStack(tag));
             }
         }
         this.materializingTime = nbtTagCompound.getShort("materializingTime");
@@ -126,11 +126,11 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
         nbt.setShort("materializingTime", (short) this.materializingTime);
         NBTTagList nbtTagList = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.slotItems.size(); ++var3) {
-            if (!this.slotItems.get(var3).isEmpty()) {
+        for (int slot = 0; slot < this.slotItems.size(); ++slot) {
+            if (!this.slotItems.get(slot).isEmpty()) {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte) var3);
-                this.slotItems.get(var3).writeToNBT(var4);
+                var4.setByte("Slot", (byte) slot);
+                this.slotItems.get(slot).writeToNBT(var4);
                 nbtTagList.appendTag(var4);
             }
         }
@@ -227,7 +227,7 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
     }
 
     public boolean isBottle(ItemStack item) {
-        return item != null && (item.getItem().equals(Items.EXPERIENCE_BOTTLE) || item.getItem().equals(ak.enchantchanger.utils.Items.itemExExpBottle));
+        return !item.isEmpty() && (item.getItem().equals(Items.EXPERIENCE_BOTTLE) || item.getItem().equals(ak.enchantchanger.utils.Items.itemExExpBottle));
     }
 
     private boolean containMasterMateria() {
