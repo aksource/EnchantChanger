@@ -1,10 +1,10 @@
 package ak.enchantchanger.client;
 
 import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.MagicType;
 import ak.enchantchanger.api.MasterMateriaType;
 import ak.enchantchanger.client.models.BakedModelMateria;
 import ak.enchantchanger.client.models.EcSwordModel;
-import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.utils.Blocks;
 import ak.enchantchanger.utils.Items;
 import ak.enchantchanger.utils.StringUtils;
@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 import static ak.enchantchanger.api.Constants.*;
-import static ak.enchantchanger.client.ClientProxy.mc;
 
 /**
  * クライアント側でモデルを扱うクラスです。
@@ -93,7 +92,6 @@ public class ClientModelUtils {
         //1.8からのモデル登録。
         B3DLoader.INSTANCE.addDomain(Constants.MOD_ID);
         OBJLoader.INSTANCE.addDomain(Constants.MOD_ID);
-//        registerCustomBlockModel(Blocks.blockHugeMateria, 0, Blocks.blockHugeMateria.getRegistryName().toString(), MODEL_TYPE_INVENTORY, false);
         registerCustomBlockModel(Blocks.blockMakoReactor, 0, Blocks.blockMakoReactor.getRegistryName().toString() + "_iron", MODEL_TYPE_INVENTORY);
         registerCustomBlockModel(Blocks.blockMakoReactor, 1, Blocks.blockMakoReactor.getRegistryName().toString() + "_gold", MODEL_TYPE_INVENTORY);
 
@@ -104,8 +102,9 @@ public class ClientModelUtils {
         registerItemModel(Items.itemZackSword, 0);
         registerItemModel(Items.itemCloudSwordCore, 0);
         registerItemModel(Items.itemCloudSword, 0);
-        for (int i = 0; i <= EcItemMateria.MagicMateriaNum; i++) {
-            registerItemModel(Items.itemMateria, i);
+        registerItemModel(Items.itemMateria, 0);
+        for (MagicType type : MagicType.values()) {
+            registerItemModel(Items.itemMateria, type.getId());
         }
 
         for (MasterMateriaType type : MasterMateriaType.values()) {
@@ -117,7 +116,6 @@ public class ClientModelUtils {
 
         registerItemModel(Items.itemHugeMateria, 0);
         registerItemModel(Items.itemExExpBottle, 0);
-        registerItemModel(Items.itemBucketLifeStream, 0);
         registerItemModel(Items.itemPortableEnchantChanger, 0);
         registerItemModel(Items.itemPortableEnchantmentTable, 0);
         registerBlockModel(Blocks.blockEnchantChanger, 0);
@@ -200,9 +198,7 @@ public class ClientModelUtils {
     }
 
     private static void registerItemModel(Item item, int meta) {
-        ModelResourceLocation modelResourceLocation = setModelRsrcToMap(item.getRegistryName(), item.getRegistryName().toString(), MODEL_TYPE_INVENTORY);
-        mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
-//        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
+        registerCustomItemModel(item, meta, item.getRegistryName().toString(), MODEL_TYPE_INVENTORY);
     }
 
     private static ModelResourceLocation setCustomModelRsrcToMap(ResourceLocation objName, String modelLocation, String type) {

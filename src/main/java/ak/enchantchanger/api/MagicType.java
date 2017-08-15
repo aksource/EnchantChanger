@@ -13,23 +13,36 @@ import java.util.Optional;
  * Created by A.K. on 2017/04/29.
  */
 public enum MagicType {
-    BLACK(1, EcItemMateria::doMeteor),
-    WHITE(2, EcItemMateria::doHoly),
-    TELEPORT(3, EcItemMateria::teleportPlayer),
-    FLOATING(4, ((world, player) -> {})),
-    THUNDER(5, EcItemMateria::doThunder),
-    DESPELL(6, ((world, player) -> {EcItemMateria.doDespell(player, player);})),
-    HASTE(7, ((world, player) -> {EcItemMateria.doHaste(player, player);})),
-    ABSORPTION(8, ((world, player) -> {}));
+    BLACK(1, "Black", "enchantment.Meteor", EcItemMateria::doMeteor),
+    WHITE(2, "White", "enchantment.Holy", EcItemMateria::doHoly),
+    TELEPORT(3, "Teleport", "enchantment.Teleport", EcItemMateria::teleportPlayer),
+    FLOATING(4, "Floating", "enchantment.Floating", ((world, player) -> {})),
+    THUNDER(5, "Thunder", "enchantment.Thunder", EcItemMateria::doThunder),
+    DESPELL(6, "Despell", "enchantment.Despell", ((world, player) -> {EcItemMateria.doDespell(player, player);})),
+    HASTE(7, "Haste", "enchantment.Haste", ((world, player) -> {EcItemMateria.doHaste(player, player);})),
+    ABSORPTION(8, "Absorption", "enchantment.Absorption", ((world, player) -> {}));
     private int id;
+    private String magicName;
+    private String infoString;
     private BiConsumer<World, EntityPlayer> consumer;
-    MagicType(int magicId, BiConsumer<World, EntityPlayer> consumer) {
+    MagicType(int magicId, String magicName, String infoString, BiConsumer<World, EntityPlayer> consumer) {
         this.id = magicId;
+        this.magicName = magicName;
+        this.infoString = infoString;
         this.consumer = consumer;
     }
     public int getId() {
         return this.id;
     }
+
+    public String getMagicName() {
+        return magicName;
+    }
+
+    public String getInfoString() {
+        return infoString;
+    }
+
     public BiConsumer<World, EntityPlayer> getConsumer() {
         return this.consumer;
     }

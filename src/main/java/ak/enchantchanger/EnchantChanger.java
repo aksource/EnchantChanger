@@ -5,7 +5,6 @@ import ak.enchantchanger.api.MakoUtils;
 import ak.enchantchanger.capability.CapabilityEventHook;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.eventhandler.CommonTickHandler;
-import ak.enchantchanger.eventhandler.FillBucketHook;
 import ak.enchantchanger.eventhandler.GenerateHandler;
 import ak.enchantchanger.eventhandler.LivingEventHooks;
 import ak.enchantchanger.modcoop.CoopMCE;
@@ -14,16 +13,15 @@ import ak.enchantchanger.utils.Blocks;
 import ak.enchantchanger.utils.EnchantmentUtils;
 import ak.enchantchanger.utils.Items;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.logging.Logger;
@@ -45,6 +43,7 @@ public class EnchantChanger {
     //Logger
     public static final Logger logger = Logger.getLogger(EnchantChanger.class.getSimpleName());
     public static Potion potionMako;
+    public static PotionType makoPotionType;
     public static DamageSource damageSourceMako;
     public static boolean loadMTH = false;
     public static boolean loadBC = false;
@@ -57,6 +56,13 @@ public class EnchantChanger {
     public static EnchantChanger instance;
     @SidedProxy(clientSide = "ak.enchantchanger.client.ClientProxy", serverSide = "ak.enchantchanger.CommonProxy")
     public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void construction(FMLConstructionEvent event) {
+        // UniversalBucket有効化処理
+        FluidRegistry.enableUniversalBucket();
+    }
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
@@ -78,10 +84,6 @@ public class EnchantChanger {
     public void load(FMLInitializationEvent event) {
         // レビテト等のイベントフック登録
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
-        // ライフストリーム登録
-        FillBucketHook.buckets.put(Blocks.blockLifeStream, ak.enchantchanger.utils.Items.itemBucketLifeStream);
-        // バケツ汲み取りイベント登録
-        MinecraftForge.EVENT_BUS.register(FillBucketHook.INSTANCE);
         // 携帯エンチャントテーブルイベント登録
         MinecraftForge.EVENT_BUS.register(ak.enchantchanger.utils.Items.itemPortableEnchantmentTable);
         // キーイベント登録

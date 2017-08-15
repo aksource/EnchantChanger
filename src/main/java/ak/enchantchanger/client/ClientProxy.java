@@ -17,6 +17,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,12 +60,16 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerPreRenderInformation() {
         ClientModelUtils.registerModelsOnPreInit();
+        // もともとinitで登録していたが、登録処理に使用するメソッドを変更したため、こちらに移動。
+        // TODO registerModelsOnPreInitと統合
+        ClientModelUtils.registerModels();
         RenderingRegistry.registerEntityRenderingHandler(
                 EcEntityExExpBottle.class, manager -> new RenderSnowball<>(manager, Items.itemExExpBottle, mc.getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
                 manager -> new EcRenderItemThrowable(manager, FIRE_CHARGE, mc.getRenderItem(), ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
                 EcRenderApOrb::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
     }
 
     @Override
@@ -74,7 +79,6 @@ public class ClientProxy extends CommonProxy {
         //キー登録
         ClientRegistry.registerKeyBinding(MAGIC_KEY);
         ClientRegistry.registerKeyBinding(MATERIA_KEY);
-        ClientModelUtils.registerModels();
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
 

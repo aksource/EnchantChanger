@@ -21,6 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -166,6 +168,32 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         storedRFEnergy = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_STORED_RF_ENERGY);
         generatingRFTime = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_GENERATING_RF_TIME);
         nowRF = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_NOW_RF);
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        IBlockState state = this.worldObj.getBlockState(this.pos);
+        this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.getPos(), 0, this.writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SPacketUpdateTileEntity pkt) {
+        if (pkt.getPos().equals(this.getPos())) {
+            this.readFromNBT(pkt.getNbtCompound());
+        }
+    }
+
+    @Override
+    @Nonnull
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
     }
 
     @Override
