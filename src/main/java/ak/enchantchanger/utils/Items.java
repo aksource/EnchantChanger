@@ -4,7 +4,6 @@ import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.item.*;
 import net.minecraft.item.Item;
 
-import static ak.enchantchanger.utils.Blocks.blockLifeStream;
 import static ak.enchantchanger.utils.Blocks.blockMakoReactor;
 
 /**
@@ -66,9 +65,5 @@ public class Items {
                 .setRegistryName("itemhugemateria");
 
         itemBlockMakoReactor = new EcItemBlockMakoReactor(blockMakoReactor).setRegistryName(Constants.REG_BLOCK_MAKO_REACTOR);
-        itemBucketLifeStream = new EcItemBucketLifeStream(blockLifeStream, "bucket_lifestream")
-                .setRegistryName("bucket_lifestream")
-                .setContainerItem(net.minecraft.init.Items.BUCKET)
-                .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }
 }

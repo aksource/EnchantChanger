@@ -2,7 +2,7 @@ package ak.enchantchanger.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class EcItemUltimateWeapon extends EcItemSword {
             float mobmaxhealth = ((EntityLivingBase) entity).getMaxHealth() / 3 + 1;
             float weaponDmgFromHP = WeaponDamagefromHP(player);
             ultimateWeaponDamage = (mobmaxhealth > weaponDmgFromHP) ? mobmaxhealth : weaponDmgFromHP;
-        } else if (entity instanceof EntityDragonPart) {
+        } else if (entity instanceof IEntityMultiPart) {
             ultimateWeaponDamage = 100;
         } else {
             ultimateWeaponDamage = 10;

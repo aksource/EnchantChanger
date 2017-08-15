@@ -63,19 +63,6 @@ public class EcBlockHugeMateria extends BlockContainer {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
-    //なくても描画される？
-/*    @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        try {
-            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(Constants.EcAssetsDomain, "/block/hugemateria.b3d"));
-            B3DLoader.B3DState defaultState = ((B3DLoader.Wrapper) model).getDefaultState();
-            return ((IExtendedBlockState) this.extendedState.getBaseState()).withProperty(B3DLoader.B3DFrameProperty.instance, defaultState);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return this.extendedState.getBaseState();
-        }
-    }*/
-
     @Override
     public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
                                     @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing,

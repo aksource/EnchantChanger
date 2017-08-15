@@ -77,11 +77,6 @@ public class EcContainerHugeMateria extends Container {
     }
 
     @Override
-    protected void retrySlotClick(int slotId, int clickedButton, boolean mode, @Nonnull EntityPlayer playerIn) {
-
-    }
-
-    @Override
     @Nonnull
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
         ItemStack retItem = ItemStack.EMPTY;

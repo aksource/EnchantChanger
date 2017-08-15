@@ -12,6 +12,7 @@ import java.io.IOException;
  * 魔晄炉ブロック用カスタムモデルローダークラス
  * Created by A.K. on 2015/08/22.
  */
+@Deprecated
 public class MakoReactorModelLoader implements ICustomModelLoader {
     @Override
     public boolean accepts(ResourceLocation modelLocation) {

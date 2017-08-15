@@ -2,9 +2,9 @@ package ak.enchantchanger.item;
 
 
 import ak.enchantchanger.EnchantChanger;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,7 +19,7 @@ public class EcItemSephirothSwordImit extends EcItemSword {
     @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public IPerspectiveAwareModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IPerspectiveAwareModel> modelList) {
+    public IBakedModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IBakedModel> modelList) {
         EntityPlayer player = EnchantChanger.proxy.getPlayer();
         if (player != null) {
             ItemStack handHeldItem = player.getHeldItemMainhand();

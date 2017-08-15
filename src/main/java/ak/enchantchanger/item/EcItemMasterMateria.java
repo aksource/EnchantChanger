@@ -1,8 +1,8 @@
 package ak.enchantchanger.item;
 
+import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.api.MasterMateriaType;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -23,9 +23,11 @@ public class EcItemMasterMateria extends EcItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
-        for (MasterMateriaType type: MasterMateriaType.values()) {
-            subItems.add(new ItemStack(this, 1, type.getMeta()));
+    public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+        if (Constants.TAB_ENCHANT_CHANGER.equals(tab)) {
+            for (MasterMateriaType type: MasterMateriaType.values()) {
+                subItems.add(new ItemStack(this, 1, type.getMeta()));
+            }
         }
     }
 }

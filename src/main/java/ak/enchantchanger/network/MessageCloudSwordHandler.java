@@ -1,9 +1,9 @@
 package ak.enchantchanger.network;
 
-import ak.MultiToolHolders.inventory.InventoryToolHolder;
+import ak.multitoolholders.inventory.InventoryToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.item.EcItemCloudSword;
-import ak.MultiToolHolders.ItemMultiToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

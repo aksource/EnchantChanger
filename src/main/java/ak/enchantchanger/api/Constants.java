@@ -144,33 +144,4 @@ public class Constants {
     public static final String REG_FLUID_LIFE_STREAM = "life_stream";
     public static final String REG_BLOCK_LIFE_STREAM = "life_stream";
     public static final String REG_BLOCK_MAKO_REACTOR = "mako_reactor";
-
-    public static final ResourceLocation runebladeGrip = new ResourceLocation(MOD_ID, "textures/item/runeblade256-grip.png");
-    public static final ResourceLocation runebladeHand = new ResourceLocation(MOD_ID, "textures/item/runeblade256-hand.png");
-    public static final ResourceLocation runebladeEdge = new ResourceLocation(MOD_ID, "textures/item/runeblade256-edge.png");
-    public static final ResourceLocation butterflyedgeGrip = new ResourceLocation(MOD_ID, "textures/item/butterflyedge256-grip.png");
-    public static final ResourceLocation butterflyedgeEdge = new ResourceLocation(MOD_ID, "textures/item/butterflyedge256-edge.png");
-    public static final ResourceLocation organixGrip = new ResourceLocation(MOD_ID, "textures/item/organix256-grip.png");
-    public static final ResourceLocation organixEdge = new ResourceLocation(MOD_ID, "textures/item/organix256-edge.png");
-    public static final ResourceLocation unionSwordObj = new ResourceLocation(MOD_ID, "models/item/unionsword.obj");
-    public static final ResourceLocation firstSwordGrip = new ResourceLocation(MOD_ID, "textures/item/firstsword256-grip.png");
-    public static final ResourceLocation firstSwordCase = new ResourceLocation(MOD_ID, "textures/item/firstsword256-case.png");
-    public static final ResourceLocation firstSwordCenter = new ResourceLocation(MOD_ID, "textures/item/firstsword256-center.png");
-    public static final ResourceLocation firstSwordEdge = new ResourceLocation(MOD_ID, "textures/item/firstsword256-edge.png");
-    public static final ResourceLocation firstSwordObj = new ResourceLocation(MOD_ID, "models/item/firstsword.obj");
-    public static final ResourceLocation masamuneGrip = new ResourceLocation(MOD_ID, "textures/item/masamune256-grip.png");
-    public static final ResourceLocation masamuneSword = new ResourceLocation(MOD_ID, "textures/item/masamune256-sword.png");
-    public static final ResourceLocation masamuneObj = new ResourceLocation(MOD_ID, "models/item/masamune.obj");
-    public static final ResourceLocation ultimateWeaponPipe02 = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-pipe02.png");
-    public static final ResourceLocation ultimateWeaponPipe01 = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-pipe01.png");
-    public static final ResourceLocation ultimateWeaponGrip = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-grip.png");
-    public static final ResourceLocation ultimateWeaponHandguard = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-handguard.png");
-    public static final ResourceLocation ultimateWeaponEmblem = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-emblem.png");
-    public static final ResourceLocation ultimateWeaponSword = new ResourceLocation(MOD_ID, "textures/item/ultimateweapon256-sword.png");
-    public static final ResourceLocation ultimateWeaponObj = new ResourceLocation(MOD_ID, "models/item/ultimateweapon.obj");
-    public static final ResourceLocation zackSwordCylinder = new ResourceLocation(MOD_ID, "textures/item/bustersword256-cylinder.png");
-    public static final ResourceLocation zackSwordBox = new ResourceLocation(MOD_ID, "textures/item/bustersword256-box.png");
-    public static final ResourceLocation zackSwordEdge = new ResourceLocation(MOD_ID, "textures/item/bustersword256-edge.png");
-    public static final ResourceLocation zackSwordObj = new ResourceLocation(MOD_ID, "models/item/bustersword.obj");
-
 }

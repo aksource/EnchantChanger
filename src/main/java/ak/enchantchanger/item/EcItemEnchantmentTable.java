@@ -1,5 +1,6 @@
 package ak.enchantchanger.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class EcItemEnchantmentTable extends EcItem {
@@ -72,8 +74,8 @@ public class EcItemEnchantmentTable extends EcItem {
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nonnull EntityPlayer playerIn, @Nonnull List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, playerIn, tooltip, advanced);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             if (nbt.hasKey(REGISTERED_POS_X, net.minecraftforge.common.util.Constants.NBT.TAG_INT)) {

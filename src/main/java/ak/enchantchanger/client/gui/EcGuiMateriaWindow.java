@@ -35,7 +35,6 @@ public class EcGuiMateriaWindow extends GuiContainer {
         GlStateManager.pushMatrix();
         itemRender.zLevel = 100.0F;
         GlStateManager.scale(4.0f, 4.0f, 1);
-//        itemRender.renderItemAndEffectIntoGUI(fontRenderer, Minecraft.getMinecraft().renderEngine, itemStack, itemRenderPosX, itemRenderPosY);
         ItemStack openItem = ((EcContainerMateriaWindow) this.inventorySlots).getOpenItem();
         mc.getRenderItem().renderItemAndEffectIntoGUI(openItem, itemRenderPosX, itemRenderPosY);//Itemの描画
         mc.getRenderItem().renderItemOverlays(this.mc.fontRenderer, openItem, itemRenderPosX, itemRenderPosY);//耐久値の描画

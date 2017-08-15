@@ -13,11 +13,9 @@ import net.minecraft.item.ItemStack;
 public class EcSlotMateriaWindow extends Slot {
     private ItemStack openItem;
 
-    //    private IInventory thisInventory;
     public EcSlotMateriaWindow(ItemStack item, IInventory inv, int slot, int x, int y) {
         super(inv, slot, x, y);
         this.openItem = item;
-//        this.thisInventory = inv;
     }
 
     @Override

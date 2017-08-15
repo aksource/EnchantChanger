@@ -1,10 +1,10 @@
 package ak.enchantchanger.client;
 
 import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.MagicType;
 import ak.enchantchanger.api.MasterMateriaType;
 import ak.enchantchanger.client.models.BakedModelMateria;
 import ak.enchantchanger.client.models.EcSwordModel;
-import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.utils.Blocks;
 import ak.enchantchanger.utils.Items;
 import ak.enchantchanger.utils.StringUtils;
@@ -22,12 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -36,13 +37,14 @@ import java.util.List;
 import java.util.Map;
 
 import static ak.enchantchanger.api.Constants.*;
-import static ak.enchantchanger.client.ClientProxy.mc;
 
 /**
  * クライアント側でモデルを扱うクラスです。
  * Created by A.K. on 2016/05/30.
  */
 public class ClientModelUtils {
+
+    public static final ClientModelUtils INSTANCE = new ClientModelUtils();
 
     private static final Map<ResourceLocation, ModelResourceLocation> MODEL_RESOURCE_LOCATION_MAP = Maps.newHashMap();
     static TextureAtlasSprite[] textureAtlasSpritesMateriaArray = new TextureAtlasSprite[16];
@@ -80,27 +82,30 @@ public class ClientModelUtils {
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_RUNE_GRIP), StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_GRIP))
             .put(StringUtils.makeObjMaterialKeyName(TEXTURE_NAME_RUNE_HAND), StringUtils.makeObjTexturePath(TEXTURE_NAME_RUNE_HAND)).build();
 
-    private ClientModelUtils() {}
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void bakedModelRegister(ModelBakeEvent event) {
+        ClientModelUtils.changeModels(event);
+    }
 
-    static void registerModelsOnPreInit() {
+    void registerModelsOnPreInit() {
         //1.8からのモデル登録。
         B3DLoader.INSTANCE.addDomain(Constants.MOD_ID);
         OBJLoader.INSTANCE.addDomain(Constants.MOD_ID);
-//        registerCustomBlockModel(Blocks.blockHugeMateria, 0, Blocks.blockHugeMateria.getRegistryName().toString(), MODEL_TYPE_INVENTORY, false);
-        registerCustomBlockModel(Blocks.blockMakoReactor, 0, Blocks.blockMakoReactor.getRegistryName().toString() + "_iron", MODEL_TYPE_INVENTORY);
-        registerCustomBlockModel(Blocks.blockMakoReactor, 1, Blocks.blockMakoReactor.getRegistryName().toString() + "_gold", MODEL_TYPE_INVENTORY);
-
-        registerFluidBlockModel(Blocks.blockLifeStream, MODEL_TYPE_FLUID);
-        /* 魔晄炉用モデルローダー登録 */
-//        ModelLoaderRegistry.registerLoader(new MakoReactorModelLoader());
     }
 
-    static void registerModels() {
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void registerModels(ModelRegistryEvent event) {
+        registerCustomBlockModel(Blocks.blockMakoReactor, 0, Blocks.blockMakoReactor.getRegistryName().toString() + "_iron", MODEL_TYPE_INVENTORY);
+        registerCustomBlockModel(Blocks.blockMakoReactor, 1, Blocks.blockMakoReactor.getRegistryName().toString() + "_gold", MODEL_TYPE_INVENTORY);
+        registerFluidBlockModel(Blocks.blockLifeStream, MODEL_TYPE_FLUID);
         registerItemModel(Items.itemZackSword, 0);
         registerItemModel(Items.itemCloudSwordCore, 0);
         registerItemModel(Items.itemCloudSword, 0);
-        for (int i = 0; i <= EcItemMateria.MagicMateriaNum; i++) {
-            registerItemModel(Items.itemMateria, i);
+        registerItemModel(Items.itemMateria, 0);
+        for (MagicType type : MagicType.values()) {
+            registerItemModel(Items.itemMateria, type.getId());
         }
 
         for (MasterMateriaType type : MasterMateriaType.values()) {
@@ -112,7 +117,6 @@ public class ClientModelUtils {
 
         registerItemModel(Items.itemHugeMateria, 0);
         registerItemModel(Items.itemExExpBottle, 0);
-        registerItemModel(Items.itemBucketLifeStream, 0);
         registerItemModel(Items.itemPortableEnchantChanger, 0);
         registerItemModel(Items.itemPortableEnchantmentTable, 0);
         registerBlockModel(Blocks.blockEnchantChanger, 0);
@@ -141,12 +145,12 @@ public class ClientModelUtils {
     private static void changeSwordModel(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, Item ecSword, List<ResourceLocation> rlList,
                                            float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
         ResourceLocation name = ecSword.getRegistryName();
-        List<IRetexturableModel> modelList = new ArrayList<>();
+        List<IModel> modelList = new ArrayList<>();
         IBakedModel iconModel = modelRegistry.getObject(MODEL_RESOURCE_LOCATION_MAP.get(name));
         try {
             for (ResourceLocation rl : rlList) {
                 IModel model = ModelLoaderRegistry.getModel(rl);
-                modelList.add((IRetexturableModel) model);
+                modelList.add(model);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,9 +159,9 @@ public class ClientModelUtils {
     }
 
     private static void changeMateriaModel(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, ResourceLocation name, ResourceLocation rl) {
-        IRetexturableModel model = null;
+        IModel model = null;
         try {
-            model = (IRetexturableModel) ModelLoaderRegistry.getModel(rl);
+            model = ModelLoaderRegistry.getModel(rl);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,9 +195,7 @@ public class ClientModelUtils {
     }
 
     private static void registerItemModel(Item item, int meta) {
-        ModelResourceLocation modelResourceLocation = setModelRsrcToMap(item.getRegistryName(), item.getRegistryName().toString(), MODEL_TYPE_INVENTORY);
-        mc.getRenderItem().getItemModelMesher().register(item, meta, modelResourceLocation);
-//        ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
+        registerCustomItemModel(item, meta, item.getRegistryName().toString(), MODEL_TYPE_INVENTORY);
     }
 
 

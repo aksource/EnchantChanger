@@ -8,10 +8,10 @@ import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.enchantchanger.utils.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -140,13 +140,13 @@ public class RenderingOverlayEvent {
      * tessellator, x, y, width, height, color
      */
     private void renderQuad(Tessellator tessellator, int x, int y, int width, int height, int color) {
-        VertexBuffer vertexBuffer = tessellator.getBuffer();
-        vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 //        tessellator.getWorldRenderer().setColorOpaque_I(color);
-        vertexBuffer.pos((double) (x + 0), (double) (y + 0), 0.0D).endVertex();
-        vertexBuffer.pos((double) (x + 0), (double) (y + height), 0.0D).endVertex();
-        vertexBuffer.pos((double) (x + width), (double) (y + height), 0.0D).endVertex();
-        vertexBuffer.pos((double) (x + width), (double) (y + 0), 0.0D).endVertex();
+        buffer.pos((double) (x + 0), (double) (y + 0), 0.0D).endVertex();
+        buffer.pos((double) (x + 0), (double) (y + height), 0.0D).endVertex();
+        buffer.pos((double) (x + width), (double) (y + height), 0.0D).endVertex();
+        buffer.pos((double) (x + width), (double) (y + 0), 0.0D).endVertex();
         tessellator.draw();
     }
 }

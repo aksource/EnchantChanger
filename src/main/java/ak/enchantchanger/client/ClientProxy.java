@@ -17,11 +17,11 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -37,11 +37,11 @@ import static net.minecraft.init.Items.FIRE_CHARGE;
 
 public class ClientProxy extends CommonProxy {
     static final float MOVE_FACTOR = 0.4F;
-    public static Minecraft mc = Minecraft.getMinecraft();
     private static final KeyBinding MAGIC_KEY = new KeyBinding("Key.EcMagic",
             Keyboard.KEY_V, Constants.MOD_ID);
     private static final KeyBinding MATERIA_KEY = new KeyBinding("Key.EcMateria",
             Keyboard.KEY_R, Constants.MOD_ID);
+    public static Minecraft mc = Minecraft.getMinecraft();
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
@@ -58,13 +58,17 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerPreRenderInformation() {
-        ClientModelUtils.registerModelsOnPreInit();
+        ClientModelUtils.INSTANCE.registerModelsOnPreInit();
         RenderingRegistry.registerEntityRenderingHandler(
                 EcEntityExExpBottle.class, manager -> new RenderSnowball<>(manager, Items.itemExExpBottle, mc.getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
                 manager -> new EcRenderItemThrowable(manager, FIRE_CHARGE, mc.getRenderItem(), ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
                 EcRenderApOrb::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
+
+        //TextureStitchEvent
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -74,14 +78,8 @@ public class ClientProxy extends CommonProxy {
         //キー登録
         ClientRegistry.registerKeyBinding(MAGIC_KEY);
         ClientRegistry.registerKeyBinding(MATERIA_KEY);
-        ClientModelUtils.registerModels();
         EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
-
-        //TextureStitchEvent
-        MinecraftForge.EVENT_BUS.register(this);
-        //モデルの光源処理修正イベントクラス登録
-        MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
 
     }
 
@@ -200,12 +198,6 @@ public class ClientProxy extends CommonProxy {
         for (String key : ClientModelUtils.textureMapUnion.keySet()) {
             textureMap.registerSprite(new ResourceLocation(ClientModelUtils.textureMapUnion.get(key)));
         }
-    }
-
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void bakedModelRegister(ModelBakeEvent event) {
-        ClientModelUtils.changeModels(event);
     }
 
 }

@@ -21,6 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -166,6 +168,32 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
         storedRFEnergy = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_STORED_RF_ENERGY);
         generatingRFTime = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_GENERATING_RF_TIME);
         nowRF = nbt.getInteger(ak.enchantchanger.api.Constants.NBT_REACTOR_NOW_RF);
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        IBlockState state = this.world.getBlockState(this.pos);
+        this.world.notifyBlockUpdate(this.pos, state, state, 3);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.getPos(), 0, this.writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public void onDataPacket(@Nonnull NetworkManager net, @Nonnull SPacketUpdateTileEntity pkt) {
+        if (pkt.getPos().equals(this.getPos())) {
+            this.readFromNBT(pkt.getNbtCompound());
+        }
+    }
+
+    @Override
+    @Nonnull
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
     }
 
     @Override
@@ -612,13 +640,11 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int receiveEnergy(EnumFacing facing, int i, boolean b) {
         return 0;//発電のみ
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int extractEnergy(EnumFacing facing, int i, boolean b) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), i));
         if (!b) {
@@ -629,23 +655,14 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getEnergyStored(EnumFacing facing) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getMaxEnergyStored(EnumFacing facing) {
         return MAX_RF_CAPACITY;
     }
-
-//    @Optional.Method(modid = "CoFHCore")
-//    @Override
-//    public boolean canConnectEnergy(EnumFacing facing) {
-//        TileEntity tile = this.worldObj.getTileEntity(this.getPos().offset(facing));
-//        return tile instanceof IEnergyConnection;
-//    }
 
     public int getOutputMaxRFValue() {
         return outputMaxRFValue;
@@ -674,37 +691,31 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoEnergyPerTick() {
         return nowRF;
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoMaxEnergyPerTick() {
         return getOutputMaxRFValue();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoEnergyStored() {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "CoFHCore")
-//    @Override
     public int getInfoMaxEnergyStored() {
         return MAX_RF_CAPACITY;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int addEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         return 0;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int drawEnergy(EnumFacing from, int power, int speed, boolean simulate) {
         int extract = Math.min(getStoredRFEnergy(), Math.min(getOutputMaxRFValue(), speed));
         if (!simulate) {
@@ -715,31 +726,26 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public boolean canInterface(EnumFacing from) {
         return true;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int getPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public long getSpeedStored(EnumFacing from) {
         return getStoredRFEnergy();
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public int getMaxPowerStored(EnumFacing from) {
         return 3;
     }
 
     @Optional.Method(modid = "SextiarySector")
-//    @Override
     public long getMaxSpeedStored(EnumFacing from) {
         return MAX_RF_CAPACITY;
     }

@@ -5,7 +5,7 @@ import ak.enchantchanger.item.EcItemMasterMateria;
 import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.utils.EnchantmentUtils;
-import ak.MultiToolHolders.ItemMultiToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
 import ak.enchantchanger.utils.Items;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -188,10 +188,6 @@ public class EcContainerMateriaWindow extends Container {
         }
         Enchantment enchantment = EnchantmentUtils.getEnchantmentFromItemStack(itemStack);
         return EnchantmentUtils.isEnchantmentValid(enchantment, openItem);
-    }
-
-    @Override
-    protected void retrySlotClick(int slotId, int clickedButton, boolean mode, @Nonnull EntityPlayer playerIn) {
     }
 
     @Override

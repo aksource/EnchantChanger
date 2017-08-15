@@ -1,7 +1,7 @@
 package ak.enchantchanger.api;
 
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,7 +23,7 @@ public interface ICustomModelItem {
      */
     @SideOnly(Side.CLIENT)
     @Nonnull
-    default IPerspectiveAwareModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IPerspectiveAwareModel> modelList) {
+    default IBakedModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IBakedModel> modelList) {
         return modelList.get(0);
     }
 }

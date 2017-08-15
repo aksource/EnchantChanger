@@ -85,7 +85,7 @@ public class BakedModelMateria implements IBakedModel {
 
     private final ItemOverrideList itemOverrideList;
 
-    public BakedModelMateria(IRetexturableModel model) {
+    public BakedModelMateria(IModel model) {
         itemOverrideList = new ItemOverrideListMateria(model);
     }
 
@@ -159,9 +159,9 @@ public class BakedModelMateria implements IBakedModel {
     }
 
     private static class ItemOverrideListMateria extends ItemOverrideList {
-        private final IRetexturableModel objModel;
+        private final IModel objModel;
 
-        public ItemOverrideListMateria(IRetexturableModel objModel) {
+        public ItemOverrideListMateria(IModel objModel) {
             super(Lists.newArrayList());
             this.objModel = objModel;
         }
@@ -180,7 +180,7 @@ public class BakedModelMateria implements IBakedModel {
         }
     }
 
-    private static class ReTexturedModel implements IPerspectiveAwareModel {
+    private static class ReTexturedModel implements IBakedModel {
         IBakedModel b3dModel;
         private float handheldSize = 0.1F;
         private float guiSize = 0.48F;
@@ -191,8 +191,9 @@ public class BakedModelMateria implements IBakedModel {
             this.b3dModel = bakedModel;
         }
 
+        @Nonnull
         @Override
-        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(@Nonnull ItemCameraTransforms.TransformType cameraTransformType) {
             /* TRSRTransformationのmulメソッドで作ってるが、Matrix4fクラスに単独の設定メソッドが存在する
              * TRSRの意味
               * T=Transformation 並行移動　第1引数

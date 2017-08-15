@@ -196,14 +196,12 @@ public class EcEntityMeteor extends Entity {
         if (source.getTrueSource() != null) {
             Vec3d lookVec = source.getTrueSource().getLookVec();
 
-            if (lookVec != null) {
-                this.motionX = lookVec.x;
-                this.motionY = lookVec.y;
-                this.motionZ = lookVec.z;
-                this.accelerationX = this.motionX * 0.1D;
-                this.accelerationY = this.motionY * 0.1D;
-                this.accelerationZ = this.motionZ * 0.1D;
-            }
+            this.motionX = lookVec.x;
+            this.motionY = lookVec.y;
+            this.motionZ = lookVec.z;
+            this.accelerationX = this.motionX * 0.1D;
+            this.accelerationY = this.motionY * 0.1D;
+            this.accelerationZ = this.motionZ * 0.1D;
 
             if (source.getTrueSource() instanceof EntityLiving) {
                 this.shootingEntity = (EntityLiving) source.getTrueSource();
@@ -216,12 +214,12 @@ public class EcEntityMeteor extends Entity {
     }
 
     @Override
-    public float getBrightness(float par1) {
+    public float getBrightness() {
         return 1.0F;
     }
 
     @Override
-    public int getBrightnessForRender(float par1) {
+    public int getBrightnessForRender() {
         return 15728880;
     }
 

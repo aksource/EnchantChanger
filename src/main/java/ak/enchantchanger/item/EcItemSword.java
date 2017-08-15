@@ -14,6 +14,7 @@ import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,10 +91,11 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull List<String> list, boolean advToolTip) {
-        if (EnchantmentUtils.hasMagic(itemStack)) {
-            for (byte b : EnchantmentUtils.getMagic(itemStack)) {
-                list.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal(EcItemMateria.MAGIC_NAME[b - 1]));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        if (EnchantmentUtils.hasMagic(stack)) {
+            for (byte b : EnchantmentUtils.getMagic(stack)) {
+                tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal(MagicType.getById(b).getInfoString()));
             }
         }
     }

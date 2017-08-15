@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public class EcRecipeMateria implements IRecipe {
+public class EcRecipeMateria extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     private ItemStack output = null;
 
     @Override
@@ -79,8 +79,8 @@ public class EcRecipeMateria implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 2;
+    public boolean canFit(int width, int height) {
+        return width >= 2 && height >=2;
     }
 
     @Override

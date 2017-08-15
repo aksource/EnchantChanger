@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class EcRecipeMasterMateria implements IRecipe {
+public class EcRecipeMasterMateria extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     private static final Map<MasterMateriaType, Set<Enchantment>> RECIPE_MAP = new HashMap<>();
 
     static {
@@ -48,7 +48,7 @@ public class EcRecipeMasterMateria implements IRecipe {
                         Enchantments.KNOCKBACK,
                         Enchantments.FIRE_ASPECT,
                         Enchantments.LOOTING,
-                        Enchantments.field_191530_r// sweeping
+                        Enchantments.SWEEPING
                 ));
         RECIPE_MAP.put(MasterMateriaType.DIGGING,
                 Sets.newHashSet(
@@ -94,8 +94,8 @@ public class EcRecipeMasterMateria implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 3;
+    public boolean canFit(int width, int height) {
+        return width >= 3 && height >= 3;
     }
 
     @Override

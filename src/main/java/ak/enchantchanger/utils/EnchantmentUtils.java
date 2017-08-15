@@ -26,7 +26,6 @@ import static ak.enchantchanger.api.Constants.NBT_KEY_ENCHANT_CHANGER_MAGIC;
 public class EnchantmentUtils {
 
     public static final Map<ResourceLocation, Integer> AP_LIMIT = new HashMap<>();
-    public static final Set<Integer> MAGIC_ENCHANTMENT = new HashSet<>();
     public static final Map<ResourceLocation, Integer> LEVEL_LIMIT_MAP = new HashMap<>();
     public static final Map<ResourceLocation, Integer> COEFFICIENT_MAP = new HashMap<>();
     public static final List<EnchantmentData> ENCHANTMENT_DATA_LIST = new ArrayList<>();

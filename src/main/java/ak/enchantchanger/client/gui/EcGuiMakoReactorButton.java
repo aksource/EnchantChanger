@@ -22,11 +22,11 @@ public class EcGuiMakoReactorButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(@Nonnull Minecraft mc, int x, int y) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             mc.getTextureManager().bindTexture(EcGuiMakoReactor.GUI);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            boolean flag = x >= this.x && y >= this.y && x < this.x + this.width && y < this.y + this.height;
+            boolean flag = mouseX >= this.x && mouseY >= this.y && x < this.x + this.width && y < this.y + this.height;
             int k = 120;
             int l = 176;
 

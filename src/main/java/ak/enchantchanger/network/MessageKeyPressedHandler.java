@@ -1,7 +1,7 @@
 package ak.enchantchanger.network;
 
-import ak.MultiToolHolders.ItemMultiToolHolder;
-import ak.MultiToolHolders.inventory.InventoryToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
+import ak.multitoolholders.inventory.InventoryToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;

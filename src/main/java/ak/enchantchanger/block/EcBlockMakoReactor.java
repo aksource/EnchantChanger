@@ -14,7 +14,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * 魔晄炉のブロッククラス
@@ -100,10 +98,10 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         for (EnumMRBaseType type : EnumMRBaseType.values()) {
             ItemStack makoReactorController = new ItemStack(this, 1, type.ordinal());
-            list.add(makoReactorController);
+            items.add(makoReactorController);
         }
     }
 

@@ -47,6 +47,9 @@ enchantment.Haste=Haste
 enchantment.Absorption=Absorption
 #Potion
 EC|MakoPoison=魔晄中毒
+potion.effect.mako=魔晄のポーション
+splash_potion.effect.mako=魔晄のスプラッシュポーション
+lingering_potion.effect.mako=魔晄の残留ポーション
 #death
 death.attack.mako=%1$sは星に還った
 #Container

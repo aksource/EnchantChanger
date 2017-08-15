@@ -61,22 +61,6 @@ public class EcBlockMultiPass extends BlockContainer {
         return BlockRenderLayer.CUTOUT;
     }
 
-//    @Override
-//    public boolean canRenderInPass(int pass) {
-//        ClientProxy.customRenderPass = pass;
-//        return true;
-//    }
-
-//    @Override
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//        EcTileMultiPass tileMultiPass = (EcTileMultiPass)world.getTileEntity(x, y, z);
-//        if (tileMultiPass != null && ClientProxy.customRenderPass == 0) {
-//            Block block = tileMultiPass.getBaseBlock();
-//            return block.getIcon(side, tileMultiPass.getBaseMeta());
-//        }
-//        return this.blockIcon;
-//    }
-
     @Override
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos blockPos, @Nonnull IBlockState state,
                                 @Nonnull EntityLivingBase setter, @Nonnull ItemStack item) {

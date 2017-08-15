@@ -15,8 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.Attributes;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.IRetexturableModel;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
@@ -40,10 +39,10 @@ public class EcSwordModel implements IBakedModel {
     private final IBakedModel guiModel;
     private final ItemOverrideList itemOverrideList;
 
-    public EcSwordModel(IBakedModel model1, List<IRetexturableModel> reTexturableModelList, float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
+    public EcSwordModel(IBakedModel model1, List<IModel> reTexturableModelList, float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
         this.guiModel = model1;
-        List<IPerspectiveAwareModel> list = new ArrayList<>();
-        for (IRetexturableModel model : reTexturableModelList) {
+        List<IBakedModel> list = new ArrayList<>();
+        for (IModel model : reTexturableModelList) {
             IBakedModel reTexturedModel;
             reTexturedModel = model.retexture(textureMap).bake(model.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, ModelLoader.defaultTextureGetter());
             PerspectiveModel perspectiveModel = new PerspectiveModel(model1, reTexturedModel, sizeFPV, sizeTPV);
@@ -99,9 +98,9 @@ public class EcSwordModel implements IBakedModel {
         /**
          * モデルリスト
          */
-        private final List<IPerspectiveAwareModel> modelList;
+        private final List<IBakedModel> modelList;
 
-        ItemOverrideListSword(IBakedModel guiModel, List<IPerspectiveAwareModel> modelList) {
+        ItemOverrideListSword(IBakedModel guiModel, List<IBakedModel> modelList) {
             super(Lists.newArrayList());
             this.guiModel = guiModel;
             this.modelList = modelList;
@@ -119,7 +118,7 @@ public class EcSwordModel implements IBakedModel {
         }
     }
 
-    public static class PerspectiveModel implements IPerspectiveAwareModel {
+    public static class PerspectiveModel implements IBakedModel {
 
         /**
          * 一人称視点時のサイズ補正
@@ -172,8 +171,6 @@ public class EcSwordModel implements IBakedModel {
             this.handHeldModel = handHeldModel;
             this.scaleFirstPerson = new Vector3f(sizeFPV, sizeFPV, sizeFPV);
             this.scaleThirdPerson = new Vector3f(sizeTPV, sizeTPV, sizeTPV);
-//            this.rotateThirdPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0)));
-//            this.rotateThirdPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 90, 0)));
             rotateFirstPerson.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 90, 0)));
             rotateFirstPersonLeft.mul(TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, -90, 0)));
         }

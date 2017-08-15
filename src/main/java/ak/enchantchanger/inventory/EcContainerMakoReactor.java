@@ -1,7 +1,6 @@
 package ak.enchantchanger.inventory;
 
-import ak.enchantchanger.item.EcItemBucketLifeStream;
-import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.api.MakoUtils;
 import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -113,7 +112,7 @@ public class EcContainerMakoReactor extends Container {
                 }
                 slot.onSlotChange(item, retItem);
             } else {
-                if (item.getItem() instanceof EcItemBucketLifeStream || item.getItem() instanceof EcItemMateria) {
+                if (MakoUtils.isMako(item)) {
                     if (!mergeItemStack(item, SLOTS_FUEL[0], SLOTS_FUEL[SLOTS_FUEL.length - 1] + 1, false)) {
                         return ItemStack.EMPTY;
                     }

@@ -1,12 +1,12 @@
 package ak.enchantchanger.client;
 
-import ak.MultiToolHolders.inventory.InventoryToolHolder;
+import ak.multitoolholders.inventory.InventoryToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.api.ICustomReachItem;
 import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.network.MessageExtendedReachAttack;
 import ak.enchantchanger.network.PacketHandler;
-import ak.MultiToolHolders.ItemMultiToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -57,7 +57,7 @@ public class ClientInputUtils {
         if (moveForward != 0 || moveStrafe != 0) {
             player.motionX = player.motionZ = 0;
         }
-        player.moveRelative(moveStrafe, moveForward, ClientProxy.MOVE_FACTOR * 1.2F);
+        player.moveRelative(moveStrafe, 0, moveForward, ClientProxy.MOVE_FACTOR * 1.2F);
     }
 
     static void doMagic(ItemStack itemStack, EntityPlayer player) {

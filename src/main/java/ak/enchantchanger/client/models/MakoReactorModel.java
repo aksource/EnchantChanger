@@ -4,6 +4,7 @@ package ak.enchantchanger.client.models;
  * 魔晄炉ブロック用IModelクラス
  * Created by A.K. on 2015/09/04.
  */
+@Deprecated
 public class MakoReactorModel/* implements IModel*/ {
 //
 //    /**

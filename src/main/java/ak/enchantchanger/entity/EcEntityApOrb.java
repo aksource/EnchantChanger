@@ -3,8 +3,8 @@ package ak.enchantchanger.entity;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.enchantchanger.utils.EnchantmentUtils;
-import ak.MultiToolHolders.ItemMultiToolHolder;
-import ak.MultiToolHolders.inventory.InventoryToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
+import ak.multitoolholders.inventory.InventoryToolHolder;
 import com.google.common.collect.Lists;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -52,7 +52,6 @@ public class EcEntityApOrb extends Entity {
     public EcEntityApOrb(World world, double x, double y, double z, int apValue) {
         super(world);
         this.setSize(0.5F, 0.5F);
-//		this.yOffset = this.height / 2.0F;
         this.setPosition(x, y, z);
         this.rotationYaw = (float) (Math.random() * 360.0D);
         this.motionX = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
@@ -71,7 +70,7 @@ public class EcEntityApOrb extends Entity {
     }
 
     @Override
-    public int getBrightnessForRender(float partialTicks) {
+    public int getBrightnessForRender() {
         float var2 = 0.5F;
 
         if (var2 < 0.0F) {
@@ -82,7 +81,7 @@ public class EcEntityApOrb extends Entity {
             var2 = 1.0F;
         }
 
-        int var3 = super.getBrightnessForRender(partialTicks);
+        int var3 = super.getBrightnessForRender();
         int var4 = var3 & 255;
         int var5 = var3 >> 16 & 255;
         var4 += (int) (var2 * 15.0F * 16.0F);
@@ -165,17 +164,6 @@ public class EcEntityApOrb extends Entity {
 
     protected void dealFireDamage(int par1) {
         this.attackEntityFrom(DamageSource.IN_FIRE, par1);
-    }
-
-    private boolean attackEntityFrom(DamageSource damageSource, int i) {
-        this.setBeenAttacked();
-        this.apOrbHealth -= i;
-
-        if (this.apOrbHealth <= 0) {
-            this.setDead();
-        }
-
-        return false;
     }
 
     @Override

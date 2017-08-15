@@ -1,7 +1,7 @@
 package ak.enchantchanger.inventory;
 
 
-import ak.MultiToolHolders.ItemMultiToolHolder;
+import ak.multitoolholders.ItemMultiToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.utils.EnchantmentUtils;
@@ -67,10 +67,6 @@ public class EcContainerMaterializer extends Container {
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer player) {
         return true;
-    }
-
-    @Override
-    protected void retrySlotClick(int slotId, int clickedButton, boolean mode, @Nonnull EntityPlayer playerIn) {
     }
 
     private void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
@@ -192,7 +188,7 @@ public class EcContainerMaterializer extends Container {
                         }
 
                         for (Pair<Enchantment, Integer> data : this.itemEnchantmentLvPair) {
-                            if (!data.getLeft()./*canApplyTogether*/func_191560_c(enchKind)) {
+                            if (!data.getLeft().isCompatibleWith(enchKind)) {
                                 this.enchantmentRemoveData.add(data);
                             }
                         }
@@ -241,7 +237,6 @@ public class EcContainerMaterializer extends Container {
                 for (Pair<Enchantment, Integer> data : subList) {
                     if (data.getLeft() == null) break;
                     int decreasedLv = EnchantmentUtils.getDecreasedLevel(baseItem, data.getRight());
-//                    int damage = this.setMateriaDmgfromEnch(data.getLeft().effectId);
                     if (decreasedLv > 0) {
                         ItemStack materia = new ItemStack(Items.itemMateria, 1, 0);
                         EnchantmentUtils.addEnchantmentToItem(materia, data.getLeft(), decreasedLv);

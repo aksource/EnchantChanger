@@ -15,8 +15,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 import javax.annotation.Nonnull;
 
@@ -95,15 +93,6 @@ public class EcItemCloudSword extends EcItemSword {
                 swordData.setInventorySlotContents(i, net.minecraft.item.ItemStack.EMPTY);
             }
         }
-    }
-
-    public void destroyTheItem(EntityPlayer player, ItemStack orig, EnumHand hand) {
-        IInventory swordData = getInventoryFromItemStack(orig);
-        swordData.setInventorySlotContents(getSlotNumFromItemStack(orig), ItemStack.EMPTY);
-        MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, orig, hand));
-        this.doCastOffSwords(orig, player.getEntityWorld(), player);
-        player.inventory.setInventorySlotContents(player.inventory.currentItem,
-                this.makeCloudSwordCore(player.getHeldItem(hand)));
     }
 
     @Override

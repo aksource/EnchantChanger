@@ -261,12 +261,12 @@ public class EcEntitySword extends Entity {
     }
 
     @Override
-    public float getBrightness(float partialTicks) {
+    public float getBrightness() {
         return 1.0F;
     }
 
     @Override
-    public int getBrightnessForRender(float partialTicks) {
+    public int getBrightnessForRender() {
         return 15728880;
     }
 }

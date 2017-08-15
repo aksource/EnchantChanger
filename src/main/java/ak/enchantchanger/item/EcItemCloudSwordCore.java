@@ -2,6 +2,8 @@ package ak.enchantchanger.item;
 
 import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.utils.Items;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -13,7 +15,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 
@@ -44,12 +46,11 @@ public class EcItemCloudSwordCore extends EcItemSword {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull List<String> list, boolean advToolTip) {
-        boolean mode = isActive(itemStack);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        boolean mode = isActive(stack);
         String s = mode ? Constants.KEY_ENCHANTCHANGER_CLOUDSWORDCORE_MODE_ACTIVE : Constants.KEY_ENCHANTCHANGER_CLOUDSWORDCORE_MODE_INACTIVE;
-        list.add(I18n.translateToLocal(s));
-        super.addInformation(itemStack, player, list, advToolTip);
+        tooltip.add(I18n.translateToLocal(s));
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Nonnull
@@ -148,7 +149,7 @@ public class EcItemCloudSwordCore extends EcItemSword {
     @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public IPerspectiveAwareModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IPerspectiveAwareModel> modelList) {
+    public IBakedModel getPresentModel(@Nonnull ItemStack itemStack, @Nonnull List<IBakedModel> modelList) {
         return (isActive(itemStack) ? modelList.get(1) : modelList.get(0));
     }
 }
