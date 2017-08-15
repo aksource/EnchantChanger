@@ -14,12 +14,13 @@ import javax.annotation.Nonnull;
  * Created by A.K. on 14/03/10.
  */
 public class EcPotionMako extends Potion {
+    public static final String NAME = "mako";
     private static final ResourceLocation NEW_EFFECT = new ResourceLocation(Constants.EcAssetsDomain, Constants.EcPotionEffect);
 
     public EcPotionMako() {
         super(true, 0x12f9c7);
         this.setIconIndex(0, 0);
-        this.setRegistryName("mako");
+        this.setRegistryName(NAME);
     }
 
     @Override
@@ -36,9 +37,12 @@ public class EcPotionMako extends Potion {
     @Override
     public boolean isReady(int duration, int amplifier) {
         int k;
-//        if (this.id == ConfigurationUtils.idMakoPoison) {
             k = 40 >> amplifier;
             return k <= 0 || duration % k == 0;
-//        } else return super.isReady(duration, amplifier);
+    }
+
+    @Override
+    public boolean hasStatusIcon() {
+        return true;
     }
 }

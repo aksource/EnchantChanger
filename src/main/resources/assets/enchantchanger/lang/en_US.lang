@@ -47,6 +47,9 @@ enchantment.Haste=Haste
 enchantment.Absorption=Absorption
 #Potion
 EC|MakoPoison=Mako Poison
+potion.effect.mako=Potion of Mako
+splash_potion.effect.mako=Splash Potion of Mako
+lingering_potion.effect.mako=Lingering Potion of Mako
 #death
 death.attack.mako=%1$s was gone to lifestream
 #Container

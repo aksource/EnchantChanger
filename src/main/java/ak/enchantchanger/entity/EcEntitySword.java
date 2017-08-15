@@ -114,14 +114,14 @@ public class EcEntitySword extends Entity {
             }
 
             Entity var4 = null;
-            List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
 
             for (Entity entity : entityList) {
 
                 if (entity.canBeCollidedWith() && (!entity.isEntityEqual(this.enemyEntity) || this.ticksInAir >= 25)) {
                     float var10 = 0.3F;
-                    AxisAlignedBB aabb = entity.getEntityBoundingBox().expand((double) var10, (double) var10, (double) var10);
+                    AxisAlignedBB aabb = entity.getEntityBoundingBox().grow((double) var10, (double) var10, (double) var10);
                     RayTraceResult traceResult = aabb.calculateIntercept(var15, var2);
 
                     if (traceResult != null) {

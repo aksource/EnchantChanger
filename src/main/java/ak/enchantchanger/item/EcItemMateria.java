@@ -1,5 +1,7 @@
 package ak.enchantchanger.item;
 
+import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.api.MagicType;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.capability.IPlayerStatusHandler;
 import ak.enchantchanger.entity.EcEntityMeteor;
@@ -40,11 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 public class EcItemMateria extends EcItem {
-    public static final String[] MateriaMagicNames = new String[]{"Black", "White", "Teleport", "Floating",
-            "Thunder", "Despell", "Haste", "Absorption"};
-    public static final String[] MAGIC_NAME = new String[]{"enchantment.Meteor", "enchantment.Holy", "enchantment.Teleport", "enchantment.Floating",
-            "enchantment.Thunder", "enchantment.Despell", "enchantment.Haste", "enchantment.Absorption"};
-    public static int MagicMateriaNum = MateriaMagicNames.length;
     private static final Map<ResourceLocation, ResourceLocation> ENCHANTMENT_EFFECT_MAP = new HashMap<>();
 
     public EcItemMateria(String name) {
@@ -81,12 +78,6 @@ public class EcItemMateria extends EcItem {
     private static void teleportToChunkCoord(World world, EntityPlayer entityplayer, Vec3d vector,
                                              boolean isSneaking, boolean telepoDim, int dimID) {
         if (!world.isRemote) {
-//            if (vector == null) {
-//                ChunkCoordinates chunk = MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
-//                entityplayer.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
-//            } else {
-//                entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
-//            }
             entityplayer.fallDistance = 0.0F;
             if (telepoDim) {
                 travelDimension(entityplayer, dimID);
@@ -101,73 +92,25 @@ public class EcItemMateria extends EcItem {
         entityplayer.setPositionAndUpdate(vector.x, vector.y, vector.z);
     }
 
-//	public void addMateriaLv(ItemStack item, int addLv)
-//	{
-//		int EnchantmentKind = EnchantmentUtils.getEnchantmentRegisterName(item);
-//		int Lv = EnchantmentUtils.getMateriaEnchLv(item);
-//		NBTTagCompound nbt = item.getTagCompound();
-//		nbt.removeTag("ench");
-//		EnchantmentUtils.addEnchantmentToItem(item, Enchantment.field_180311_a[EnchantmentKind], Lv + addLv);
-//	}
-
     private static void travelDimension(EntityPlayer player, int nowDim) {
         if (nowDim != 0 && player instanceof EntityPlayerMP) {
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
             player.changeDimension(0);
-            /*transferPlayerToDimension(playerMP.mcServer.getConfigurationManager(), playerMP, 0, new MateriaTeleporter(
-                    playerMP.mcServer.worldServerForDimension(0)));*/
         }
     }
 
-//    public static void transferPlayerToDimension(ServerConfigurationManager serverConf,
-//                                                 EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter) {
-//        int j = par1EntityPlayerMP.dimension;
-//        WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-//        par1EntityPlayerMP.dimension = par2;
-//        WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-//        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension,
-//                par1EntityPlayerMP.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(),
-//                par1EntityPlayerMP.theItemInWorldManager.getGameType()));
-//        worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
-//        par1EntityPlayerMP.isDead = false;
-//        serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
-//        serverConf.preparePlayer(par1EntityPlayerMP, worldserver);
-//        par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY,
-//                par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
-//        par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
-//        serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
-//        serverConf.syncPlayerInventory(par1EntityPlayerMP);
-//
-//        for (Object object : par1EntityPlayerMP.getActivePotionEffects()) {
-//            PotionEffect potioneffect = (PotionEffect) object;
-//            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP
-//                    .getEntityId(), potioneffect));
-//        }
-//
-//        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
-//    }
-
     public static Vec3d setTeleportPoint(World world, EntityPlayer entityplayer) {
-        double var1 = 1.0D;
         double distLimit = 150.0D;
         double viewX = entityplayer.getLookVec().x;
         double viewY = entityplayer.getLookVec().y;
         double viewZ = entityplayer.getLookVec().z;
-/*        double playerPosX = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * var1;
-        double playerPosY = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * var1 + entityplayer.getYOffset();
-        double playerPosZ = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * var1;*/
         double playerPosX = entityplayer.posX;
-        double playerPosY = entityplayer.posY + 1.62D/*1.62D - entityplayer.getYOffset()*/;
+        double playerPosY = entityplayer.posY + 1.62D;
         double playerPosZ = entityplayer.posZ;
         Vec3d playerPosition = new Vec3d(playerPosX, playerPosY, playerPosZ);
         Vec3d playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
         RayTraceResult rayTraceResult = world.rayTraceBlocks(playerPosition, playerLookVec, false);
         if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
             EnumFacing blockSide = rayTraceResult.sideHit;
-//            ForgeDirection direction = ForgeDirection.getOrientation(blockSide);
-//			double blockPosX = rayTraceResult.blockX + 0.5D + direction.offsetX;
-//			double blockPosY = rayTraceResult.blockY + direction.offsetY;
-//			double blockPosZ = rayTraceResult.blockZ + 0.5D + direction.offsetZ;
             BlockPos blockPos = rayTraceResult.getBlockPos();
             if (blockSide == EnumFacing.DOWN) {
                 blockPos = blockPos.down(2);
@@ -188,7 +131,7 @@ public class EcItemMateria extends EcItem {
         }
         decreasePlayerFood(entityplayer, 6);
         List<EntityLivingBase> EntityList = world.getEntitiesWithinAABB(EntityLivingBase.class,
-                entityplayer.getEntityBoundingBox().expand(5D, 5D, 5D));
+                entityplayer.getEntityBoundingBox().grow(5D, 5D, 5D));
         for (EntityLivingBase entityLivingBase : EntityList) {
             if (entityLivingBase.isEntityUndead()) {
                 int var1 = MathHelper.floor(entityLivingBase.getMaxHealth() / 2);
@@ -214,8 +157,9 @@ public class EcItemMateria extends EcItem {
         }
         decreasePlayerFood(entityplayer, 6);
         Vec3d EndPoint = setTeleportPoint(world, entityplayer);
-        if (EndPoint != null)
-            world.spawnEntity(new EntityLightningBolt(world, EndPoint.x, EndPoint.y, EndPoint.z, false));
+        if (EndPoint != null && !world.isRemote) {
+            world.addWeatherEffect(new EntityLightningBolt(world, EndPoint.x, EndPoint.y, EndPoint.z, false));
+        }
     }
 
     private static void decreasePlayerFood(EntityPlayer player, int dec) {
@@ -233,7 +177,7 @@ public class EcItemMateria extends EcItem {
     public boolean onLeftClickEntity(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player, @Nonnull Entity entity) {
         if (entity instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) entity;
-            this.MateriaPotionEffect(itemstack, entityliving, player);
+            this.applyMateriaPotionEffect(itemstack, entityliving, player);
             return false;
         }
         return false;
@@ -281,7 +225,7 @@ public class EcItemMateria extends EcItem {
         return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
     }
 
-    public void MateriaPotionEffect(ItemStack item, EntityLiving entity, EntityPlayer player) {
+    public void applyMateriaPotionEffect(ItemStack item, EntityLiving entity, EntityPlayer player) {
         if (item.getItemDamage() > 0) {
             switch (item.getItemDamage()) {
                 case 6:
@@ -296,15 +240,14 @@ public class EcItemMateria extends EcItem {
         } else {
             ResourceLocation registerName = EnchantmentUtils.getEnchantmentRegisterName(item);
             int lv = EnchantmentUtils.getEnchantmentLv(item);
-                String message;
                 String EntityName = entity.toString();
                 ResourceLocation potionRegName = ENCHANTMENT_EFFECT_MAP.get(registerName);
             if (potionRegName != null && Potion.getPotionFromResourceLocation(potionRegName.toString()) != null) {
                 Potion potion = Potion.getPotionFromResourceLocation(potionRegName.toString());
-                if (player.experienceLevel > LevelUPEXP(item, false) || player.capabilities.isCreativeMode) {
+                if (player.experienceLevel > getLevelUPEXP(item, false) || player.capabilities.isCreativeMode) {
                     entity.addPotionEffect(new PotionEffect(potion, 20 * 60 * ConfigurationUtils.minutesMateriaEffects,
                             lv));
-                    player.addExperienceLevel(-LevelUPEXP(item, false));
+                    player.addExperienceLevel(-getLevelUPEXP(item, false));
                     player.sendMessage(new TextComponentString(EntityName + " gets " + potion.getName()));
                     decreasePlayerFood(player, 6);
                 }
@@ -317,36 +260,35 @@ public class EcItemMateria extends EcItem {
     public String getUnlocalizedName(@Nonnull ItemStack itemStack) {
         if (itemStack.getItemDamage() == 0) {
             return itemStack.isItemEnchanted() ? "ItemMateria" : "ItemMateria.Base";
-        } else if (itemStack.getItemDamage() < MagicMateriaNum + 1) {
-            int var3 = itemStack.getItemDamage() - 1;
-            return "ItemMateria." + MateriaMagicNames[var3];
         } else {
-            return "";
+            return "ItemMateria." + MagicType.getById(itemStack.getItemDamage()).getMagicName();
         }
     }
 
     @Override
     public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
-        subItems.add(new ItemStack(this, 1, 0));
-        ItemStack stack1, stack2, /*stack3, */stack4;
-        for (Enchantment enchantment : Enchantment.REGISTRY) {
-            stack1 = new ItemStack(this, 1, 0);
-            stack1.addEnchantment(enchantment, 1);
-            subItems.add(stack1);
-            if (enchantment.getMaxLevel() > 1) {
-                stack2 = new ItemStack(this, 1, 0);
-                stack2.addEnchantment(enchantment, enchantment.getMaxLevel());
-                subItems.add(stack2);
+        if (Constants.TAB_ENCHANT_CHANGER.equals(tab)) {
+            subItems.add(new ItemStack(this, 1, 0));
+            ItemStack stack1, stack2, stack4;
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                stack1 = new ItemStack(this, 1, 0);
+                stack1.addEnchantment(enchantment, 1);
+                subItems.add(stack1);
+                if (enchantment.getMaxLevel() > 1) {
+                    stack2 = new ItemStack(this, 1, 0);
+                    stack2.addEnchantment(enchantment, enchantment.getMaxLevel());
+                    subItems.add(stack2);
+                }
+                if (ConfigurationUtils.debug) {
+                    stack4 = new ItemStack(this, 1, 0);
+                    stack4.addEnchantment(enchantment, 127);
+                    subItems.add(stack4);
+                }
             }
-            if (ConfigurationUtils.debug) {
-                stack4 = new ItemStack(this, 1, 0);
-                stack4.addEnchantment(enchantment, 127);
-                subItems.add(stack4);
+            for (MagicType type : MagicType.values()) {
+                ItemStack magic = new ItemStack(this, 1, type.getId());
+                subItems.add(magic);
             }
-        }
-        for (int i = 0; i < MagicMateriaNum; i++) {
-            ItemStack magic = new ItemStack(this, 1, 1 + i);
-            subItems.add(magic);
         }
     }
 
@@ -363,7 +305,7 @@ public class EcItemMateria extends EcItem {
                 info = enchantment.getName();
             } else {
                 type = "ecsword";
-                info = MAGIC_NAME[(itemStack.getItemDamage() - 1) % MAGIC_NAME.length];
+                info = MagicType.getById(itemStack.getItemDamage()).getInfoString();
             }
 
             String enchantmentType = "Type : " + I18n.translateToLocal("enchantmenttype." + type);
@@ -376,7 +318,7 @@ public class EcItemMateria extends EcItem {
     }
 
     public boolean isFloatingMateria(ItemStack itemStack) {
-        return itemStack.getItemDamage() == 4;
+        return itemStack.getItemDamage() == MagicType.FLOATING.getId();
     }
 
     @Override
@@ -400,7 +342,7 @@ public class EcItemMateria extends EcItem {
         }
     }
 
-    public int LevelUPEXP(ItemStack item, boolean next) {
+    public int getLevelUPEXP(ItemStack item, boolean next) {
         ResourceLocation registerName = EnchantmentUtils.getEnchantmentRegisterName(item);
         int Lv = EnchantmentUtils.getEnchantmentLv(item);
         int nextLv = next ? 1 : 0;
@@ -414,8 +356,8 @@ public class EcItemMateria extends EcItem {
     }
 
     public static void doDespell(EntityPlayer player, Entity entity) {
-        if (entity instanceof EntityLiving) {
-            ((EntityLiving) entity).clearActivePotions();
+        if (entity instanceof EntityLivingBase) {
+            ((EntityLivingBase) entity).clearActivePotions();
             for (Potion potion : Potion.REGISTRY) {
                 ((EntityLiving) entity).removePotionEffect(potion);
             }
@@ -424,7 +366,7 @@ public class EcItemMateria extends EcItem {
     }
 
     public static void doHaste(EntityPlayer player, EntityLivingBase entityliving) {
-        entityliving.addPotionEffect(new PotionEffect(MobEffects.HASTE, 20 * 60 * 5, 1));
+        entityliving.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20 * 60 * 5, 1));
         decreasePlayerFood(player, 2);
     }
     static {

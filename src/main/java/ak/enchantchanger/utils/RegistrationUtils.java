@@ -9,10 +9,13 @@ import ak.enchantchanger.tileentity.EcTileEntityHugeMateria;
 import ak.enchantchanger.tileentity.EcTileEntityMakoReactor;
 import ak.enchantchanger.tileentity.EcTileEntityMaterializer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import static ak.enchantchanger.EnchantChanger.makoPotionType;
 import static ak.enchantchanger.EnchantChanger.potionMako;
 import static ak.enchantchanger.utils.Blocks.*;
 import static ak.enchantchanger.utils.Items.*;
@@ -29,8 +32,6 @@ public class RegistrationUtils {
         GameRegistry.register(blockMakoReactor);
         GameRegistry.register(itemBlockMakoReactor);
         GameRegistry.register(blockLifeStream);
-//        FluidContainerRegistry.registerFluidContainer(FluidRegistry.getFluidStack(fluidLifeStream.getName(), FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(itemBucketLifeStream), new ItemStack(bucket));
-        GameRegistry.register(itemBucketLifeStream);
 
         GameRegistry.register(itemMateria);
         GameRegistry.register(itemHugeMateria);
@@ -68,5 +69,8 @@ public class RegistrationUtils {
 
     public static void addStatusEffect() {
         potionMako = new EcPotionMako().setPotionName("EC|MakoPoison");
+        GameRegistry.register(potionMako);
+        makoPotionType = new PotionType(EcPotionMako.NAME, new PotionEffect(potionMako)).setRegistryName(EcPotionMako.NAME);
+        GameRegistry.register(makoPotionType);
     }
 }

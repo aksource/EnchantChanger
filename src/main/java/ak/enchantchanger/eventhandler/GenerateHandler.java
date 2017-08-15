@@ -1,6 +1,6 @@
 package ak.enchantchanger.eventhandler;
 
-import ak.enchantchanger.item.EcItemMateria;
+import ak.enchantchanger.api.MagicType;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import ak.enchantchanger.utils.Items;
 import com.google.common.collect.Lists;
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.List;
 import java.util.Random;
 
-import static ak.enchantchanger.utils.Blocks.blockLifeStream;
 import static ak.enchantchanger.EnchantChanger.logger;
+import static ak.enchantchanger.utils.Blocks.blockLifeStream;
 
 /**
  * 地形構造物生成系処理ハンドラークラス
@@ -66,14 +66,14 @@ public class GenerateHandler {
 
     private LootEntry[] makeMagicMateriaEntry() {
         List<LootEntry> entryList = Lists.newArrayList();
-        for (int i = 0; i < EcItemMateria.MagicMateriaNum; i++) {
+        for (MagicType type : MagicType.values()) {
             entryList.add(new LootEntryItem(
                     Items.itemMateria,
                     1,
                     1,
                     new LootFunction[]{
                             new SetMetadata(new LootCondition[]{},
-                                    new RandomValueRange(1, 1))
+                                    new RandomValueRange(type.getId(), type.getId()))
                     },
                     new LootCondition[]{},
                     "magic_materia"

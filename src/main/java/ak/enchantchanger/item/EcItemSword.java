@@ -93,7 +93,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
     public void addInformation(@Nonnull ItemStack itemStack, @Nonnull EntityPlayer player, @Nonnull List<String> list, boolean advToolTip) {
         if (EnchantmentUtils.hasMagic(itemStack)) {
             for (byte b : EnchantmentUtils.getMagic(itemStack)) {
-                list.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal(EcItemMateria.MAGIC_NAME[b - 1]));
+                list.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal(MagicType.getById(b).getInfoString()));
             }
         }
     }

@@ -72,7 +72,7 @@ public class EcEntityMeteor extends Entity {
             }
 
             Entity var4 = null;
-            List<Entity> var5 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> var5 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
             EntityLivingBase entitylivingbase = this.getThrower();
 
@@ -80,7 +80,7 @@ public class EcEntityMeteor extends Entity {
 
                 if (var9.canBeCollidedWith() && (!var9.isEntityEqual(entitylivingbase)/* || this.ticksInAir >= 25*/)) {
                     float var10 = 0.3F;
-                    AxisAlignedBB var11 = var9.getEntityBoundingBox().expand((double) var10, (double) var10, (double) var10);
+                    AxisAlignedBB var11 = var9.getEntityBoundingBox().grow((double) var10, (double) var10, (double) var10);
                     RayTraceResult var12 = var11.calculateIntercept(var15, var2);
 
                     if (var12 != null) {
