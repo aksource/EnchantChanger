@@ -9,13 +9,15 @@ import javax.annotation.Nonnull;
  * Created by A.K. on 2017/05/10.
  */
 public enum EnumMRBaseType implements IStringSerializable {
-    IRON("iron", "minecraft:iron_block"),
-    GOLD("gold", "minecraft:gold_block");
+    IRON("iron", "minecraft:iron_block", "blockIron"),
+    GOLD("gold", "minecraft:gold_block", "blockGold");
     private final String name;
     private final String registryName;
-    EnumMRBaseType(String name, String registryName) {
+    private final String oreName;
+    EnumMRBaseType(String name, String registryName, String oreName) {
         this.name = name;
         this.registryName = registryName;
+        this.oreName = oreName;
     }
     @Override
     @Nonnull
@@ -34,5 +36,9 @@ public enum EnumMRBaseType implements IStringSerializable {
             }
         }
         return IRON;
+    }
+
+    public String getOreName() {
+        return oreName;
     }
 }
