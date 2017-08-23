@@ -9,15 +9,12 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * レシピ系登録クラス
@@ -129,21 +126,17 @@ public class Recipes {
                         'Y', new ItemStack(ak.enchantchanger.utils.Items.itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE));
 
         for (EnumMRBaseType type : EnumMRBaseType.values()) {
-            addOreDictRecipe(type.getName());
+            addOreDictRecipe(type);
         }
     }
 
 
-    private static void addOreDictRecipe(String OreDictName) {
+    private static void addOreDictRecipe(EnumMRBaseType type) {
         ItemStack makoReactorController;
-        List<ItemStack> ores = OreDictionary.getOres(OreDictName);
+        List<ItemStack> ores = OreDictionary.getOres(type.getOreName());
         if (ores == null) return;
         for (ItemStack itemStack : ores) {
-            makoReactorController = new ItemStack(ak.enchantchanger.utils.Blocks.blockMakoReactor, 1, 0);
-            makoReactorController.setTagCompound(new NBTTagCompound());
-            ResourceLocation uidRL = Optional.ofNullable(itemStack.getItem().getRegistryName()).orElse(new ResourceLocation("dummy", "dummy"));
-            makoReactorController.getTagCompound().setString("enchantchanger|baseBlock", uidRL.toString());
-            makoReactorController.getTagCompound().setInteger("enchantchanger|baseMeta", itemStack.getItemDamage());
+            makoReactorController = new ItemStack(ak.enchantchanger.utils.Blocks.blockMakoReactor, 1, type.ordinal());
             GameRegistry.addRecipe(makoReactorController,
                     "BBB",
                     "BMB",
