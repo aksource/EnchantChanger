@@ -79,6 +79,9 @@ public class EnchantChanger {
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
         MinecraftForge.EVENT_BUS.register(ClientModelUtils.INSTANCE);
+
+        // レシピ登録
+        MinecraftForge.EVENT_BUS.register(new Recipes());
     }
 
     @SuppressWarnings("unused")
@@ -109,9 +112,6 @@ public class EnchantChanger {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
         // TESR登録
         proxy.registerTileEntitySpecialRenderer();
-
-        // レシピ登録
-        MinecraftForge.EVENT_BUS.register(new Recipes());
         // 描画系登録
         proxy.registerRenderInformation();
         if (enableDungeonLoot) {
