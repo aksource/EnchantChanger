@@ -13,18 +13,14 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-
-import java.lang.reflect.Constructor;
 
 /**
  * Created by A.K. on 14/03/11.
@@ -40,21 +36,10 @@ public class RenderingOverlayEvent {
         int width = mc.displayWidth;
         int height = mc.displayHeight;
         ScaledResolution res;
-        if (ForgeVersion.getBuildVersion() > 1147) {
-            res = new ScaledResolution(mc/*, width, height*/);
-            width = res.getScaledWidth();
-            height = res.getScaledHeight();
-        } else {
-            Class<?> scaledResolutionClass = ScaledResolution.class;
-            try {
-                Constructor<?> scaledResolutionConstructor = scaledResolutionClass.getConstructor(GameSettings.class, int.class, int.class);
-                res = (ScaledResolution) scaledResolutionConstructor.newInstance(mc.gameSettings, width, height);
-                width = res.getScaledWidth();
-                height = res.getScaledHeight();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        res = new ScaledResolution(mc/*, width, height*/);
+        width = res.getScaledWidth();
+        height = res.getScaledHeight();
+
         EntityPlayer player = Minecraft.getMinecraft().player;
         ItemStack holdItem = player.getHeldItemMainhand();
         if (!holdItem.isEmpty() && holdItem.getItem() instanceof EcItemSword) {

@@ -44,7 +44,13 @@ public class ConfigurationUtils {
             "flame:1",
             "infinity:1",
             "luck_of_the_sea:1",
-            "lure:1"
+            "lure:1",
+            "mending:1",
+            "depth_strider:1",
+            "frost_walker:1",
+            "binding_curse:0",
+            "sweeping:2",
+            "vanishing_curse:3"
     };
     public static boolean enableDecMateriaLv = false;
     public static boolean flagYOUARETERRA = false;

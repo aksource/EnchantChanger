@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 public class EcRecipeMateria implements IRecipe {
-    private ItemStack output = null;
+    private ItemStack output = ItemStack.EMPTY;
 
     @Override
     public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World worldIn) {
@@ -41,7 +41,7 @@ public class EcRecipeMateria implements IRecipe {
             else
                 return false;
         }
-        if (materia2 != null && materia1.isItemEnchanted() && materia2.isItemEnchanted()) {
+        if (!materia2.isEmpty() && materia1.isItemEnchanted() && materia2.isItemEnchanted()) {
             if (ItemStack.areItemStackTagsEqual(materia1, materia2)) {
                 this.output = materia1.copy();
                 this.output.setCount(1);
@@ -49,7 +49,7 @@ public class EcRecipeMateria implements IRecipe {
                 EnchantmentUtils.addEnchantmentToItem(output, EnchantmentUtils.getEnchantmentFromItemStack(materia1), EnchantmentUtils.getEnchantmentLv(materia1) + 1);
                 flag = true;
             }
-        } else if (materia1 != null) {
+        } else if (!materia1.isEmpty()) {
             if (materia1.getItemDamage() == 0) {
                 if (!expBottle.isEmpty() && EnchantmentUtils.getEnchantmentLv(materia1) < 5 && materia1.isItemEnchanted()) {
                     this.output = materia1.copy();
