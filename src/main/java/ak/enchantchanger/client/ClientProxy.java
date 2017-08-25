@@ -73,6 +73,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerRenderInformation() {
+
         MinecraftForge.EVENT_BUS.register(new RenderingOverlayEvent());
 
         //キー登録
@@ -90,7 +91,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerExtraMateriaRendering(NBTTagCompound nbt) {
         if (nbt.hasKey("enchantId") && nbt.hasKey("materiaTexId")) {
-            int enchantId = nbt.getInteger("enchantId");
             ResourceLocation registerName = new ResourceLocation(nbt.getString("register_name"));
             int texId = nbt.getInteger("materiaTexId");
             BakedModelMateria.registerExtraMateria(registerName, texId);
