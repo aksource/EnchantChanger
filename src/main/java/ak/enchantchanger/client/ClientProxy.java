@@ -38,11 +38,11 @@ import static net.minecraft.init.Items.FIRE_CHARGE;
 
 public class ClientProxy extends CommonProxy {
     static final float MOVE_FACTOR = 0.4F;
-    public static Minecraft mc = Minecraft.getMinecraft();
     private static final KeyBinding MAGIC_KEY = new KeyBinding("Key.EcMagic",
             Keyboard.KEY_V, Constants.MOD_ID);
     private static final KeyBinding MATERIA_KEY = new KeyBinding("Key.EcMateria",
             Keyboard.KEY_R, Constants.MOD_ID);
+    public static Minecraft mc = Minecraft.getMinecraft();
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
@@ -84,8 +84,6 @@ public class ClientProxy extends CommonProxy {
 
         //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
-        //モデルの光源処理修正イベントクラス登録
-        MinecraftForge.EVENT_BUS.register(new ModelLightningFixer());
 
     }
 
@@ -96,7 +94,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerExtraMateriaRendering(NBTTagCompound nbt) {
         if (nbt.hasKey("enchantId") && nbt.hasKey("materiaTexId")) {
-            int enchantId = nbt.getInteger("enchantId");
             ResourceLocation registerName = new ResourceLocation(nbt.getString("register_name"));
             int texId = nbt.getInteger("materiaTexId");
             BakedModelMateria.registerExtraMateria(registerName, texId);
