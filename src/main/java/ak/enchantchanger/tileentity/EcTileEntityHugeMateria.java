@@ -24,29 +24,27 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EcTileEntityHugeMateria extends TileEntity implements ITickable, IInventory {
     public int materializingTime = 0;
     public float angle = 0;
     private ItemStack result = null;
     private int consumedExpBottle = 0;
-    private final List<ItemStack> slotItems = new ArrayList<>(5);
+    private final ItemStack[] slotItems = new ItemStack[5];
 
     @Override
     public int getSizeInventory() {
-        return slotItems.size();
+        return slotItems.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return slotItems.get(slot);
+        return slotItems[slot % slotItems.length];
     }
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        slotItems.set(slot, stack);
+        slotItems[slot] = stack;
         if (stack != null && stack.stackSize > getInventoryStackLimit()) {
             stack.stackSize = getInventoryStackLimit();
         }
@@ -110,8 +108,8 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
             NBTTagCompound var4 = tagList.getCompoundTagAt(var3);
             int var5 = var4.getByte("Slot") & 255;
 
-            if (var5 >= 0 && var5 < this.slotItems.size()) {
-                this.slotItems.set(var5, ItemStack.loadItemStackFromNBT(var4));
+            if (var5 >= 0 && var5 < this.slotItems.length) {
+                this.slotItems[var5] = ItemStack.loadItemStackFromNBT(var4);
             }
         }
         this.materializingTime = nbtTagCompound.getShort("materializingTime");
@@ -124,11 +122,11 @@ public class EcTileEntityHugeMateria extends TileEntity implements ITickable, II
         nbt.setShort("materializingTime", (short) this.materializingTime);
         NBTTagList nbtTagList = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.slotItems.size(); ++var3) {
-            if (this.slotItems.get(var3) != null) {
+        for (int var3 = 0; var3 < this.slotItems.length; ++var3) {
+            if (this.slotItems[var3] != null) {
                 NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) var3);
-                this.slotItems.get(var3).writeToNBT(var4);
+                this.slotItems[var3].writeToNBT(var4);
                 nbtTagList.appendTag(var4);
             }
         }
