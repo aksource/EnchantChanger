@@ -33,6 +33,13 @@ public class EcGuiMakoReactor extends GuiContainer {
         tileEntity = te;
     }
 
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
 //    @SuppressWarnings("unchecked")
 //    @Override
 //    public void initGui() {
