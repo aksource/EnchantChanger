@@ -21,7 +21,7 @@ public class MessageCloudSwordHandler implements IMessageHandler<MessageCloudSwo
         if (itemStack != null) {
             if (itemStack.getItem() instanceof EcItemCloudSword) {
                 EcItemCloudSword.setSlotNumToItemStack(itemStack, message.slotNum);
-            } else if (itemStack.getItem() instanceof ItemMultiToolHolder) {
+            } else if (EnchantChanger.loadMTH && itemStack.getItem() instanceof ItemMultiToolHolder) {
                 ItemMultiToolHolder mth = (ItemMultiToolHolder) itemStack.getItem();
                 InventoryToolHolder toolHolder = mth.getInventoryFromItemStack(itemStack);
                 itemStack = toolHolder.getStackInSlot(ItemMultiToolHolder.getSlotNumFromItemStack(itemStack));
