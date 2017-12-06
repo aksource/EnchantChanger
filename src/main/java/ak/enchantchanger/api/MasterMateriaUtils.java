@@ -23,9 +23,10 @@ public class MasterMateriaUtils {
 
     /**
      * ヒュージマテリアへの登録メソッド
-     * @param master マスターマテリアのdamage値。0:究極、1:防御、2:水、3:攻撃、4:採掘、5:弓、6:追加
+     *
+     * @param master   マスターマテリアのdamage値。0:究極、1:防御、2:水、3:攻撃、4:採掘、5:弓、6:追加
      * @param material 素材
-     * @param result 生成物。マテリアじゃなくても良い。
+     * @param result   生成物。マテリアじゃなくても良い。
      */
     public static void registerHugeMateria(int master, ItemStack material, ItemStack result) {
         Set<Pair<ItemStack, ItemStack>> set;
@@ -45,7 +46,8 @@ public class MasterMateriaUtils {
 
     /**
      * 素材が対応するマスターマテリアに登録されてるかどうか。
-     * @param master マスターマテリアのdamage値
+     *
+     * @param master   マスターマテリアのdamage値
      * @param material 素材
      * @return 登録されていたらtrue
      */
@@ -63,7 +65,8 @@ public class MasterMateriaUtils {
 
     /**
      * マスターマテリア別の素材に対応している生成物を返す
-     * @param master マスターマテリアのdamage値
+     *
+     * @param master   マスターマテリアのdamage値
      * @param material 素材
      * @return 生成物
      */

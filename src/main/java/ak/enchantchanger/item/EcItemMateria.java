@@ -240,8 +240,8 @@ public class EcItemMateria extends EcItem {
         } else {
             ResourceLocation registerName = EnchantmentUtils.getEnchantmentRegisterName(item);
             int lv = EnchantmentUtils.getEnchantmentLv(item);
-                String EntityName = entity.toString();
-                ResourceLocation potionRegName = ENCHANTMENT_EFFECT_MAP.get(registerName);
+            String EntityName = entity.toString();
+            ResourceLocation potionRegName = ENCHANTMENT_EFFECT_MAP.get(registerName);
             if (potionRegName != null && Potion.getPotionFromResourceLocation(potionRegName.toString()) != null) {
                 Potion potion = Potion.getPotionFromResourceLocation(potionRegName.toString());
                 if (player.experienceLevel > getLevelUPEXP(item, false) || player.capabilities.isCreativeMode) {
@@ -252,7 +252,7 @@ public class EcItemMateria extends EcItem {
                     decreasePlayerFood(player, 6);
                 }
             }
-          }
+        }
     }
 
     @Override
@@ -369,6 +369,7 @@ public class EcItemMateria extends EcItem {
         entityliving.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20 * 60 * 5, 1));
         decreasePlayerFood(player, 2);
     }
+
     static {
         ENCHANTMENT_EFFECT_MAP.put(Enchantments.FIRE_PROTECTION.getRegistryName(), MobEffects.FIRE_RESISTANCE.getRegistryName());
         ENCHANTMENT_EFFECT_MAP.put(Enchantments.AQUA_AFFINITY.getRegistryName(), MobEffects.WATER_BREATHING.getRegistryName());

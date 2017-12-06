@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "enchantchanger:enchant_changer" }
+  "variants": {
+    "normal": {
+      "model": "enchantchanger:enchant_changer"
     }
+  }
 }

@@ -50,7 +50,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
     public static void doMagic(ItemStack itemStack, World world,
                                EntityPlayer player) {
         byte[] byteArray = EnchantmentUtils.getMagic(itemStack);
-        for(byte magicId : byteArray) {
+        for (byte magicId : byteArray) {
             MagicType.getById(magicId).getConsumer().accept(world, player);
         }
     }
@@ -116,7 +116,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
             Minecraft mc = Minecraft.getMinecraft();
             Timer timer = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, Constants.FIELD_INDEX_MINECRAFT_TIMER);
             RayTraceResult mop = ClientInputUtils.getMouseOverSpecialReach(entityLiving, this.getReach(stack), timer.renderPartialTicks);
-            if (mop !=null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != null) {
+            if (mop != null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != null) {
                 mc.objectMouseOver = mop;
                 mc.pointedEntity = mop.entityHit;
                 PacketHandler.INSTANCE.sendToServer(new MessageExtendedReachAttack(mop.entityHit));
@@ -152,7 +152,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
 
     // 内蔵武器切り替え用攻撃メソッドの移植
     void attackTargetEntityWithTheItem(Entity entity,
-                                              EntityPlayer player, @Nonnull ItemStack stack, boolean cancelHurt) {
+                                       EntityPlayer player, @Nonnull ItemStack stack, boolean cancelHurt) {
         ItemStack prevItem = player.getHeldItemMainhand();
         player.setHeldItem(EnumHand.MAIN_HAND, stack);
         player.attackTargetEntityWithCurrentItem(entity);

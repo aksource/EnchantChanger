@@ -88,7 +88,7 @@ public class EcItemSephirothSword extends EcItemSword {
         EntityPlayer player = EnchantChanger.proxy.getPlayer();
         if (player != null) {
             ItemStack handHeldItem = player.getHeldItemMainhand();
-            return (itemStack.isItemEqual(handHeldItem)) ? modelList.get(0): modelList.get(1);
+            return (itemStack.isItemEqual(handHeldItem)) ? modelList.get(0) : modelList.get(1);
         }
         return super.getPresentModel(itemStack, modelList);
     }

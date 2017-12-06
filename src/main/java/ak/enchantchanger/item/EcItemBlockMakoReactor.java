@@ -49,6 +49,7 @@ public class EcItemBlockMakoReactor extends ItemBlock {
 
     /**
      * ItemStackのNBTから基底ブロックのItemStackを取得するメソッド
+     *
      * @param itemStack 魔晄炉ブロックのItemStack
      * @return 基底ブロックのItemStack
      */

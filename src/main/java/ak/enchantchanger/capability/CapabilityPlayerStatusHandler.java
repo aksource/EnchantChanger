@@ -20,6 +20,7 @@ public class CapabilityPlayerStatusHandler {
     public static final ResourceLocation PLAYER_STATUS = new ResourceLocation(Constants.MOD_ID, Constants.CAP_KEY_PLAYER_STATUS);
     @CapabilityInject(IPlayerStatusHandler.class)
     public static Capability<IPlayerStatusHandler> CAPABILITY_PLAYER_STATUS = null;
+
     public static void register() {
         CapabilityManager.INSTANCE.register(IPlayerStatusHandler.class, new Capability.IStorage<IPlayerStatusHandler>() {
             @Nullable

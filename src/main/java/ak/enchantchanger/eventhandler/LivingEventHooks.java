@@ -8,6 +8,7 @@ import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -17,10 +18,12 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class LivingEventHooks {
@@ -28,6 +31,9 @@ public class LivingEventHooks {
     private static final int mpTermGG = 20;
     private static final int mpTermAbsorp = 20 * 3;
     private int[] Count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private Method getExperiencePoints = ReflectionHelper.findMethod(EntityLivingBase.class,
+            "getExperiencePoints",
+            "func_70693_a", EntityPlayer.class);
 
     private boolean checkFlightItem(ItemStack itemstack) {
         if (itemstack == null) {
@@ -132,7 +138,14 @@ public class LivingEventHooks {
                 && !killer.getHeldItemMainhand().isEmpty()
                 && killer.getHeldItemMainhand().isItemEnchanted()
                 && !dead.getEntityWorld().isRemote) {
-            int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
+            int exp = 0;
+            try {
+                @SuppressWarnings("unchecked")
+                Integer ret = (Integer) getExperiencePoints.invoke(dead, killer);
+                exp = ret;
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             long lastTime = CapabilityPlayerStatusHandler.getPlayerStatusHandler(killer).getApCoolingTime();
             if (lastTime != 0 && lastTime - dead.getEntityWorld().getTotalWorldTime() < 20) exp = 2;
             if (exp > 0) {

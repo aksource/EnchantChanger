@@ -24,6 +24,7 @@ public class Items {
     public static Item itemImitateSephirothSword;
     public static Item itemHugeMateria;
     public static Item itemBlockMakoReactor;
+
     public static void init() {
 
 

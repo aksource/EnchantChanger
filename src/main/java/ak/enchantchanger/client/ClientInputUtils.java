@@ -7,6 +7,7 @@ import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.network.MessageExtendedReachAttack;
 import ak.enchantchanger.network.PacketHandler;
 import ak.MultiToolHolders.ItemMultiToolHolder;
+import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -16,6 +17,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -90,8 +92,11 @@ public class ClientInputUtils {
     }
 
     public static RayTraceResult getMouseOverSpecialReach(@Nonnull EntityLivingBase viewingEntity, double reach, float partialTicks) {
-        RayTraceResult traceResult = viewingEntity.rayTrace(reach, partialTicks);
+        double vanillaExtendedReach = 6.0d;
+        double vanillaBlockDistance = Minecraft.getMinecraft().playerController.getBlockReachDistance();
+        RayTraceResult traceResult = viewingEntity.rayTrace(reach < vanillaBlockDistance ? vanillaBlockDistance : reach, partialTicks);
         Vec3d viewPosition = viewingEntity.getPositionEyes(partialTicks);
+        double d0 = reach < vanillaExtendedReach ? vanillaExtendedReach : reach;
         double d1 = 0;
 
         if (traceResult != null) {
@@ -103,38 +108,40 @@ public class ClientInputUtils {
         }
 
         Vec3d lookVector = viewingEntity.getLook(partialTicks);
-        Vec3d reachVector = viewPosition.addVector(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach);
+        Vec3d reachVector = viewPosition.addVector(lookVector.x * d0, lookVector.y * d0, lookVector.z * d0);
         Vec3d vec33 = null;
         float f1 = 1.0F;
-        List<Entity> list = viewingEntity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(viewingEntity, viewingEntity.getEntityBoundingBox().expand(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach).expand(f1, f1, f1));
+        List<Entity> list = viewingEntity.getEntityWorld().getEntitiesInAABBexcluding(
+                viewingEntity,
+                viewingEntity.getEntityBoundingBox()
+                        .expand(lookVector.x * d0, lookVector.y * d0, lookVector.z * d0)
+                        .grow(f1, f1, f1), Predicates.and(EntitySelectors.NOT_SPECTATING, (entity) -> entity != null && entity.canBeCollidedWith()));
         double d2 = d1;
         Entity pointedEntity = null;
         for (Entity entity : list) {
-            if (entity.canBeCollidedWith()) {
-                float collisionSize = entity.getCollisionBorderSize();
-                AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(collisionSize, collisionSize, collisionSize);
-                RayTraceResult RayTraceResult = axisalignedbb.calculateIntercept(viewPosition, reachVector);
+            float collisionSize = entity.getCollisionBorderSize();
+            AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(collisionSize);
+            RayTraceResult rayTraceResult = axisalignedbb.calculateIntercept(viewPosition, reachVector);
 
-                if (axisalignedbb.contains(viewPosition)) {
-                    if (0.0D < d2 || d2 == 0.0D) {
-                        pointedEntity = entity;
-                        vec33 = RayTraceResult == null ? viewPosition : RayTraceResult.hitVec;
-                        d2 = 0.0D;
-                    }
-                } else if (RayTraceResult != null) {
-                    double d3 = viewPosition.distanceTo(RayTraceResult.hitVec);
+            if (axisalignedbb.contains(viewPosition)) {
+                if (d2 >= 0.0D) {
+                    pointedEntity = entity;
+                    vec33 = rayTraceResult == null ? viewPosition : rayTraceResult.hitVec;
+                    d2 = 0.0D;
+                }
+            } else if (rayTraceResult != null) {
+                double d3 = viewPosition.distanceTo(rayTraceResult.hitVec);
 
-                    if (d3 < d2 || d2 == 0.0D) {
-                        if (entity == viewingEntity.getRidingEntity() && !entity.canRiderInteract()) {
-                            if (d2 == 0.0D) {
-                                pointedEntity = entity;
-                                vec33 = RayTraceResult.hitVec;
-                            }
-                        } else {
+                if (d3 < d2 || d2 == 0.0D) {
+                    if (entity.getLowestRidingEntity() == viewingEntity.getLowestRidingEntity() && !entity.canRiderInteract()) {
+                        if (d2 == 0.0D) {
                             pointedEntity = entity;
-                            vec33 = RayTraceResult.hitVec;
-                            d2 = d3;
+                            vec33 = rayTraceResult.hitVec;
                         }
+                    } else {
+                        pointedEntity = entity;
+                        vec33 = rayTraceResult.hitVec;
+                        d2 = d3;
                     }
                 }
             }

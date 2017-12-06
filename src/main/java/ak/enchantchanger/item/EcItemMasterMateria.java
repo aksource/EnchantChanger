@@ -24,7 +24,7 @@ public class EcItemMasterMateria extends EcItem {
 
     @Override
     public void getSubItems(@Nonnull Item itemIn, @Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
-        for (MasterMateriaType type: MasterMateriaType.values()) {
+        for (MasterMateriaType type : MasterMateriaType.values()) {
             subItems.add(new ItemStack(this, 1, type.getMeta()));
         }
     }

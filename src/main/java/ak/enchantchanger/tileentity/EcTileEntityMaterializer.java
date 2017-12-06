@@ -82,6 +82,7 @@ public class EcTileEntityMaterializer extends TileEntity implements IInventory {
     @Override
     public void closeInventory(@Nonnull EntityPlayer player) {
     }
+
     @Override
     @Nonnull
     public String getName() {

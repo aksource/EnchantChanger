@@ -14,11 +14,13 @@ public enum EnumMRBaseType implements IStringSerializable {
     private final String name;
     private final String registryName;
     private final String oreName;
+
     EnumMRBaseType(String name, String registryName, String oreName) {
         this.name = name;
         this.registryName = registryName;
         this.oreName = oreName;
     }
+
     @Override
     @Nonnull
     public String getName() {
@@ -29,6 +31,7 @@ public enum EnumMRBaseType implements IStringSerializable {
     public String getRegistryName() {
         return this.registryName;
     }
+
     public static EnumMRBaseType getByIndex(int index) {
         for (EnumMRBaseType type : values()) {
             if (index == type.ordinal()) {

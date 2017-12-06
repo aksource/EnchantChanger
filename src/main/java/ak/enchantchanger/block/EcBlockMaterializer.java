@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 
 public class EcBlockMaterializer extends BlockContainer {
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
+
     public EcBlockMaterializer() {
         super(Material.ROCK);
     }

@@ -135,7 +135,7 @@ public class ClientModelUtils {
     }
 
     private static void changeSwordModel(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, Item ecSword, List<ResourceLocation> rlList,
-                                           float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
+                                         float sizeFPV, float sizeTPV, ImmutableMap<String, String> textureMap) {
         ResourceLocation name = ecSword.getRegistryName();
         List<IRetexturableModel> modelList = new ArrayList<>();
         IBakedModel iconModel = modelRegistry.getObject(MODEL_RESOURCE_LOCATION_MAP.get(name));
@@ -167,8 +167,9 @@ public class ClientModelUtils {
     /**
      * 液体ブロックモデルの登録<br />
      * preInitで行うこと
+     *
      * @param block 流体ブロック
-     * @param type fluid or gas
+     * @param type  fluid or gas
      */
     static void registerFluidBlockModel(Block block, String type) {
         ModelResourceLocation modelResourceLocation = setCustomModelRsrcToMap(block.getRegistryName(), block.getRegistryName().toString(), type);

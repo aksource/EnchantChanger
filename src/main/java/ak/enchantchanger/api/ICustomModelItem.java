@@ -17,6 +17,7 @@ public interface ICustomModelItem {
     /**
      * アイテムの状態別にモデルを返すメソッド。
      * 必要に応じてオーバーライドする。
+     *
      * @param itemStack モデルを取得したいアイテム
      * @param modelList アイテムに登録されたモデルのリスト
      * @return 描画させたいモデル

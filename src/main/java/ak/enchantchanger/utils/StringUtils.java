@@ -14,6 +14,7 @@ public class StringUtils {
 
     /**
      * 部分的なパス文字列を補完するメソッド
+     *
      * @param path 部分パス文字列
      * @return 補完されたパス文字列
      */
@@ -28,6 +29,7 @@ public class StringUtils {
     /**
      * ドメイン付きブロック固有名からBlockを取得するメソッド
      * Blockが取得できなかった場合は、Airブロックを返す。
+     *
      * @param stringBlockName ドメイン付きブロック固有名
      * @return 固有名から取得したBlock
      */
