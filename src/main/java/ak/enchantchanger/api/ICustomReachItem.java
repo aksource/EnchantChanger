@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
  */
 public interface ICustomReachItem {
     /**
-     *
      * @param itemStack ItemStack
      * @return 攻撃到達距離
      */

@@ -195,12 +195,12 @@ public class BakedModelMateria implements IBakedModel {
         public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
             /* TRSRTransformationのmulメソッドで作ってるが、Matrix4fクラスに単独の設定メソッドが存在する
              * TRSRの意味
-              * T=Transformation 並行移動　第1引数
-              * R=Rotate 回転（前）　第2引数
-              * S=Scale リサイズ　第3引数
-              * R=Rotate 回転（後）　第4引数
-              * 設定したい引数にVector3fクラス,Quat4fクラスのインスタンスを指定。
-              * 全部nullだとおそらくIdentity Matrix（単位行列）が返る*/
+             * T=Transformation 並行移動　第1引数
+             * R=Rotate 回転（前）　第2引数
+             * S=Scale リサイズ　第3引数
+             * R=Rotate 回転（後）　第4引数
+             * 設定したい引数にVector3fクラス,Quat4fクラスのインスタンスを指定。
+             * 全部nullだとおそらくIdentity Matrix（単位行列）が返る*/
             Matrix4f matrix4fGui = TRSRTransformation.mul(vectorTransGui, null, new Vector3f(guiSize, guiSize, guiSize), null);
             Matrix4f matrix4fHandHeld = TRSRTransformation.mul(vectorTransHand, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
             Matrix4f matrix4fGround = TRSRTransformation.mul(null, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);

@@ -37,8 +37,8 @@ public class EcPotionMako extends Potion {
     @Override
     public boolean isReady(int duration, int amplifier) {
         int k;
-            k = 40 >> amplifier;
-            return k <= 0 || duration % k == 0;
+        k = 40 >> amplifier;
+        return k <= 0 || duration % k == 0;
     }
 
     @Override

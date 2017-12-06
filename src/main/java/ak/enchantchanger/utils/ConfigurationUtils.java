@@ -12,42 +12,45 @@ public class ConfigurationUtils {
     public static float powerMeteor;
     public static float sizeMeteor;
     public static String[] enchantmentLevelLimits = new String[]{
-            "protection:10",
-            "fire_protection:10",
-            "feather_falling:10",
-            "blast_protection:10",
-            "projectile_protection:10",
-            "efficiency:0",
-            "unbreaking:30"
+            "minecraft:protection 10",
+            "minecraft:fire_protection 10",
+            "minecraft:feather_falling 10",
+            "minecraft:blast_protection 10",
+            "minecraft:projectile_protection 10",
+            "minecraft:efficiency 0",
+            "minecraft:unbreaking 30"
     };
     public static String[] enchantmentAPCoefficients = new String[]{
-            "protection:2",
-            "fire_protection:1",
-            "feather_falling:1",
-            "blast_protection:1",
-            "projectile_protection:1",
-            "respiration:1",
-            "aqua_affinity:1",
-            "thorns:1",
-            "sharpness:2",
-            "smite:1",
-            "bane_of_arthropods:1",
-            "knockback:1",
-            "fire_aspect:1",
-            "looting:3",
-            "efficiency:1",
-            "silk_touch:1",
-            "unbreaking:1",
-            "fortune:2",
-            "power:2",
-            "punch:1",
-            "flame:1",
-            "infinity:1",
-            "luck_of_the_sea:1",
-            "lure:1",
-            "mending:1",
-            "depth_strider:1",
-            "frost_walker:1"
+            "minecraft:protection 2",
+            "minecraft:fire_protection 1",
+            "minecraft:feather_falling 1",
+            "minecraft:blast_protection 1",
+            "minecraft:projectile_protection 1",
+            "minecraft:respiration 1",
+            "minecraft:aqua_affinity 1",
+            "minecraft:thorns 1",
+            "minecraft:sharpness 2",
+            "minecraft:smite 1",
+            "minecraft:bane_of_arthropods 1",
+            "minecraft:knockback 1",
+            "minecraft:fire_aspect 1",
+            "minecraft:looting 3",
+            "minecraft:efficiency 1",
+            "minecraft:silk_touch 1",
+            "minecraft:unbreaking 1",
+            "minecraft:fortune 2",
+            "minecraft:power 2",
+            "minecraft:punch 1",
+            "minecraft:flame 1",
+            "minecraft:infinity 1",
+            "minecraft:luck_of_the_sea 1",
+            "minecraft:lure 1",
+            "minecraft:binding_curse 0",
+            "minecraft:sweeping 2",
+            "minecraft:vanishing_curse 3",
+            "minecraft:depth_strider 2",
+            "minecraft:frost_walker 2",
+            "minecraft:mending 2"
     };
     public static boolean enableDecMateriaLv = false;
     public static boolean flagYOUARETERRA = false;
@@ -55,7 +58,6 @@ public class ConfigurationUtils {
     public static int difficulty = 2;
     public static int enchantChangerCost = 5;
     public static double sizeAbsorbBox = 5D;
-    //    public static int MaxLv = 127;
     public static boolean enableAPSystem = true;
     public static boolean enableDungeonLoot = true;
     public static int pointAPBase = 200;
@@ -108,7 +110,7 @@ public class ConfigurationUtils {
                 .getInt();
         enchantmentLevelLimits = config
                 .get(Configuration.CATEGORY_GENERAL, "ApSystemLevelLimit", enchantmentLevelLimits,
-                        "Set Enchantmets Level Limit for AP System Format EnchantmentID:LimitLv(LimitLv = 0 > DefaultMaxLevel)")
+                        "Set Enchantments Level Limit for AP System Format EnchantmentID:LimitLv(LimitLv = 0 > DefaultMaxLevel)")
                 .getStringList();
         enchantmentAPCoefficients = config.get(Configuration.CATEGORY_GENERAL, "ApSystemCoefficientList", enchantmentAPCoefficients,
                 "Set Coefficients of AP System. Format EnchantmentsID:Coefficient").getStringList();

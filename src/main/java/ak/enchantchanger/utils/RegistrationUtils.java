@@ -17,6 +17,7 @@ import static ak.enchantchanger.EnchantChanger.makoPotionType;
 import static ak.enchantchanger.EnchantChanger.potionMako;
 import static ak.enchantchanger.utils.Blocks.*;
 import static ak.enchantchanger.utils.Items.*;
+
 /**
  * システムに登録周りのクラス
  * Created by A.K. on 14/10/12.

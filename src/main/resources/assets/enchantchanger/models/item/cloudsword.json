@@ -1,6 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "enchantchanger:items/cloud_sword"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "enchantchanger:items/cloud_sword"
+  }
 }

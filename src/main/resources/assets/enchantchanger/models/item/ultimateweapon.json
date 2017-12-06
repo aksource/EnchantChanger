@@ -1,6 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "enchantchanger:items/ultimate_weapon"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "enchantchanger:items/ultimate_weapon"
+  }
 }

@@ -8,6 +8,7 @@ import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -17,10 +18,12 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class LivingEventHooks {
@@ -132,7 +135,16 @@ public class LivingEventHooks {
                 && killer.getHeldItemMainhand() != null
                 && killer.getHeldItemMainhand().isItemEnchanted()
                 && !dead.getEntityWorld().isRemote) {
-            int exp = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, dead, 1);
+            Method getExperiencePoints = ReflectionHelper.findMethod(EntityLivingBase.class, dead,
+                    new String[]{"getExperiencePoints", "func_70693_a"}, EntityPlayer.class);
+            int exp = 0;
+            try {
+                @SuppressWarnings("unchecked")
+                Integer ret = (Integer) getExperiencePoints.invoke(dead, killer);
+                exp = ret;
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             long lastTime = CapabilityPlayerStatusHandler.getPlayerStatusHandler(killer).getApCoolingTime();
             if (lastTime != 0 && lastTime - dead.getEntityWorld().getTotalWorldTime() < 20) exp = 2;
             if (exp > 0) {

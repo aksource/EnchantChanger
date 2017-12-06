@@ -14,6 +14,7 @@ public enum MasterMateriaType {
     ADDITION(999, 1000);
     private final int meta;
     private final int makoAmount;
+
     MasterMateriaType(int meta, int makoAmount) {
         this.meta = meta;
         this.makoAmount = makoAmount;

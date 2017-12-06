@@ -3,7 +3,10 @@ package ak.enchantchanger.client;
 import ak.enchantchanger.CommonProxy;
 import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.client.models.BakedModelMateria;
-import ak.enchantchanger.client.renderer.*;
+import ak.enchantchanger.client.renderer.EcRenderEntityItemCustom;
+import ak.enchantchanger.client.renderer.EcRenderItemThrowable;
+import ak.enchantchanger.client.renderer.EcRenderPlayerBack;
+import ak.enchantchanger.client.renderer.RenderingOverlayEvent;
 import ak.enchantchanger.entity.EcEntityApOrb;
 import ak.enchantchanger.entity.EcEntityExExpBottle;
 import ak.enchantchanger.entity.EcEntityMeteor;
@@ -15,6 +18,7 @@ import ak.enchantchanger.utils.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.renderer.entity.RenderXPOrb;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityItem;
@@ -68,7 +72,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EcEntityMeteor.class,
                 manager -> new EcRenderItemThrowable(manager, FIRE_CHARGE, mc.getRenderItem(), ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
-                EcRenderApOrb::new);
+                RenderXPOrb::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
     }
 
@@ -172,10 +176,12 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    //    @SubscribeEvent
+    @SubscribeEvent
+    @SuppressWarnings("unused")
     public void mouseHandlingEvent(InputEvent.MouseInputEvent event) {
-        if (mc.gameSettings.keyBindAttack.isKeyDown() && FMLClientHandler.instance().getClientPlayerEntity() != null) {
-            ClientInputUtils.changeObjectMouseOver(FMLClientHandler.instance().getClientPlayerEntity());
+        EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
+        if (mc.gameSettings.keyBindAttack.isKeyDown() && player != null) {
+            ClientInputUtils.changeObjectMouseOver(player);
         }
     }
 

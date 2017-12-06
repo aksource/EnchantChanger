@@ -25,6 +25,7 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
     private int limitBreakCount;
     private byte limitBreakId;
     private boolean ggMode;
+
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityPlayerStatusHandler.CAPABILITY_PLAYER_STATUS;
@@ -33,7 +34,7 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        return hasCapability(capability, facing) ? CapabilityPlayerStatusHandler.CAPABILITY_PLAYER_STATUS.cast(this): null;
+        return hasCapability(capability, facing) ? CapabilityPlayerStatusHandler.CAPABILITY_PLAYER_STATUS.cast(this) : null;
     }
 
     @Override
