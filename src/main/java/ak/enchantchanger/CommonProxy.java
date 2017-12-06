@@ -1,10 +1,10 @@
 package ak.enchantchanger;
 
+import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.client.gui.EcGuiHugeMateria;
 import ak.enchantchanger.client.gui.EcGuiMakoReactor;
 import ak.enchantchanger.client.gui.EcGuiMateriaWindow;
 import ak.enchantchanger.client.gui.EcGuiMaterializer;
-import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.inventory.EcContainerHugeMateria;
 import ak.enchantchanger.inventory.EcContainerMakoReactor;
 import ak.enchantchanger.inventory.EcContainerMateriaWindow;

@@ -25,7 +25,7 @@ public class EcItemMasterMateria extends EcItem {
     @Override
     public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
         if (Constants.TAB_ENCHANT_CHANGER.equals(tab)) {
-            for (MasterMateriaType type: MasterMateriaType.values()) {
+            for (MasterMateriaType type : MasterMateriaType.values()) {
                 subItems.add(new ItemStack(this, 1, type.getMeta()));
             }
         }

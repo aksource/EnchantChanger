@@ -25,6 +25,7 @@ public class Items {
     public static Item itemHugeMateria;
     public static Item itemBucketLifeStream;
     public static Item itemBlockMakoReactor;
+
     public static void init() {
 
 

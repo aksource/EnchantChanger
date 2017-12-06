@@ -23,6 +23,7 @@ public class EcGuiHugeMateria extends GuiContainer {
         super(new EcContainerHugeMateria(inventoryPlayer, te));
         this.tileEntity = te;
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();

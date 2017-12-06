@@ -19,7 +19,7 @@ public class MakoReactorModelLoader implements ICustomModelLoader {
         boolean ret;
         ret = Constants.MOD_ID.toLowerCase().equals(modelLocation.getResourceDomain());
         ret &= "models/block/blockmakoreactor".equals(modelLocation.getResourcePath())
-        || "models/item/blockmakoreactor".equals(modelLocation.getResourcePath());
+                || "models/item/blockmakoreactor".equals(modelLocation.getResourcePath());
         return ret;
     }
 

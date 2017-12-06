@@ -80,7 +80,7 @@ public class EcRecipeMateria extends net.minecraftforge.registries.IForgeRegistr
 
     @Override
     public boolean canFit(int width, int height) {
-        return width >= 2 && height >=2;
+        return width >= 2 && height >= 2;
     }
 
     @Override

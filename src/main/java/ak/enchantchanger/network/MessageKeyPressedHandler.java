@@ -1,12 +1,12 @@
 package ak.enchantchanger.network;
 
-import ak.multitoolholders.ItemMultiToolHolder;
-import ak.multitoolholders.inventory.InventoryToolHolder;
 import ak.enchantchanger.EnchantChanger;
 import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.utils.ConfigurationUtils;
+import ak.multitoolholders.ItemMultiToolHolder;
+import ak.multitoolholders.inventory.InventoryToolHolder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;

@@ -152,7 +152,7 @@ public class EcRenderPlayerBack {
 
     private void translateDependingYaw(@Nonnull ItemStack itemStack, @Nonnull EntityLivingBase livingBase, float partialTicks) {
         float nowYawOffset = getYaw(livingBase, partialTicks);
-        float add90Offset= nowYawOffset + 90F;
+        float add90Offset = nowYawOffset + 90F;
         float radianAngle90 = (float) (add90Offset / 180F * Math.PI);
         float radianAngle = (float) (nowYawOffset / 180F * Math.PI);
         float slideBack = (!livingBase.isSneaking()) ? translateValue : this.getTranslateSneakingBack(itemStack);

@@ -25,6 +25,7 @@ import static ak.enchantchanger.EnchantChanger.makoPotionType;
 import static ak.enchantchanger.EnchantChanger.potionMako;
 import static ak.enchantchanger.utils.Blocks.*;
 import static ak.enchantchanger.utils.Items.*;
+
 /**
  * システム登録周りのクラス
  * Created by A.K. on 14/10/12.
@@ -68,6 +69,7 @@ public class RegistrationUtils {
         IForgeRegistry<Potion> registry = event.getRegistry();
         registry.register(potionMako);
     }
+
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void registerPotionType(RegistryEvent.Register<PotionType> event) {

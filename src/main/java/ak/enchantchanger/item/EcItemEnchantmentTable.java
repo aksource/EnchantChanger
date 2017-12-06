@@ -100,6 +100,7 @@ public class EcItemEnchantmentTable extends EcItem {
         public CustomInteractionObj(BlockPos pos) {
             this.pos = pos;
         }
+
         @Override
         @Nonnull
         public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
