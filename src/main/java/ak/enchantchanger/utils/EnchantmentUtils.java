@@ -305,7 +305,7 @@ public class EnchantmentUtils {
 
     private static void makeMapFromArray(Map<ResourceLocation, Integer> map, String[] array) {
         for (String str : array) {
-            String[] split = str.split(":");
+            String[] split = str.split(" ");
             map.put(new ResourceLocation(split[0]), Integer.valueOf(split[1]));
         }
     }

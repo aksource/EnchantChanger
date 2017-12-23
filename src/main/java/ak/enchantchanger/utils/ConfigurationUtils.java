@@ -110,10 +110,10 @@ public class ConfigurationUtils {
                 .getInt();
         enchantmentLevelLimits = config
                 .get(Configuration.CATEGORY_GENERAL, "ApSystemLevelLimit", enchantmentLevelLimits,
-                        "Set Enchantments Level Limit for AP System Format EnchantmentID:LimitLv(LimitLv = 0 > DefaultMaxLevel)")
+                        "Set Enchantments Level Limit for AP System Format 'ModID:EnchantmentID LimitLv'(LimitLv = 0 > DefaultMaxLevel)")
                 .getStringList();
         enchantmentAPCoefficients = config.get(Configuration.CATEGORY_GENERAL, "ApSystemCoefficientList", enchantmentAPCoefficients,
-                "Set Coefficients of AP System. Format EnchantmentsID:Coefficient").getStringList();
+                "Set Coefficients of AP System. Format 'ModID:EnchantmentsID Coefficient'").getStringList();
         enableCloudSwordDisplay = config.get(Configuration.CATEGORY_GENERAL, "EnableCloudSwordDisplay", enableCloudSwordDisplay).getBoolean();
         cloudInvXCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDxCoordinate", cloudInvXCoord).getInt();
         cloudInvYCoord = config.get(Configuration.CATEGORY_GENERAL, "CloudSwordHUDyCoordinate", cloudInvYCoord).getInt();
