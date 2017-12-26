@@ -78,7 +78,7 @@ public class ClientInputUtils {
 
     static void changeObjectMouseOver(@Nonnull EntityPlayer player) {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if (heldItem.getItem() instanceof ICustomReachItem) {
+        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ICustomReachItem) {
             double extendedReach = ((ICustomReachItem) heldItem.getItem()).getReach(heldItem);
             RayTraceResult traceResult = getMouseOverSpecialReach(player, extendedReach, timer.renderPartialTicks);
             if (traceResult != null && traceResult.typeOfHit == RayTraceResult.Type.ENTITY) {
