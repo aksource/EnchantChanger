@@ -14,7 +14,7 @@ public class ContainerEventHandler {
     public void openEnchantmentContainerEvent(PlayerContainerEvent.Open event) {
         Container container = event.getEntityPlayer().openContainer;
         ItemStack itemStack = event.getEntityPlayer().getHeldItemMainhand();
-        if (container instanceof ContainerEnchantment && !itemStack.isEmpty() && itemStack.getItem() instanceof EcItemEnchantmentTable) {
+        if (container instanceof ContainerEnchantment && itemStack != null && itemStack.getItem() instanceof EcItemEnchantmentTable) {
             event.setResult(Event.Result.ALLOW);
         }
     }
