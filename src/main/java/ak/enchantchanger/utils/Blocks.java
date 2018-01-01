@@ -41,13 +41,16 @@ public class Blocks {
                 .setResistance(2000.0f)
                 .setLightLevel(1.0f)
                 .setLightOpacity(0)
-                .setUnlocalizedName(Constants.REG_BLOCK_HUGE_MATERIA);
+                .setUnlocalizedName(Constants.REG_BLOCK_HUGE_MATERIA)
+                .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         fluidLifeStream = new Fluid(Constants.REG_FLUID_LIFE_STREAM, LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
         FluidRegistry.registerFluid(Blocks.fluidLifeStream);
         // UniversalBucket登録処理
         FluidRegistry.addBucketForFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako)
-                .setRegistryName(Constants.REG_BLOCK_LIFE_STREAM).setUnlocalizedName(Constants.REG_BLOCK_LIFE_STREAM);
+                .setRegistryName(Constants.REG_BLOCK_LIFE_STREAM)
+                .setUnlocalizedName(Constants.REG_BLOCK_LIFE_STREAM)
+                .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         blockMakoReactor = new EcBlockMakoReactor()
                 .setRegistryName(Constants.REG_BLOCK_MAKO_REACTOR)
                 .setUnlocalizedName(Constants.REG_BLOCK_MAKO_REACTOR)

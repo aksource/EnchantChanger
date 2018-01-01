@@ -70,6 +70,7 @@ public class ClientProxy extends CommonProxy {
 
         //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(ClientModelUtils.INSTANCE);
     }
 
     @Override

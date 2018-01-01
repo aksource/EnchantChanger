@@ -16,9 +16,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,16 +78,6 @@ public class EcItemEnchantmentTable extends EcItem {
             if (nbt.hasKey(REGISTERED_POS_X, net.minecraftforge.common.util.Constants.NBT.TAG_INT)) {
                 tooltip.add(String.format("Position x:%d, y:%d, z:%d", nbt.getInteger(REGISTERED_POS_X), nbt.getInteger(REGISTERED_POS_Y), nbt.getInteger(REGISTERED_POS_Z)));
             }
-        }
-    }
-
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void openEnchantmentContainerEvent(PlayerContainerEvent.Open event) {
-        Container container = event.getEntityPlayer().openContainer;
-        ItemStack itemStack = event.getEntityPlayer().getHeldItemMainhand();
-        if (container instanceof ContainerEnchantment && !itemStack.isEmpty() && itemStack.getItem() instanceof EcItemEnchantmentTable) {
-            event.setResult(Event.Result.ALLOW);
         }
     }
 

@@ -4,8 +4,8 @@ import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.api.MakoUtils;
 import ak.enchantchanger.capability.CapabilityEventHook;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
-import ak.enchantchanger.client.ClientModelUtils;
 import ak.enchantchanger.eventhandler.CommonTickHandler;
+import ak.enchantchanger.eventhandler.ContainerEventHandler;
 import ak.enchantchanger.eventhandler.GenerateHandler;
 import ak.enchantchanger.eventhandler.LivingEventHooks;
 import ak.enchantchanger.modcoop.CoopMCE;
@@ -78,7 +78,6 @@ public class EnchantChanger {
         PacketHandler.init();
         addStatusEffect();
         damageSourceMako = new DamageSource("mako").setDamageBypassesArmor();
-        MinecraftForge.EVENT_BUS.register(ClientModelUtils.INSTANCE);
 
         // レシピ登録
         MinecraftForge.EVENT_BUS.register(new Recipes());
@@ -90,7 +89,7 @@ public class EnchantChanger {
         // レビテト等のイベントフック登録
         MinecraftForge.EVENT_BUS.register(livingeventhooks);
         // 携帯エンチャントテーブルイベント登録
-        MinecraftForge.EVENT_BUS.register(ak.enchantchanger.utils.Items.itemPortableEnchantmentTable);
+        MinecraftForge.EVENT_BUS.register(new ContainerEventHandler());
         // キーイベント登録
         MinecraftForge.EVENT_BUS.register(proxy);
         // 共通TickHandler登録

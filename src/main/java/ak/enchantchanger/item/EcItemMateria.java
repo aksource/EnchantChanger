@@ -1,6 +1,5 @@
 package ak.enchantchanger.item;
 
-import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.api.MagicType;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.capability.IPlayerStatusHandler;
@@ -267,7 +266,7 @@ public class EcItemMateria extends EcItem {
 
     @Override
     public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-        if (Constants.TAB_ENCHANT_CHANGER.equals(tab)) {
+        if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1, 0));
             ItemStack stack1, stack2, stack4;
             for (Enchantment enchantment : Enchantment.REGISTRY) {
