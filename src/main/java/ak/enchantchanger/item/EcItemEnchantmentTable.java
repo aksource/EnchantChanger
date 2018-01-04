@@ -84,14 +84,14 @@ public class EcItemEnchantmentTable extends EcItem {
     private static class CustomInteractionObj implements IInteractionObject {
         BlockPos pos;
 
-        public CustomInteractionObj(BlockPos pos) {
+        CustomInteractionObj(BlockPos pos) {
             this.pos = pos;
         }
 
         @Override
         @Nonnull
         public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
-            return new ContainerEnchantment(playerInventory, playerIn.world, pos);
+            return new EcContainerEnchantment(playerInventory, playerIn.world, pos);
         }
 
         @Override
@@ -115,6 +115,18 @@ public class EcItemEnchantmentTable extends EcItem {
         @Nonnull
         public ITextComponent getDisplayName() {
             return new TextComponentString(this.getName());
+        }
+    }
+
+    public static class EcContainerEnchantment extends ContainerEnchantment {
+        EcContainerEnchantment(InventoryPlayer playerInv, World worldIn, BlockPos pos) {
+            super(playerInv, worldIn, pos);
+        }
+
+        @Override
+        public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
+            return !playerIn.getHeldItemMainhand().isEmpty()
+                    && playerIn.getHeldItemMainhand().getItem() instanceof EcItemEnchantmentTable;
         }
     }
 }
