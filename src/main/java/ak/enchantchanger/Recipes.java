@@ -105,6 +105,8 @@ public class Recipes {
         GameRegistry.addShapelessRecipe(new ItemStack(
                 ak.enchantchanger.utils.Items.itemPortableEnchantChanger, 1), ak.enchantchanger.utils.Blocks.blockEnchantChanger);
         GameRegistry.addShapelessRecipe(new ItemStack(
+                ak.enchantchanger.utils.Blocks.blockEnchantChanger, 1), ak.enchantchanger.utils.Items.itemPortableEnchantChanger);
+        GameRegistry.addShapelessRecipe(new ItemStack(
                         ak.enchantchanger.utils.Items.itemPortableEnchantmentTable, 1),
                 Blocks.ENCHANTING_TABLE);
         GameRegistry.addShapelessRecipe(new ItemStack(ak.enchantchanger.utils.Items.itemMasterMateria, 1, 0),
