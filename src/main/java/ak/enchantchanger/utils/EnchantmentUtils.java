@@ -123,29 +123,8 @@ public class EnchantmentUtils {
         return true;
     }
 
-    public static boolean isEnchantmentValid(Enchantment ench, ItemStack itemStack) {
-        if (ench == null) {
-            return false;
-        }
-        if (itemStack.getItem() instanceof ItemBook) {
-            return true;
-        }
-        if (ench instanceof EnchantmentDurability) {
-            return itemStack.isItemStackDamageable() || ench.type.canEnchantItem(itemStack.getItem());
-        }
-        if (ench instanceof EnchantmentDigging) {
-            return itemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(itemStack.getItem())/* || isExtraTools(itemStack)*/;
-        }
-        if (ench instanceof EnchantmentDamage || ench instanceof EnchantmentLootBonus || ench instanceof EnchantmentFireAspect) {
-            return itemStack.getItem() instanceof ItemTool || ench.type.canEnchantItem(itemStack.getItem())/* || isExtraSwords(itemStack)*/;
-        }
-        if (ench instanceof EnchantmentThorns) {
-            return itemStack.getItem() instanceof ItemArmor || ench.type.canEnchantItem(itemStack.getItem())/* || isExtraArmors(itemStack)*/;
-        }
-        if (ench instanceof EnchantmentUntouching) {
-            return itemStack.getItem() instanceof ItemShears || ench.type.canEnchantItem(itemStack.getItem())/* || isExtraTools(itemStack)*/;
-        }
-        return ench.type.canEnchantItem(itemStack.getItem());
+    public static boolean isEnchantmentValid(Enchantment enchantment, ItemStack itemStack) {
+        return enchantment != null && (itemStack.getItem() instanceof ItemBook || enchantment.canApply(itemStack));
     }
 
     public static boolean isEnchanted(ItemStack itemStack) {

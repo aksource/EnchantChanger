@@ -140,6 +140,10 @@ public class Recipes {
                 new ItemStack(itemPortableEnchantChanger, 1),
                 new ItemStack(blockEnchantChanger))
                 .setRegistryName(itemPortableEnchantChanger.getRegistryName()));
+        registry.register(new ShapelessOreRecipe(blockEnchantChanger.getRegistryName(),
+                new ItemStack(blockEnchantChanger, 1),
+                new ItemStack(itemPortableEnchantChanger))
+                .setRegistryName(blockEnchantChanger.getRegistryName() + "_portable"));
         registry.register(new ShapelessOreRecipe(itemPortableEnchantmentTable.getRegistryName(),
                 new ItemStack(itemPortableEnchantmentTable, 1),
                 new ItemStack(Blocks.ENCHANTING_TABLE))
