@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * プレイヤーの同期処理Handlerクラス
  * Created by A.K. on 15/03/12.
  */
+@Deprecated
 public class MessagePlayerJoinInAnnouncementHandler implements IMessageHandler<MessagePlayerJoinInAnnouncement, MessagePlayerProperties> {
     @Override
     public MessagePlayerProperties onMessage(MessagePlayerJoinInAnnouncement message, MessageContext ctx) {

@@ -5,16 +5,21 @@ import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.entity.EcEntityApOrb;
 import ak.enchantchanger.item.EcItemMateria;
 import ak.enchantchanger.item.EcItemSword;
+import ak.enchantchanger.network.MessageBackItem;
+import ak.enchantchanger.network.PacketHandler;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -65,6 +70,29 @@ public class LivingEventHooks {
 
     public boolean getLevitationModeToNBT(@Nonnull EntityPlayer player) {
         return CapabilityPlayerStatusHandler.getPlayerStatusHandler(player).isLevitating();
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void changeEquipments(LivingEquipmentChangeEvent event) {
+        EntityLivingBase living = event.getEntityLiving();
+        if (living instanceof EntityPlayer && event.getSlot() == EntityEquipmentSlot.MAINHAND) {
+            EntityPlayer player = (EntityPlayer) living;
+            String uuidString = player.getGameProfile().getId().toString();
+            ItemStack from = event.getFrom();
+            ItemStack to = event.getTo();
+            if (isBackItem(from)
+                    && player.inventory.hasItemStack(from)
+                    && !ItemStack.areItemStacksEqual(from, to)) {
+                MessageBackItem message = new MessageBackItem(uuidString, from);
+                PacketHandler.INSTANCE.sendToAll(message);
+            }
+        }
+    }
+
+    private boolean isBackItem(@Nonnull ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        return item instanceof EcItemSword;
     }
 
     @SubscribeEvent

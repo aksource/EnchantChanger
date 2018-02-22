@@ -4,7 +4,6 @@ import ak.enchantchanger.api.ICustomModelItem;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -176,12 +175,13 @@ public class EcSwordModel implements IBakedModel {
         }
 
         @Override
-        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+        @Nonnull
+        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(@Nonnull ItemCameraTransforms.TransformType cameraTransformType) {
 
             IBakedModel model;
             Matrix4f matrix4f = new Matrix4f();
             matrix4f.setIdentity();
-            GlStateManager.disableLighting();
+//            GlStateManager.disableLighting();
             switch (cameraTransformType) {
                 case GUI:
                     model = this.guiModel;

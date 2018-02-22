@@ -21,6 +21,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -46,6 +47,8 @@ public class ClientProxy extends CommonProxy {
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
 
+    private EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
+
     private static byte getKeyIndex() {
         byte key = -1;
         if (MAGIC_KEY.isPressed()) {
@@ -68,7 +71,6 @@ public class ClientProxy extends CommonProxy {
                 RenderXPOrb::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
 
-        //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(ClientModelUtils.INSTANCE);
     }
@@ -81,7 +83,6 @@ public class ClientProxy extends CommonProxy {
         //キー登録
         ClientRegistry.registerKeyBinding(MAGIC_KEY);
         ClientRegistry.registerKeyBinding(MATERIA_KEY);
-        EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
 
     }
@@ -106,6 +107,9 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void doFlightOnSide(EntityPlayer player) {
+        if (!(player instanceof EntityPlayerSP)) {
+            return;
+        }
         boolean jump = ((EntityPlayerSP) player).movementInput.jump;
         float var2 = 0.8F;
         boolean var3 = ((EntityPlayerSP) player).movementInput.moveForward >= var2;
@@ -152,6 +156,11 @@ public class ClientProxy extends CommonProxy {
         }
 
         PacketHandler.INSTANCE.sendToServer(new MessageLevitation(livingeventhooks.getLevitationModeToNBT(player)));
+    }
+
+    @Override
+    public void addBackItemToRendererMap(String uuid, ItemStack itemStack) {
+        this.ecRenderPlayerBack.addBackItem(uuid, itemStack);
     }
 
     @SubscribeEvent

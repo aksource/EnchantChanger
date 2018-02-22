@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
  * プレイヤーの同期処理Messageクラス
  * Created by A.K. on 15/03/12.
  */
+@Deprecated
 public class MessagePlayerJoinInAnnouncement implements IMessage {
     private String uuidString;
 

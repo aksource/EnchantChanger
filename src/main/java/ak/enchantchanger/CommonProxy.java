@@ -35,6 +35,8 @@ public class CommonProxy implements IGuiHandler {
 
     public void doFlightOnSide(EntityPlayer player) {}
 
+    public void addBackItemToRendererMap(String uuid, ItemStack itemStack) {}
+
     //returns an instance of the Container you made earlier
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {

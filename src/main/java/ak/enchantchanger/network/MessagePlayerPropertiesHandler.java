@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 /**
  * Created by A.K. on 14/07/31.
  */
+@Deprecated
 public class MessagePlayerPropertiesHandler implements IMessageHandler<MessagePlayerProperties, IMessage> {
     @Override
     public IMessage onMessage(MessagePlayerProperties message, MessageContext ctx) {

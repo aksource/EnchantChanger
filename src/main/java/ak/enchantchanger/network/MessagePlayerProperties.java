@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 /**
  * Created by A.K. on 14/06/02.
  */
+@Deprecated
 public class MessagePlayerProperties implements IMessage {
 
     public NBTTagCompound data;
