@@ -5,7 +5,6 @@ import ak.enchantchanger.utils.EnchantmentUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -204,7 +203,7 @@ public class BakedModelMateria implements IBakedModel {
             Matrix4f matrix4fGui = TRSRTransformation.mul(vectorTransGui, null, new Vector3f(guiSize, guiSize, guiSize), null);
             Matrix4f matrix4fHandHeld = TRSRTransformation.mul(vectorTransHand, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
             Matrix4f matrix4fGround = TRSRTransformation.mul(null, null, new Vector3f(handheldSize, handheldSize, handheldSize), null);
-            GlStateManager.disableLighting();
+//            GlStateManager.disableLighting();
             Matrix4f matrix4f = matrix4fGround;
             switch (cameraTransformType) {
                 case GUI:
