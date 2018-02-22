@@ -21,6 +21,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -46,6 +47,8 @@ public class ClientProxy extends CommonProxy {
     public static Minecraft mc = Minecraft.getMinecraft();
     private int flyToggleTimer = 0;
     private int sprintToggleTimer = 0;
+
+    private EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
 
     private static byte getKeyIndex() {
         byte key = -1;
@@ -80,10 +83,8 @@ public class ClientProxy extends CommonProxy {
         //キー登録
         ClientRegistry.registerKeyBinding(MAGIC_KEY);
         ClientRegistry.registerKeyBinding(MATERIA_KEY);
-        EcRenderPlayerBack ecRenderPlayerBack = new EcRenderPlayerBack();
         MinecraftForge.EVENT_BUS.register(ecRenderPlayerBack);
 
-        //TextureStitchEvent
         MinecraftForge.EVENT_BUS.register(this);
 
     }
@@ -154,6 +155,11 @@ public class ClientProxy extends CommonProxy {
         }
 
         PacketHandler.INSTANCE.sendToServer(new MessageLevitation(livingeventhooks.getLevitationModeToNBT(player)));
+    }
+
+    @Override
+    public void addBackItemToRendererMap(String uuid, ItemStack itemStack) {
+        this.ecRenderPlayerBack.addBackItem(uuid, itemStack);
     }
 
     @SubscribeEvent

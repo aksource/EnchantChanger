@@ -6,6 +6,7 @@ import ak.enchantchanger.item.EcItemSephirothSwordImit;
 import ak.enchantchanger.item.EcItemSword;
 import ak.enchantchanger.utils.ConfigurationUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,10 +18,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * プレイヤーの背中に直前に持っていた追加武器を描画するクラス
@@ -31,49 +31,34 @@ public class EcRenderPlayerBack {
     private static final float anglePlayerSneaking = 30F;
     private static final float translateValue = -0.1F;
     private static final float translateSneakingValue = 0F;
-    private ItemStack prevHeldItem = ItemStack.EMPTY;
-    private ItemStack nowHeldItem = ItemStack.EMPTY;
+
+    private final ConcurrentHashMap<String, ItemStack> prevHeldMap = new ConcurrentHashMap<>();
 
 
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void renderPlayerEvent(RenderPlayerEvent.Post event) {
-        if (prevHeldItem.isEmpty()) return;
         EntityPlayer entityPlayer = event.getEntityPlayer();
-        ItemStack heldItem = entityPlayer.getHeldItemMainhand();
-        if (ConfigurationUtils.enableBackSword && !ItemStack.areItemStacksEqual(heldItem, this.prevHeldItem)
-                && isBackItem(this.prevHeldItem) && canRenderBack(entityPlayer)) {
-            renderPlayerBackItem(this.prevHeldItem, entityPlayer, event.getPartialRenderTick());
+        String uuidString = entityPlayer.getGameProfile().getId().toString();
+        ItemStack prevHeldItem = prevHeldMap.getOrDefault(uuidString, ItemStack.EMPTY);
+        if (checkToRender(entityPlayer, prevHeldItem)) {
+            renderPlayerBackItem(prevHeldItem, entityPlayer, event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ());
         }
     }
 
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void checkPreviousItem(TickEvent.PlayerTickEvent event) {
-        if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
-            ItemStack heldItem = event.player.getHeldItemMainhand();
-            if (!isSwordInQuickBar(event.player.inventory)) {
-                this.prevHeldItem = ItemStack.EMPTY;
-                return;
-            }
-            if (heldItem.isEmpty()) return;
-
-            if (this.nowHeldItem.isEmpty()) {
-                this.nowHeldItem = heldItem;
-            }
-            if (!ItemStack.areItemStacksEqual(heldItem, this.nowHeldItem)) {
-                if (isBackItem(this.nowHeldItem)) {
-                    this.prevHeldItem = this.nowHeldItem;
-                }
-                this.nowHeldItem = heldItem;
-            }
-        }
+    private boolean checkToRender(EntityPlayer entityPlayer, ItemStack prevHeldItem) {
+        return ConfigurationUtils.enableBackSword
+                && !prevHeldItem.isEmpty()
+                && isBackItem(prevHeldItem)
+                && canRenderBack(entityPlayer)
+                && !ItemStack.areItemStacksEqual(prevHeldItem, entityPlayer.getHeldItemMainhand())
+                && (isSwordInQuickBar(entityPlayer.inventory, prevHeldItem) || entityPlayer instanceof EntityOtherPlayerMP);
     }
 
-    private boolean isSwordInQuickBar(@Nonnull InventoryPlayer inventoryPlayer) {
+    private boolean isSwordInQuickBar(@Nonnull InventoryPlayer inventoryPlayer, @Nonnull ItemStack prevHeldItem) {
         for (int i = 0; i < 9; i++) {
             ItemStack itemStack = inventoryPlayer.getStackInSlot(i);
-            if (!itemStack.isEmpty() && itemStack.getItem() instanceof EcItemSword) {
+            if (!itemStack.isEmpty() && ItemStack.areItemStacksEqual(itemStack, prevHeldItem)) {
                 return true;
             }
         }
@@ -122,18 +107,19 @@ public class EcRenderPlayerBack {
         return 1.5F;
     }
 
-    private void renderPlayerBackItem(@Nonnull ItemStack backItem, @Nonnull EntityLivingBase livingBase, float partialTicks) {
+    private void renderPlayerBackItem(@Nonnull ItemStack backItem, @Nonnull EntityLivingBase livingBase, float partialTicks, double x, double y, double z) {
+        if (livingBase instanceof EntityOtherPlayerMP) {
+            GlStateManager.translate(x, y, z);
+        }
         GlStateManager.pushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
-        if (backItem.getItem() instanceof EcItemSword) {
-            this.translateDependingYaw(backItem, livingBase, partialTicks);
-            this.rotateYawSneaking(livingBase, partialTicks);
-            this.rotateLivingYaw(livingBase, partialTicks, -1.0F);
-            GlStateManager.rotate(getAngle(backItem), 0F, 0F, 1.0F);
-            GlStateManager.disableLighting();
-            mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.HEAD);
-            GlStateManager.enableLighting();
-        }
+        this.translateDependingYaw(backItem, livingBase, partialTicks);
+        this.rotateYawSneaking(livingBase, partialTicks);
+        this.rotateLivingYaw(livingBase, partialTicks, -1.0F);
+        GlStateManager.rotate(getAngle(backItem), 0F, 0F, 1.0F);
+        GlStateManager.disableLighting();
+        mc.getItemRenderer().renderItem(livingBase, backItem, ItemCameraTransforms.TransformType.HEAD);
+        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
     }
 
@@ -162,5 +148,9 @@ public class EcRenderPlayerBack {
 
     private float getYaw(@Nonnull EntityLivingBase livingBase, float partialTicks) {
         return livingBase.prevRenderYawOffset + (livingBase.renderYawOffset - livingBase.prevRenderYawOffset) * partialTicks;
+    }
+
+    public void addBackItem(String uuid, ItemStack itemStack) {
+        prevHeldMap.put(uuid, itemStack);
     }
 }
