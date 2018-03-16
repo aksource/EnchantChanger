@@ -25,6 +25,8 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
     private int limitBreakCount;
     private byte limitBreakId;
     private boolean ggMode;
+    private boolean initialized;
+    private boolean enableLevitation;
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
@@ -49,6 +51,8 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
         nbt.setInteger(Constants.NBT_LIMIT_BREAK_COUNT, this.limitBreakCount);
         nbt.setByte(Constants.NBT_LIMIT_BREAK_ID, this.limitBreakId);
         nbt.setBoolean(Constants.NBT_GG_MODE, this.ggMode);
+        nbt.setBoolean(Constants.NBT_INITIALIZE, this.initialized);
+        nbt.setBoolean(Constants.NBT_ENABLE_LEVITATION, this.enableLevitation);
         return nbt;
     }
 
@@ -63,6 +67,8 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
         this.limitBreakCount = nbt.getInteger(Constants.NBT_LIMIT_BREAK_COUNT);
         this.limitBreakId = nbt.getByte(Constants.NBT_LIMIT_BREAK_ID);
         this.ggMode = nbt.getBoolean(Constants.NBT_GG_MODE);
+        this.initialized = nbt.getBoolean(Constants.NBT_INITIALIZE);
+        this.enableLevitation = nbt.getBoolean(Constants.NBT_ENABLE_LEVITATION);
     }
 
     @Override
@@ -173,5 +179,25 @@ public class PlayerStatusHandlerImpl implements IPlayerStatusHandler, ICapabilit
     @Override
     public void setGgMode(boolean ggMode) {
         this.ggMode = ggMode;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return this.initialized;
+    }
+
+    @Override
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
+    }
+
+    @Override
+    public boolean isEnableLevitation() {
+        return this.enableLevitation;
+    }
+
+    @Override
+    public void setEnableLevitation(boolean enableLevitation) {
+        this.enableLevitation = enableLevitation;
     }
 }

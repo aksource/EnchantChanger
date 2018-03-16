@@ -68,6 +68,8 @@ public class ConfigurationUtils {
     public static boolean enableBackSword = true;
     public static int materiaGeneratingRatio = 256;
     public static int lifeStreamLakeRatio = 256;
+    public static boolean disableFloating = false;
+    public static boolean disableMeteor = false;
 
 
     public static void initConfig(Configuration config) {
@@ -121,6 +123,8 @@ public class ConfigurationUtils {
         enchantChangerCost = config.get(Configuration.CATEGORY_GENERAL, "EnchantChangerOpenCost", enchantChangerCost, "Cost to open enchantchanger or Materia Window when mods difficulty is hard").getInt();
         soldierSalary = config.get(Configuration.CATEGORY_GENERAL, "SoldiersSalary", soldierSalary, "Monthly Salary of soldier.").getInt();
         materiaGeneratingRatio = config.get(Configuration.CATEGORY_GENERAL, "MateriaGeneratingRatio", materiaGeneratingRatio, "Materia generating ratio in Mako reactor").getInt();
+        disableFloating = config.get(Configuration.CATEGORY_GENERAL, "DisableFloatingMateria", disableFloating, "TRUE:Disable floating materia").getBoolean();
+        disableMeteor = config.get(Configuration.CATEGORY_GENERAL, "DisableMeteor", disableFloating, "TRUE:Disable meteor").getBoolean();
         config.save();
     }
 }

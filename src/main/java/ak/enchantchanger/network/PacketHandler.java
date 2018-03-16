@@ -21,5 +21,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageRFSteppingHandler.class, MessageRFStepping.class, 5, Side.SERVER);
 //        INSTANCE.registerMessage(MessagePlayerJoinInAnnouncementHandler.class, MessagePlayerJoinInAnnouncement.class, 6, Side.SERVER);
         INSTANCE.registerMessage(MessageBackItemHandler.class, MessageBackItem.class, 7, Side.CLIENT);
+        INSTANCE.registerMessage(MessageSyncConfigStoCHandler.class, MessageSyncConfigStoC.class, 8, Side.CLIENT);
+        INSTANCE.registerMessage(MessageCallingSyncConfigStoCHandler.class, MessageCallingSyncConfigStoC.class, 9, Side.SERVER);
     }
 }
