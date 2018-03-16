@@ -115,6 +115,8 @@ public class Constants {
     public static final String NBT_LIMIT_BREAK_COUNT = "limit_break_count";
     public static final String NBT_LIMIT_BREAK_ID = "limit_break_id";
     public static final String NBT_GG_MODE = "gg_mode";
+    public static final String NBT_INITIALIZE = "initialized";
+    public static final String NBT_ENABLE_LEVITATION = "enable_levitation";
     public static final String CAP_KEY_PLAYER_STATUS = "player_status";
     public static final String NBT_KEY_ENCHANT_CHANGER_MAGIC = "enchant_changer|magic";
     public static final String NBT_STORED_ENCHANTMENTS = "StoredEnchantments";

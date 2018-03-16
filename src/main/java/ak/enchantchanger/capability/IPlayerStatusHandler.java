@@ -161,4 +161,30 @@ public interface IPlayerStatusHandler {
      * @param ggMode ggMode
      */
     void setGgMode(boolean ggMode);
+
+    /**
+     * サーバ設定のクライアントへの反映初期化済みかどうか
+     * @return true:初期化済み
+     */
+    boolean isInitialized();
+
+    /**
+     * サーバ設定のクライアントへの反映初期化済みかどうかの設定
+     * @param initialized initialized
+     */
+    void setInitialized(boolean initialized);
+
+    /**
+     * レビテト可能かどうか
+     *
+     * @return true:レビテト可能
+     */
+    boolean isEnableLevitation();
+
+    /**
+     * レビテト可能フラグの設定
+     *
+     * @param enableLevitation enableLevitation
+     */
+    void setEnableLevitation(boolean enableLevitation);
 }
