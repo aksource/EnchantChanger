@@ -2,6 +2,7 @@ package ak.enchantchanger.client;
 
 import ak.enchantchanger.CommonProxy;
 import ak.enchantchanger.api.Constants;
+import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.client.models.BakedModelMateria;
 import ak.enchantchanger.client.renderer.EcRenderEntityItemCustom;
 import ak.enchantchanger.client.renderer.EcRenderItemThrowable;
@@ -10,6 +11,7 @@ import ak.enchantchanger.client.renderer.RenderingOverlayEvent;
 import ak.enchantchanger.entity.EcEntityApOrb;
 import ak.enchantchanger.entity.EcEntityExExpBottle;
 import ak.enchantchanger.entity.EcEntityMeteor;
+import ak.enchantchanger.network.MessageCallingSyncConfigStoC;
 import ak.enchantchanger.network.MessageKeyPressed;
 import ak.enchantchanger.network.MessageLevitation;
 import ak.enchantchanger.network.PacketHandler;
@@ -111,6 +113,14 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void doFlightOnSide(EntityPlayer player) {
+        boolean initialized = CapabilityPlayerStatusHandler.getPlayerStatusHandler(player).isInitialized();
+        if (!initialized) {
+            PacketHandler.INSTANCE.sendToServer(new MessageCallingSyncConfigStoC());
+        }
+        boolean enableLevitation = CapabilityPlayerStatusHandler.getPlayerStatusHandler(player).isEnableLevitation();
+        if (!(player instanceof EntityPlayerSP) || !enableLevitation) {
+            return;
+        }
         boolean jump = ((EntityPlayerSP) player).movementInput.jump;
         float var2 = 0.8F;
         boolean var3 = ((EntityPlayerSP) player).movementInput.moveForward >= var2;

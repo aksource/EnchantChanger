@@ -20,5 +20,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageExtendedReachAttackHandler.class, MessageExtendedReachAttack.class, 4, Side.SERVER);
         INSTANCE.registerMessage(MessageRFSteppingHandler.class, MessageRFStepping.class, 5, Side.SERVER);
 //        INSTANCE.registerMessage(MessagePlayerJoinInAnnouncementHandler.class, MessagePlayerJoinInAnnouncement.class, 6, Side.SERVER);
+        INSTANCE.registerMessage(MessageSyncConfigStoCHandler.class, MessageSyncConfigStoC.class, 8, Side.CLIENT);
+        INSTANCE.registerMessage(MessageCallingSyncConfigStoCHandler.class, MessageCallingSyncConfigStoC.class, 9, Side.SERVER);
     }
 }

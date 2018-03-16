@@ -141,7 +141,7 @@ public class EcItemMateria extends EcItem {
     }
 
     public static void doMeteor(World world, EntityPlayer entityplayer) {
-        if (!canMagic(entityplayer)) {
+        if (!canMagic(entityplayer) || ConfigurationUtils.disableMeteor) {
             return;
         }
         decreasePlayerFood(entityplayer, 6);
