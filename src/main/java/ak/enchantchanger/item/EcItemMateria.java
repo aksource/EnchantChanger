@@ -301,7 +301,7 @@ public class EcItemMateria extends EcItem {
             String type, info;
             if (itemStack.isItemEnchanted()) {
                 Enchantment enchantment = EnchantmentUtils.getEnchantmentFromItemStack(itemStack);
-                type = enchantment.type.name();
+                type = enchantment.type != null ? enchantment.type.name() : "UNKNOWN";
                 info = enchantment.getName();
             } else {
                 type = "ecsword";

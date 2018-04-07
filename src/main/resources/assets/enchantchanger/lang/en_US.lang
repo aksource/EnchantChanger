@@ -76,6 +76,7 @@ enchantmenttype.FISHING_ROD=Fishing Rod
 enchantmenttype.BREAKABLE=Breakable Tools
 enchantmenttype.BOW=Bows
 enchantmenttype.ecsword=Swords of EnchantChanger
+enchantmenttype.UNKNOWN=Unknown
 #EnchantmentInfo
 info.enchantment.protect.all=Decreasing All Damage
 info.enchantment.protect.fire=Decreasing Fire Damage

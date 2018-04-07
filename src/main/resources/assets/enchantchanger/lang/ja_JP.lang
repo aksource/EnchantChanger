@@ -75,6 +75,7 @@ enchantmenttype.FISHING_ROD=釣り竿対象
 enchantmenttype.BREAKABLE=耐久値を持つアイテム対象
 enchantmenttype.BOW=弓対象
 enchantmenttype.ecsword=エンチャント交換MOD追加武器対象
+enchantmenttype.UNKNOWN=対象不明
 #EnchantmentInfo
 info.enchantment.protect.all=全てのダメージを軽減
 info.enchantment.protect.fire=炎のダメージを軽減
