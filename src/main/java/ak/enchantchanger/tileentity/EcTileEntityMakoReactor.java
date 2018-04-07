@@ -219,7 +219,7 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
             }
 
             //魔晄バケツ・マテリアからの搬入処理
-            if (!tank.isFull() && !items.get(SLOTS_FUEL[0]).isEmpty() && MakoUtils.isMako(items.get(SLOTS_FUEL[0]))) {
+            if (!tank.isFull() && items.size() > SLOTS_FUEL[0] && !items.get(SLOTS_FUEL[0]).isEmpty() && MakoUtils.isMako(items.get(SLOTS_FUEL[0]))) {
                 int makoAmount = MakoUtils.getMakoFromItem(items.get(SLOTS_FUEL[0]));
                 if (tank.getFluidAmount() + makoAmount <= tank.getCapacity()) {
                     tank.fill(new FluidStack(ak.enchantchanger.utils.Blocks.fluidLifeStream, makoAmount), true);
