@@ -253,7 +253,9 @@ public class EcContainerMaterializer extends Container {
                 result = EnchantmentUtils.getBookResult(result, itemEnchantmentLvPair.subList(endIndex, itemEnchantmentLvPair.size()));
                 this.materializeResult.setInventorySlotContents(0, result);
             } else if (magicList != null) {
-                result.getTagCompound().removeTag(NBT_KEY_ENCHANT_CHANGER_MAGIC);
+                if (result.hasTagCompound()) {
+                    result.getTagCompound().removeTag(NBT_KEY_ENCHANT_CHANGER_MAGIC);
+                }
                 int slotIndex = 0;
                 for (byte b : magicList) {
                     ItemStack materia = new ItemStack(Items.itemMateria, 1, b);

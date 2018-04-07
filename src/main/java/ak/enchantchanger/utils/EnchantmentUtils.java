@@ -257,13 +257,13 @@ public class EnchantmentUtils {
     }
 
     public static ItemStack getBookResult(ItemStack baseItem, Collection enchantmentCollection) {
-        if (baseItem.getItem() instanceof ItemEnchantedBook && enchantmentCollection == null) {
+        if (baseItem.getItem() instanceof ItemEnchantedBook && enchantmentCollection.isEmpty()) {
             ItemStack book = new ItemStack(Items.BOOK);
             book.setTagCompound(baseItem.getTagCompound());
             return book;
         }
 
-        if (baseItem.getItem() instanceof ItemBook && enchantmentCollection != null) {
+        if (baseItem.getItem() instanceof ItemBook && !enchantmentCollection.isEmpty()) {
             ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
             book.setTagCompound(baseItem.getTagCompound());
             return book;
