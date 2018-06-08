@@ -268,7 +268,6 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
                     smeltingItems.set(i, ItemStack.EMPTY);
                 } else {
                     if (items.get(SLOTS_RESULT[i]).isItemEqual(smelted)
-                            && ItemStack.areItemStackTagsEqual(items.get(SLOTS_RESULT[i]), smelted)
                             && items.get(SLOTS_RESULT[i]).getCount() < items.get(SLOTS_RESULT[i]).getMaxStackSize()) {
                         items.get(SLOTS_RESULT[i]).grow(smelted.getCount());
                         smeltingItems.set(i, ItemStack.EMPTY);
