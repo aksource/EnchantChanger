@@ -45,7 +45,7 @@ public class Constants {
     public static final ResourceLocation ITEM_MASAMUNE_BLADE_MODEL_RL = new ResourceLocation(MOD_ID, "item/masamune-noscabbard-united.obj");
     public static final ResourceLocation ITEM_MASAMUNE_BLADE_SCABBARD_MODEL_RL = new ResourceLocation(MOD_ID, "item/masamune-scabbard-united.obj");
     public static final ResourceLocation ITEM_ULTIMATE_WEAPON_MODEL_RL = new ResourceLocation(MOD_ID, "item/ultimateweapon.obj");
-    public static final ResourceLocation ITEM_MATERIA_MODEL_RL = new ResourceLocation(MOD_ID, "item/spherelight.obj");
+    public static final ResourceLocation ITEM_MATERIA_MODEL_RL = new ResourceLocation(MOD_ID, "item/spherell.obj");
     public static final String TEXTURE_NAME_ULTIMATE_EMBLEM = "ultimateweapon256-emblem";
     public static final String TEXTURE_NAME_ULTIMATE_GRIP = "ultimateweapon256-grip";
     public static final String TEXTURE_NAME_ULTIMATE_HAND = "ultimateweapon256-handguard";
