@@ -183,7 +183,7 @@ public class BakedModelMateria implements IBakedModel {
         IBakedModel b3dModel;
         private float handheldSize = 0.1F;
         private float guiSize = 0.48F;
-        private Vector3f vectorTransGui = new Vector3f(0.28F, 0.28F, 0.0F);
+        private Vector3f vectorTransGui = new Vector3f(0.25F, 0.25F, 0.0F);
         private Vector3f vectorTransHand = new Vector3f(0.1F, 0.15F, -0.01F);
 
         public ReTexturedModel(IBakedModel bakedModel) {
