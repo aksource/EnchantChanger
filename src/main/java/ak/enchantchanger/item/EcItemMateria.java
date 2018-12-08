@@ -106,7 +106,7 @@ public class EcItemMateria extends EcItem {
         double playerPosY = entityplayer.posY + 1.62D;
         double playerPosZ = entityplayer.posZ;
         Vec3d playerPosition = new Vec3d(playerPosX, playerPosY, playerPosZ);
-        Vec3d playerLookVec = playerPosition.addVector(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
+        Vec3d playerLookVec = playerPosition.add(viewX * distLimit, viewY * distLimit, viewZ * distLimit);
         RayTraceResult rayTraceResult = world.rayTraceBlocks(playerPosition, playerLookVec, false);
         if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
             EnumFacing blockSide = rayTraceResult.sideHit;
@@ -256,7 +256,7 @@ public class EcItemMateria extends EcItem {
 
     @Override
     @Nonnull
-    public String getUnlocalizedName(@Nonnull ItemStack itemStack) {
+    public String getTranslationKey(@Nonnull ItemStack itemStack) {
         if (itemStack.getItemDamage() == 0) {
             return itemStack.isItemEnchanted() ? "ItemMateria" : "ItemMateria.Base";
         } else {
@@ -355,9 +355,9 @@ public class EcItemMateria extends EcItem {
 
     public static void doDespell(EntityPlayer player, Entity entity) {
         if (entity instanceof EntityLivingBase) {
-            ((EntityLiving) entity).clearActivePotions();
+            ((EntityLivingBase) entity).clearActivePotions();
             for (Potion potion : Potion.REGISTRY) {
-                ((EntityLiving) entity).removePotionEffect(potion);
+                ((EntityLivingBase) entity).removePotionEffect(potion);
             }
             decreasePlayerFood(player, 2);
         }

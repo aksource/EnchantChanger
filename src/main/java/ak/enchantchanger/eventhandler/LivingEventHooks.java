@@ -224,10 +224,9 @@ public class LivingEventHooks {
             }
             ItemStack playerItem = player.getHeldItemMainhand();
             if (!playerItem.isEmpty() && playerItem.getItem() instanceof EcItemMateria && playerItem.getItemDamage() == 8) {
-                List EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(
+                List<Entity> EntityList = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(
                         ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox, ConfigurationUtils.sizeAbsorbBox));
-                for (Object aEntityList : EntityList) {
-                    Entity entity = (Entity) aEntityList;
+                for (Entity entity : EntityList) {
                     if (entity instanceof EntityLiving) {
                         entity.attackEntityFrom(DamageSource.GENERIC, 1);
                         player.getFoodStats().addStats(1, 1.0f);

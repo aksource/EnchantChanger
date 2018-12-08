@@ -425,8 +425,8 @@ public class EcTileEntityMakoReactor extends EcTileMultiPass implements ITickabl
 
     public void setFace(byte face) {
         this.face = face;
-        EnumFacing direction = EnumFacing.getFront(face).getOpposite();
-        posHugeMateria = new BlockPos(this.getPos().getX() + direction.getFrontOffsetX() * 2, this.getPos().getY(), this.getPos().getZ() + direction.getFrontOffsetZ() * 2);
+        EnumFacing direction = EnumFacing.byIndex(face).getOpposite();
+        posHugeMateria = new BlockPos(this.getPos().getX() + direction.getXOffset() * 2, this.getPos().getY(), this.getPos().getZ() + direction.getZOffset() * 2);
     }
 
     public void setHugeMateria(BlockPos blockPos) {

@@ -65,7 +65,7 @@ public class EcItemSephirothSword extends EcItemSword {
 
         if (entity instanceof EntityLiving) {
             List EntityList = world.getEntitiesWithinAABB(EntityLiving.class,
-                    entity.getEntityBoundingBox().expand(BoxSize, BoxSize, BoxSize));
+                    entity.getEntityBoundingBox().grow(BoxSize));
             for (Object object : EntityList) {
                 Entity entity1 = (Entity) object;
                 if (entity1 != entity && entity1 != player) {

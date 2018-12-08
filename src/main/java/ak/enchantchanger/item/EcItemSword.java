@@ -43,7 +43,7 @@ public class EcItemSword extends ItemSword implements ICustomReachItem, ICustomM
     public EcItemSword(ToolMaterial toolMaterial, String name) {
         super(toolMaterial);
         String s = String.format("%s%s", Constants.EcTextureDomain, name);
-        this.setUnlocalizedName(s);
+        this.setTranslationKey(s);
         this.setNoRepair();
         this.setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
     }

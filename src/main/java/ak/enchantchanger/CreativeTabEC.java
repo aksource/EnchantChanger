@@ -13,13 +13,13 @@ public class CreativeTabEC extends CreativeTabs {
 
     @Override
     @Nonnull
-    public String getTranslatedTabLabel() {
+    public String getTranslationKey() {
         return "E.Changer";
     }
 
     @Override
     @Nonnull
-    public ItemStack getTabIconItem() {
+    public ItemStack createIcon() {
         return new ItemStack(Items.itemZackSword);
     }
 }

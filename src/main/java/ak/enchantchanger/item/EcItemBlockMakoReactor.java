@@ -43,7 +43,7 @@ public class EcItemBlockMakoReactor extends ItemBlock {
 
     @Override
     @Nonnull
-    public String getUnlocalizedName(@Nonnull ItemStack itemStack) {
+    public String getTranslationKey(@Nonnull ItemStack itemStack) {
         return "tile.mako_reactor-machine";
     }
 

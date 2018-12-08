@@ -236,7 +236,7 @@ public class EcEntitySword extends Entity {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource damageSource, float amount) {
-        this.setBeenAttacked();
+        this.markVelocityChanged();
 
         if (damageSource.getTrueSource() != null) {
             Vec3d lookVec = damageSource.getTrueSource().getLookVec();

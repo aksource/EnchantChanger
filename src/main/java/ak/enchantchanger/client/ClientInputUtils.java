@@ -108,7 +108,7 @@ public class ClientInputUtils {
         }
 
         Vec3d lookVector = viewingEntity.getLook(partialTicks);
-        Vec3d reachVector = viewPosition.addVector(lookVector.x * d0, lookVector.y * d0, lookVector.z * d0);
+        Vec3d reachVector = viewPosition.add(lookVector.x * d0, lookVector.y * d0, lookVector.z * d0);
         Vec3d vec33 = null;
         float f1 = 1.0F;
         List<Entity> list = viewingEntity.getEntityWorld().getEntitiesInAABBexcluding(

@@ -16,7 +16,7 @@ public class EcItemMasterMateria extends EcItem {
 
     @Override
     @Nonnull
-    public String getUnlocalizedName(@Nonnull ItemStack itemStack) {
+    public String getTranslationKey(@Nonnull ItemStack itemStack) {
         int itemDmg = itemStack.getItemDamage();
         return "ItemMasterMateria." + itemDmg;
     }

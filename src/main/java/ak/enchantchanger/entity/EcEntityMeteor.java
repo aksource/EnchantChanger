@@ -191,7 +191,7 @@ public class EcEntityMeteor extends Entity {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        this.setBeenAttacked();
+        this.markVelocityChanged();
 
         if (source.getTrueSource() != null) {
             Vec3d lookVec = source.getTrueSource().getLookVec();

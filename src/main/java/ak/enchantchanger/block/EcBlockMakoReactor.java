@@ -58,7 +58,7 @@ public class EcBlockMakoReactor extends EcBlockMultiPass {
         if (tile != null) {
             face = tile.face;
         }
-        return state.withProperty(FACING, EnumFacing.getFront(face));
+        return state.withProperty(FACING, EnumFacing.byIndex(face));
     }
 
     @Override

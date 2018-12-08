@@ -51,7 +51,7 @@ public class GenerateHandler {
     @SuppressWarnings("unused")
     public void onLootTableLoading(LootTableLoadEvent event) {
         ResourceLocation name = event.getName();
-        if (name.getResourcePath().matches("chests/.*")) {
+        if (name.getPath().matches("chests/.*")) {
             event.getTable().addPool(
                     new LootPool(
                             makeMagicMateriaEntry(),

@@ -30,7 +30,7 @@ public class Blocks {
     public static void init() {
         blockEnchantChanger = new EcBlockMaterializer()
                 .setRegistryName(Constants.REG_BLOCK_ENCHANTCHANGER)
-                .setUnlocalizedName(Constants.REG_BLOCK_ENCHANTCHANGER)
+                .setTranslationKey(Constants.REG_BLOCK_ENCHANTCHANGER)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER)
                 .setHardness(5.0f)
                 .setResistance(2000.0f)
@@ -41,7 +41,7 @@ public class Blocks {
                 .setResistance(2000.0f)
                 .setLightLevel(1.0f)
                 .setLightOpacity(0)
-                .setUnlocalizedName(Constants.REG_BLOCK_HUGE_MATERIA)
+                .setTranslationKey(Constants.REG_BLOCK_HUGE_MATERIA)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         fluidLifeStream = new Fluid(Constants.REG_FLUID_LIFE_STREAM, LIFESTREAM_STILL_RL, LIFESTREAM_FLOW_RL).setLuminosity(15);
         FluidRegistry.registerFluid(Blocks.fluidLifeStream);
@@ -49,11 +49,11 @@ public class Blocks {
         FluidRegistry.addBucketForFluid(fluidLifeStream);
         blockLifeStream = new EcBlockLifeStreamFluid(fluidLifeStream, materialMako)
                 .setRegistryName(Constants.REG_BLOCK_LIFE_STREAM)
-                .setUnlocalizedName(Constants.REG_BLOCK_LIFE_STREAM)
+                .setTranslationKey(Constants.REG_BLOCK_LIFE_STREAM)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);
         blockMakoReactor = new EcBlockMakoReactor()
                 .setRegistryName(Constants.REG_BLOCK_MAKO_REACTOR)
-                .setUnlocalizedName(Constants.REG_BLOCK_MAKO_REACTOR)
+                .setTranslationKey(Constants.REG_BLOCK_MAKO_REACTOR)
                 .setHardness(5.0f)
                 .setResistance(10.0f)
                 .setCreativeTab(Constants.TAB_ENCHANT_CHANGER);

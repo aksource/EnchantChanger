@@ -52,8 +52,8 @@ public class Recipes {
                     "BBB",
                     'B', itemStack,
                     'M', new ItemStack(itemMateria, 1, 0))
-                    .setRegistryName(blockMakoReactor.getRegistryName().getResourcePath()
-                            + itemStack.getItem().getRegistryName().getResourcePath()));
+                    .setRegistryName(blockMakoReactor.getRegistryName().getPath()
+                            + itemStack.getItem().getRegistryName().getPath()));
         }
     }
 
@@ -125,17 +125,17 @@ public class Recipes {
                 " A ",
                 'A', new ItemStack(Blocks.DIAMOND_BLOCK),
                 'B', new ItemStack(Items.NETHER_STAR))
-                .setRegistryName(itemHugeMateria.getRegistryName().getResourcePath()
-                        + Items.NETHER_STAR.getRegistryName().getResourcePath()));
+                .setRegistryName(itemHugeMateria.getRegistryName().getPath()
+                        + Items.NETHER_STAR.getRegistryName().getPath()));
         registry.register(new ShapedOreRecipe(itemHugeMateria.getRegistryName(),
-                        new ItemStack(itemHugeMateria),
-                        " A ",
-                        "ABA",
-                        " A ",
-                        'A', new ItemStack(Blocks.DIAMOND_BLOCK),
-                        'B', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE))
-                        .setRegistryName(itemHugeMateria.getRegistryName().getResourcePath()
-                                + itemMasterMateria.getRegistryName().getResourcePath()));
+                new ItemStack(itemHugeMateria),
+                " A ",
+                "ABA",
+                " A ",
+                'A', new ItemStack(Blocks.DIAMOND_BLOCK),
+                'B', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE))
+                .setRegistryName(itemHugeMateria.getRegistryName().getPath()
+                        + itemMasterMateria.getRegistryName().getPath()));
         registry.register(new ShapelessOreRecipe(itemPortableEnchantChanger.getRegistryName(),
                 new ItemStack(itemPortableEnchantChanger, 1),
                 new ItemStack(blockEnchantChanger))
@@ -169,7 +169,7 @@ public class Recipes {
                         "XXX",
                         'X', new ItemStack(Items.ENDER_EYE),
                         'Y', new ItemStack(itemMasterMateria, 1, OreDictionary.WILDCARD_VALUE))
-                        .setRegistryName(Constants.MOD_ID, Blocks.DRAGON_EGG.getRegistryName().getResourcePath()));
+                        .setRegistryName(Constants.MOD_ID, Blocks.DRAGON_EGG.getRegistryName().getPath()));
 
         for (EnumMRBaseType type : EnumMRBaseType.values()) {
             addOreDictRecipe(registry, type);

@@ -37,7 +37,7 @@ public class EcItemExExpBottle extends EcItem {
 
         if (!worldIn.isRemote) {
             EcEntityExExpBottle exExpBottle = new EcEntityExExpBottle(worldIn, playerIn);
-            exExpBottle.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
+            exExpBottle.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
             worldIn.spawnEntity(exExpBottle);
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
