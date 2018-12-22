@@ -5,7 +5,7 @@ sourceSets.main {
 dependencies {
     compile project(':MultiToolHolders')
 }
-version = "1.12-1.9.18"
+version = "1.12-1.9.19"
 minecraft {
     // replacing stuff in the source
     replace '@VERSION@', project.version

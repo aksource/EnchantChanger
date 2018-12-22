@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.Random;
 
 import static net.minecraft.init.Items.AIR;
@@ -90,33 +91,36 @@ public class EcBlockHugeMateria extends BlockContainer {
         IBlockState state = world.getBlockState(pos);
         IBlockState neighborState = world.getBlockState(neighbor);
         Block neighborBlock = neighborState.getBlock();
-        int var6 = state.getValue(PART);
+        Collection<IProperty<?>> propertyKeys = state.getPropertyKeys();
+        if (propertyKeys.contains(PART)) {
+            int value = state.getValue(PART);
 
-        if (var6 != 0) {
-            if (var6 == 1) {
-                if (world.getBlockState(pos.down()).getBlock() != this || world.getBlockState(pos.up()).getBlock() != this) {
+            if (value != 0) {
+                if (value == 1) {
+                    if (world.getBlockState(pos.down()).getBlock() != this || world.getBlockState(pos.up()).getBlock() != this) {
+                        ((World) world).setBlockToAir(pos);
+                    }
+                    if (neighborBlock != this) {
+                        this.onNeighborChange(world, pos.down(), pos);
+                        this.onNeighborChange(world, pos.up(), pos);
+                    }
+                } else {//value ==2
+                    if (world.getBlockState(pos.down()).getBlock() != this) {
+                        ((World) world).setBlockToAir(pos);
+                    }
+                }
+            } else {
+                boolean broken = false;
+
+                if (world.getBlockState(pos.up()).getBlock() != this) {
                     ((World) world).setBlockToAir(pos);
+                    broken = true;
                 }
-                if (neighborBlock != this) {
-                    this.onNeighborChange(world, pos.down(), pos);
-                    this.onNeighborChange(world, pos.up(), pos);
-                }
-            } else {//var6 ==2
-                if (world.getBlockState(pos.down()).getBlock() != this) {
-                    ((World) world).setBlockToAir(pos);
-                }
-            }
-        } else {
-            boolean var7 = false;
 
-            if (world.getBlockState(pos.up()).getBlock() != this) {
-                ((World) world).setBlockToAir(pos);
-                var7 = true;
-            }
-
-            if (var7) {
-                if (!((World) world).isRemote) {
-                    this.dropBlockAsItem((World) world, pos, state, 0);
+                if (broken) {
+                    if (!((World) world).isRemote) {
+                        this.dropBlockAsItem((World) world, pos, state, 0);
+                    }
                 }
             }
         }
