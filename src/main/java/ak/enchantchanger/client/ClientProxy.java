@@ -4,7 +4,9 @@ import ak.enchantchanger.CommonProxy;
 import ak.enchantchanger.api.Constants;
 import ak.enchantchanger.capability.CapabilityPlayerStatusHandler;
 import ak.enchantchanger.client.models.BakedModelMateria;
-import ak.enchantchanger.client.renderer.*;
+import ak.enchantchanger.client.renderer.EcRenderItemThrowable;
+import ak.enchantchanger.client.renderer.EcRenderPlayerBack;
+import ak.enchantchanger.client.renderer.RenderingOverlayEvent;
 import ak.enchantchanger.entity.EcEntityApOrb;
 import ak.enchantchanger.entity.EcEntityExExpBottle;
 import ak.enchantchanger.entity.EcEntityMeteor;
@@ -20,7 +22,6 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.entity.RenderXPOrb;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -71,7 +72,7 @@ public class ClientProxy extends CommonProxy {
                 manager -> new EcRenderItemThrowable(manager, FIRE_CHARGE, mc.getRenderItem(), ConfigurationUtils.sizeMeteor));
         RenderingRegistry.registerEntityRenderingHandler(EcEntityApOrb.class,
                 RenderXPOrb::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
+//        RenderingRegistry.registerEntityRenderingHandler(EntityItem.class, manager -> new EcRenderEntityItemCustom(manager, mc.getRenderItem()));
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(ClientModelUtils.INSTANCE);

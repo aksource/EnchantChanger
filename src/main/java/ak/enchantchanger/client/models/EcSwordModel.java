@@ -128,6 +128,10 @@ public class EcSwordModel implements IBakedModel {
          */
         private Vector3f scaleThirdPerson;
         /**
+         * 三人称視点時のサイズ補正
+         */
+        private Vector3f scaleGround = new Vector3f(0.5f, 0.5f, 0.5f);
+        /**
          * 一人称視点時の平行移動ベクトル
          */
         private Vector3f translationFirstPerson = new Vector3f(0.5F, 0.0F, 0.1F);
@@ -207,7 +211,7 @@ public class EcSwordModel implements IBakedModel {
                     model = this.handHeldModel;
                     break;
                 case GROUND:
-                    matrix4f = null;
+                    matrix4f = TRSRTransformation.mul(null, null, scaleGround, null);
                     model = this.guiModel;
                     break;
                 default:
